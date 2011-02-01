@@ -1,0 +1,69 @@
+App:
+    # path    
+    path: /servers/sites/quodis/twitter-collage
+    pathCache: /servers/sites/quodis/twitter-collage/cache
+    cacheFilePermissions: 777
+    cacheDirPermissions: 777
+    # url
+    url: http://twitter-collage.quodis.worker
+Store:
+    # storage path
+    path: /servers/store/twitter-collage
+    # storage public url
+    url: http://store.twitter-collage.quodis.worker
+    # created files and dirs in storage
+    filePermissions: 777
+    dirPermissions: 777
+Twitter: 
+    urlSearch: "http://search.twitter.com/search.json" 
+Collage:
+    logoFile: assets/logo46x48.png
+    defaultPic: assets/default48x48.png
+    configFile: assets/config46x48.php
+    pageDir: assets
+    terms: "obama"
+    cols: 46
+    rows: 48
+    tileSize: 11
+Cache:
+    enabled: 1
+    TTL:
+      - collageConfig: 2000 
+      - tweetIds: 200
+    servers:
+        - host: localhost
+          port: 11211
+Db:
+    schemaDir: schema
+    databases:
+        - name: twitter_collage
+          schemaFile: db.sql
+          defaults: &connectionDefaults
+              host: localhost
+              name: twitter_collage
+              user: twitter_collage
+              pass: twitter_collage
+              client: localhost
+          connections:
+              read: 
+                  <<: *connectionDefaults
+                  mode: _modeRead
+              write:
+                  <<: *connectionDefaults
+                  mode: _modeWrite
+          installConnection:
+              <<: *connectionDefaults
+              name: 
+              mode: _modeWrite
+              user: install
+              pass: install
+UI:
+    gaEnabled: "0"
+    gaId: ""
+    title: Twitter Collage
+    keywords: ""
+    description: ""
+    templateDir: templates
+    template : website
+    stylesheet : "main.css?r=1"
+    mainJs : "twitter-collage.js?r=1" 

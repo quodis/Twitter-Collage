@@ -1,0 +1,157 @@
+/**
+ * FF4
+ * by Quodis © 2011
+ * http://www.quodis.com
+ * 
+ * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+ */ /**
+
+	FF4 - Application Style
+	
+	Z-index
+	
+	Colors:
+	
+	1. General
+		typography
+		controls, inputs
+	2. Structure	
+	3. Collage
+	.
+	.
+	.
+	7. Dialogs
+ 
+ */ /* 1. General */
+body { /* HACK prevents dragging being interrupted by FF s */
+	-moz-user-select: none;
+}
+
+/* -- typography */
+body {
+	font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
+	font-size: 11px;
+	background: white;
+}
+
+p {
+	font-size: 12px;
+	margin-bottom: 10px;
+	line-height: 150%;
+}
+
+h2 {
+	color: #333333;
+	font-size: 16px;
+	margin-bottom: 10px;
+}
+
+h3 {
+	color: #333333;
+	font-size: 14px;
+	margin-bottom: 10px;
+}
+
+/* -- submit, cancel */
+input {
+	text-align: center;
+	line-height: normal;
+	white-space: nowrap;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+input.disabled,input.disabled:hover {
+	cursor: default;
+}
+
+/* -- upload */
+input.upload {
+	border: none;
+	background: none;
+}
+
+/* -- link */
+button.link {
+	font-size: 12px;
+	border: none;
+	cursor: pointer;
+}
+
+button.link.disabled,button.link.disabled:hover {
+	cursor: default;
+}
+
+/* -- close button */
+.hasCloseButton {
+	position: relative;
+}
+
+button.close {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	display: block;
+	cursor: pointer;
+	border: none;
+}
+
+button.close span {
+	display: none
+}
+
+/* 2. Structure */
+#container {
+	margin: 0 auto;
+}
+
+.main-content {
+	display: block;
+	padding: 9px;
+	margin-bottom: 10px;
+	border: 1px solid transparent;
+}
+
+footer {
+	clear: both;
+}
+
+/* 3. Collage */
+#collage {
+	
+}
+
+/* 7. Dialogs */
+#overlay,.overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #000000;
+	opacity: 0.7;
+	z-index: 1000;
+}
+
+#overlay {
+	opacity: 0.7;
+}
+
+#overlay .message {
+	position: absolute;
+	top: 150px;
+	left: 50%;
+	width: 600px;
+	height: 100px;
+	margin-left: -320px;
+	margin-top: -20px;
+	padding: 20px;
+	background: #f2f2f2;
+}
+
+.dialog {
+	position: absolute;
+	z-index: 1001;
+	left: 50%;
+	display: block;
+}

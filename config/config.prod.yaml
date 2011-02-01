@@ -1,0 +1,55 @@
+App:
+    # path    
+    path: /servers/prod/twitter-collage
+    # url
+    url: http://twitter-collage.quodis.com
+Store:
+    # storage path
+    path: /storage/prod/twitter-collage
+    # storage public url
+    url: http://store.twitter-collage.quodis.com
+    # created files and dirs in storage
+    filePermissions: 600
+    dirPermissions: 700
+    # resize
+    size: 10   
+Twitter:
+Cache:
+    enabled: 1
+    servers:
+        - host: localhost
+          port: 11211
+Db:
+    schemaDir: schema
+    databases:
+        - name: twitter-collage
+          schemaFile: db.sql
+          defaults: &connectionDefaults
+              host: localhost
+              name: twitter-collage
+              user: twitter-collage
+              pass: twitter-collage
+              client: localhost
+          connections:
+              read: 
+                  <<: *connectionDefaults
+                  mode: _modeRead
+              write:
+                  <<: *connectionDefaults
+                  mode: _modeWrite
+          installConnection:
+              <<: *connectionDefaults
+              name: 
+              mode: _modeWrite
+              user: install
+              pass: install
+UI:
+    gaEnabled: "0"
+    gaId: ""
+    title: Twitter Collage
+    keywords: ""
+    description: ""
+    templateDir: templates
+    template : website
+    stylesheet : "main.css?r=1"
+    mainJs : "collage.js?r=1" 
