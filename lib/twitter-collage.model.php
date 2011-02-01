@@ -202,7 +202,7 @@ final class Tweet
 	 */
 	public static function getUnprocessed()
 	{
-		$sql = "SELECT * FROM `tweet` WHERE `imageData` IS NULL LIMIT 100";
+		$sql = "SELECT * FROM `tweet` WHERE `imageData` IS NULL LIMIT 2000";
 
 		$result = Db::query($sql);
 
@@ -231,6 +231,8 @@ final class Tweet
 		$sql.= " WHERE `imageData` IS NOT NULL";
 		$sql.= " AND id > $from AND id <= $through";
 		$sql.= " ORDER BY `id` ASC";
+
+dd($sql);
 
 		$result = Db::query($sql);
 

@@ -20,7 +20,7 @@ function main()
 
 	$count = isset($argv[1]) ? $argv[1] : 10;
 
-	$tweets = Tweet::getByPage(0, $count * 2);
+	$tweets = Tweet::getByPage(0, $count);
 
 	$i = 0;
 	while ($i < $count)
@@ -28,9 +28,7 @@ function main()
 		$i++;
 		$tweet = $tweets->row();
 		$tweet = json_decode($tweet['payload'], TRUE);
-		Tweet::insert($tweet, $id);
-
-		dd($id);
+		Tweet::insert($tweet);
 	}
 
 	Dispatch::now(1, 'ADD FAKES OK', $data);
