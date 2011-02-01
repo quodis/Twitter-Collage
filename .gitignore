@@ -1,0 +1,13 @@
+# project files
+.DS_Store
+.settings/
+.buildpath
+.project
+
+# configuration
+config/config.yaml
+config/*.php
+
+# data files
+assets/*.php
+
