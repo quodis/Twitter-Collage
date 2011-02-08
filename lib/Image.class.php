@@ -65,7 +65,7 @@ class Image
 		$config = & Collage::getPageConfig();
 
 		$index = $config['index'][$position];
-		Debug::logMsg($id . ' > ' . $index . ' > ' . $index['x'] . ',' . $index['y']);
+		Debug::logMsg($id . ' > ' . $position . ' > ' . $index['x'] . ',' . $index['y']);
 		$tile  = $config['grid'][$index['y']][$index['x']];
 		$color = $tile['c'];
 		$rgbColor = str_pad(dechex($color[0]), 2, '0', STR_PAD_LEFT);

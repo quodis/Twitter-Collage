@@ -23,6 +23,7 @@
 	7. Dialogs
  
  */ /* 1. General */
+ 
 body { /* HACK prevents dragging being interrupted by FF s */
 	-moz-user-select: none;
 }
@@ -31,7 +32,7 @@ body { /* HACK prevents dragging being interrupted by FF s */
 body {
 	font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
 	font-size: 11px;
-	background: white;
+	background-color: #000;
 }
 
 p {

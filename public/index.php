@@ -81,7 +81,7 @@ function main()
 	<?php } ?>
 
 </head>
-<body class="<?=implode(" ", $classes)?>">
+<body class="<?=implode(" ", $classes)?>" >
 
 	<?php include '../templates/' . $config['UI']['template'] . '.tpl' ?>
 

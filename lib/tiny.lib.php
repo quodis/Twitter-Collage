@@ -205,6 +205,9 @@ class Dispatch
 					'msg' => $contents,
 					'payload' => $data
 				);
+
+				file_put_contents('/var/log/twitter-collage/page0.json', json_encode($var));
+
 				Debug::logMsg(json_encode($var), 'TERMINATE');
 
 				echo json_encode($var);
