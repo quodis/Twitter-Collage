@@ -15,6 +15,13 @@ class Collage
 {
 
 	/**
+	 * @const string cache key
+	 */
+	const CACHE_KEY_LAST_TWEET = 'TWITTER-COLLAGE::lastTweet::';
+	const CACHE_KEY_LAST_TWEET_WITH_IMAGE = 'TWITTER-COLLAGE::lastTweetWithImage::';
+
+
+	/**
 	 * @var array
 	 */
 	private static $_config = null;
@@ -36,6 +43,15 @@ class Collage
 	 * @var array
 	 */
 	private static $_pageConfig = null;
+
+	/**
+	 * @var integer twitter API id
+	 */
+	private static $_lastTweet = null;
+	/**
+	 * @var integer twitt serial number
+	 */
+	private static $_lastTweetWithImage = null;
 
 	/**
 	 * static class, nothing to see here, move along
@@ -83,6 +99,8 @@ class Collage
 			// declares $config
 			$json = file_get_contents(self::_getPageConfigFileName());
 
+			if (!$json) throw new Exception('could not load page config');
+
 			self::$_pageConfig = json_decode($json, TRUE);
 		}
 		return self::$_pageConfig;
@@ -96,7 +114,7 @@ class Collage
 	 */
 	public static function setPageGrid($grid)
 	{
-		$index = 0;
+		$index = 1;
 
 		foreach ($grid as $rowIx => $rowPixels)
 		{
@@ -122,7 +140,7 @@ class Collage
 	}
 
 
-	// ---- build
+	// ---- pages
 
 
 	/**
@@ -131,11 +149,30 @@ class Collage
 	 */
 	public static function updatePage($pageNo)
 	{
-		if (!self::pageExists($pageNo))
+		$filename = self::_getPageDataFileName($pageNo);
+
+		$fileData = self::getPageData($pageNo);
+
+		$last = end($fileData);
+
+		$lastId = isset($last['id']) ? $last['id'] : null;
+
+		$tweets = Tweet::getByPageWithImage($pageNo - 1, self::getPageSize(), $lastId);
+
+		Debug::logMsg('pageNo:' . $pageNo);
+
+		Debug::logMsg('tweets:' . $tweets->count());
+
+		$i = 0;
+
+		while ($tweet = $tweets->row())
 		{
-			self::_makePage($pageNo);
+			$i++;
+			$fileData[$tweet['position']] = $tweet;
+			if ($i == 100) break;
 		}
-		else self::_updatePage($pageNo);
+
+		file_put_contents($filename, json_encode($fileData));
 	}
 
 
@@ -149,16 +186,32 @@ class Collage
 	}
 
 	/**
-	 * only takes into account tweets with image already processed
 	 *
-	 * will page number according to last tweet
+	 * @param $pageNo
+	 *
+	 * @return array;
+	 */
+	public static function getPageData($pageNo)
+	{
+		$filename = self::_getPageDataFileName($pageNo);
+
+		if (file_exists($filename))
+		{
+			return json_decode(file_get_contents($filename), TRUE);
+		}
+		else return array();
+	}
+
+
+	/**
+	 * only takes into account tweets with image already processed
 	 *
 	 * @return integer
 	 */
 	public static function getCurrentViewingPageNo()
 	{
 		// force loading tweet no
-		$lastTweetWithImage = Twitter::getLastTweetWithImage();
+		$lastTweetWithImage = self::getLastTweetWithImage();
 
 		// page number
 		return ceil($lastTweetWithImage['id'] / self::getPageSize());
@@ -166,20 +219,29 @@ class Collage
 
 
 	/**
-	 * only takes into account tweets with image already processed
-	 * if a page is complete it will return the next page
+	 * based on processed pages
 	 *
 	 * @return integer
 	 */
 	public static function getCurrentWorkingPageNo()
 	{
-		// force loading
-		$lastTweetWithImage = Twitter::getLastTweetWithImage();
+		// TODO CACHE this
 
-		$pageFloat = $lastTweetWithImage['id'] / self::getPageSize();
+		$pageNo = 0;
 
-		// if is complete page returns +1 else returns current
-		$pageNo = (ceil($pageFloat) == $pageFloat) ? $pageFloat + 1 : ceil($pageFloat);
+		do
+		{
+			$pageNo++;
+
+			$fileName = self::_getPageDataFileName($pageNo);
+
+			if (!file_exists($fileName)) break;
+
+			$fileData = self::getPageData($pageNo);
+
+			if (count($fileData) < self::getPageSize()) break;
+		}
+		while (TRUE);
 
 		return $pageNo;
 	}
@@ -190,27 +252,98 @@ class Collage
 	 *
 	 * @return integer
 	 */
+	/*
 	public static function getTweetPageNo($id)
 	{
 		// page number
 		return ceil($id / self::getPageSize());
 	}
+	*/
+
+
+	// ---- tweets
 
 
 	/**
-	 * returns the index number of a certain tweet in it's page
+	 * @param array & $row
+	 */
+	public static function addTweet(array & $row)
+	{
+		Tweet::insert($row);
+
+		Cache::delete(self::CACHE_KEY_LAST_TWEET);
+	}
+
+
+	/**
+	 * @param integer $id
+	 * @param string $imageData (by reference)
+	 */
+	public static function updateTweetImage($id, & $imageData)
+	{
+		Tweet::updateImage($id, $imageData);
+
+		Cache::delete(self::CACHE_KEY_LAST_TWEET_WITH_IMAGE);
+	}
+
+	/**
+	 * @param array $lastTweet (by reference)
+	 */
+	public static function setLastTweet(array & $lastTweet)
+	{
+		self::$_lastTweet = $lastTweet;
+
+		Cache::set(self::CACHE_KEY_LAST_TWEET, $lastTweet, self::$_config['Cache']['TTL']['tweetIds']);
+	}
+
+
+	/**
+	 * @param array $lastTweet (by reference)
+	 */
+	public static function setLastTweetWithImage(array & $lastTweetWithImage)
+	{
+		self::$_lastTweetWithImage = $lastTweetWithImage;
+
+		Cache::set(self::CACHE_KEY_LAST_TWEET_WITH_IMAGE, $lastTweetWithImage, self::$_config['Cache']['TTL']['tweetIds']);
+	}
+
+
+	/**
+	 * last captured tweet (twitter id)
 	 *
 	 * @return integer
 	 */
-	public static function getTweetIndexInPage($id)
+	public static function getLastTweet()
 	{
-		$pageNo = self::getTweetPageNo($id);
+		// already loaded
+		if (!isset(self::$_lastTweet))
+		{
+			// load from db
+			if ($row = Tweet::getLast()) self::setLastTweet($row);
+		}
+		return self::$_lastTweet;
+	}
 
-		return $id - ($pageNo - 1) * self::getPageSize();
+
+	/**
+	 * last captured
+	 *
+	 * @return integer
+	 */
+	public static function getLastTweetWithImage()
+	{
+		// already loaded
+		if (!isset(self::$_lastTweetWithImage))
+		{
+			// load from db
+			if ($row = Tweet::getLastWithImage()) self::setLastTweetWithImage($row);
+		}
+		return self::$_lastTweetWithImage;
 	}
 
 
 	// ---- private
+
 
 	/**
 	 * @return string
@@ -228,58 +361,18 @@ class Collage
 	 */
 	private static function _getPageDataFileName($pageNo)
 	{
-		return self::$_config['App']['path'] . '/' . self::$_config['Collage']['pageDir'] . '/page' . (int)$pageNo . '.php';
-	}
+		$filename = self::$_config['App']['pathCache'] . '/pages/page' . $pageNo . '.php';
 
-	/**
-	 *
-	 * @param $pageNo
-	 */
-	private static function _makePage($pageNo)
-	{
-		$filename = self::_getPageDataFileName($pageNo);
-
-		$tweets = Tweet::getByPage($pageNo - 1, self::getPageSize());
-
-		$fileData = array();
-
-		while ($tweet = $tweets->row())
+		if (!is_dir(dirname($filename)))
 		{
-			$tweetNo = self::getTweetIndexInPage($tweet['id']);
-
-			$fileData[$tweetNo] = $tweet;
+			mkdir(dirname($filename), octdec(self::$_config['App']['cacheDirPermissions']), TRUE);
 		}
 
-		file_put_contents($filename, json_encode($fileData));
-	}
-
-	/**
-	 * @param $pageNumber
-	 */
-	private static function _updatePage($pageNo)
-	{
-		$filename = self::_getPageDataFileName($pageNo);
-
-		$fileData = json_decode(file_get_contents($filename), TRUE);
-
-		$last = end($fileData);
-
-		$lastId = isset($last['id']) ? $last['id'] : null;
-
-		$tweets = Tweet::getByPage($pageNo - 1, self::getPageSize(), $lastId);
-
-		while ($tweet = $tweets->row())
-		{
-			$tweetNo = self::getTweetIndexInPage($tweet['id']);
-
-			$fileData[$tweetNo] = $tweet;
-		}
-
-		file_put_contents($filename, json_encode($fileData));
+		return $filename;
 	}
 
 
-
+	// ----
 
 }
 

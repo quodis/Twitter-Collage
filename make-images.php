@@ -22,7 +22,9 @@ function main()
 	{
 		if (Image::download($tweet['imageUrl'], $tweet['id']))
 		{
-			Image::makeTile($tweet['imageUrl'], $tweet['id'], Collage::getTweetIndexInPage($tweet['id']));
+			$encoded = Image::makeTile($tweet['imageUrl'], $tweet['id'], $tweet['position']);
+
+			Tweet::updateImage($tweet['id'], $encoded);
 		}
 	}
 

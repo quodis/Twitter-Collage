@@ -9,6 +9,8 @@
 DROP TABLE IF EXISTS `tweet`;
 CREATE TABLE `tweet` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `page` INT(10) UNSIGNED NOT NULL,
+  `position` SMALLINT(5) UNSIGNED NOT NULL,
   `twitterId` BIGINT(20) UNSIGNED NOT NULL,    /* id_str: "32073166788493312" */
   `userId` INT(10) UNSIGNED NOT NULL,          /* from_user_id_str: "70669597" */
   `userName` VARCHAR(36) NOT NULL,    /* from_user: "onion_soup" */

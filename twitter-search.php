@@ -17,13 +17,46 @@ function main()
 	include dirname(__FILE__) . '/bootstrap.php';
 
 	// will return nothing on first call
-	$lastTweet = Twitter::getLastTweet();
+	$lastTweet = Collage::getLastTweet();
 
 	// fetch results using twitter API
-	$results = Twitter::search($config['Collage']['terms'], $lastTweet['id']);
+	$newTweets = Twitter::search($config['Twitter']['terms'], $config['Twitter']['rpp'], $lastTweet['twitterId']);
 
-	// add results (will clear some cache values)
-	foreach ($results as $row) Twitter::addTweet($row);
+	// start adding to this page
+	$pageNo   = Collage::getCurrentWorkingPageNo();
+	$pageSize = Collage::getPageSize();
+	// all slots
+	$freeSlots = array();
+	for ($i = 1; $i <= $pageSize; $i++) $freeSlots[$i] = $i;
+	// remove used slots
+	$result = Tweet::getByPage($pageNo, $pageSize);
+	while ($row = $result->row()) unset($freeSlots[$row['position']]);
+
+	// shuffle slots
+	shuffle($freeSlots);
+
+	// add new tweets
+	foreach ($newTweets as $tweet)
+	{
+		$position = array_pop($freeSlots);
+
+		$tweet['page'] = $pageNo;
+		$tweet['position'] = $position;
+
+		Collage::addTweet($tweet);
+
+		// no positions left in this page
+		if (!count($freeSlots))
+		{
+			// new page
+			$pageNo++;
+			// all slots
+			$freeSlots = array();
+			for ($i = 1; $i <= $pageSize; $i++) $freeSlots[] = $i;
+			// shuffle slots
+			shuffle($freeSlots);
+		}
+	}
 
 	Dispatch::now(1, 'TWITTER SEARCH OK', $data);
 

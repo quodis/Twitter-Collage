@@ -20,6 +20,8 @@ final class Tweet
 	 * @var array
 	 */
 	public static $_fieldMap = array(
+		'page'              => 'page',
+		'position'          => 'position',
 		'id_str'            => 'twitterId',
 		'from_user_id_str'  => 'userId',
 		'from_user'         => 'userName',
@@ -202,7 +204,7 @@ final class Tweet
 	 */
 	public static function getUnprocessed()
 	{
-		$sql = "SELECT * FROM `tweet` WHERE `imageData` IS NULL LIMIT 2000";
+		$sql = "SELECT * FROM `tweet` WHERE `imageData` IS NULL LIMIT 1000";
 
 		$result = Db::query($sql);
 
@@ -222,6 +224,33 @@ final class Tweet
 	public static function getByPage($pageNo, $pageSize, $lastId = null)
 	{
 		$pageNo = (int)$pageNo;
+		$from = ($pageNo - 1) * $pageSize;
+		$through = $pageNo * $pageSize;
+
+		if ($lastId > $from) $from = $lastId;
+
+		$sql = "SELECT * FROM `tweet` ";
+		$sql.= " WHERE id > $from AND id <= $through";
+		$sql.= " ORDER BY `id` ASC";
+
+		$result = Db::query($sql);
+
+		return $result;
+	}
+
+
+	/**
+	 * tweets of this page
+	 *
+	 * @param integer $pageNo
+	 * @param integer $pageSize
+	 * @param integer $lastId
+	 *
+	 * @return array
+	 */
+	public static function getByPageWithImage($pageNo, $pageSize, $lastId = null)
+	{
+		$pageNo = (int)$pageNo;
 		$from = $pageNo * $pageSize;
 		$through = ($pageNo + 1) * $pageSize;
 
@@ -231,8 +260,6 @@ final class Tweet
 		$sql.= " WHERE `imageData` IS NOT NULL";
 		$sql.= " AND id > $from AND id <= $through";
 		$sql.= " ORDER BY `id` ASC";
-
-dd($sql);
 
 		$result = Db::query($sql);
 

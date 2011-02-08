@@ -88,7 +88,10 @@ class Curl
 
 			if ($cacheFile)
 			{
-				if (!is_dir(dirname($cacheFile))) @mkdir(dirname($cacheFile), octdec($cacheDirPermissions), TRUE);
+				if (!is_dir(dirname($cacheFile)))
+				{
+					mkdir(dirname($cacheFile), octdec($cacheDirPermissions), TRUE);
+				}
 				file_put_contents($cacheFile, $response);
 				chmod($cacheFile, octdec($cacheFilePermissions));
 			}

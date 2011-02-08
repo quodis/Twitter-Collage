@@ -65,7 +65,7 @@ class Image
 		$config = & Collage::getPageConfig();
 
 		$index = $config['index'][$position];
-		Debug::logMsg($id . ' -> ' . $index['x'] . ',' . $index['y']);
+		Debug::logMsg($id . ' > ' . $index . ' > ' . $index['x'] . ',' . $index['y']);
 		$tile  = $config['grid'][$index['y']][$index['x']];
 		$color = $tile['c'];
 		$rgbColor = str_pad(dechex($color[0]), 2, '0', STR_PAD_LEFT);
@@ -89,7 +89,10 @@ class Image
 		$fileId = str_pad($index['x'], 2, '0', STR_PAD_LEFT) . str_pad($index['y'], 2, '0', STR_PAD_LEFT) . $id;
 		$destination = self::fileName('processed', $fileId, 'jpg');
 
-		if (!is_dir(dirname($destination))) mkdir(dirname($destination), octdec(self::$_config['App']['cacheDirPermissions']), TRUE);
+		if (!is_dir(dirname($destination)))
+		{
+			mkdir(dirname($destination), octdec(self::$_config['App']['cacheDirPermissions']), TRUE);
+		}
 
 		// store
 		$image->writeImage($destination);
@@ -99,9 +102,7 @@ class Image
 		$rgbColorFile = self::fileName('processed', $fileId, $rgbColor . '.' .  'txt');
 		file_put_contents($rgbColorFile, '');
 
-		$encoded = base64_encode(file_get_contents($destination));
-
-		Tweet::updateImage($id, $encoded);
+		return base64_encode(file_get_contents($destination));
 	}
 
 

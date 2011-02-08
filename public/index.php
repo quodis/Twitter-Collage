@@ -129,8 +129,10 @@ function main()
 			};
 		}
 
-		function addImage(data, i, x, y)
+		function addImage(data, i)
 		{
+			var x = config.index[i].x;
+			var y = config.index[i].y;
 			var offsetX = config.tileSize * x;
 			var offsetY = config.tileSize * y;
 			$('#main').append('<img id="image-' + i + '" src="data:image/gif;base64,' + data + '" style="width:11px; height:11px; position: absolute; top: ' + offsetY +'px; left: ' + offsetX + 'px" />');
@@ -143,9 +145,10 @@ function main()
 			data: [],
 			dataType: 'json',
 			success: function(data) {
+				var imageData, i;
 				for (i in data.payload.tweets) {
-					var imageData = data.payload.tweets[i].imageData;
-					addImage(imageData, i, config.index[i].x, config.index[i].y);
+					imageData = data.payload.tweets[i].imageData;
+					addImage(imageData, data.payload.tweets[i].position);
 					// fetch position from index
 				}
 			}.bind(this),

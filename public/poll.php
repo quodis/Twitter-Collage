@@ -19,8 +19,11 @@ function main()
 	// create / update page
 	$pageNo = Collage::getCurrentViewingPageNo();
 
+	$pageNo = 1;
+
 	$result = Tweet::getByPage($pageNo, Collage::getPageSize());
 
+	$tweets = array();
 	while ($row = $result->row())
 	{
 		unset($row['payload']);

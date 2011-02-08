@@ -392,6 +392,9 @@ class Cache
 	{
 		// drop out if not enabled
 		if (!self::$_config['Cache']['enabled']) return FALSE;
+
+		//dd($cacheValue, 'CACHE SET ' . $cacheKey . ' » ' . gettype($cacheValue));
+
 		//
 		$ok = self::$_handler->set($cacheKey, $cacheValue, MEMCACHE_COMPRESSED, $TTL);
 
@@ -428,6 +431,8 @@ class Cache
 		if (!self::$_config['Cache']['enabled']) return FALSE;
 		//
 		$ret = self::$_handler->get($cacheKey);
+
+		//dd($ret, 'CACHE GET ' . $cacheKey . ' » ' . gettype($ret));
 
 		audit::call('Cache', $ret ? 'get/OK' : 'get/MISS', $cacheKey);
 

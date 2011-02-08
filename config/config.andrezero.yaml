@@ -1,7 +1,7 @@
 App:
     # path    
     path: /servers/sites/quodis/twitter-collage
-    pathCache: /servers/sites/quodis/twitter-collage/cache
+    pathCache: /servers/cache/twitter-collage
     cacheFilePermissions: 777
     cacheDirPermissions: 777
     # url
@@ -14,22 +14,23 @@ Store:
     # created files and dirs in storage
     filePermissions: 777
     dirPermissions: 777
-Twitter: 
+Twitter:
     urlSearch: "http://search.twitter.com/search.json" 
+    terms: "mubarak"
+    rpp: 100
+    pageLimit: 30
 Collage:
     logoFile: assets/logo46x48.png
     defaultPic: assets/default48x48.png
     configFile: assets/config46x48.php
-    pageDir: assets
-    terms: "obama"
     cols: 46
     rows: 48
     tileSize: 11
 Cache:
     enabled: 1
     TTL:
-      - collageConfig: 2000 
-      - tweetIds: 200
+      collageConfig: 2000 
+      tweetIds: 200
     servers:
         - host: localhost
           port: 11211

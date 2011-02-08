@@ -20,9 +20,10 @@ function main()
 
 	Db::executeFile(dirname(__FILE__) .'/schema/tables.sql');
 
-	Cache::delete(Twitter::CACHE_KEY_LAST_TWEET);
-	Cache::delete(Twitter::CACHE_KEY_LAST_TWEET_WITH_IMAGE);
+	Cache::delete(Collage::CACHE_KEY_LAST_TWEET);
+	Cache::delete(Collage::CACHE_KEY_LAST_TWEET_WITH_IMAGE);
 
+	shell_exec('rm -R /servers/cache/twitter-collage/*');
 
 	Dispatch::now(1, 'RESET ALL OK', $data);
 
