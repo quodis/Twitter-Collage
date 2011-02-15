@@ -18,7 +18,7 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include dirname(__FILE__) . '/bootstrap.php';
 
-	$sql = 'UPDATE tweet SET imageUrl = NULL, imageData = NULL';
+	$sql = 'UPDATE tweet SET imageData = NULL';
 	dd($sql);
 
 	Db::execute($sql);
