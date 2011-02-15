@@ -16,7 +16,7 @@ Store:
     dirPermissions: 700
 Twitter:
     urlSearch: "http://search.twitter.com/search.json"
-    terms: "mubarak"
+    terms: "obama"
     rpp: 100
     pageLimit: 30
 Collage:

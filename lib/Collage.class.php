@@ -147,7 +147,7 @@ class Collage
 
 		$lastId = isset($last['id']) ? $last['id'] : null;
 
-		$tweets = Tweet::getByPageWithImage($pageNo - 1, self::getPageSize(), $lastId);
+		$tweets = Tweet::getByPageWithImage($pageNo, self::getPageSize(), $lastId);
 
 		Debug::logMsg('pageNo:' . $pageNo);
 
