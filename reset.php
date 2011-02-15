@@ -12,18 +12,29 @@
  */
 function main()
 {
+	global $argv;
+
 	DEFINE('CLIENT', 'script');
 	DEFINE('CONTEXT', __FILE__);
 	include dirname(__FILE__) . '/bootstrap.php';
 
-	// create / update page
+	$usage = "missing params\nUSAGE:\n- php reset.php db\n- php reset.php pages\n- php reset.php pages db\n";
 
-	Db::executeFile(dirname(__FILE__) .'/schema/tables.sql');
+	if (!isset($argv[1])) Dispatch::now(0, $usage);
 
-	Cache::delete(Collage::CACHE_KEY_LAST_TWEET);
-	Cache::delete(Collage::CACHE_KEY_LAST_TWEET_WITH_IMAGE);
+	if (in_array('db', $argv))
+	{
+		Db::executeFile(dirname(__FILE__) .'/schema/tables.sql');
 
-	shell_exec('rm -R /servers/cache/twitter-collage/*');
+		Cache::delete(Collage::CACHE_KEY_LAST_TWEET);
+		Cache::delete(Collage::CACHE_KEY_LAST_TWEET_WITH_IMAGE);
+	}
+
+	if (in_array('pages', $argv))
+	{
+		shell_exec('rm -R /servers/cache/twitter-collage/processed/*');
+		shell_exec('rm -R /servers/cache/twitter-collage/pages/*');
+	}
 
 	Dispatch::now(1, 'RESET ALL OK', $data);
 

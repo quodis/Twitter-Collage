@@ -17,8 +17,8 @@ Store:
 Twitter:
     urlSearch: "http://search.twitter.com/search.json"
     terms: "mubarak"
-    rpp: 10
-    pageLimit: 3
+    rpp: 100
+    pageLimit: 30
 Collage:
     logoFile: assets/logo46x48.png
     defaultPic: assets/default48x48.png
