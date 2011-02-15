@@ -52,13 +52,13 @@ function main()
 			$pageNo++;
 			// all slots
 			$freeSlots = array();
-			for ($i = 0; $i < $pageSize; $i++) $freeSlots[] = $i;
+			for ($i = 0; $i < $pageSize; $i++) $freeSlots[$i] = $i;
 			// shuffle slots
 			shuffle($freeSlots);
 		}
 	}
 
-	Dispatch::now(1, 'TWITTER SEARCH OK', $data);
+	Dispatch::now(1, 'TWITTER SEARCH OK');
 
 } // main()
 

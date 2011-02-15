@@ -27,10 +27,6 @@ class Collage
 	private static $_config = null;
 
 	/**
-	 * @var integer
-	 */
-	private static $_pageSize = null;
-	/**
 	 * index[0] = '0x0'
 	 * grid['0x0'] - array of pixels, each one containing
 	 *  - color
@@ -78,14 +74,10 @@ class Collage
 	 */
 	public static function getPageSize()
 	{
-		if (!isset(self::$_pageSize))
-		{
-			// force load data
-			if (!isset(self::$_pageConfig)) self::getPageConfig();
+		// force load data
+		if (!isset(self::$_pageConfig)) self::getPageConfig();
 
-			self::$_pageSize = count(self::$_pageConfig['index']);
-		}
-		return self::$_pageSize;
+		return count(self::$_pageConfig['index']);
 	}
 
 
