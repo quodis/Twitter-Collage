@@ -169,7 +169,6 @@ class Collage
 		{
 			$i++;
 			$fileData[$tweet['position']] = $tweet;
-			if ($i == 100) break;
 		}
 
 		file_put_contents($filename, json_encode($fileData));
