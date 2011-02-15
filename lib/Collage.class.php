@@ -141,13 +141,7 @@ class Collage
 	 */
 	public static function updatePage($pageNo)
 	{
-		$fileData = self::getPageData($pageNo);
-
-		$last = end($fileData);
-
-		$lastId = isset($last['id']) ? $last['id'] : null;
-
-		$tweets = Tweet::getByPageWithImage($pageNo, self::getPageSize(), $lastId);
+		$tweets = Tweet::getByPageWithImage($pageNo, self::getPageSize());
 
 		Debug::logMsg('pageNo:' . $pageNo);
 
@@ -155,11 +149,15 @@ class Collage
 
 		$i = 0;
 
+		$fileData = array();
 		while ($tweet = $tweets->row())
 		{
+			if (isset($fileData[$tweet['position']])) continue;
 			$i++;
 			$fileData[$tweet['position']] = $tweet;
 		}
+
+		if ($i < $tweets->count()) Debug::logError('#wtf#');
 
 		$filename = self::_getPageDataFileName($pageNo);
 		file_put_contents($filename, json_encode($fileData));
