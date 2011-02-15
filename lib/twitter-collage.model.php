@@ -251,8 +251,8 @@ final class Tweet
 	public static function getByPageWithImage($pageNo, $pageSize, $lastId = null)
 	{
 		$pageNo = (int)$pageNo;
-		$from = $pageNo * $pageSize;
-		$through = ($pageNo + 1) * $pageSize;
+		$from = ($pageNo - 1) * $pageSize;
+		$through = $pageNo * $pageSize;
 
 		if ($lastId > $from) $from = $lastId;
 

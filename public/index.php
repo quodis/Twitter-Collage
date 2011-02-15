@@ -64,7 +64,7 @@ function main()
 	<?php }?>
 
 	<?php if ($config['UI']['gaEnabled']) { ?>
-<script type="text/javascript">
+		<script type="text/javascript">
 		//<![CDATA[
 			var _gaq = _gaq || [];
 			_gaq.push(['_setAccount', '<?=$config['UI']['gaId']?>']);
@@ -83,6 +83,10 @@ function main()
 </head>
 <body class="<?=implode(" ", $classes)?>" >
 
+	PageNo:
+	<input type="text" id="pageNo" value="1"/>
+	<button id ="pageGo">Go</button>
+
 	<?php include '../templates/' . $config['UI']['template'] . '.tpl' ?>
 
 <script type="text/javascript">
@@ -94,7 +98,7 @@ function main()
 
 		config.tileSize = <?=$config['Collage']['tileSize']?>;
 
-		console.log(config);
+		console.log('GRID CONFIG', config);
 
 		/**
 		 * mock support for window.console
@@ -138,23 +142,43 @@ function main()
 			$('#main').append('<img id="image-' + i + '" src="data:image/gif;base64,' + data + '" style="width:11px; height:11px; position: absolute; top: ' + offsetY +'px; left: ' + offsetX + 'px" />');
 		}
 
+		function loadPage(pageNo)
+		{
 
-		$.ajax( {
-			type: 'GET',
-			url: 'poll.php',
-			data: [],
-			dataType: 'json',
-			success: function(data) {
-				var imageData, i;
-				for (i in data.payload.tweets) {
-					imageData = data.payload.tweets[i].imageData;
-					addImage(imageData, data.payload.tweets[i].position);
-					// fetch position from index
-				}
-			}.bind(this),
-				error: function() {
-			}.bind(this)
-		});
+			$('#main img').remove();
+
+			var pollParams = {}
+			if (pageNo) {
+				pollParams.pageNo = pageNo;
+			}
+
+			console.log('POLL PARAMS', pollParams);
+
+			$.ajax( {
+				type: 'GET',
+				url: 'poll.php',
+				data: pollParams,
+				dataType: 'json',
+				success: function(data) {
+					var imageData, i;
+					for (i in data.payload.tweets) {
+						imageData = data.payload.tweets[i].imageData;
+						addImage(imageData, data.payload.tweets[i].position);
+						// fetch position from index
+					}
+				}.bind(this),
+					error: function() {
+				}.bind(this)
+			});
+		}
+
+		loadPage();
+
+		$('#pageGo').click( function() {
+
+			loadPage($('#pageNo').val());
+
+		} );
 
 <?php } else { ?>
 

@@ -16,12 +16,18 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include '../bootstrap.php';
 
-	// create / update page
-	$pageNo = Collage::getCurrentViewingPageNo();
+	if (isset($_REQUEST['pageNo']))
+	{
+		$pageNo = (int)$_REQUEST['pageNo'];
+		if ($pageNo == 0) $pageNo = 1;
+	}
+	else $pageNo = Collage::getCurrentViewingPageNo();
 
-	$pageNo = 1;
+	dd('pageNo:' . $pageNo);
 
-	$result = Tweet::getByPage($pageNo, Collage::getPageSize());
+	$result = Tweet::getByPageWithImage($pageNo, Collage::getPageSize());
+
+	dd('count:' . $result->count());
 
 	$tweets = array();
 	while ($row = $result->row())
