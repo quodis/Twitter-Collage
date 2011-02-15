@@ -27,7 +27,7 @@ function main()
 	$pageSize = Collage::getPageSize();
 	// all slots
 	$freeSlots = array();
-	for ($i = 1; $i <= $pageSize; $i++) $freeSlots[$i] = $i;
+	for ($i = 0; $i < $pageSize; $i++) $freeSlots[$i] = $i;
 	// remove used slots
 	$result = Tweet::getByPage($pageNo, $pageSize);
 	while ($row = $result->row()) unset($freeSlots[$row['position']]);
@@ -52,7 +52,7 @@ function main()
 			$pageNo++;
 			// all slots
 			$freeSlots = array();
-			for ($i = 1; $i <= $pageSize; $i++) $freeSlots[] = $i;
+			for ($i = 0; $i < $pageSize; $i++) $freeSlots[] = $i;
 			// shuffle slots
 			shuffle($freeSlots);
 		}
