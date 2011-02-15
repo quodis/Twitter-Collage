@@ -38,13 +38,6 @@ function main()
 	// add new tweets
 	foreach ($newTweets as $tweet)
 	{
-		$position = array_pop($freeSlots);
-
-		$tweet['page'] = $pageNo;
-		$tweet['position'] = $position;
-
-		Collage::addTweet($tweet);
-
 		// no positions left in this page
 		if (!count($freeSlots))
 		{
@@ -56,6 +49,13 @@ function main()
 			// shuffle slots
 			shuffle($freeSlots);
 		}
+
+		$position = array_pop($freeSlots);
+
+		$tweet['page'] = $pageNo;
+		$tweet['position'] = $position;
+
+		Collage::addTweet($tweet);
 	}
 
 	Dispatch::now(1, 'TWITTER SEARCH OK');
