@@ -171,3 +171,8 @@ input#pageNo {
 	top: 100px;
 	left: 100px;
 }
+
+header,
+footer {
+	display: none;
+}

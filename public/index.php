@@ -84,7 +84,7 @@ function main()
 <body class="<?=implode(" ", $classes)?>" >
 
 	PageNo:
-	<input type="text" id="pageNo" value="1"/>
+	<input type="text" id="pageNo" value=""/>
 	<button id ="pageGo">Go</button>
 
 	<?php include '../templates/' . $config['UI']['template'] . '.tpl' ?>
