@@ -48,6 +48,11 @@ class Image
 
 		$fileData = Curl::get($url, $cacheFile, self::$_config['App']['cacheDirPermissions'], self::$_config['App']['cacheFilePermissions']);
 
+		if (!$fileData)
+		{
+			$fileData = file_get_contents(self::$_config['App']['path'] . '/' . self::$_config['Collage']['defaultPic']);
+		}
+
 		return !!$fileData;
 	}
 

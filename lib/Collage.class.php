@@ -114,7 +114,7 @@ class Collage
 	 */
 	public static function setPageGrid($grid)
 	{
-		$index = 1;
+		$index = 0;
 
 		foreach ($grid as $rowIx => $rowPixels)
 		{
@@ -149,8 +149,6 @@ class Collage
 	 */
 	public static function updatePage($pageNo)
 	{
-		$filename = self::_getPageDataFileName($pageNo);
-
 		$fileData = self::getPageData($pageNo);
 
 		$last = end($fileData);
@@ -171,6 +169,7 @@ class Collage
 			$fileData[$tweet['position']] = $tweet;
 		}
 
+		$filename = self::_getPageDataFileName($pageNo);
 		file_put_contents($filename, json_encode($fileData));
 	}
 
