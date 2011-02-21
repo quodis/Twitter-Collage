@@ -1,10 +1,15 @@
-# Wiki
+# Relevant URLs
 
 [http://dev.twitter-collage.quodis.com/](http://dev.twitter-collage.quodis.com/)
 
 [http://swap.quodis.com/collage/v1.html](http://swap.quodis.com/collage/v1.html)
 ...
 [http://swap.quodis.com/collage/v8.html](http://swap.quodis.com/collage/v8.html)
+
+# Requirements
+
+* PHP 5.3.2
+ * Imagick 3.0.1
 
 ## execute
 
