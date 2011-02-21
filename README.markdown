@@ -1,5 +1,11 @@
 # Wiki
 
+[http://dev.twitter-collage.quodis.com/](http://dev.twitter-collage.quodis.com/)
+
+[http://swap.quodis.com/collage/v1.html](http://swap.quodis.com/collage/v1.html)
+...
+[http://swap.quodis.com/collage/v8.html](http://swap.quodis.com/collage/v8.html)
+
 ## execute
 
 ### color-import.php
