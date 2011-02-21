@@ -20,7 +20,7 @@ Twitter:
     rpp: 100
     pageLimit: 30
 Collage:
-    logoFile: assets/logo46x48.png
+    logoFile: assets/logo47x48.png
     defaultPic: assets/default48x48.png
     configFile: assets/config47x48.php
     cols: 47
