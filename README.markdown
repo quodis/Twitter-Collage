@@ -10,13 +10,13 @@
 
 ### color-import.php
 
-takes the icon in 
+uses the icon in 
 
-config/Collage/logoFile 
+config/<logoFile>
 
 analyses it and imports the pixel colors into a file as in
 
-config/Collage/configFile
+config/<configFile>
 
 *the following 3 php scripts should be cron'ed*
 

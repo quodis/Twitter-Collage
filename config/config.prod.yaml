@@ -20,10 +20,10 @@ Twitter:
     rpp: 100
     pageLimit: 30
 Collage:
-    logoFile: assets/logo40x48.png
+    logoFile: assets/logo47x48.png
     defaultPic: assets/default48x48.png
-    configFile: assets/config46x48.php
-    cols: 46
+    configFile: assets/config47x48.php
+    cols: 47
     rows: 48
     tileSize: 11
 Cache:
