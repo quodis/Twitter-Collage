@@ -1,8 +1,8 @@
-h1. Wiki
+# Wiki
 
-h2. execute
+## execute
 
-h3. color-import.php
+### color-import.php
 
 takes the icon in 
 
@@ -15,7 +15,7 @@ analyses it and imports the pixel colors into a file as in
 
 *the following 3 php scripts should be cron'ed*
 
-h3. twitter-search.php
+### twitter-search.php
 
 * fetch tweets from twitter API,
 * randomize each new tweet position in current page
@@ -44,7 +44,7 @@ php twitter-search.php
  php collage-build.php
 </code></pre>
 
-h2. update 
+## update 
 
 <pre><code>
  cd /servers/develop/twitter-collage
@@ -59,23 +59,23 @@ h2. update
 
 </code></pre>
 
-h2. install
+## install
 
-h3. cache dir
+### cache dir
 
 <pre><code>
  mkdir /servers/cache/twitter-collage
  chmod 777 /servers/cache/twitter-collage
 </code></pre>
 
-h3. log dir
+### log dir
 
 <pre><code>
  mkdir /var/log/twitter-collage
  chmod 777 /var/log/twitter-collage
 </code></pre>
 
-h3. code dir
+### code dir
 
 <pre><code>
  mkdir /servers/develop
@@ -83,13 +83,13 @@ h3. code dir
  git clone git@github.com:quodis/Twitter-Collage.git twitter-collage
 </code></pre>
 
-h3. configure
+### configure
 
 <pre><code>
  php configure.php
 </code></pre>
 
-h3. database
+### database
 
 <pre><code>
  mysql> \. schema/db.sql
