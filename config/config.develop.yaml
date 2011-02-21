@@ -22,8 +22,8 @@ Twitter:
 Collage:
     logoFile: assets/logo46x48.png
     defaultPic: assets/default48x48.png
-    configFile: assets/config46x48.php
-    cols: 46
+    configFile: assets/config47x48.php
+    cols: 47
     rows: 48
     tileSize: 11
 Cache:
