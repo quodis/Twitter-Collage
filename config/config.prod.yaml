@@ -25,7 +25,7 @@ Collage:
     configFile: assets/config48x47.php
     cols: 48
     rows: 47
-    tileSize: 11
+    tileSize: 12
 Cache:
     enabled: 1
     TTL:
