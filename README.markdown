@@ -17,11 +17,11 @@
 
 uses the icon in 
 
-config/<logoFile>
+config/logoFile
 
 analyses it and imports the pixel colors into a file as in
 
-config/<configFile>
+config/configFile
 
 *the following 3 php scripts should be cron'ed*
 
