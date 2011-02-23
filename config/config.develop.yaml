@@ -2,8 +2,9 @@ App:
     # path    
     path: /servers/develop/twitter-collage
     pathCache: /servers/cache/twitter-collage
-    cacheFilePermissions: 777
-    cacheDirPermissions: 777
+    cacheFilePermissions: 664
+    cacheDirPermissions: 764
+    cacheDirGroup: quodis
     # url
     url: http://dev.twitter-collage.quodis.com
 Store:

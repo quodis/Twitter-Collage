@@ -90,7 +90,9 @@ class Image
 		// create the destination directory if it doesn't exist already
 		if (!is_dir(dirname($fileName)))
 		{
+			dd("#".octdec(self::$_config['App']['cacheDirPermissions'])."#");
 			mkdir(dirname($fileName), octdec(self::$_config['App']['cacheDirPermissions']), TRUE);
+			chgrp(dirname($fileName), self::$_config['App']['cacheDirGroup']);
 		}
 
 		// save a "blank" file with the filename we generated above
@@ -149,7 +151,9 @@ class Image
 		// create the destination directory if it doesn't exist already
 		if (!is_dir(dirname($destination)))
 		{
+			dd("#".octdec(self::$_config['App']['cacheDirPermissions'])."#");
 			mkdir(dirname($destination), octdec(self::$_config['App']['cacheDirPermissions']), TRUE);
+			chgrp(dirname($destination), self::$_config['App']['cacheDirGroup']);
 		}
 
 		// store the processed original image
