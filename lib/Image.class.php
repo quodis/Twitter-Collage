@@ -137,13 +137,14 @@ class Image
 		}
 
 		/* PROCESS THE ORIGINAL IMAGE */
+		$image->setImageFormat('gif');
 		// desaturate the image
 		$image->modulateImage(100, 0, 100);
 		// resize the image to the tile size
 		$image->thumbnailImage(self::$_config['Collage']['tileSize'], 0);
 
 		// generate the destination
-		$destination = self::fileName('processed', md5($id), 'jpg');
+		$destination = self::fileName('processed', md5($id), 'gif');
 
 		// create the destination directory if it doesn't exist already
 		if (!is_dir(dirname($destination))) self::mkdir(dirname($destination));
