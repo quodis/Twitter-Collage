@@ -68,6 +68,40 @@ class Image
 
 
 	/**
+	 * generate the overlay image
+	 *
+	 * @param integer $position
+	 *
+	 * @return string filename for dbg purposes
+	 */
+	public static function makeTileOverlay($position)
+	{
+		$rgbColor = self::getTileRgbColor($position);
+
+		$fileName = self::getTileOverlayFilename($position);
+
+		$tileSize = self::$_config['Collage']['tileSize'];
+
+		// generate the overlay with the current rgb color and same size as original image
+		$overlay = new Imagick();
+		$overlay->newImage($tileSize, $tileSize, new ImagickPixel('#' . $rgbColor));
+		$overlay->setImageFormat('gif');
+
+		// create the destination directory if it doesn't exist already
+		if (!is_dir(dirname($fileName)))
+		{
+			mkdir(dirname($fileName), octdec(self::$_config['App']['cacheDirPermissions']), TRUE);
+		}
+
+		// save a "blank" file with the filename we generated above
+		if ($overlay->writeImage($fileName))
+		{
+			return $fileName;
+		}
+	}
+
+
+	/**
 	 * Create the Tile file
 	 *
 	 * @param string $url
@@ -85,21 +119,10 @@ class Image
 		// generate the file path for the destination/cache file
 		$cacheFile = self::fileName('original', md5($url), $sufix);
 
-		// fetch the config for this page that includes ???
-		$config = & Collage::getPageConfig();
-
-		// fetch 
-		$index = $config['index'][$position];
 		// debug
+		$config = & Collage::getPageConfig();
+		$index = $config['index'][$position];
 		Debug::logMsg($id . ' > ' . $position . ' > ' . $index['x'] . ',' . $index['y']);
-		// fetch the 
-		$tile  = $config['grid'][$index['y']][$index['x']];
-		// ??
-		$color = $tile['c'];
-		// ???
-		$rgbColor = str_pad(dechex($color[0]), 2, '0', STR_PAD_LEFT);
-		$rgbColor.= str_pad(dechex($color[1]), 2, '0', STR_PAD_LEFT);
-		$rgbColor.= str_pad(dechex($color[2]), 2, '0', STR_PAD_LEFT);
 
 		try
 		{
@@ -113,17 +136,15 @@ class Image
 			// new Imagick object from default twitter avatar, usually in the assets folder inside app root
 			$image = new Imagick($default);
 		}
-		
+
 		/* PROCESS THE ORIGINAL IMAGE */
 		// desaturate the image
 		$image->modulateImage(100, 0, 100);
 		// resize the image to the tile size
 		$image->thumbnailImage(self::$_config['Collage']['tileSize'], 0);
-		
-		// generate the filename
-		$fileId = str_pad($index['x'], 2, '0', STR_PAD_LEFT) . str_pad($index['y'], 2, '0', STR_PAD_LEFT) . $id;
+
 		// generate the destination
-		$destination = self::fileName('processed', $fileId, 'jpg');
+		$destination = self::fileName('processed', md5($id), 'jpg');
 
 		// create the destination directory if it doesn't exist already
 		if (!is_dir(dirname($destination)))
@@ -136,21 +157,13 @@ class Image
 		// set permissions on the original image
 		chmod($destination, octdec(self::$_config['App']['cacheFilePermissions']));
 
-		// TODO: the overlay should be generated once only, like the color matrix file
-		// generate the overlay with the current rgb color and same size as original image
-		$overlay = new Imagick();
-		$overlay->newImage($image->getImageWidth(), $image->getImageHeight(), new ImagickPixel('#' . $rgbColor));
-		$overlay->setImageFormat('png');
-		// generate the overlay file path
-		$overlayFile = self::fileName('processed', $fileId, $rgbColor . '.' .  'png');
-		// save a blank file with the filename we generated above
-		$overlay->writeImage($overlayFile);
-		
+		$overlayFile = self::getTileOverlayFilename($position);
+
 		// discover the binary path - currently returning a new line, simple fix
 		//$binary_path = system('which composite');
 		$binary_path = '/usr/bin/composite';
 		// build the cmd arguments
-		$cmd_arguments = "$overlayFile $destination -gravity center -compose hardlight -matte";
+		$cmd_arguments = "$overlayFile $destination -colors 8 -gravity center -compose hardlight -matte";
 		// reprocess the first pass image using shell_exec
 		shell_exec("$binary_path $cmd_arguments $destination");
 		//Debug::logMsg("$binary_path $cmd_arguments $destination");
@@ -178,10 +191,33 @@ class Image
 	public static function fileName($dir, $id, $sufix)
 	{
 		// make filename
-		//$fileName = substr($id, 0, 2) . '/' . substr($id, 2, 2) . '/' . substr($id, 4) . '.' . $sufix;
-		$fileName = $id . '.' . $sufix;
-
+		$fileName = substr($id, 0, 2) . '/' . substr($id, 2, 2) . '/' . substr($id, 4, 2) . '/' . substr($id, 6) . '.' . $sufix;
 		return self::$_config['App']['pathCache'] . '/' . $dir . '/' . $fileName;
+	}
+
+	public static function getTileOverlayFilename($position)
+	{
+		$rgbColor = self::getTileRgbColor($position);
+		//
+		return self::fileName('tiles', str_pad($position, 4, '0', STR_PAD_LEFT) . $rgbColor, 'gif');
+	}
+
+	public static function getTileRgbColor($position)
+	{
+		// fetch the config for this page that includes ???
+		$config = & Collage::getPageConfig();
+
+		// fetch
+		$index = $config['index'][$position];
+		// fetch the tile
+		$tile  = $config['grid'][$index['y']][$index['x']];
+		// tile color
+		$color = $tile['c'];
+		$rgbColor = str_pad(dechex($color[0]), 2, '0', STR_PAD_LEFT);
+		$rgbColor.= str_pad(dechex($color[1]), 2, '0', STR_PAD_LEFT);
+		$rgbColor.= str_pad(dechex($color[2]), 2, '0', STR_PAD_LEFT);
+
+		return $rgbColor;
 	}
 }
 
