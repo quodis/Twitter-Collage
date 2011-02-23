@@ -6,6 +6,14 @@
 ...
 [http://swap.quodis.com/collage/v8.html](http://swap.quodis.com/collage/v8.html)
 
+# Reference
+
+## list page(full logo collage) details
+	select page,count(1), min(position), max(position) from tweet group by page;
+
+## tweets left to process
+	select count(1) from tweet where imageData is not null;
+
 # Requirements
 
 * PHP 5.3.2

@@ -3,7 +3,7 @@ App:
     path: /servers/develop/twitter-collage
     pathCache: /servers/cache/twitter-collage
     cacheFilePermissions: 664
-    cacheDirPermissions: 764
+    cacheDirPermissions: 774
     cacheGroup: quodis
     # url
     url: http://dev.twitter-collage.quodis.com
@@ -17,7 +17,7 @@ Store:
     dirPermissions: 700
 Twitter:
     urlSearch: "http://search.twitter.com/search.json"
-    terms: "obama"
+    terms: "firefox"
     rpp: 100
     pageLimit: 30
 Collage:
