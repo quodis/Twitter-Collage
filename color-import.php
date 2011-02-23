@@ -41,7 +41,18 @@ function main()
 		}
 	}
 
-	Collage::setPageGrid($data);
+	// store the configuration
+	$config = Collage::setPageGrid($data);
+
+	// get config (meanwhile indexed)
+	foreach ($config['index'] as $position => $foo)
+	{
+		$file = Image::makeTileOverlay($position);
+
+		if (!$file) Dispatch::now(0, 'FAIL pos:' . $position);
+
+		Debug::logMsg('generated: ' . $position . ' > ' . $file);
+	}
 
 	Dispatch::now(1, 'COLOR IMPORT OK');
 
