@@ -147,7 +147,7 @@ class Image
 		$overlay->writeImage($overlayFile);
 		
 		// discover the binary path - currently returning a new line, simple fix
-		$binary_path = shell_exec('which composite');
+		//$binary_path = system('which composite');
 		$binary_path = '/usr/bin/composite';
 		// build the cmd arguments
 		$cmd_arguments = "$overlayFile $destination -gravity center -compose hardlight -matte";
