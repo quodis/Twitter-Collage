@@ -9,7 +9,8 @@
 # Requirements
 
 * PHP 5.3.2
- * Imagick 3.0.1
+	* Imagick 3.0.1
+* ImageMagick 6.5.7-8 2009-11-26 Q16
 
 ## execute
 
@@ -17,13 +18,13 @@
 
 uses the icon in 
 
-config/<logoFile>
+config/logoFile
 
 analyses it and imports the pixel colors into a file as in
 
-config/<configFile>
+config/configFile
 
-*the following 3 php scripts should be cron'ed*
+*the following 3 php scripts should be cron'ed* - php twitter-search.php ; php make-images.php ; php collage-build.php
 
 ### twitter-search.php
 

@@ -139,7 +139,7 @@ function main()
 			var y = config.index[i].y;
 			var offsetX = config.tileSize * x;
 			var offsetY = config.tileSize * y;
-			$('#main').append('<img id="image-' + i + '" src="data:image/gif;base64,' + data + '" style="width:11px; height:11px; position: absolute; top: ' + offsetY +'px; left: ' + offsetX + 'px" />');
+			$('#main').append('<img id="image-' + i + '" src="data:image/gif;base64,' + data + '" style="width:12px; height:12px; position: absolute; top: ' + offsetY +'px; left: ' + offsetX + 'px" />');
 		}
 
 		function loadPage(pageNo)

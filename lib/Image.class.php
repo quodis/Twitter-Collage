@@ -54,6 +54,7 @@ class Image
 		$cacheFile = self::fileName('original', md5($url), $sufix);
 		// get the file from the url and save it to disk as cache file with the required permissions
 		$fileData = Curl::get($url, $cacheFile, self::$_config['App']['cacheDirPermissions'], self::$_config['App']['cacheFilePermissions']);
+		// TODO: configure the CURL timeout for a shorter period
 
 		// use a default image if we're unable to fetch/save the url
 		if (!$fileData)
@@ -135,6 +136,7 @@ class Image
 		// set permissions on the original image
 		chmod($destination, octdec(self::$_config['App']['cacheFilePermissions']));
 
+		// TODO: the overlay should be generated once only, like the color matrix file
 		// generate the overlay with the current rgb color and same size as original image
 		$overlay = new Imagick();
 		$overlay->newImage($image->getImageWidth(), $image->getImageHeight(), new ImagickPixel('#' . $rgbColor));
@@ -144,12 +146,14 @@ class Image
 		// save a blank file with the filename we generated above
 		$overlay->writeImage($overlayFile);
 		
-		// discover the binary path
-		$binary_path = shell_exec('which composite');
+		// discover the binary path - currently returning a new line, simple fix
+		//$binary_path = system('which composite');
+		$binary_path = '/usr/bin/composite';
 		// build the cmd arguments
 		$cmd_arguments = "$overlayFile $destination -gravity center -compose hardlight -matte";
 		// reprocess the first pass image using shell_exec
-		shell_exec("$binary_path $cmd_arguments $destination");
+		//shell_exec("$binary_path $cmd_arguments $destination");
+		//Debug::logMsg("$binary_path $cmd_arguments $destination");
 		// set permissions on the final image
 		chmod($destination, octdec(self::$_config['App']['cacheFilePermissions']));
 
