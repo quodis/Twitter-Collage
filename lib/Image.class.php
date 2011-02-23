@@ -146,10 +146,7 @@ class Image
 		$destination = self::fileName('processed', md5($id), 'jpg');
 
 		// create the destination directory if it doesn't exist already
-		if (!is_dir(dirname($destination)))
-		{
-			self::mkdir($destination);
-		}
+		if (!is_dir(dirname($destination))) self::mkdir(dirname($destination));
 
 		// store the processed original image
 		$image->writeImage($destination);
@@ -222,10 +219,8 @@ class Image
 
 	public static function mkdir($dir)
 	{
-		while (!file_exists(dirname($dir)))
-		{
-			self::mkdir(dirname($dir));
-		}
+		while (!file_exists(dirname($dir))) self::mkdir(dirname($dir));
+
 		mkdir($dir);
 		chmod($dir, octdec(self::$_config['App']['cacheDirPermissions']));
 		chgrp(dirname($dir), self::$_config['App']['cacheGroup']);
