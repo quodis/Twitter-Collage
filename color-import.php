@@ -42,7 +42,9 @@ function main()
 	}
 
 	// store the configuration
-	$config = Collage::setPageGrid($data);
+	Collage::setPageGrid($data);
+
+	$config = Collage::getPageConfig();
 
 	// get config (meanwhile indexed)
 	foreach ($config['index'] as $position => $foo)
