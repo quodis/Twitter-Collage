@@ -102,9 +102,9 @@ class Collage
 	/**
 	 * set (and index) page data
 	 *
-	 * @param $grid array
+	 * @param $grid array (by reference)
 	 */
-	public static function setPageGrid($grid)
+	public static function setPageGrid(array & $grid)
 	{
 		$index = 0;
 
