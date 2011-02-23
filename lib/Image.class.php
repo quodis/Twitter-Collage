@@ -88,17 +88,13 @@ class Image
 		$overlay->setImageFormat('gif');
 
 		// create the destination directory if it doesn't exist already
-		if (!is_dir(dirname($fileName)))
-		{
-			dd(dirname($fileName) . ' #'.octdec(self::$_config['App']['cacheFilePermissions']).'# ' . self::$_config['App']['cacheGroup']);
-
-			mkdir(dirname($fileName), octdec(self::$_config['App']['cacheDirPermissions']), TRUE);
-			chgrp(dirname($fileName), self::$_config['App']['cacheGroup']);
-		}
+		if (!is_dir(dirname($fileName))) self::mkdir(dirname($fileName));
 
 		// save a "blank" file with the filename we generated above
 		if ($overlay->writeImage($fileName))
 		{
+			chmod($fileName, octdec(self::$_config['App']['cacheFilePermissions']));
+			chgrp($fileName, self::$_config['App']['cacheGroup']);
 			return $fileName;
 		}
 	}
@@ -152,10 +148,7 @@ class Image
 		// create the destination directory if it doesn't exist already
 		if (!is_dir(dirname($destination)))
 		{
-			dd(dirname($destination) . ' #'.octdec(self::$_config['App']['cacheFilePermissions']).'# ' . self::$_config['App']['cacheGroup']);
-
-			mkdir(dirname($destination), octdec(self::$_config['App']['cacheDirPermissions']), TRUE);
-			chgrp(dirname($destination), self::$_config['App']['cacheGroup']);
+			self::mkdir($destination);
 		}
 
 		// store the processed original image
@@ -225,6 +218,17 @@ class Image
 		$rgbColor.= str_pad(dechex($color[2]), 2, '0', STR_PAD_LEFT);
 
 		return $rgbColor;
+	}
+
+	public static function mkdir($dir)
+	{
+		while (!file_exists(dirname($dir)))
+		{
+			self::mkdir(dirname($dir));
+		}
+		mkdir($dir);
+		chmod($dir, octdec(self::$_config['App']['cacheDirPermissions']));
+		chgrp(dirname($dir), self::$_config['App']['cacheGroup']);
 	}
 }
 

@@ -4,7 +4,7 @@ App:
     pathCache: /servers/cache/twitter-collage
     cacheFilePermissions: 777
     cacheDirPermissions: 777
-    cacheGroup: quodis
+    cacheGroup: www-data
     # url
     url: http://twitter-collage.quodis.worker
 Store:
