@@ -152,7 +152,7 @@ class Image
 		// build the cmd arguments
 		$cmd_arguments = "$overlayFile $destination -gravity center -compose hardlight -matte";
 		// reprocess the first pass image using shell_exec
-		//shell_exec("$binary_path $cmd_arguments $destination");
+		shell_exec("$binary_path $cmd_arguments $destination");
 		//Debug::logMsg("$binary_path $cmd_arguments $destination");
 		// set permissions on the final image
 		chmod($destination, octdec(self::$_config['App']['cacheFilePermissions']));
