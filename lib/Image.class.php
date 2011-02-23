@@ -90,9 +90,10 @@ class Image
 		// create the destination directory if it doesn't exist already
 		if (!is_dir(dirname($fileName)))
 		{
-			dd("#".octdec(self::$_config['App']['cacheDirPermissions'])."#");
+			dd(dirname($fileName) . ' #'.octdec(self::$_config['App']['cacheFilePermissions']).'# ' . self::$_config['App']['cacheGroup']);
+
 			mkdir(dirname($fileName), octdec(self::$_config['App']['cacheDirPermissions']), TRUE);
-			chgrp(dirname($fileName), self::$_config['App']['cacheDirGroup']);
+			chgrp(dirname($fileName), self::$_config['App']['cacheGroup']);
 		}
 
 		// save a "blank" file with the filename we generated above
@@ -151,15 +152,14 @@ class Image
 		// create the destination directory if it doesn't exist already
 		if (!is_dir(dirname($destination)))
 		{
-			dd("#".octdec(self::$_config['App']['cacheDirPermissions'])."#");
+			dd(dirname($destination) . ' #'.octdec(self::$_config['App']['cacheFilePermissions']).'# ' . self::$_config['App']['cacheGroup']);
+
 			mkdir(dirname($destination), octdec(self::$_config['App']['cacheDirPermissions']), TRUE);
-			chgrp(dirname($destination), self::$_config['App']['cacheDirGroup']);
+			chgrp(dirname($destination), self::$_config['App']['cacheGroup']);
 		}
 
 		// store the processed original image
 		$image->writeImage($destination);
-		// set permissions on the original image
-		chmod($destination, octdec(self::$_config['App']['cacheFilePermissions']));
 
 		$overlayFile = self::getTileOverlayFilename($position);
 
@@ -173,6 +173,9 @@ class Image
 		//Debug::logMsg("$binary_path $cmd_arguments $destination");
 		// set permissions on the final image
 		chmod($destination, octdec(self::$_config['App']['cacheFilePermissions']));
+		chgrp($destination, self::$_config['App']['cacheGroup']);
+
+		dd($destination . ' #'.octdec(self::$_config['App']['cacheFilePermissions']).'# ' . self::$_config['App']['cacheGroup']);
 
 		// return the base64 encoded destination file
 		return base64_encode(file_get_contents($destination));
