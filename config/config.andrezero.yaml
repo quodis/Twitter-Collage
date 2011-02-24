@@ -2,8 +2,8 @@ App:
     # path    
     path: /servers/sites/quodis/twitter-collage
     pathCache: /servers/cache/twitter-collage
-    cacheFilePermissions: 777
-    cacheDirPermissions: 777
+    cacheFilePermissions: 664
+    cacheDirPermissions: 774
     cacheGroup: www-data
     # url
     url: http://twitter-collage.quodis.worker
@@ -13,11 +13,11 @@ Store:
     # storage public url
     url: http://store.twitter-collage.quodis.worker
     # created files and dirs in storage
-    filePermissions: 777
-    dirPermissions: 777
+    filePermissions: 664
+    dirPermissions: 774
 Twitter:
-    urlSearch: "http://search.twitter.com/search.json" 
-    terms: "mubarak"
+    urlSearch: "http://search.twitter.com/search.json"
+    terms: "firefox"
     rpp: 100
     pageLimit: 30
 Collage:
