@@ -130,7 +130,6 @@ class Image
 		// debug
 		$config = & Collage::getPageConfig();
 		$index = $config['index'][$position];
-		Debug::logMsg($id . ' > ' . $position . ' > ' . $index['x'] . ',' . $index['y']);
 
 		try
 		{
@@ -175,8 +174,6 @@ class Image
 		// set permissions on the final image
 		chmod($destination, octdec(self::$_config['App']['cacheFilePermissions']));
 		chgrp($destination, self::$_config['App']['cacheGroup']);
-
-		dd($destination . ' #'.octdec(self::$_config['App']['cacheFilePermissions']).'# ' . self::$_config['App']['cacheGroup']);
 
 		// return the base64 encoded destination file
 		return base64_encode(file_get_contents($destination));

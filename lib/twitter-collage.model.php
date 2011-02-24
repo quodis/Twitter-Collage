@@ -203,11 +203,16 @@ final class Tweet
 	/**
 	 * tweets without processed image
 	 *
+	 * @param $limit = null
+	 *
 	 * @return array
 	 */
-	public static function getUnprocessed()
+	public static function getUnprocessed($limit = null)
 	{
-		$sql = "SELECT * FROM `tweet` WHERE `imageData` IS NULL LIMIT 1000";
+		$limit = Db::escape($limit);
+		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
+
+		$sql = "SELECT * FROM `tweet` WHERE `imageData` IS NULL LIMIT $limit";
 
 		$result = Db::query($sql);
 

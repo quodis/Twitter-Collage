@@ -140,8 +140,11 @@ class Collage
 
 
 	/**
+	 * updates this page file, returns number of tweets
 	 *
 	 * @param $pageNo
+	 *
+	 * @return $tweets;
 	 */
 	public static function updatePage($pageNo)
 	{
@@ -168,6 +171,8 @@ class Collage
 		file_put_contents($fileName, json_encode($fileData));
 		chmod($fileName, octdec(self::$_config['App']['cacheFilePermissions']));
 		chgrp($fileName, self::$_config['App']['cacheGroup']);
+
+		return count($fileData);
 	}
 
 

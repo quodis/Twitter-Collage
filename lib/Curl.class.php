@@ -10,6 +10,8 @@
 
 /**
  * calls web-services operations
+ *
+ * TODO check if permission/ownership enforce is really optional
  */
 class Curl
 {
@@ -63,22 +65,11 @@ class Curl
 	public static function get($url, array $options = null)
 	{
 
-		/*
-		'timeout' => self::$_config['Twitter']['timeout']['imgFile'],
-			'cache' => array(
-				'file' => $cacheFile,
-				'dirPermissions' => self::$_config['App']['cacheDirPermissions'],
-				'filePermissions' => self::$_config['App']['cacheFilePermissions'],
-				'group' => self::$_config['App']['cacheGroup']
-
-		*/
-
-
 		if (isset($options['cache']) && file_exists($options['cache']['file']) && filesize($options['cache']['file']))
 		{
 			$doc = file_get_contents($options['cache']['file']);
 
-			Debug::logMsg('CURL (cached): ' . $url . ' /' . $options['cache']['file'] . ' (' . strlen($doc) .')');
+			//Debug::logMsg('CURL (cached): ' . $url . ' /' . $options['cache']['file'] . ' (' . strlen($doc) .')');
 			return $doc;
 		}
 		else
@@ -98,7 +89,7 @@ class Curl
 
 			curl_close($ch);
 
-			Debug::logMsg('CURL: ' . $url . ' (' . strlen($response) .')');
+			//Debug::logMsg('CURL: ' . $url . ' (' . strlen($response) .')');
 
 			if (!strlen($response)) return '';
 
