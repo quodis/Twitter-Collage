@@ -220,3 +220,17 @@ function main()
 	</body>
 
 </html>
+<?php
+
+} // main()
+
+try
+{
+	main();
+}
+catch(Exception $e) {
+	Debug::logError($e, 'EXCEPTION ' . $e->getMessage());
+	Dispatch::now(0, 'EXCEPTION ' . $e->getMessage());
+}
+
+?>
