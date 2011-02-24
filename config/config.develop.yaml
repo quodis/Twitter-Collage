@@ -17,12 +17,12 @@ Store:
     dirPermissions: 775
 Twitter:
     urlSearch: "http://search.twitter.com/search.json"
-    terms: "vina2011"
+    terms: "pleasedonttext"
     rpp: 100
     pageLimit: 30
     timeout:
-      apiCall: 5
-      imgFile: 1
+        apiCall: 5
+        imgFile: 1
 Collage:
     logoFile: assets/logo48x47.png
     defaultPic: assets/default48x48.png
@@ -30,11 +30,18 @@ Collage:
     cols: 48
     rows: 47
     tileSize: 12
+Jobs:
+    twitter-search:
+        period: 10
+    make-images:
+        period: 10
+    collage-build:
+        period: 10
 Cache:
     enabled: 1
     TTL:
-      collageConfig: 2000 
-      tweetIds: 200
+        collageConfig: 2000 
+        tweetIds: 200
     servers:
         - host: localhost
           port: 11211
