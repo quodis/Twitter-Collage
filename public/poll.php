@@ -36,7 +36,6 @@ function main()
 	$tweets = array();
 	while ($row = $result->row())
 	{
-		unset($row['payload']);
 		$tweets[] = $row;
 		if ($row['id'] > $lastId) $lastId = $row['id'];
 	}

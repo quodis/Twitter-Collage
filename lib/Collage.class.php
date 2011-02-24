@@ -158,7 +158,6 @@ class Collage
 		{
 			if (isset($fileData[$tweet['position']])) continue;
 			$i++;
-			unset($tweet['payload']);
 			$fileData[$tweet['position']] = $tweet;
 		}
 
