@@ -3,7 +3,7 @@ App:
     path: /servers/develop/twitter-collage
     pathCache: /servers/cache/twitter-collage
     cacheFilePermissions: 664
-    cacheDirPermissions: 774
+    cacheDirPermissions: 775
     cacheGroup: quodis
     # url
     url: http://dev.twitter-collage.quodis.com
@@ -13,8 +13,8 @@ Store:
     # storage public url
     url: http://store.dev.twitter-collage.quodis.com
     # created files and dirs in storage
-    filePermissions: 600
-    dirPermissions: 700
+    filePermissions: 664
+    dirPermissions: 775
 Twitter:
     urlSearch: "http://search.twitter.com/search.json"
     terms: "vina2011"
