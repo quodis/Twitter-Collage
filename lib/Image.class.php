@@ -150,7 +150,8 @@ class Image
 		// desaturate the image
 		$image->modulateImage(100, 0, 100);
 		// resize the image to the tile size
-		$image->thumbnailImage(self::$_config['Collage']['tileSize'], 0);
+		$tileSize = self::$_config['Collage']['tileSize'];
+		$image->cropThumbnailImage($tileSize, $tileSize);
 
 		// generate the destination
 		$destination = self::fileName('processed', md5($id), 'gif');
