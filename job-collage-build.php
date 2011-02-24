@@ -16,12 +16,27 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include dirname(__FILE__) .  '/bootstrap.php';
 
-	// create / update page
-	$pageNo = Collage::getCurrentWorkingPageNo();
+	$period = $config['Jobs']['collage-build']['period'];
 
-	Collage::updatePage($pageNo);
+	while (TRUE)
+	{
+		// start time
+		$start = time();
 
-	Dispatch::now(1, 'COLLAGE BUILD OK');
+		// get page no
+		$pageNo = Collage::getCurrentWorkingPageNo();
+
+		// update page
+		$tweetCount = Collage::updatePage($pageNo);
+
+		// sleep?
+		$elapsed = time() - $start;
+		$sleep = $period - $elapsed;
+		if ($sleep < 1) $sleep = 1;
+
+		Debug::logMsg('OK! ... updated page:' . $pageNo . ' ... page has ' . $tweetCount . ' tweets ... sleeping for ' . $sleep . ' seconds ...');
+		sleep($sleep);
+	}
 
 } // main()
 
