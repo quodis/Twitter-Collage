@@ -52,16 +52,18 @@ function main()
 	if ($pageNo)
 	{
 		$lastId = 0;
-		$tweets = Collage::getPageData($pageNo);
+		$pageTweets = Collage::getPageData($pageNo);
 
-		foreach ($tweets as $tweet)
+		$tweets = array();
+		foreach ($pageTweets as $tweet)
 		{
+			$tweets[] = $tweet;
 			if ($tweet['id'] > $lastId) $lastId = $tweet['id'];
 		}
 
 		if (count($tweets))
 		{
-			$data['tweets']   = $tweets;
+			$data['tweets'] = $tweets;
 			$data['lastId'] = $lastId;
 		}
 	}
