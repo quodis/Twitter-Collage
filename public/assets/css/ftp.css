@@ -1,0 +1,745 @@
+/*
+1.RESET
+2.FONT FACE
+3.GENERAL
+4.HEADER
+5.FOOTER
+6.CONTENT
+*/
+
+
+/* 1.RESET */
+
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, code, del, dfn, em, img, q, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+
+article, aside, figure, footer, header, hgroup, nav, section {
+	display: block; 
+}
+
+html, body {
+	height: 100%;
+}
+
+body {
+	line-height: 20px;
+}
+
+table {
+	border-collapse: separate;
+	border-spacing: 0;
+}
+
+caption, th, td {
+	text-align: left;
+	font-weight: normal;
+}
+
+table, td, th {
+	vertical-align: middle;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+	content:"";
+}
+
+blockquote, q {
+	quotes:"" "";
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-size: 100%; 
+	margin: 0 0 20px;
+	text-rendering: optimizeLegibility; 
+}
+
+p {
+	margin-bottom: 20px;
+}
+
+a img {
+	border: none;
+}
+
+.clearfix:after, .container:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+.clearfix, .container {
+	display: inline-block;
+}
+
+* html .clearfix, * html .container {
+	height: 1%;
+}
+
+.clearfix, .container {
+	display: block;
+}
+
+.clear {
+	clear: both;
+}
+
+.hide {
+	display:none;
+}
+
+
+
+/* 2.FONT-FACE */
+
+@font-face {
+	font-family: 'MetaBlack';
+	src: url('http://mozcom-cdn.mozilla.net/img/fonts/MetaWebPro-Black.eot');
+	src: local('☺'), url('http://mozcom-cdn.mozilla.net/img/fonts/MetaWebPro-Black.woff') format('woff');
+	font-weight: bold;
+	font-style: normal;
+}
+
+
+/* 3.GENERAL */
+
+body {
+	background: url(../images/layout/body-bg.png) left top repeat-x;
+	border-top: 2px solid #4e76b7;
+	color: #484848;
+	font-family: Georgia, serif;
+	font-size: 16px;
+	line-height: 20px;	
+	position: relative;
+}
+
+#container {
+	margin: 0 auto;
+	padding:80px 0 0;
+	width: 940px;
+	min-height: 100%;
+	position:relative;
+}
+
+.wrapper {
+	width:300px;
+	float:left;
+}
+
+#main-content {
+	background-color: #fff;
+	margin: 50px 0px 20px 0px;
+	padding: 135px 20px 20px;
+	width: 260px;
+
+	
+	-moz-box-shadow: 0px 0px 3px #a6bfcc;
+	-webkit-box-shadow: 0px 0px 3px #a6bfcc;
+	box-shadow: 0px 0px 3px #a6bfcc;
+	-moz-border-radius: 10px; border-radius: 10px;
+}
+
+#mosaic {
+	background: url(../images/layout/firefox-logo-grid.png) top left no-repeat;
+	float:left;
+	height:564px;
+	width:576px;
+	margin:20px 0 0 60px; 
+	position:relative;
+}
+
+#mosaic h2 {
+	text-indent: -9999px;
+	overflow: hidden;
+	display: none;
+}
+
+
+
+/* 4.HEADER */
+#brand {
+	background: url(../images/layout/ftp-logo-bg.png) left top no-repeat;
+	width: 250px;
+	height: 150px;
+	position: absolute;
+	top:100px;
+	left:20px;
+	
+	-moz-transform: rotate(-2deg);
+	-webkit-transform: rotate(-2deg);
+	transform: rotate(-2deg);
+	
+/* 	-webkit-transition: -webkit-transform 0.5s ease-in; */
+}
+
+#brand:hover {
+	-moz-transform: rotate(0deg);
+	-webkit-transform: rotate(0deg);
+	transform: rotate(0deg);
+}
+
+#brand h1 a{
+	background: url(../images/layout/ftp-logo.png) center 20px no-repeat;
+	width: 250px;
+	height: 150px;
+	display:block;
+	text-indent: -9999px;
+	overflow: hidden;
+	
+	-moz-transform: rotate(2deg);
+	-webkit-transform: rotate(2deg);
+	transform: rotate(2deg);
+}
+
+
+#brand h1 a:hover, #brand:hover a {
+	-moz-transform: rotate(0deg);
+	-webkit-transform: rotate(0deg);
+	transform: rotate(0deg);
+}
+
+
+
+/* 6.FOOTER */
+footer {
+	background: url(../images/layout/footer-bg.png) left top repeat-x;
+	padding:85px 0px 0px;
+	margin:-165px 0 0;
+}
+
+footer a { text-decoration: none;}
+
+footer a:hover {
+	text-decoration: underline;
+}
+
+#sub-footer {
+	height:80px;
+	margin:0 auto;
+	padding:20px 0;
+	width:940px;
+}
+
+#sub-footer h3 {
+	background:url(../images/layout/footer-social.png) -35px 0 no-repeat;
+	float:left;
+	width:126px;
+	margin: 0;
+	padding:15px 0 25px 10px;
+	font-family:georgia,serif;
+	font-weight:normal;
+	font-style:italic;
+	color:#33559b;
+	font-size:22px;
+	line-height:22px
+}
+
+#sub-footer h3 span{
+	font-family:MetaBlack,"Trebuchet MS",sans-serif;
+	font-weight:bold;
+	text-transform:uppercase;
+	font-style:normal;
+	font-size:22px;
+	color:#fff
+}
+
+#sub-footer ul li {
+	float:left;
+	padding:0;
+	margin:0 15px 0 0;
+	background:none;
+	list-style: none;
+}
+
+#sub-footer ul li a, 
+#sub-footer ul li a:link, 
+#sub-footer ul li a:visited {
+	display:block;
+	background:url(../images/layout/footer-social.png) 50% 0 no-repeat;
+	width:110px;
+	padding:50px 0 0 0;
+	font-family:georgia, serif;
+	font-weight:normal;
+	font-size:18px;
+	line-height:18px;
+	font-style:italic;
+	text-align:center;
+	color:#fff;
+	-moz-transition:text-shadow 0.2s ease-out;
+	-webkit-transition:text-shadow 0.2s ease-out;
+}
+
+#sub-footer a:hover, 
+#sub-footer a:active {
+	text-shadow:1px 1px 2px rgba(0, 0, 0, 0.5),  0 0 5px rgba(51, 85, 155, 1),  0 0 20px rgba(255, 255, 255, 0.6);
+	-moz-transition:text-shadow 0.1s ease-out;
+	-webkit-transition:text-shadow 0.1s ease-out;
+}
+
+#sub-footer ul li#footer-twitter a {
+	background-position:50% -130px;
+}
+
+#sub-footer ul li#footer-facebook a {
+	background-position:50% -230px;
+}
+
+#sub-footer ul li#footer-connect a {
+	background-position:50% -330px;
+}
+
+
+.sub-footer-social a {
+	color: #fff;
+}
+
+#sub-footer-newsletter{
+	float:right;
+	width:250px;
+	margin:20px 0 0;
+	line-height:24px;
+	text-align:left
+}
+
+#sub-footer-newsletter span.intro{
+	display:block;
+	font-family:georgia,serif;
+	font-weight:normal;
+	font-size:18px;
+	line-height:18px;
+	font-style:italic;
+	color:#fff;
+}
+
+#sub-footer #sub-footer-newsletter a, 
+#sub-footer #sub-footer-newsletter a:link, 
+#sub-footer #sub-footer-newsletter a:visited {
+	font-family:MetaBlack, "Trebuchet MS", sans-serif;
+	font-weight:bold;
+	text-transform:uppercase;
+	font-style:normal;
+	font-size:22px;
+	color:#83b3f2;
+	-moz-transition:text-shadow 0.2s ease-in;
+	-webkit-transition:text-shadow 0.2s ease-in;
+}
+
+#sub-footer #sub-footer-newsletter a:hover, 
+#sub-footer #sub-footer-newsletter a:active {
+	text-shadow:1px 1px 1px rgba(0, 0, 0, 0.3),  0 0 5px rgba(51, 85, 155, 1),  0 0 20px rgba(255, 255, 255, 0.4);
+}
+
+#footer-copyright {
+	color: #476fbe;
+	font-size: 11px;
+	line-height: 16px;
+	width: 940px;
+	margin: 0 auto;
+	padding: 30px 0;
+}
+
+#footer-copyright a {
+	color: #669be1;
+}
+
+#footer-copyright a:hover,
+#footer-copyright a:active { text-decoration:underline}
+
+#footer-copyright p {
+	margin: 0 0 5px 0;
+}
+
+/* 7.CONTENT */
+
+.hashtag {
+	color:#c52f14;
+	font-weight: bold;
+}
+
+#twitter-counter {
+	width:260px;
+	margin: 0 0 20px 0;
+	text-align: center;
+}
+
+#twitter-counter dl{
+	display: inline-block;
+	line-height: 40px;
+	height:40px;
+}
+
+#twitter-counter dt, #twitter-counter dd  {
+	float:left;
+}
+
+#twitter-counter a, #twitter-counter span {
+	color:#1b5898;
+	display:block;
+	font-family: 'MetaBlack';
+	font-size:22px;
+	padding: 0 10px;
+	text-decoration: none;
+	text-shadow: 0 1px 0px #fff,  0 0 20px rgba(255, 255, 255, 0.4);
+	height:40px;
+	overflow: hidden;
+}
+
+#twitter-counter dt {
+	background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(213,230,239)), color-stop(1, rgb(255,255,255)));
+	background-image: -moz-linear-gradient( center bottom, rgb(213,230,239) 0%, rgb(255,255,255) 100%);
+	margin-right:10px;
+}
+
+#twitter-counter dt a {
+	background: url(../images/layout/twitter-bird-bg.png) 8px center no-repeat;
+	padding-left: 40px;
+	border: 1px solid #87b7dd;
+	-moz-border-radius: 5px; border-radius: 5px;
+}
+
+#twitter-counter dt:active {
+	background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(255,255,255)), color-stop(1, rgb(213,230,239)));
+	background-image: -moz-linear-gradient( center bottom, rgb(255,255,255) 0%, rgb(213,230,239) 100%);
+		-moz-box-shadow:inset 0 -1px 0 #fff;
+  -webkit-box-shadow:inset 0 -1px 0 #fff;
+  box-shadow:inset 0 -1px 0 #fff;
+}
+
+#twitter-counter dd {
+	border: 1px solid #87b7dd;
+	-moz-border-radius: 5px; border-radius: 5px;
+}
+
+#twitter-counter dd span {
+	background: url(../images/layout/twitter-arrow.png) left center no-repeat;
+	padding-left:20px;
+	margin-left:-7px;
+}
+
+
+/* SEARCH */
+
+#search-box {
+	background: url(../images/layout/aside-ornament.png) center top no-repeat;
+	padding-top: 30px;
+}
+
+#search-box h3 {
+	color:#303030;
+	font-style: italic;
+	font-size: 18px;
+	margin-bottom: 10px;
+}
+
+#search-box label{
+	text-indent: -9999px;
+	position: absolute;
+	top:0;
+}
+
+#search-box input {
+	background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, #fff), color-stop(1, #f0f7fc));
+	background-image: -moz-linear-gradient( center bottom, #fff 0%, #f0f7fc 100%);
+	border: 1px solid #87b7dd;
+	-moz-border-radius: 5px; border-radius: 5px;
+	color:#6f7fA3;
+	display: block;
+	float:left;
+	height:20px;
+	line-height: 20px;
+	padding:4px 40px 4px 4px;
+	width:220px;
+	z-index: 100;
+}
+
+#search-box button {
+	background: url(../images/layout/search-icon-bg.png) center center no-repeat;
+	width:16px;
+	height:16px;
+	display: block;
+	float:right;
+	border: 0 none;
+	outline: 0 none;
+	text-indent: -9999px;
+	overflow: hidden;
+	z-index: 300;
+	margin:-22px 0 0 0px;
+}
+
+/* Mozilla Badge */
+
+#mozilla-badge a {
+	background: url(../images/layout/mozilla-badge-bg.png) right top no-repeat;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	height: 50px;
+	width: 118px;
+	text-indent: -9999px;
+	overflow: hidden;
+}
+
+
+/* DOWNLOAD BUTTON */
+
+ul.home-download, ul.home-download li {
+	margin:0;
+	padding:0;
+	list-style-type:none;
+	background:none;
+	float:left;
+}
+
+ul.home-download {
+	margin-left:0;
+	position:relative;
+	width:320px;
+	overflow:hidden;
+	float:left;
+}
+
+a.download-link, a.download-link:link, a.download-link:visited {
+	display:block;
+	margin:0 0 10px 25px;
+	height:45px;
+	-moz-box-shadow:0 3px rgba(0, 0, 0, 0.1),  inset 0 -4px rgba(0, 0, 0, 0.1);
+	-webkit-box-shadow:0 3px rgba(0, 0, 0, 0.1),  inset 0 -4px rgba(0, 0, 0, 0.1);
+	box-shadow:0 3px rgba(0, 0, 0, 0.1),  inset 0 -4px rgba(0, 0, 0, 0.1);
+	-webkit-border-radius:6px;
+	-moz-border-radius:6px;
+	border-radius:6px;
+	color:#fff;
+	overflow:visible;
+	background:#84C63C;
+	background: -moz-linear-gradient(top,  #84C63C 0%,  #489615 100%);
+	background: -webkit-gradient(linear,  left top,  left bottom,  color-stop(0%, #84C63C),  color-stop(100%, #489615));
+	background:linear-gradient(top,  #84C63C 0%,  #489615 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#84C63C',  endColorstr='#489615', GradientType=0 );
+	-moz-transition:box-shadow 0.2s ease-in-out;
+	-webit-transition:box-shadow 0.2s ease-in-out;
+	transition:box-shadow 0.2s ease-in-out;
+	text-decoration: none;
+}
+
+* html a.download-link, 
+* html a.download-link:link, 
+* html a.download-link:visited {
+	height:105px;
+}
+
+.beta-download a.download-link, 
+.beta-download a.download-link:link, 
+.beta-download a.download-link:visited {
+	background:#F9CB89;
+	background: -moz-linear-gradient(top,  #F9CB89 0%,  #f79200 100%);
+	background: -webkit-gradient(linear,  left top,  left bottom,  color-stop(0%, #F9CB89),  color-stop(100%, #f79200));
+	filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#F9CB89',  endColorstr='#f79200', GradientType=0 );
+}
+
+a.download-link:hover, a.download-link:active {
+	-moz-box-shadow:0 3px rgba(0, 0, 0, 0.15),  inset 0 -4px rgba(0, 0, 0, 0.15),  inset 0 0 80px rgba(255, 255, 255, 0.3);
+	-webkit-box-shadow:0 3px rgba(0, 0, 0, 0.15),  inset 0 -4px rgba(0, 0, 0, 0.15),  inset 0 0 80px rgba(255, 255, 255, 0.3);
+	box-shadow:0 3px rgba(0, 0, 0, 0.15),  inset 0 -4px rgba(0, 0, 0, 0.15),  inset 0 0 80px rgba(255, 255, 255, 0.3);
+	-moz-transition:box-shadow 0.2s ease-in-out;
+	-webkit-transition:box-shadow 0.2s ease-in-out;
+	transition:box-shadow 0.2s ease-in-out;
+}
+
+a.download-link span.download-content {
+	position:relative;
+	margin-left: -50px;
+	display:block;
+	background:url(../images/layout/ddownload-logo-sub.png) 0 0 no-repeat;
+	height:95px;
+	font-family:georgia, "Bitstream Charter", serif;
+	font-style:italic;
+	font-weight:normal;
+	font-size:18px;
+	line-height:18px;
+	padding:10px 10px 0 118px;
+}
+
+a.download-link span.download-title {
+	display:block;
+	font-style:normal;
+	font-size:28px;
+	line-height:28px;
+	letter-spacing: -0.02em;
+}
+
+a.download-link:hover, a.download-link:active {
+	background-position: -300px 0;
+	text-decoration:none;
+	cursor:pointer;
+}
+
+* html ul.home-download li a.download-link {
+	overflow:hidden;
+}
+
+ul.home-download li a.download-link span.download-info {
+	display:block;
+	margin-top:3px;
+	color:#346012;
+	font-size:12px;
+	font-style:normal;
+	line-height:12px;
+}
+
+ul.beta-download li a.download-link span.download-info {
+	color:#fff;
+}
+
+ul.home-download li a.download-link #download-arrow, 
+ul.home-download li a.download-link .download-arrow {
+	position:absolute;
+	top:15px;
+	right:15px;
+}
+
+ul.home-download li a.download-link span.download-info em {
+	display:block;
+	font-style:normal;
+}
+
+.download-noscript {
+	margin-left:35px;
+	width:400px;
+}
+
+.download-noscript h3 {
+	font-size:120%;
+	margin-bottom:0;
+}
+
+.download-noscript h3 span {
+	display:block;
+	font-size:75%;
+	color:#898378;
+}
+
+.download-noscript ul {
+	margin-top:0.5em;
+}
+
+.download-other {
+	font-family:"Trebuchet MS", sans-serif;
+	font-size:11px;
+	width:310px;
+	text-align:center;
+	color:#ccc;
+	margin:0;
+}
+
+#download .download-noscript h3 span a, 
+#download .download-noscript h3 span a:link, 
+#download .download-noscript h3 span a:visited, 
+.download-other a, 
+.download-other a:link, 
+.download-other a:visited {
+	white-space:nowrap;
+	color:#999;
+}
+
+.home-download abbr, 
+.download-noscript
+abbr {
+	border-bottom:0;
+}
+
+/*
+#download {
+	position:absolute;
+	right:25px;
+	top:85px;
+	z-index:9;
+}
+*/
+
+/*
+#download ul.home-download {
+	width:auto;
+}
+*/
+
+* html #download ul.home-download {
+	width:330px;
+}
+
+#download a.download-link {
+	height:45px;
+	margin-bottom:3px;
+}
+
+* html #download a.download-link {
+	height:48px;
+}
+
+#download a.download-link span.download-content {
+	margin-left: -25px;
+	padding-left:65px;
+	font-size:14px;
+	background-image:url(../images/layout/download-logo-sub.png);
+	height:40px;
+	line-height:auto;
+	padding-top:8px;
+	text-decoration: none;
+}
+
+#download a.download-link span.download-title {
+	font-size:22px;
+	display:inline-block;
+	padding-right:30px;
+	padding-bottom:3px;
+	margin-right:14px;
+	vertical-align:middle;
+	background:url(../images/layout/download-arrow.png) 100% 50% no-repeat;
+	text-decoration: none;
+}
+
+
+/* DOWNLOAD BUTTON No Script*/
+
+
+#download .download-noscript {
+	width:275px;
+	background:url(../images/layout/download-logo-sub.png) 0 0 no-repeat;
+	padding-left:55px;
+	margin-left:25px;
+}
+
+#download .download-noscript
+h3 {
+	margin:0;
+}
+
+#download .download-noscript h3
+span {
+	font-family:"Trebuchet MS", sans-serif;
+	font-size:11px;
+	font-weight:normal;
+	text-transform:none;
+}
+
+#download .download-noscript
+ul {
+	list-style-type:none;
+	margin:0;
+}
+
+#download .download-noscript ul
+li {
+	display:inline;
+	margin-right:10px;
+	font-family:"Trebuchet MS", sans-serif;
+	font-size:11px;
+}
