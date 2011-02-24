@@ -102,7 +102,11 @@ class Twitter
 	{
 		Debug::logMsg($url);
 
-		return json_decode(Curl::get($url), TRUE);
+		$options = array(
+			'timeout' => self::$_config['Twitter']['timeout']['apiCall']
+		);
+
+		return json_decode(Curl::get($url, $options), TRUE);
 	}
 }
 

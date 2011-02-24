@@ -83,9 +83,14 @@ function main()
 </head>
 <body class="<?=implode(" ", $classes)?>" >
 
-	PageNo:
-	<input type="text" id="pageNo" value=""/>
-	<button id ="pageGo">Go</button>
+	<label>Last Page:<span><?=Collage::getCurrentWorkingPageNo()?></span></label>
+	<label>PageNo:</label>
+	<input type="text" id="page-no" value="<?=Collage::getCurrentWorkingPageNo()?>"/>
+	<label>Z:</label>
+	<input type="text" id="z" value=""/>
+	<button id ="bt-page-load">Go</button>
+	<button id ="bt-poll">Poll</button>
+	<label id="last-tweet">Last Tweet:<span>?</span></label>
 
 	<?php include '../templates/' . $config['UI']['template'] . '.tpl' ?>
 
@@ -98,7 +103,7 @@ function main()
 
 		config.tileSize = <?=$config['Collage']['tileSize']?>;
 
-		console.log('GRID CONFIG', config);
+		//console.log('GRID CONFIG', config);
 
 		/**
 		 * mock support for window.console
@@ -133,6 +138,8 @@ function main()
 			};
 		}
 
+		var lastId = 0;
+
 		function addImage(data, i)
 		{
 			var x = config.index[i].x;
@@ -142,24 +149,55 @@ function main()
 			$('#main').append('<img id="image-' + i + '" src="data:image/gif;base64,' + data + '" style="width:12px; height:12px; position: absolute; top: ' + offsetY +'px; left: ' + offsetX + 'px" />');
 		}
 
-		function loadPage(pageNo)
+		function loadPage(pageNo, z)
 		{
 
 			$('#main img').remove();
 
-			var pollParams = {}
+			var params = {}
 			if (pageNo) {
-				pollParams.pageNo = pageNo;
+				params.page = pageNo;
+				params.z = z;
 			}
 
-			console.log('POLL PARAMS', pollParams);
+			console.log('PAGE > PARAMS', params);
+
+			$.ajax( {
+				type: 'GET',
+				url: 'page.php',
+				data: params,
+				dataType: 'json',
+				success: function(data) {
+					lastId = data.payload.lastId;
+					$('#last-tweet span').text(data.payload.lastId);
+					var imageData, i;
+					for (i in data.payload.tweets) {
+						imageData = data.payload.tweets[i].imageData;
+						addImage(imageData, data.payload.tweets[i].position);
+						// fetch position from index
+					}
+				}.bind(this),
+					error: function() {
+				}.bind(this)
+			});
+		}
+
+		function poll()
+		{
+			var params = {
+				'lastId' : lastId
+			}
+
+			console.log('POLL > PARAMS', params);
 
 			$.ajax( {
 				type: 'GET',
 				url: 'poll.php',
-				data: pollParams,
+				data: params,
 				dataType: 'json',
 				success: function(data) {
+					lastId = data.payload.lastId;
+					$('#last-tweet span').text(data.payload.lastId);
 					var imageData, i;
 					for (i in data.payload.tweets) {
 						imageData = data.payload.tweets[i].imageData;
@@ -174,9 +212,15 @@ function main()
 
 		loadPage();
 
-		$('#pageGo').click( function() {
+		$('#bt-page-load').click( function() {
 
-			loadPage($('#pageNo').val());
+			loadPage($('#page-no').val());
+
+		} );
+
+		$('#bt-poll').click( function() {
+
+			poll();
 
 		} );
 

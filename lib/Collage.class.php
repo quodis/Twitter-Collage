@@ -158,14 +158,15 @@ class Collage
 		{
 			if (isset($fileData[$tweet['position']])) continue;
 			$i++;
+			unset($tweet['payload']);
 			$fileData[$tweet['position']] = $tweet;
 		}
 
 		if ($i < $tweets->count()) Debug::logError('#wtf#');
 
-		$filename = self::_getPageDataFileName($pageNo);
+		$fileName = self::_getPageDataFileName($pageNo);
 
-		file_put_contents($filename, json_encode($fileData));
+		file_put_contents($fileName, json_encode($fileData));
 		chmod($fileName, octdec(self::$_config['App']['cacheFilePermissions']));
 		chgrp($fileName, self::$_config['App']['cacheGroup']);
 	}
@@ -203,13 +204,13 @@ class Collage
 	 *
 	 * @return integer
 	 */
-	public static function getCurrentViewingPageNo()
+	public static function getCurrentInsertingPageNo()
 	{
 		// force loading tweet no
-		$lastTweetWithImage = self::getLastTweetWithImage();
+		$lastTweet = self::getLastTweet();
 
 		// page number
-		return ceil($lastTweetWithImage['id'] / self::getPageSize() + 1);
+		return ceil($lastTweet['id'] / self::getPageSize());
 	}
 
 
@@ -313,8 +314,13 @@ class Collage
 		// already loaded
 		if (!isset(self::$_lastTweet))
 		{
+			self::$_lastTweet = Cache::Get(self::CACHE_KEY_LAST_TWEET);
+
 			// load from db
-			if ($row = Tweet::getLast()) self::setLastTweet($row);
+			if (!self::$_lastTweet)
+			{
+				if ($row = Tweet::getLast()) self::setLastTweet($row);
+			}
 		}
 		return self::$_lastTweet;
 	}
@@ -360,7 +366,7 @@ class Collage
 
 		if (!is_dir(dirname($filename)))
 		{
-			mkdir(dirname($filename), octdec(self::$_config['App']['cacheDirPermissions']), TRUE);
+			rmkdir(dirname($filename), self::$_config['App']['cacheDirPermissions'], self::$_config['App']['cacheGroup']);
 		}
 
 		return $filename;

@@ -16,30 +16,38 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include '../bootstrap.php';
 
-	if (isset($_REQUEST['pageNo']))
+	if (isset($_REQUEST['lastId']))
 	{
-		$pageNo = (int)$_REQUEST['pageNo'];
-		if ($pageNo == 0) $pageNo = 1;
+		$lastId = (int)$_REQUEST['lastId'];
 	}
-	else $pageNo = Collage::getCurrentViewingPageNo();
 
-	dd('pageNo:' . $pageNo);
+	$result = Tweet::getSinceLastIdWithImage($lastId, $config['UI']['pollLimit']);
 
-	$result = Tweet::getByPageWithImage($pageNo, Collage::getPageSize());
+	// init response
 
-	dd('count:' . $result->count());
+	$data = array(
+		'pageNo' => 0,
+		'tweets' => array(),
+		'lastId' => null,
+		'msg' => null
+	);
 
+	$lastId = null;
 	$tweets = array();
 	while ($row = $result->row())
 	{
 		unset($row['payload']);
 		$tweets[] = $row;
+		if ($row['id'] > $lastId) $lastId = $row['id'];
 	}
 
-	$data = array(
-		'pageNo' => $pageNo,
-		'tweets' => $tweets,
-	);
+	if (count($tweets))
+	{
+		$data['tweets'] = $tweets;
+		$data['lastId'] = $lastId;
+	}
+
+	dd('lastId:' .  $lastId . ' count:' . count($data['tweets']) . ' lastId:' . $data['lastId']);
 
 	Dispatch::now(1, 'POLL OK', $data);
 

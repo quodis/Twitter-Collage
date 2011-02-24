@@ -23,7 +23,10 @@ function main()
 	$newTweets = Twitter::search($config['Twitter']['terms'], $config['Twitter']['rpp'], $lastTweet['twitterId']);
 
 	// start adding to this page
-	$pageNo   = Collage::getCurrentWorkingPageNo();
+	$pageNo   = Collage::getCurrentInsertingPageNo();
+
+	if ($pageNo == 5) dk("!");
+
 	$pageSize = Collage::getPageSize();
 	// all slots
 	$freeSlots = array();

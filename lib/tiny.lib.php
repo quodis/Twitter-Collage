@@ -873,6 +873,29 @@ class Audit {
 
 
 
+/**
+ * recursive makedir() with optional chmod() and chgrp()
+ *
+ * @param string $dir
+ * @param string $dirPermissions (optional)
+ * @param string $group (optional)
+ *
+ * @return bollean
+ */
+function rmkdir($dir, $dirPermissions = null, $group = null)
+{
+	while (!file_exists(dirname($dir))) if(!rmkdir(dirname($dir), $dirPermissions, $group)) return;
+
+	if (!mkdir($dir)) return;
+
+	if ($dirPermissions) if (!chmod($dir, octdec($dirPermissions))) return;
+
+	if ($group) if (!chgrp($dir, $group)) return;
+
+	return TRUE;
+}
+
+
 
 /**
  * logs message

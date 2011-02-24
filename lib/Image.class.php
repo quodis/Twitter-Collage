@@ -53,7 +53,16 @@ class Image
 		// define the cache file filename
 		$cacheFile = self::fileName('original', md5($url), $sufix);
 		// get the file from the url and save it to disk as cache file with the required permissions
-		$fileData = Curl::get($url, $cacheFile, self::$_config['App']['cacheDirPermissions'], self::$_config['App']['cacheFilePermissions']);
+		$options = array(
+			'timeout' => self::$_config['Twitter']['timeout']['imgFile'],
+			'cache' => array(
+				'file' => $cacheFile,
+				'dirPermissions' => self::$_config['App']['cacheDirPermissions'],
+				'filePermissions' => self::$_config['App']['cacheFilePermissions'],
+				'group' => self::$_config['App']['cacheGroup']
+			)
+		);
+		$fileData = Curl::get($url, $options);
 		// TODO: configure the CURL timeout for a shorter period
 
 		// use a default image if we're unable to fetch/save the url
@@ -88,7 +97,7 @@ class Image
 		$overlay->setImageFormat('gif');
 
 		// create the destination directory if it doesn't exist already
-		if (!is_dir(dirname($fileName))) self::mkdir(dirname($fileName));
+		if (!is_dir(dirname($fileName))) rmkdir(dirname($fileName), self::$_config['App']['cacheDirPermissions'], self::$_config['App']['cacheGroup']);
 
 		// save a "blank" file with the filename we generated above
 		if ($overlay->writeImage($fileName))
@@ -147,7 +156,7 @@ class Image
 		$destination = self::fileName('processed', md5($id), 'gif');
 
 		// create the destination directory if it doesn't exist already
-		if (!is_dir(dirname($destination))) self::mkdir(dirname($destination));
+		if (!is_dir(dirname($destination))) rmkdir(dirname($destination), self::$_config['App']['cacheDirPermissions'], self::$_config['App']['cacheGroup']);
 
 		// store the processed original image
 		$image->writeImage($destination);
@@ -170,7 +179,6 @@ class Image
 
 		// return the base64 encoded destination file
 		return base64_encode(file_get_contents($destination));
-		// FIXME: looks like we can optimize disk I/O
 	}
 
 
@@ -218,14 +226,6 @@ class Image
 		return $rgbColor;
 	}
 
-	public static function mkdir($dir)
-	{
-		while (!file_exists(dirname($dir))) self::mkdir(dirname($dir));
-
-		mkdir($dir);
-		chmod($dir, octdec(self::$_config['App']['cacheDirPermissions']));
-		chgrp(dirname($dir), self::$_config['App']['cacheGroup']);
-	}
 }
 
 ?>

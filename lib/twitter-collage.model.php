@@ -16,6 +16,9 @@
 final class Tweet
 {
 
+	// because _hit happens
+	const HARDCODED_LIMIT = 1000;
+
 	/**
 	 * @var array
 	 */
@@ -229,7 +232,7 @@ final class Tweet
 
 		if ($lastId > $from) $from = $lastId;
 
-		$sql = "SELECT * FROM `tweet` ";
+		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
 		$sql.= " WHERE id > $from AND id <= $through";
 		$sql.= " ORDER BY `id` ASC";
 
@@ -256,7 +259,7 @@ final class Tweet
 
 		if ($lastId > $from) $from = $lastId;
 
-		$sql = "SELECT * FROM `tweet` ";
+		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
 		$sql.= " WHERE `imageData` IS NOT NULL";
 		$sql.= " AND id > $from AND id <= $through";
 		$sql.= " ORDER BY `id` ASC";
@@ -265,6 +268,41 @@ final class Tweet
 
 		return $result;
 	}
+
+
+	/**
+	 *
+	 * @param integer $lastId
+	 *
+	 * @return array
+	 */
+	public static function getSinceLastIdWithImage($lastId, $limit = null)
+	{
+		$lastId = Db::escape($lastId);
+		$limit = Db::escape($limit);
+		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
+
+
+		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
+		$sql.= " WHERE `imageData` IS NOT NULL";
+
+		if ($lastId)
+		{
+			$sql.= " AND id > $lastId";
+			$sql.= " ORDER BY `id` ASC";
+		}
+		else
+		{
+			$sql.= " ORDER BY `id` DESC";
+		}
+
+		$sql.= " LIMIT $limit";
+
+		$result = Db::query($sql);
+
+		return $result;
+	}
+
 }
 
 ?>

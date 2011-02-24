@@ -17,9 +17,12 @@ Store:
     dirPermissions: 774
 Twitter:
     urlSearch: "http://search.twitter.com/search.json"
-    terms: "firefox"
+    terms: "vina2011"
     rpp: 100
-    pageLimit: 30
+    pageLimit: 1
+    timeout:
+      apiCall: 5
+      imgFile: 1
 Collage:
     logoFile: assets/logo48x47.png
     defaultPic: assets/default48x48.png
@@ -68,4 +71,5 @@ UI:
     templateDir: templates
     template : website
     stylesheet : "main.css?r=1"
-    mainJs : "twitter-collage.js?r=1" 
+    mainJs : "twitter-collage.js?r=1"
+    pollLimit: 100 

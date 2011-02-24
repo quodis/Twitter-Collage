@@ -56,27 +56,43 @@ class Curl
 	 * request this url
 	 *
 	 * @param string $url
-	 * @param string $cacheFile (optional)
+	 * @param array $options (optional)
 	 *
 	 * @return string
 	 */
-	public static function get($url, $cacheFile = null, $cacheDirPermissions = null, $cacheFilePermissions = null)
+	public static function get($url, array $options = null)
 	{
-		if (file_exists($cacheFile) && filesize($cacheFile))
-		{
-			$doc = file_get_contents($cacheFile);
 
-			Debug::logMsg('CURL (cached): ' . $url . ' /' . $cacheFile . ' (' . strlen($doc) .')');
+		/*
+		'timeout' => self::$_config['Twitter']['timeout']['imgFile'],
+			'cache' => array(
+				'file' => $cacheFile,
+				'dirPermissions' => self::$_config['App']['cacheDirPermissions'],
+				'filePermissions' => self::$_config['App']['cacheFilePermissions'],
+				'group' => self::$_config['App']['cacheGroup']
+
+		*/
+
+
+		if (isset($options['cache']) && file_exists($options['cache']['file']) && filesize($options['cache']['file']))
+		{
+			$doc = file_get_contents($options['cache']['file']);
+
+			Debug::logMsg('CURL (cached): ' . $url . ' /' . $options['cache']['file'] . ' (' . strlen($doc) .')');
 			return $doc;
 		}
 		else
 		{
 			$ch = curl_init();
 
+			if (!isset($options['timeout'])) $options['timeout'] = 10;
+
 			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $options['timeout']);
+			curl_setopt($ch, CURLOPT_TIMEOUT, $options['timeout']);
+			curl_setopt($ch, CURLOPT_MAXREDIRS, 2);
 
 			$response = curl_exec($ch);
 
@@ -86,14 +102,19 @@ class Curl
 
 			if (!strlen($response)) return '';
 
-			if ($cacheFile)
+			if (isset($options['cache']))
 			{
-				if (!is_dir(dirname($cacheFile)))
+				$cacheFile = $options['cache']['file'];
+
+				$dirName = dirname($cacheFile);
+
+				if (!is_dir($dirName))
 				{
-					mkdir(dirname($cacheFile), octdec($cacheDirPermissions), TRUE);
+					rmkdir($dirName, $options['cache']['dirPermissions'], $options['cache']['group']);
 				}
 				file_put_contents($cacheFile, $response);
-				chmod($cacheFile, octdec($cacheFilePermissions));
+				if (isset($options['cache']['filePermissions'])) chmod($cacheFile, octdec($options['cache']['filePermissions']));
+				if (isset($options['cache']['group'])) chgrp($cacheFile, $options['cache']['group']);
 			}
 		}
 
