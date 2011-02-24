@@ -25,8 +25,6 @@ function main()
 	// start adding to this page
 	$pageNo   = Collage::getCurrentInsertingPageNo();
 
-	if ($pageNo == 5) dk("!");
-
 	$pageSize = Collage::getPageSize();
 	// all slots
 	$freeSlots = array();
