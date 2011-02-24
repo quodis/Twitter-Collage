@@ -128,7 +128,10 @@ class Collage
 			}
 		}
 
-		file_put_contents(self::_getPageConfigFileName(), json_encode(self::$_pageConfig));
+		$fileName = self::_getPageConfigFileName();
+
+		file_put_contents($fileName, json_encode(self::$_pageConfig));
+		chmod($fileName, octdec(self::$_config['App']['filePermissions']));
 	}
 
 
@@ -160,7 +163,9 @@ class Collage
 		if ($i < $tweets->count()) Debug::logError('#wtf#');
 
 		$filename = self::_getPageDataFileName($pageNo);
+
 		file_put_contents($filename, json_encode($fileData));
+		chmod($fileName, octdec(self::$_config['App']['filePermissions']));
 	}
 
 
