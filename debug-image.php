@@ -24,11 +24,15 @@ function main()
 	// define a sufix based on the extension key from the path info
 	$sufix = isset($pathinfo['extension']) ? $pathinfo['extension'] : '';
 	// define the cache file filename
-	$cacheFile = Image::fileName('original', md5($url), $sufix);
+	$original = Image::fileName('original', md5($url), $sufix);
 
-	dk($cacheFile);
+	$processed = Image::fileName('processed', md5($id), 'gif');
 
-	Dispatch::now(1, 'MAKE IMAGES OK');
+	dd('original:' . $original);
+
+	dd('processed:' . $processed);
+
+	Dispatch::now(1);
 
 } // main()
 
