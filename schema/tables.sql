@@ -21,5 +21,6 @@ CREATE TABLE `tweet` (
   `isoLanguage` VARCHAR(3) NOT NULL,  /* iso_language_code: "en" */
   `payload` TEXT,
   `imageData` TEXT,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (page, position)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
