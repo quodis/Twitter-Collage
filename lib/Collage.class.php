@@ -209,7 +209,7 @@ class Collage
 		$lastTweet = self::getLastTweet();
 
 		// page number
-		return ceil($lastTweet['id'] / self::getPageSize());
+		return floor($lastTweet['id'] / self::getPageSize()) + 1;
 	}
 
 
