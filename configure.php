@@ -27,7 +27,11 @@ function main()
 
 		$contents = "<?php \$config = unserialize('" . serialize($data) . "'); ?>";
 
-		file_put_contents(dirname(__FILE__) . '/config/config.php', $contents);
+		$fileName = dirname(__FILE__) . '/config/config.php';
+
+		file_put_contents($fileName, $contents);
+		chmod($fileName, octdec($data['App']['cacheFilePermissions']));
+		chgrp($fileName, $data['App']['cacheGroup']);
 	}
 	else
 	{

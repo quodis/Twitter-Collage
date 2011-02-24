@@ -131,7 +131,8 @@ class Collage
 		$fileName = self::_getPageConfigFileName();
 
 		file_put_contents($fileName, json_encode(self::$_pageConfig));
-		chmod($fileName, octdec(self::$_config['App']['filePermissions']));
+		chmod($fileName, octdec(self::$_config['App']['cacheFilePermissions']));
+		chgrp($fileName, self::$_config['App']['cacheGroup']);
 	}
 
 
@@ -165,7 +166,8 @@ class Collage
 		$filename = self::_getPageDataFileName($pageNo);
 
 		file_put_contents($filename, json_encode($fileData));
-		chmod($fileName, octdec(self::$_config['App']['filePermissions']));
+		chmod($fileName, octdec(self::$_config['App']['cacheFilePermissions']));
+		chgrp($fileName, self::$_config['App']['cacheGroup']);
 	}
 
 
