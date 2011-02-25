@@ -92,9 +92,9 @@ final class Tweet
 		$processedTs = time();
 
 		// update tweet
-		$sql = "UPDATE `tweet` ";
-		$sql.= "  SET `imageData` = '$imageData'";
-		$sql.= "  SET `processedTs` = '$processedTs'";
+		$sql = "UPDATE `tweet` SET ";
+		$sql.= "  `imageData` = '$imageData', ";
+		$sql.= "  `processedTs` = '$processedTs'";
 		$sql.= "  WHERE id = '$id'";
 		$result = Db::execute($sql);
 
