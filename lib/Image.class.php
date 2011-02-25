@@ -120,8 +120,8 @@ class Image
 	 */
 	public static function makeTile($url, $id, $position)
 	{
-		$start = microtime(TRUE);
-		$time = array();
+//		$start = microtime(TRUE);
+//		$time = array();
 
 		// fetch the pathinfo from the $url
 		$pathinfo = pathinfo($url);
@@ -151,7 +151,7 @@ class Image
 		// desaturate the image
 		$image->modulateImage(100, 0, 100);
 
-		$time['process'] = microtime(TRUE);
+//		$time['process'] = microtime(TRUE);
 
 		// generate the destination
 		$destination = self::fileName('processed', md5($id), 'gif');
@@ -170,7 +170,7 @@ class Image
 			$image->compositeImage($overlay, Imagick::COMPOSITE_HARDLIGHT, 0, 0);
 			$image->writeImage($destination);
 
-			$time['composite'] = microtime(TRUE);
+//			$time['composite'] = microtime(TRUE);
 
 			// discover the binary path - currently returning a new line, simple fix
 			$binary_path = '/usr/bin/convert';
@@ -179,7 +179,7 @@ class Image
 			// reprocess the first pass image using shell_exec
 			shell_exec("$binary_path $cmd_arguments $destination");
 
-			$time['convert'] = microtime(TRUE);
+//			$time['convert'] = microtime(TRUE);
 		}
 		else
 		{
@@ -191,7 +191,7 @@ class Image
 			// reprocess the first pass image using shell_exec
 			shell_exec("$binary_path $cmd_arguments $destination");
 
-			$time['composite'] = microtime(TRUE);
+//			$time['composite'] = microtime(TRUE);
 		}
 
 
@@ -205,11 +205,11 @@ class Image
 
 		//$contents = base64_encode($image->getImageBlob());
 
-		$time['read'] = microtime(TRUE);
+//		$time['read'] = microtime(TRUE);
 
-		$log = array();
-		foreach ($time as $key => $value) $log[] = $key . ': ' . ceil(($value - $start) * 1000) / 1000;
-		dd('TIME! id:' . $id . ' len:' . strlen($contents) .  ' > ' . implode(', ', $log));
+//		$log = array();
+//		foreach ($time as $key => $value) $log[] = $key . ': ' . ceil(($value - $start) * 1000) / 1000;
+//		dd('TIME! id:' . $id . ' len:' . strlen($contents) .  ' > ' . implode(', ', $log));
 
 		return $contents;
 	}

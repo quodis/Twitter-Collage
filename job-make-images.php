@@ -56,7 +56,7 @@ function main()
 
 				$time['update-db'] = microtime(TRUE);
 
-				Debug::logMsg('updated tweet id: ' . $tweet['id'] . ' page:' . $tweet['page'] . ' position:' . $tweet['position'] . ' > ' . Image::fileName('processed', md5($tweet['id']), 'gif'));
+				Debug::logMsg('updated tweet id: ' . $tweet['id'] . ' page:' . $tweet['page'] . ' position:' . $tweet['position'] . ' [' . strlen($encoded) . ' bytes] '. Image::fileName('processed', md5($tweet['id']), 'gif'));
 			}
 			else Debug::logError('fail download tweet id:' . $tweet['id'] . ' page:' . $tweet['page'] . ' position: ' . $tweet['position'] . ' from url:' . $tweet['imageUrl']);
 
@@ -74,7 +74,7 @@ function main()
 		sleep($sleep);
 	}
 
-	Debug::logMsg('...this honoured is now going to hara-kiri...');
+	Debug::logMsg('...this honoured worker is now going to hara-kiri...');
 
 	exit();
 
