@@ -77,6 +77,6 @@ UI:
         general: "/assets/js/general.js?v=1"
         config: "/assets/js/config.js?v=1"
     css:
-        main: "/assets/js/ftp.js?v=1"
-        mosaic: "/assets/js/mosaic.js?v=1"
+        main: "/assets/css/ftp.js?v=1"
+        mosaic: "/assets/css/mosaic.js?v=1"
     pollLimit: 100
