@@ -163,7 +163,7 @@ class Image
 
 		$colors = self::$_config['Collage']['colorDepth'];
 
-		if (self::$_config['Collage']['internalComposite'])
+		if (TRUE || self::$_config['Collage']['internalComposite'])
 		{
 			$overlay = new Imagick($overlayFile);
 			$image->setImageColorspace($overlay->getImageColorspace() );
@@ -175,7 +175,7 @@ class Image
 			// discover the binary path - currently returning a new line, simple fix
 			$binary_path = '/usr/bin/convert';
 			// build the cmd arguments
-			$cmd_arguments = "$destination -colors $colors -matte";
+			$cmd_arguments = "$destination -colors $colors";
 			// reprocess the first pass image using shell_exec
 			shell_exec("$binary_path $cmd_arguments $destination");
 
