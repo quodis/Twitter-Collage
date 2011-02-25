@@ -24,7 +24,7 @@ Mosaic:
     cols: 48
     rows: 47
     tileSize: 12
-    colorDepth: 12
+    colorDepth: 16
     internalComposite: 0
 Jobs:
     twitter-search:
