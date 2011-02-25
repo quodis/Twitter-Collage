@@ -31,6 +31,8 @@ Collage:
     cols: 48
     rows: 47
     tileSize: 12
+    colorDepth: 12
+    internalComposite: 1
 Jobs:
     twitter-search:
         period: 10

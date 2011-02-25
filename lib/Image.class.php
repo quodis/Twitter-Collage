@@ -120,16 +120,15 @@ class Image
 	 */
 	public static function makeTile($url, $id, $position)
 	{
+		$start = microtime(TRUE);
+		$time = array();
+
 		// fetch the pathinfo from the $url
 		$pathinfo = pathinfo($url);
 		// fetch the suffix(file extension) from the pathinfo array
 		$sufix = isset($pathinfo['extension']) ? $pathinfo['extension'] : '';
 		// generate the file path for the destination/cache file
 		$cacheFile = self::fileName('original', md5($url), $sufix);
-
-		// debug
-		$config = & Collage::getPageConfig();
-		$index = $config['index'][$position];
 
 		try
 		{
@@ -144,13 +143,15 @@ class Image
 			$image = new Imagick($default);
 		}
 
+		// resize the image to the tile size
+		$tileSize = self::$_config['Collage']['tileSize'];
+		$image->cropThumbnailImage($tileSize, $tileSize);
 		/* PROCESS THE ORIGINAL IMAGE */
 		$image->setImageFormat('gif');
 		// desaturate the image
 		$image->modulateImage(100, 0, 100);
-		// resize the image to the tile size
-		$tileSize = self::$_config['Collage']['tileSize'];
-		$image->cropThumbnailImage($tileSize, $tileSize);
+
+		$time['process'] = microtime(TRUE);
 
 		// generate the destination
 		$destination = self::fileName('processed', md5($id), 'gif');
@@ -158,25 +159,59 @@ class Image
 		// create the destination directory if it doesn't exist already
 		if (!is_dir(dirname($destination))) rmkdir(dirname($destination), self::$_config['App']['cacheDirPermissions'], self::$_config['App']['cacheGroup']);
 
-		// store the processed original image
-		$image->writeImage($destination);
-
 		$overlayFile = self::getTileOverlayFilename($position);
 
-		// discover the binary path - currently returning a new line, simple fix
-		//$binary_path = system('which composite');
-		$binary_path = '/usr/bin/composite';
-		// build the cmd arguments
-		$cmd_arguments = "$overlayFile $destination -colors 8 -gravity center -compose hardlight -matte";
-		// reprocess the first pass image using shell_exec
-		shell_exec("$binary_path $cmd_arguments $destination");
+		$colors = self::$_config['Collage']['colorDepth'];
+
+		if (self::$_config['Collage']['internalComposite'])
+		{
+			$overlay = new Imagick($overlayFile);
+			$image->setImageColorspace($overlay->getImageColorspace() );
+			$image->compositeImage($overlay, Imagick::COMPOSITE_HARDLIGHT, 0, 0);
+			$image->writeImage($destination);
+
+			$time['composite'] = microtime(TRUE);
+
+			// discover the binary path - currently returning a new line, simple fix
+			$binary_path = '/usr/bin/convert';
+			// build the cmd arguments
+			$cmd_arguments = "$destination -colors $colors -matte";
+			// reprocess the first pass image using shell_exec
+			shell_exec("$binary_path $cmd_arguments $destination");
+
+			$time['convert'] = microtime(TRUE);
+		}
+		else
+		{
+			$image->writeImage($destination);
+			// discover the binary path - currently returning a new line, simple fix
+			$binary_path = '/usr/bin/composite';
+			// build the cmd arguments
+			$cmd_arguments = "$overlayFile $destination -colors $colors -compose hardlight";
+			// reprocess the first pass image using shell_exec
+			shell_exec("$binary_path $cmd_arguments $destination");
+
+			$time['composite'] = microtime(TRUE);
+		}
+
+
 		//Debug::logMsg("$binary_path $cmd_arguments $destination");
 		// set permissions on the final image
 		chmod($destination, octdec(self::$_config['App']['cacheFilePermissions']));
 		chgrp($destination, self::$_config['App']['cacheGroup']);
 
 		// return the base64 encoded destination file
-		return base64_encode(file_get_contents($destination));
+		$contents = base64_encode(file_get_contents($destination));
+
+		//$contents = base64_encode($image->getImageBlob());
+
+		$time['read'] = microtime(TRUE);
+
+		$log = array();
+		foreach ($time as $key => $value) $log[] = $key . ': ' . ceil(($value - $start) * 1000) / 1000;
+		dd('TIME! id:' . $id . ' len:' . strlen($contents) .  ' > ' . implode(', ', $log));
+
+		return $contents;
 	}
 
 

@@ -38,18 +38,31 @@ function main()
 		{
 			$processed++;
 
+			$start = microtime(TRUE);
+			$time = array();
+
 			// download
 			if (Image::download($tweet['imageUrl'], $tweet['id']))
 			{
-				Debug::logMsg('updated tweet id: ' . $tweet['id'] . ' page:' . $tweet['page'] . ' position:' . $tweet['position']);
+				$time['download'] = microtime(TRUE);
 
 				// process tile (stores on disk and returns image raw data)
 				$encoded = Image::makeTile($tweet['imageUrl'], $tweet['id'], $tweet['position']);
 
+				$time['make-tile'] = microtime(TRUE);
+
 				// update db with image data
 				Tweet::updateImage($tweet['id'], $encoded);
+
+				$time['update-db'] = microtime(TRUE);
+
+				Debug::logMsg('updated tweet id: ' . $tweet['id'] . ' page:' . $tweet['page'] . ' position:' . $tweet['position'] . ' > ' . Image::fileName('processed', md5($tweet['id']), 'gif'));
 			}
-			else Debug::logError('fail download tweet id:' . $tweet['id'] . ' page:' . $tweet['page'] . ' position:' . $tweet['position'] . ' from url:' . $tweet['imageUrl']);
+			else Debug::logError('fail download tweet id:' . $tweet['id'] . ' page:' . $tweet['page'] . ' position: ' . $tweet['position'] . ' from url:' . $tweet['imageUrl']);
+
+			$log = array();
+			foreach ($time as $key => $value) $log[] = $key . ': ' . ceil(($value - $start) * 1000) / 1000;
+			dd('TIME! id:' . $tweet['id'] . ' > ' . implode(', ', $log));
 		}
 
 		// sleep?
