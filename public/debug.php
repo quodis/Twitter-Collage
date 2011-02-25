@@ -86,8 +86,6 @@ function main()
 	<button id ="bt-poll">Poll</button>
 	<label id="last-tweet">Last Tweet:<span>?</span></label>
 
-	<?php include '../templates/' . $config['UI']['template'] . '.tpl' ?>
-
 <script type="text/javascript">
 	//<![CDATA[
 	(function($) {
