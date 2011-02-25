@@ -150,10 +150,6 @@ class Collage
 	{
 		$tweets = Tweet::getByPageWithImage($pageNo, self::getPageSize());
 
-		Debug::logMsg('pageNo:' . $pageNo);
-
-		Debug::logMsg('tweets:' . $tweets->count());
-
 		$i = 0;
 
 		$fileData = array();
