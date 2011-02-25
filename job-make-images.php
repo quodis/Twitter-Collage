@@ -16,6 +16,10 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include dirname(__FILE__) .  '/bootstrap.php';
 
+	Debug::setLogMsgFile($config['App']['pathLog'] .'/make-images.msg.php');
+	Debug::setLogErrorFile($config['App']['pathLog'] .'/make-images.error.php');
+	Debug::setForceLogToFile(TRUE);
+
 	$period   = $config['Jobs']['make-images']['period'];
 	$dbLimit  = $config['Jobs']['make-images']['dbLimit'];
 	$imgLimit = $config['Jobs']['make-images']['imgLimit'];

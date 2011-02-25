@@ -1,6 +1,7 @@
 App:
     # path    
     path: /servers/develop/twitter-collage
+    pathLog: /var/log/twitter-collage
     pathCache: /servers/cache/twitter-collage
     cacheFilePermissions: 664
     cacheDirPermissions: 775

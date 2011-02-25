@@ -510,6 +510,11 @@ class Debug
 	private static $_logErrorFile;
 
 	/**
+	 * @var boolean
+	 */
+	private static $_forceLogToFile = FALSE;
+
+	/**
 	 * @var string message prefix
 	 */
 	private static $_context = '';
@@ -528,6 +533,10 @@ class Debug
 		self::$_logErrorFile = $logErrorFile;
 	}
 
+	public static function setForceLogToFile($force)
+	{
+		self::$_forceLogToFile = $force;
+	}
 
 	/**
 	 *  set prefix
@@ -607,13 +616,13 @@ class Debug
 
 		$text = date('Y-m-d H:i:s') . ' | ' . Req::time() . ' > ' . self::$_context . ' > ' . $text . NL;
 
-		if (CLIENT != SCRIPT)
+		if (CLIENT != SCRIPT || self::$_forceLogToFile)
 		{
 			if ($file)
 			{
 				file_put_contents($file, $text, FILE_APPEND);
 			}
-			else error_log($file);
+			else error_log($text);
 		}
 		if (CLIENT == SCRIPT) echo ($isError) ? '>>>' . $text : $text;
 

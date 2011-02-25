@@ -16,6 +16,10 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include dirname(__FILE__) .  '/bootstrap.php';
 
+	Debug::setLogMsgFile($config['App']['pathLog'] .'/collage-build.msg.php');
+	Debug::setLogErrorFile($config['App']['pathLog'] .'/collage-build.error.php');
+	Debug::setForceLogToFile(TRUE);
+
 	$period = $config['Jobs']['collage-build']['period'];
 
 	while (TRUE)
