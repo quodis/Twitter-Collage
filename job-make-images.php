@@ -16,22 +16,19 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include dirname(__FILE__) .  '/bootstrap.php';
 
-	$period     = $config['Jobs']['make-images']['period'];
-	$limit      = $config['Jobs']['make-images']['limit'];
-	$iterations = $config['Jobs']['make-images']['iterations'];
+	$period   = $config['Jobs']['make-images']['period'];
+	$dbLimit  = $config['Jobs']['make-images']['dbLimit'];
+	$imgLimit = $config['Jobs']['make-images']['imgLimit'];
 
-	$i = 0;
+	$processed = 0;
 
-	while (TRUE && $i < $iterations)
+	while (TRUE && $processed < $imgLimit)
 	{
-		$i++;
-
 		// start time
 		$start = time();
-		$processed = 0;
 
 		// fetch tweets
-		$tweetsWithoutImage = Tweet::getUnprocessed($limit);
+		$tweetsWithoutImage = Tweet::getUnprocessed($dbLimit);
 
 		while ($tweet = $tweetsWithoutImage->row())
 		{
@@ -56,9 +53,11 @@ function main()
 		$sleep = $period - $elapsed;
 		if ($sleep < 1) $sleep = 1;
 
-		Debug::logMsg('OK! ... iteartion:' . $i . '/' . $iterations .' images processed: ' . $processed);
+		Debug::logMsg('OK! ... images processed: ' . $processed . '/' . $imgLimit);
 		sleep($sleep);
 	}
+
+	Debug::logMsg('...this honoured is now going to hara-kiri...');
 
 	exit();
 

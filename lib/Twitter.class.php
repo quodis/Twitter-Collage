@@ -15,6 +15,11 @@ class Twitter
 {
 
 	/**
+	 * @const string cache key
+	 */
+	const CACHE_KEY_RESET_FLAG = 'TWITTER-COLLAGE::Twitter::resetFlag';
+
+	/**
 	 * @var array
 	 */
 	private static $_config = null;
@@ -49,14 +54,21 @@ class Twitter
 	 */
 	public static function search($terms, $rpp, $lastId)
 	{
-
 		$data = array();
 
 		$url = self::$_config['Twitter']['urlSearch'];
 
 		$params = array('q' => $terms);
 
-		$params['since_id'] = $lastId;
+		// don't use lastId?
+		// NOTE: this behaviour controlled by flag (using memcached)
+		//   use reset-twitter-api script to trigger once
+		if (!Cache::get(self::CACHE_KEY_RESET_FLAG))
+		{
+			$params['since_id'] = $lastId;
+		}
+		else Cache::delete(self::CACHE_KEY_RESET_FLAG);
+
 		$params['rpp'] = $rpp;
 
 		$url = $url . '?' . http_build_query($params);
@@ -84,6 +96,15 @@ class Twitter
 		ksort($data);
 
 		return $data;
+	}
+
+	/**
+	 * sets a flag using memcache, lastId will be ignored in next search call
+	 */
+	public static function reset()
+	{
+		$value = 'wtf!?';
+		Cache::set(self::CACHE_KEY_RESET_FLAG, $value, 1000000);
 	}
 
 

@@ -269,9 +269,9 @@ class Collage
 	 */
 	public static function addTweet(array & $row)
 	{
-		Tweet::insert($row);
+		$tweet = Tweet::insert($row);
 
-		Cache::delete(self::CACHE_KEY_LAST_TWEET);
+		self::setLastTweet($tweet);
 	}
 
 

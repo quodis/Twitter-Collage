@@ -42,7 +42,7 @@ final class Tweet
 	 * @param array data (by reference)
 	 * @param string $insertId (returned by reference)
 	 *
-	 * @return boolean
+	 * @return array
 	 */
 	public static function insert(array & $data, & $insertId = null)
 	{
@@ -56,8 +56,6 @@ final class Tweet
 
 			$values[$to] = Db::escape($data[$from]);
 		}
-
-		//if (isset($data['id'])) $values['id'] = $data['id'];
 
 		// add payload
 		$values['payload'] = Db::escape(json_encode($data));
@@ -73,7 +71,9 @@ final class Tweet
 
 		$insertId = Db::lastInsertId();
 
-		return $result->success();
+		$values['id'] = $insertId;
+
+		return $result->success() ? $values : null;
 	}
 
 
@@ -89,8 +89,12 @@ final class Tweet
 	{
 		$id = Db::escape($id);
 
+		$processedTs = time();
+
 		// update tweet
-		$sql = "UPDATE `tweet` SET `imageData` = '$imageData'";
+		$sql = "UPDATE `tweet` ";
+		$sql.= "  SET `imageData` = '$imageData'";
+		$sql.= "  SET `processedTs` = '$processedTs'";
 		$sql.= "  WHERE id = '$id'";
 		$result = Db::execute($sql);
 

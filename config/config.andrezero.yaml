@@ -35,8 +35,8 @@ Jobs:
         period: 10
     make-images:
         period: 1
-        limit: 10
-        iterations: 10
+        dbLimit: 100
+        imgLimit: 1000
     collage-build:
         period: 5
 Cache:

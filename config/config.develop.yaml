@@ -34,9 +34,11 @@ Jobs:
     twitter-search:
         period: 10
     make-images:
-        period: 10
+        period: 1
+        dbLimit: 100
+        imgLimit: 1000
     collage-build:
-        period: 10
+        period: 5
 Cache:
     enabled: 1
     TTL:
