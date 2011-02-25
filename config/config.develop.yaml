@@ -1,21 +1,14 @@
 App:
     # path    
-    path: /servers/develop/twitter-collage
-    pathLog: /var/log/twitter-collage
-    pathCache: /servers/cache/twitter-collage
-    cacheFilePermissions: 664
-    cacheDirPermissions: 775
-    cacheGroup: quodis
+    path: /servers/develop/twitterparty
+    pathLog: /var/log/twitterparty
     # url
-    url: http://dev.twitter-collage.quodis.com
+    url: http://dev.twitterparty.quodis.com
 Store:
-    # storage path
-    path: /storage/develop/twitter-collage
-    # storage public url
-    url: http://store.dev.twitter-collage.quodis.com
-    # created files and dirs in storage
+    path: /servers/store/twitterparty
     filePermissions: 664
     dirPermissions: 775
+    group: quodis
 Twitter:
     urlSearch: "http://search.twitter.com/search.json"
     terms: "pleasedonttext"
@@ -24,7 +17,7 @@ Twitter:
     timeout:
         apiCall: 5
         imgFile: 1
-Collage:
+Mosaic:
     logoFile: assets/logo48x47.png
     defaultPic: assets/default48x48.png
     configFile: assets/config48x47.php
@@ -36,16 +29,16 @@ Collage:
 Jobs:
     twitter-search:
         period: 10
-    make-images:
+    image-process:
         period: 1
         dbLimit: 100
         imgLimit: 1000
-    collage-build:
+    mosaic-build:
         period: 5
 Cache:
     enabled: 1
     TTL:
-        collageConfig: 2000 
+        mosaicConfig: 2000 
         tweetIds: 200
     servers:
         - host: localhost
@@ -53,13 +46,13 @@ Cache:
 Db:
     schemaDir: schema
     databases:
-        - name: twitter_collage
+        - name: twitterparty
           schemaFile: db.sql
           defaults: &connectionDefaults
               host: localhost
-              name: twitter_collage
-              user: twitter_collage
-              pass: twitter_collage
+              name: twitterparty
+              user: twitterparty
+              pass: twitterparty
               client: localhost
           connections:
               read: 
@@ -80,9 +73,10 @@ UI:
     title: "Firefox 4 Twitter Party"
     keywords: "Mozilla,Firefox, Firefox 4, Collage, Twitter,Tweet"
     description: "Firefox 4 Twitter Party is a visualization of Firefox 4 activity on Twitter. It is an experiment with exclusively open web tools and technologies."
-    templateDir: templates
-    template : website
-    stylesheet : "main.css?r=1"
-    mainJs : "twitter-collage.js?r=1"
+    js: 
+        general: "/assets/js/general.js?v=1"
+        config: "/assets/js/config.js?v=1"
+    css:
+        main: "/assets/js/ftp.js?v=1"
+        mosaic: "/assets/js/mosaic.js?v=1"
     pollLimit: 100
-     
