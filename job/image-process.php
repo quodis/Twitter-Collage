@@ -14,15 +14,15 @@ function main()
 {
 	DEFINE('CLIENT', 'script');
 	DEFINE('CONTEXT', __FILE__);
-	include dirname(__FILE__) .  '/bootstrap.php';
+	include dirname(__FILE__) . '/../bootstrap.php';
 
-	Debug::setLogMsgFile($config['App']['pathLog'] .'/make-images.msg.php');
-	Debug::setLogErrorFile($config['App']['pathLog'] .'/make-images.error.php');
+	Debug::setLogMsgFile($config['App']['pathLog'] .'/image-process.msg.php');
+	Debug::setLogErrorFile($config['App']['pathLog'] .'/image-process.error.php');
 	Debug::setForceLogToFile(TRUE);
 
-	$period   = $config['Jobs']['make-images']['period'];
-	$dbLimit  = $config['Jobs']['make-images']['dbLimit'];
-	$imgLimit = $config['Jobs']['make-images']['imgLimit'];
+	$period   = $config['Jobs']['image-process']['period'];
+	$dbLimit  = $config['Jobs']['image-process']['dbLimit'];
+	$imgLimit = $config['Jobs']['image-process']['imgLimit'];
 
 	$processed = 0;
 
