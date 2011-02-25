@@ -50,16 +50,10 @@ function main()
 <title><?=$config['UI']['title']?></title>
 
 <link href="assets/css/reset.css" type="text/css" rel="stylesheet" />
-<link href="assets/css/<?=$config['UI']['stylesheet']?>" type="text/css"
-				rel="stylesheet" />
+<link href="assets/css/debug.css" type="text/css" rel="stylesheet" />
 
 	<?php if (!$isOldBrowser) { ?>
-<script type="text/javascript" src="assets/js/jquery-1.4.2.min.js"
-				charset="utf-8"></script>
-<script type="text/javascript" src="assets/js/raphael-min.js"
-				charset="utf-8"></script>
-<script type="text/javascript"
-				src="assets/js/<?=$config['UI']['mainJs']?>" charset="utf-8"></script>
+<script type="text/javascript" src="assets/js/jquery-1.4.2.min.js" charset="utf-8"></script>
 
 	<?php }?>
 
