@@ -1,6 +1,6 @@
 <?php
 /**
- * @package    TwitterCollage
+ * @pacjage    Firefox 4 Twitter Party
  * @subpackage server
  * @version    v.0.4
  * @author     Andre Torgal <andre@quodis.com>
@@ -23,15 +23,15 @@ DEFINE ('SCRIPT', 'script');
 
 // TODO AUTOLOAD
 require LIB_PATH . '/tiny.lib.php';
-require LIB_PATH . '/twitter-collage.model.php';
+require LIB_PATH . '/twitterparty.model.php';
 require LIB_PATH . '/Curl.class.php';
 require LIB_PATH . '/Image.class.php';
-require LIB_PATH . '/Collage.class.php';
+require LIB_PATH . '/Mosaic.class.php';
 require LIB_PATH . '/Twitter.class.php';
 
 Debug::setCtx(basename(CONTEXT));
-Debug::setLogMsgFile('/var/log/twitter-collage/www.msg.log');
-Debug::setLogErrorFile('/var/log/twitter-collage/www.error.log');
+Debug::setLogMsgFile('/var/log/twitterparty/www.msg.log');
+Debug::setLogErrorFile('/var/log/twitterparty/www.error.log');
 
 
 // TODO SESSION

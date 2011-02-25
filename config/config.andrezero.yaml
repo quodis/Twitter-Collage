@@ -29,10 +29,10 @@ Mosaic:
 Jobs:
     twitter-search:
         period: 10
-    make-process:
+    image-process:
         period: 1
-        dbLimit: 100
-        imgLimit: 1000
+        dbLimit: 10
+        imgLimit: 100
     mosaic-build:
         period: 5
 Cache:

@@ -18,12 +18,14 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include dirname(__FILE__) . '/../bootstrap.php';
 
-	$sql = 'UPDATE tweet SET imageData = NULL';
+	Db::executeFile(dirname(__FILE__) .'/schema/tables.sql');
 
-	Debug::logMsg($sql);
+	Twitter::reset();
+	Cache::delete(Mosaic::CACHE_KEY_LAST_TWEET);
+	Cache::delete(Mosaic::CACHE_KEY_LAST_TWEET_WITH_IMAGE);
 
-	Db::execute($sql);
-
+	shell_exec('rm -R ' . $config['Store']['path'] . '/tiles/*');
+	shell_exec('rm -R ' . $config['Store']['path'] . '/original/*');
 	shell_exec('rm -R ' . $config['Store']['path'] . '/processed/*');
 	shell_exec('rm -R ' . $config['Store']['path'] . '/pages/*');
 

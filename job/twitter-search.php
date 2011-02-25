@@ -1,6 +1,6 @@
 <?php
 /**
- * @package    TwitterCollage
+ * @pacjage    Firefox 4 Twitter Party
  * @subpackage server
  * @version    v.0.4
  * @author     Andre Torgal <andre@quodis.com>
@@ -29,15 +29,15 @@ function main()
 		$tweets = 0;
 
 		// will return nothing on first call
-		$lastTweet = Collage::getLastTweet();
+		$lastTweet = Mosaic::getLastTweet();
 
 		// fetch results using twitter API
 		$newTweets = Twitter::search($config['Twitter']['terms'], $config['Twitter']['rpp'], $lastTweet['twitterId']);
 
 		// start adding to this page
-		$pageNo   = Collage::getCurrentInsertingPageNo();
+		$pageNo   = Mosaic::getCurrentInsertingPageNo();
 
-		$pageSize = Collage::getPageSize();
+		$pageSize = Mosaic::getPageSize();
 		// all slots
 		$freeSlots = array();
 		for ($i = 0; $i < $pageSize; $i++) $freeSlots[$i] = $i;
@@ -71,7 +71,7 @@ function main()
 			// insert tweet
 			$tweet['page'] = $pageNo;
 			$tweet['position'] = $position;
-			Collage::addTweet($tweet);
+			Mosaic::addTweet($tweet);
 		}
 
 		// sleep?

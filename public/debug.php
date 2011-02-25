@@ -1,6 +1,6 @@
 <?php
 /**
- * @package    TwitterCollage
+ * @pacjage    Firefox 4 Twitter Party
  * @subpackage server
  * @version    v.0.1
  * @author     Andre Torgal <andre@quodis.com>
@@ -77,9 +77,9 @@ function main()
 </head>
 <body class="<?=implode(" ", $classes)?>" >
 
-	<label>Last Page:<span><?=Collage::getCurrentWorkingPageNo()?></span></label>
+	<label>Last Page:<span><?=Mosaic::getCurrentWorkingPageNo()?></span></label>
 	<label>PageNo:</label>
-	<input type="text" id="page-no" value="<?=Collage::getCurrentWorkingPageNo()?>"/>
+	<input type="text" id="page-no" value="<?=Mosaic::getCurrentWorkingPageNo()?>"/>
 	<label>Z:</label>
 	<input type="text" id="z" value=""/>
 	<button id ="bt-page-load">Go</button>
@@ -93,9 +93,9 @@ function main()
 	(function($) {
 <?php if (!$isOldBrowser) { ?>
 
-		eval('var config = <?=json_encode(Collage::getPageConfig())?>');
+		eval('var config = <?=json_encode(Mosaic::getPageConfig())?>');
 
-		config.tileSize = <?=$config['Collage']['tileSize']?>;
+		config.tileSize = <?=$config['Mosaic']['tileSize']?>;
 
 		//console.log('GRID CONFIG', config);
 

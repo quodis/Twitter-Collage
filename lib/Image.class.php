@@ -1,6 +1,6 @@
 <?php
 /**
- * @package    TwitterCollage
+ * @pacjage    Firefox 4 Twitter Party
  * @subpackage server
  * @version    v.0.1
  * @author     Andre Torgal <andre@quodis.com>
@@ -68,7 +68,7 @@ class Image
 		// use a default image if we're unable to fetch/save the url
 		if (!$fileData)
 		{
-			$fileData = file_get_contents(self::$_config['App']['path'] . '/' . self::$_config['Collage']['defaultPic']);
+			$fileData = file_get_contents(self::$_config['App']['path'] . '/' . self::$_config['Mosaic']['defaultPic']);
 		}
 
 		// return true if we have fileData
@@ -89,7 +89,7 @@ class Image
 
 		$fileName = self::getTileOverlayFilename($position);
 
-		$tileSize = self::$_config['Collage']['tileSize'];
+		$tileSize = self::$_config['Mosaic']['tileSize'];
 
 		// generate the overlay with the current rgb color and same size as original image
 		$overlay = new Imagick();
@@ -138,13 +138,13 @@ class Image
 		catch (Exception $e)
 		{
 			// use default twitter avatar when we can't open the cached Tile
-			$default = self::$_config['App']['path'] .'/'. self::$_config['Collage']['defaultPic'];
+			$default = self::$_config['App']['path'] .'/'. self::$_config['Mosaic']['defaultPic'];
 			// new Imagick object from default twitter avatar, usually in the assets folder inside app root
 			$image = new Imagick($default);
 		}
 
 		// resize the image to the tile size
-		$tileSize = self::$_config['Collage']['tileSize'];
+		$tileSize = self::$_config['Mosaic']['tileSize'];
 		$image->cropThumbnailImage($tileSize, $tileSize);
 		/* PROCESS THE ORIGINAL IMAGE */
 		$image->setImageFormat('gif');
@@ -161,9 +161,9 @@ class Image
 
 		$overlayFile = self::getTileOverlayFilename($position);
 
-		$colors = self::$_config['Collage']['colorDepth'];
+		$colors = self::$_config['Mosaic']['colorDepth'];
 
-		if (TRUE || self::$_config['Collage']['internalComposite'])
+		if (TRUE || self::$_config['Mosaic']['internalComposite'])
 		{
 			$overlay = new Imagick($overlayFile);
 			$image->setImageColorspace($overlay->getImageColorspace() );
@@ -244,7 +244,7 @@ class Image
 	public static function getTileRgbColor($position)
 	{
 		// fetch the config for this page that includes ???
-		$config = & Collage::getPageConfig();
+		$config = & Mosaic::getPageConfig();
 
 		// fetch
 		$index = $config['index'][$position];

@@ -1,6 +1,6 @@
 /**
  * 
- * @package    TwitterCollage
+ * @pacjage    Firefox 4 Twitter Party
  * @subpackage sql
  * @version    v.0.1
  * @author     Andre Torgal <andre@quodis.com>

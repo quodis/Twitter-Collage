@@ -1,6 +1,6 @@
 <?php
 /**
- * @package    TwitterCollage
+ * @pacjage    Firefox 4 Twitter Party
  * @subpackage server
  * @version    v.0.1
  * @author     Andre Torgal <andre@quodis.com>
@@ -17,7 +17,7 @@ class Twitter
 	/**
 	 * @const string cache key
 	 */
-	const CACHE_KEY_RESET_FLAG = 'TWITTER-COLLAGE::Twitter::resetFlag';
+	const CACHE_KEY_RESET_FLAG = 'TWITTER-MOSAIC::Twitter::resetFlag';
 
 	/**
 	 * @var array

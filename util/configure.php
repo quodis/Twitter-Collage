@@ -1,6 +1,6 @@
 <?php
 /**
- * @package    TwitterCollage
+ * @pacjage    Firefox 4 Twitter Party
  * @subpackage server
  * @version    v.0.4
  * @author     Andre Torgal <andre@quodis.com>
@@ -40,7 +40,7 @@ function main()
 	{
 		Dispatch::now(0, 'configuration file config/config.yaml not found');
 	}
-	Dispatch::now(1, 'CONFIGURE_OK');
+	Dispatch::now(1, 'OK');
 }
 
 try

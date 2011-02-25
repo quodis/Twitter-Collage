@@ -1,6 +1,6 @@
 <?php
 /**
- * @package    TwitterCollage
+ * @pacjage    Firefox 4 Twitter Party
  * @subpackage server
  * @version    v.0.4
  * @author     Andre Torgal <andre@quodis.com>
@@ -28,10 +28,10 @@ function main()
 		$start = time();
 
 		// get page no
-		$pageNo = Collage::getCurrentWorkingPageNo();
+		$pageNo = Mosaic::getCurrentWorkingPageNo();
 
 		// update page
-		$tweetCount = Collage::updatePage($pageNo);
+		$tweetCount = Mosaic::updatePage($pageNo);
 
 		// sleep?
 		$elapsed = time() - $start;

@@ -33,12 +33,12 @@ Jobs:
         period: 1
         dbLimit: 100
         imgLimit: 1000
-    build-mosaic:
+    mosaic-build:
         period: 5
 Cache:
     enabled: 1
     TTL:
-        collageConfig: 2000 
+        mosaicConfig: 2000 
         tweetIds: 200
     servers:
         - host: localhost

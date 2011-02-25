@@ -1,6 +1,6 @@
 <?php
 /**
- * @package    TwitterCollage
+ * @pacjage    Firefox 4 Twitter Party
  * @subpackage server
  * @version    v.0.1
  * @author     Andre Torgal <andre@quodis.com>
@@ -32,7 +32,7 @@ function main()
 	else
 	{
 		// current page (minus one)
-		$pageNo = Collage::getCurrentWorkingPageNo() - 1;
+		$pageNo = Mosaic::getCurrentWorkingPageNo() - 1;
 		// minus optional Z parameter
 		$z = (isset($_REQUEST['z'])) ? (int)$_REQUEST['z'] : 0;
 		$pageNo = $pageNo - $z;
@@ -52,7 +52,7 @@ function main()
 	if ($pageNo)
 	{
 		$lastId = 0;
-		$pageTweets = Collage::getPageData($pageNo);
+		$pageTweets = Mosaic::getPageData($pageNo);
 
 		$tweets = array();
 		foreach ($pageTweets as $tweet)
