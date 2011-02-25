@@ -8,4 +8,4 @@
  */
 CREATE DATABASE twitter_collage;
 CREATE USER 'twitter_collage'@'localhost' IDENTIFIED BY 'twitter_collage';
-GRANT ALL PRIVILEGES ON `twitter_collage`.* TO 'twitter_collage'@'localhost'; 
+GRANT ALL PRIVILEGES ON `twitter_collage`.* TO 'twitter_collage'@'localhost';
