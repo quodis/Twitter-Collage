@@ -64,7 +64,7 @@ if (!defined('NO_CONFIG'))
 	// configure facebook, cache and game
 	Cache::configure($config);
 	Image::configure($config);
-	Collage::configure($config);
+	Mosaic::configure($config);
 	Twitter::configure($config);
 
 	// connect cache + db

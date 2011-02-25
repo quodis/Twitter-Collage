@@ -231,7 +231,7 @@ class Image
 	{
 		// make filename
 		$fileName = substr($id, 0, 2) . '/' . substr($id, 2, 2) . '/' . substr($id, 4, 2) . '/' . substr($id, 6) . '.' . $sufix;
-		return self::$_config['App']['pathStore'] . '/' . $dir . '/' . $fileName;
+		return self::$_config['Store']['path'] . '/' . $dir . '/' . $fileName;
 	}
 
 	public static function getTileOverlayFilename($position)

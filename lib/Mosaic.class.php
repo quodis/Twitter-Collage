@@ -362,7 +362,7 @@ class Mosaic
 	 */
 	private static function _getPageDataFileName($pageNo)
 	{
-		$filename = self::$_config['App']['pathStore'] . '/pages/page' . $pageNo . '.php';
+		$filename = self::$_config['Store']['path'] . '/pages/page' . $pageNo . '.php';
 
 		if (!is_dir(dirname($filename)))
 		{

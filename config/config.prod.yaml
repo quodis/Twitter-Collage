@@ -20,7 +20,7 @@ Twitter:
 Mosaic:
     logoFile: assets/logo48x47.png
     defaultPic: assets/default48x48.png
-    configFile: assets/config48x47.php
+    configFile: assets/config48x47.config.php
     cols: 48
     rows: 47
     tileSize: 12

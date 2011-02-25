@@ -22,7 +22,6 @@ function main()
 	require LIB_PATH . '/spyc-0.4.5/spyc.php';
 
 	$configDir = realpath(dirname(__FILE__) . '/../config');
-	dk($configDir);
 
 	if (file_exists($configDir . '/config.yaml'))
 	{
