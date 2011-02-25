@@ -11,7 +11,7 @@ Store:
     group: quodis
 Twitter:
     urlSearch: "http://search.twitter.com/search.json"
-    terms: "pleasedonttext"
+    terms: "fridaynightdinner"
     rpp: 100
     pageLimit: 30
     timeout:
