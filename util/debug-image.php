@@ -14,7 +14,7 @@ function main()
 {
 	DEFINE('CLIENT', 'script');
 	DEFINE('CONTEXT', __FILE__);
-	include dirname(__FILE__) .  '/bootstrap.php';
+	include dirname(__FILE__) .  '/../bootstrap.php';
 
 	$tweet = Tweet::getById('4012');
 

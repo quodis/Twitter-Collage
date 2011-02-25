@@ -17,21 +17,24 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	DEFINE('NO_CONFIG', 'TRUE');
 	DEFINE('NO_SESSION', 'TRUE');
-	include dirname(__FILE__) . '/bootstrap.php';
+	include dirname(__FILE__) . '/../bootstrap.php';
 
 	require LIB_PATH . '/spyc-0.4.5/spyc.php';
 
-	if (file_exists(dirname(__FILE__) . '/config/config.yaml'))
+	$configDir = realpath(dirname(__FILE__) . '/../config');
+	dk($configDir);
+
+	if (file_exists($configDir . '/config.yaml'))
 	{
-		$data = Spyc::YAMLLoad(dirname(__FILE__) . '/config/config.yaml');
+		$data = Spyc::YAMLLoad($configDir . '/config.yaml');
 
 		$contents = "<?php \$config = unserialize('" . serialize($data) . "'); ?>";
 
-		$fileName = dirname(__FILE__) . '/config/config.php';
+		$fileName = $configDir . '/config.php';
 
 		file_put_contents($fileName, $contents);
-		chmod($fileName, octdec($data['App']['cacheFilePermissions']));
-		chgrp($fileName, $data['App']['cacheGroup']);
+		chmod($fileName, octdec($data['Store']['filePermissions']));
+		chgrp($fileName, $data['Store']['group']);
 	}
 	else
 	{

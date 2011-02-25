@@ -16,17 +16,18 @@ function main()
 
 	DEFINE('CLIENT', 'script');
 	DEFINE('CONTEXT', __FILE__);
-	include dirname(__FILE__) . '/bootstrap.php';
+	include dirname(__FILE__) . '/../bootstrap.php';
 
 	$sql = 'UPDATE tweet SET imageData = NULL';
-	dd($sql);
+
+	Debug::logMsg($sql);
 
 	Db::execute($sql);
 
-	shell_exec('rm -R /servers/cache/twitter-collage/processed/*');
-	shell_exec('rm -R /servers/cache/twitter-collage/pages/*');
+	shell_exec('rm -R ' . $config['Store']['path'] . '/processed/*');
+	shell_exec('rm -R ' . $config['Store']['path'] . '/pages/*');
 
-	Dispatch::now(1, 'RESET ALL OK', $data);
+	Dispatch::now(1, 'OK', $data);
 
 } // main()
 
