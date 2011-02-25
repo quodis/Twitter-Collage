@@ -131,8 +131,8 @@ class Collage
 		$fileName = self::_getPageConfigFileName();
 
 		file_put_contents($fileName, json_encode(self::$_pageConfig));
-		chmod($fileName, octdec(self::$_config['App']['cacheFilePermissions']));
-		chgrp($fileName, self::$_config['App']['cacheGroup']);
+		chmod($fileName, octdec(self::$_config['Store']['filePermissions']));
+		chgrp($fileName, self::$_config['Store']['group']);
 	}
 
 
@@ -165,8 +165,8 @@ class Collage
 		$fileName = self::_getPageDataFileName($pageNo);
 
 		file_put_contents($fileName, json_encode($fileData));
-		chmod($fileName, octdec(self::$_config['App']['cacheFilePermissions']));
-		chgrp($fileName, self::$_config['App']['cacheGroup']);
+		chmod($fileName, octdec(self::$_config['Store']['filePermissions']));
+		chgrp($fileName, self::$_config['Store']['group']);
 
 		return count($fileData);
 	}
@@ -362,11 +362,11 @@ class Collage
 	 */
 	private static function _getPageDataFileName($pageNo)
 	{
-		$filename = self::$_config['App']['pathCache'] . '/pages/page' . $pageNo . '.php';
+		$filename = self::$_config['App']['pathStore'] . '/pages/page' . $pageNo . '.php';
 
 		if (!is_dir(dirname($filename)))
 		{
-			rmkdir(dirname($filename), self::$_config['App']['cacheDirPermissions'], self::$_config['App']['cacheGroup']);
+			rmkdir(dirname($filename), self::$_config['Store']['dirPermissions'], self::$_config['Store']['group']);
 		}
 
 		return $filename;
