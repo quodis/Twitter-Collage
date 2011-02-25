@@ -16,11 +16,11 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include dirname(__FILE__) . '/../bootstrap.php';
 
-	Debug::setLogMsgFile($config['App']['pathLog'] .'/build-mosaic.msg.php');
-	Debug::setLogErrorFile($config['App']['pathLog'] .'/build-mosaic.error.php');
+	Debug::setLogMsgFile($config['App']['pathLog'] .'/mosaic-build.msg.php');
+	Debug::setLogErrorFile($config['App']['pathLog'] .'/mosaic-build.error.php');
 	Debug::setForceLogToFile(TRUE);
 
-	$period = $config['Jobs']['build-mosaic']['period'];
+	$period = $config['Jobs']['mosaic-build']['period'];
 
 	while (TRUE)
 	{
