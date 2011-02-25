@@ -30,8 +30,8 @@ require LIB_PATH . '/Collage.class.php';
 require LIB_PATH . '/Twitter.class.php';
 
 Debug::setCtx(basename(CONTEXT));
-Debug::setLogMsgFile('/var/log/twitter-collage/msg.log');
-Debug::setLogErrorFile('/var/log/twitter-collage/msg.log');
+Debug::setLogMsgFile('/var/log/twitter-collage/www.msg.log');
+Debug::setLogErrorFile('/var/log/twitter-collage/www.error.log');
 
 
 // TODO SESSION
