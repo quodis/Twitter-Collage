@@ -16,8 +16,8 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include dirname(__FILE__) . '/../bootstrap.php';
 
-	Debug::setLogMsgFile($config['App']['pathLog'] .'/twitter-search.msg.php');
-	Debug::setLogErrorFile($config['App']['pathLog'] .'/twitter-search.error.php');
+	Debug::setLogMsgFile($config['App']['pathLog'] .'/twitter-search.msg.log');
+	Debug::setLogErrorFile($config['App']['pathLog'] .'/twitter-search.error.log');
 	Debug::setForceLogToFile(TRUE);
 
 	$period = $config['Jobs']['twitter-search']['period'];

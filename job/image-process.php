@@ -16,8 +16,8 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include dirname(__FILE__) . '/../bootstrap.php';
 
-	Debug::setLogMsgFile($config['App']['pathLog'] .'/image-process.msg.php');
-	Debug::setLogErrorFile($config['App']['pathLog'] .'/image-process.error.php');
+	Debug::setLogMsgFile($config['App']['pathLog'] .'/image-process.msg.log');
+	Debug::setLogErrorFile($config['App']['pathLog'] .'/image-process.error.log');
 	Debug::setForceLogToFile(TRUE);
 
 	$period   = $config['Jobs']['image-process']['period'];
