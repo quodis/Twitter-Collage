@@ -16,7 +16,7 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include '../bootstrap.php';
 
-	$lastId = (isset($_REQUEST['lastId'])) ? (int)$_REQUEST['lastId'] : null;
+	$lastId = (isset($_REQUEST['last_id'])) ? (int)$_REQUEST['last_id'] : null;
 
 	$result = Tweet::getSinceLastIdWithImage($lastId, $config['UI']['pollLimit']);
 
