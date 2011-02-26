@@ -159,7 +159,7 @@ var party = party || {};
 	function getVisibleTiles() {
 		
 		// Check if we have a complete page. If not, try again later
-		if (last_page == 0) {
+		if (party.last_page == 0) {
 			setTimeout(getVisibleTiles, 60 * 1000);
 			return;
 		}
@@ -197,7 +197,7 @@ var party = party || {};
 	function getHiddenTiles() {
 		
 		// Check if we have a second complete page. If not, try again later
-		if ((last_page-1) == 0) {
+		if ((party.last_page-1) == 0) {
 			setTimeout(getHiddenTiles, 60 * 1000);
 			return;
 		}
