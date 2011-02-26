@@ -57,9 +57,9 @@ class Image
 			'timeout' => self::$_config['Twitter']['timeout']['imgFile'],
 			'cache' => array(
 				'file' => $fileName,
-				'dirPermissions' => self::$_config['Store']['dirPermissions'],
-				'filePermissions' => self::$_config['Store']['filePermissions'],
-				'group' => self::$_config['Store']['group']
+				'dirPermissions' => self::$_config['Data']['dirPermissions'],
+				'filePermissions' => self::$_config['Data']['filePermissions'],
+				'group' => self::$_config['Data']['group']
 			)
 		);
 		$fileData = Curl::get($url, $options);
@@ -95,13 +95,13 @@ class Image
 		$overlay->setImageFormat('gif');
 
 		// create the destination directory if it doesn't exist already
-		if (!is_dir(dirname($fileName))) rmkdir(dirname($fileName), self::$_config['Store']['dirPermissions'], self::$_config['Store']['group']);
+		if (!is_dir(dirname($fileName))) rmkdir(dirname($fileName), self::$_config['Data']['dirPermissions'], self::$_config['Data']['group']);
 
 		// save a "blank" file with the filename we generated above
 		if ($overlay->writeImage($fileName))
 		{
-			chmod($fileName, octdec(self::$_config['Store']['filePermissions']));
-			chgrp($fileName, self::$_config['Store']['group']);
+			chmod($fileName, octdec(self::$_config['Data']['filePermissions']));
+			chgrp($fileName, self::$_config['Data']['group']);
 			return $fileName;
 		}
 	}
@@ -138,7 +138,7 @@ class Image
 		$destination = self::fileName('processed', md5($id), 'gif');
 
 		// create the destination directory if it doesn't exist already
-		if (!is_dir(dirname($destination))) rmkdir(dirname($destination), self::$_config['Store']['dirPermissions'], self::$_config['Store']['group']);
+		if (!is_dir(dirname($destination))) rmkdir(dirname($destination), self::$_config['Data']['dirPermissions'], self::$_config['Data']['group']);
 
 		$overlayFile = self::getTileOverlayFilename($position);
 
@@ -186,8 +186,8 @@ class Image
 
 		//Debug::logMsg("$binary_path $cmd_arguments $destination");
 		// set permissions on the final image
-		chmod($destination, octdec(self::$_config['Store']['filePermissions']));
-		chgrp($destination, self::$_config['Store']['group']);
+		chmod($destination, octdec(self::$_config['Data']['filePermissions']));
+		chgrp($destination, self::$_config['Data']['group']);
 
 		// return the base64 encoded destination file
 		$contents = base64_encode(file_get_contents($destination));
@@ -220,7 +220,7 @@ class Image
 	{
 		// make filename
 		$fileName = substr($id, 0, 2) . '/' . substr($id, 2, 2) . '/' . substr($id, 4, 2) . '/' . substr($id, 6) . '.' . $sufix;
-		return self::$_config['Store']['path'] . '/' . $dir . '/' . $fileName;
+		return self::$_config['Data']['path'] . '/' . $dir . '/' . $fileName;
 	}
 
 	public static function getTileOverlayFilename($position)

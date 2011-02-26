@@ -209,11 +209,9 @@ function main()
 			$('#mosaic img').remove();
 			$('<div id="loading"></div>').appendTo('#mosaic');
 
-			var params = {}
-			if (pageNo > 0) {
-				params.page = pageNo;
+			var params = {
+				page: pageNo
 			}
-			else params.z = pageNo;
 
 			console.log('PAGE > PARAMS', params);
 

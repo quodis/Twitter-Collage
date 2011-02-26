@@ -24,26 +24,26 @@ function main()
 
 	$data = array(
 		'pageNo' => 0,
-		'tweets' => array(),
+		'tiles' => array(),
 		'lastId' => null,
 		'msg' => null
 	);
 
 	$lastId = null;
-	$tweets = array();
-	while ($row = $result->row())
+	$tiles = array();
+	while ($tweet = $result->row())
 	{
-		$tweets[] = $row;
-		if ($row['id'] > $lastId) $lastId = $row['id'];
+		$tiles[] = $tweet;
+		if ($tweet['id'] > $lastId) $lastId = $tweet['id'];
 	}
 
-	if (count($tweets))
+	if (count($tiles))
 	{
-		$data['tweets'] = $tweets;
+		$data['tiles'] = $tiles;
 		$data['lastId'] = $lastId;
 	}
 
-	dd('lastId:' .  $lastId . ' count:' . count($data['tweets']) . ' lastId:' . $data['lastId']);
+	dd('lastId:' .  $lastId . ' count:' . count($data['tiles']) . ' lastId:' . $data['lastId']);
 
 	Dispatch::now(1, 'POLL OK', $data);
 

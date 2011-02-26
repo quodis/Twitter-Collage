@@ -131,8 +131,8 @@ class Mosaic
 		$fileName = self::_getPageConfigFileName();
 
 		file_put_contents($fileName, json_encode(self::$_pageConfig));
-		chmod($fileName, octdec(self::$_config['Store']['filePermissions']));
-		chgrp($fileName, self::$_config['Store']['group']);
+		chmod($fileName, octdec(self::$_config['Config']['filePermissions']));
+		chgrp($fileName, self::$_config['Config']['group']);
 	}
 
 
@@ -182,7 +182,7 @@ class Mosaic
 	public static function purgePage($pageNo)
 	{
 		// delete from filesys
-		$command = 'rm -R ' . self::$_config['Store']['path'] . '/pages/page' . $pageNo . '.php';
+		$command = 'rm ' . self::_getPageDataFileName($pageNo);
 		Debug::logMsg('purgePage page:' .$pageNo , ' command:' . $command);
 		shell_exec($command);
 
