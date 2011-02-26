@@ -192,7 +192,7 @@ function main()
 			};
 		}
 
-		var lastId = 0;
+		var last_id = 0;
 		var lastPage = '<?=(Mosaic::getCurrentWorkingPageNo() - 1)?>';
 
 		function addImage(data, i)
@@ -211,23 +211,21 @@ function main()
 
 			console.log('PAGE > PAGE NO', pageNo);
 
-			alert('<?=$config['UI']['options']['store_url']?>/pages/page_' + pageNo + '.json');
-
 			$.ajax( {
 				type: 'GET',
 				url: '<?=$config['UI']['options']['store_url']?>/pages/page_' + pageNo + '.json',
-				dataType: 'text',
+				dataType: 'json',
 				success: function(data) {
 					console.log(data);
 					return;
 
-					lastId = data.payload.lastId;
-					$('#last-tweet span').text(data.payload.lastId);
+					last_id = data.payload.last_id;
+					$('#last-tweet span').text(data.payload.last_id);
 					var count = showTweets(data.payload.tweets);
 					if (!count) {
 						alert('empty page, TODO proper dialog');
 					}
-					else lastId = data.payload.lastId;
+					else last_id = data.payload.last_id;
 				}
 			});
 
@@ -237,7 +235,7 @@ function main()
 		function poll()
 		{
 			var params = {
-				'lastId' : lastId
+				'last_id' : last_id
 			}
 
 			console.log('POLL > PARAMS', params);
@@ -248,13 +246,14 @@ function main()
 				data: params,
 				dataType: 'json',
 				success: function(data) {
-					$('#last-tweet span').text(data.payload.lastId);
+					console.log(data);
+					$('#last-tweet span').text(data.payload.last_id);
 					var count = showTweets(data.payload.tweets);
 					if (!count) {
 						alert('empty poll, TODO proper dialog');
 					}
 					else {
-						lastId = data.payload.lastId;
+						last_id = data.payload.last_id;
 						alert(count + ' tweets, TODO proper dialog');
 					}
 				}.bind(this),
