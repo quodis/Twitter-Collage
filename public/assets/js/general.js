@@ -119,6 +119,8 @@ var party = party || {};
 		party.performance_mode = $.browser.msie;
 		// Cache the canvas
 		party.canvas = $('#mosaic');
+		// TODO
+		party.last_page = 4;
 		// Cache the counter DOM
 		party.counter_canvas = $('#twitter-counter dd span');
 		// Get the page of visible tiles
@@ -138,7 +140,7 @@ var party = party || {};
 			inc = 1;
 		
 		// Check if we have anything to do
-		if (dif = 0) {
+		if (dif == 0) {
 			return;
 		}
 		
