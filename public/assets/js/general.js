@@ -1,7 +1,7 @@
 var party = party || {};
 
 (function () {
-	var initial_build_interval,
+	var initial_draw_interval,
 		loading_message_interval,
 		polling_interval,
 		loading_message_index,
@@ -10,18 +10,19 @@ var party = party || {};
 		visible_tiles = {},
 		hidden_tiles = {},
 		last_id = 0, // The ID of the newest tile
-		polled_tiles = {}; // Tiles got from the server in "real-time"
+		polled_tiles = {}, // Tiles got from the server in "real-time"
+		counter_current
 		
-	// Build the Initial Mosaic
-	function initialBuild() {
+	// Draw the Initial Mosaic
+	function initialDraw() {
 		
 		// Start the recursive call for each frame
-		initial_build_interval = setInterval(initialBuildFrame, (1000/party.initial_frames_per_second) );
+		initial_draw_interval = setInterval(initialDrawFrame, (1000/party.initial_frames_per_second) );
 		
 	}
 	
-	// Construct each frame for the initial build
-	function initialBuildFrame() {
+	// Construct each frame for the initial draw
+	function initialDrawFrame() {
 		
 		var tiles_to_draw = "",
 			tile,
@@ -32,7 +33,7 @@ var party = party || {};
 			i = 0,
 			j = (tile_counter + party.initial_tiles_per_frame);
 		
-		// Build tiles_per_frame tiles and draw them
+		// Draw tiles_per_frame tiles and draw them
 		for (i = tile_counter; i < j; i += 1) {
 			
 			// Make sure this is an existing data entry
@@ -70,7 +71,7 @@ var party = party || {};
 		} else {
 			
 			// No Tiles were built - task is complete
-			clearInterval(initial_build_interval);
+			clearInterval(initial_draw_interval);
 			
 		}
 		
@@ -123,11 +124,14 @@ var party = party || {};
 	// Get the last complete page of tiles
 	function getVisibleTiles() {
 		
+		// Request URL
+		var url = party.store_url + '/pages/page_' + party.last_page + '.json';
+		
 		// Show the loading
 		loadingShow();
 		
 		// Get the first visible page from server
-		$.getJSON(party.store_url + '/pages/page_' + (party.last_page-1) + '.json', function(data) {
+		$.getJSON(url, function(data) {
 			
 			// Hide the Loading
 			loadingHide();
@@ -136,15 +140,15 @@ var party = party || {};
 			getHiddenTiles();
 			
 			// Update last id
-			if (data.payload.last_id > last_id) {
-				last_id = data.payload.last_id;
+			if (data.last_id > last_id) {
+				last_id = data.last_id;
 			}
 			// Write the data locally
-			visible_tiles = data.payload.tiles;
+			visible_tiles = data.tiles;
 			console.log('Got ' + visible_tiles.length + ' visible tiles');
 			
-			// Build the mosaic!
-			initialBuild();
+			// Draw the mosaic!
+			initialDraw();
 			
 		});
 	}
@@ -152,15 +156,19 @@ var party = party || {};
 	// Get the previous
 	function getHiddenTiles() {
 		
-		$.getJSON(party.store_url + '/pages/page_' + (party.last_page-1) + '.json', function(data) {
+		// Request URL
+		var url = party.store_url + '/pages/page_' + (party.last_page-1) + '.json';
+		
+		// Get the previous completed page
+		$.getJSON(url, function(data) {
 
 			// Update last id
-			if (data.payload.last_id > last_id) {
-				last_id = data.payload.last_id;
+			if (data.last_id > last_id) {
+				last_id = data.last_id;
 			}
 			
 			// Write the data locally
-			hidden_tiles = data.payload.tiles;
+			hidden_tiles = data.tiles;
 			console.log('Got ' + hidden_tiles.length + ' hidden tiles');
 			
 			// Start the Real-time polling
@@ -187,13 +195,13 @@ var party = party || {};
 		  success: function(data) {
 			
 				// Update last id
-				if (data.payload.last_id > last_id) {
-					last_id = data.payload.last_id;
+				if (data.last_id > last_id) {
+					last_id = data.last_id;
 				}
 				
 				// Append the data locally
-				$.extend(polled_tiles, data.payload.tiles);
-				console.log('Got ' + data.payload.tiles.length + ' polled tiles');
+				$.extend(polled_tiles, data.tiles);
+				console.log('Got ' + data.tiles.length + ' polled tiles');
 				
 			}
 		});
