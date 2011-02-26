@@ -26,8 +26,15 @@ function main()
 
 	$processed = 0;
 
+	// NOTE: first loop sleep, avoids sending too many requests to twitter if loop is crashing
+	// - if process crashes it is restarted within 1 sec by superivise, and it is likely to crash again, and again...
+	$sleep = ceil($period / 2);
+
 	while (TRUE && $processed < $imgLimit)
 	{
+		// NOTE: sleep at the top of the loop prevents (see above)
+		if ($sleep) sleep($sleep);
+
 		// start time
 		$start = time();
 
@@ -42,12 +49,19 @@ function main()
 			$time = array();
 
 			// download
-			if (Image::download($tweet['imageUrl'], $tweet['id']))
+			if ($fileName = Image::download($tweet['imageUrl'], $tweet['id']))
 			{
 				$time['download'] = microtime(TRUE);
 
-				// process tile (stores on disk and returns image raw data)
-				$encoded = Image::makeTile($tweet['imageUrl'], $tweet['id'], $tweet['position']);
+				try
+				{
+					$encoded = Image::makeTile($fileName, $tweet['id'], $tweet['position']);
+				}
+				catch(Exception $e)
+				{
+					$defaultPic = $config['App']['path'] . '/' . $config['Mosaic']['defaultPic'];
+					$encoded = Image::makeTile($defaultPic, $tweet['id'], $tweet['position']);
+				}
 
 				$time['make-tile'] = microtime(TRUE);
 
@@ -61,8 +75,14 @@ function main()
 			else Debug::logError('fail download tweet id:' . $tweet['id'] . ' page:' . $tweet['page'] . ' position: ' . $tweet['position'] . ' from url:' . $tweet['imageUrl']);
 
 			$log = array();
-			foreach ($time as $key => $value) $log[] = $key . ': ' . ceil(($value - $start) * 1000) / 1000;
-			dd('TIME! id:' . $tweet['id'] . ' > ' . implode(', ', $log));
+			$previous = $start;
+			$value = $start;
+			foreach ($time as $key => $value)
+			{
+				$log[] = $key . ': ' . ceil(($value - $previous) * 1000) / 1000;
+				$previous = $value;
+			}
+			dd('TIME! id:' . $tweet['id'] . ' > total:' . (ceil(($value - $start) * 1000) / 1000) . ', ' .implode(', ', $log));
 		}
 
 		// sleep?
@@ -70,8 +90,7 @@ function main()
 		$sleep = $period - $elapsed;
 		if ($sleep < 1) $sleep = 1;
 
-		Debug::logMsg('OK! ... images processed: ' . $processed . '/' . $imgLimit);
-		sleep($sleep);
+		Debug::logMsg('OK! ... images processed: ' . $processed . '/' . $imgLimit . ' ... sleeping for ' . $sleep . ' seconds ...');
 	}
 
 	Debug::logMsg('...this honoured worker is now going to hara-kiri...');

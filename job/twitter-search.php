@@ -37,13 +37,19 @@ function main()
 		// start adding to this page
 		$pageNo   = Mosaic::getCurrentInsertingPageNo();
 
-		$pageSize = Mosaic::getPageSize();
 		// all slots
+		$pageSize = Mosaic::getPageSize();
 		$freeSlots = array();
 		for ($i = 0; $i < $pageSize; $i++) $freeSlots[$i] = $i;
 		// remove used slots
-		$result = Tweet::getByPage($pageNo, $pageSize);
-		while ($row = $result->row()) unset($freeSlots[$row['position']]);
+		$result = Tweet::getByPage($pageNo);
+		while ($row = $result->row())
+		{
+			// should not happen, but is sane
+			if (!isset($freeSlots[$row['position']])) continue;
+			// remove slot
+			unset($freeSlots[$row['position']]);
+		}
 
 		// shuffle slots
 		shuffle($freeSlots);
