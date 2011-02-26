@@ -265,9 +265,16 @@ class Mosaic
 	 */
 	public static function addTweet(array & $row)
 	{
-		$tweet = Tweet::insert($row);
+		try
+		{
+			$tweet = Tweet::insert($row);
 
-		self::setLastTweet($tweet);
+			self::setLastTweet($tweet);
+		}
+		catch (Exception $e)
+		{
+			Debug::logError($e, 'FAIL Mosaic::addTweet()');
+		}
 	}
 
 
