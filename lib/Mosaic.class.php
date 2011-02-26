@@ -148,7 +148,7 @@ class Mosaic
 	 */
 	public static function updatePage($pageNo)
 	{
-		$tweets = Tweet::getByPageWithImage($pageNo, self::getPageSize());
+		$tweets = Tweet::getByPageWithImage($pageNo);
 
 		$i = 0;
 
@@ -169,6 +169,26 @@ class Mosaic
 		chgrp($fileName, self::$_config['Store']['group']);
 
 		return count($fileData);
+	}
+
+
+	/**
+	 * updates this page file, returns number of tweets
+	 *
+	 * @param $pageNo
+	 *
+	 * @return $tweets;
+	 */
+	public static function purgePage($pageNo)
+	{
+		// delete from filesys
+		$command = 'rm -R ' . self::$_config['Store']['path'] . '/pages/page' . $pageNo . '.php';
+		Debug::logMsg('purgePage page:' .$pageNo , ' command:' . $command);
+		shell_exec($command);
+
+		// TODO delete cached page
+
+		// TODO delete current working page from cache (force job to rebuild this page)
 	}
 
 
@@ -229,9 +249,7 @@ class Mosaic
 		{
 			$pageNo++;
 
-			$fileName = self::_getPageDataFileName($pageNo);
-
-			if (!file_exists($fileName)) break;
+			if (!self::pageExists($pageNo)) break;
 
 			$fileData = self::getPageData($pageNo);
 

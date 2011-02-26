@@ -228,21 +228,18 @@ final class Tweet
 	 * tweets of this page
 	 *
 	 * @param integer $pageNo
-	 * @param integer $pageSize
 	 * @param integer $lastId
 	 *
 	 * @return array
 	 */
-	public static function getByPage($pageNo, $pageSize, $lastId = null)
+	public static function getByPage($pageNo, $lastId = null)
 	{
 		$pageNo = (int)$pageNo;
-		$from = ($pageNo - 1) * $pageSize;
-		$through = $pageNo * $pageSize;
-
-		if ($lastId > $from) $from = $lastId;
+		$lastId = (int)$lastId;
 
 		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
-		$sql.= " WHERE id > $from AND id <= $through";
+		$sql.= " WHERE page = $pageNo ";
+		if ($lastId) $sql.= "  AND id > $lastId";
 		$sql.= " ORDER BY `id` ASC";
 
 		$result = Db::query($sql);
@@ -260,17 +257,15 @@ final class Tweet
 	 *
 	 * @return array
 	 */
-	public static function getByPageWithImage($pageNo, $pageSize, $lastId = null)
+	public static function getByPageWithImage($pageNo, $lastId = null)
 	{
 		$pageNo = (int)$pageNo;
-		$from = ($pageNo - 1) * $pageSize;
-		$through = $pageNo * $pageSize;
-
-		if ($lastId > $from) $from = $lastId;
+		$lastId = (int)$lastId;
 
 		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
 		$sql.= " WHERE `imageData` IS NOT NULL";
-		$sql.= " AND id > $from AND id <= $through";
+		$sql.= "  AND page = $pageNo ";
+		if ($lastId) $sql.= "  AND id > $lastId";
 		$sql.= " ORDER BY `id` ASC";
 
 		$result = Db::query($sql);

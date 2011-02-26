@@ -18,7 +18,7 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include dirname(__FILE__) . '/../bootstrap.php';
 
-	Db::executeFile(dirname(__FILE__) .'/schema/tables.sql');
+	Db::executeFile(dirname(__FILE__) .'/../schema/tables.sql');
 
 	Twitter::reset();
 	Cache::delete(Mosaic::CACHE_KEY_LAST_TWEET);

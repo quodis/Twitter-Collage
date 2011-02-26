@@ -81,53 +81,53 @@ function main()
 
 			<div class="wrapper">
 
-			<!-- HEADER -->
-			<header id="brand">
-				<h1><a href="#" title="Join the Firefox 4 Twitter Party">Join the Firefox 4 Twitter Party</a></h1>
-			</header>
+				<!-- HEADER -->
+				<header id="brand">
+					<h1><a href="#" title="Join the Firefox 4 Twitter Party">Join the Firefox 4 Twitter Party</a></h1>
+				</header>
 
 
-			<!-- CONTENT -->
-			<aside id="main-content" class="clearfix">
+				<!-- CONTENT -->
+				<aside id="main-content" class="clearfix">
 
-				<!-- Here goes the text explaining how Firefox Twitter Party works. -->
-				<p>Be part of Team Firefox! Tweet about Firefox 4 with the <span class="hashtag">#fx4</span> hashtag and your avatar will join thousands of others from around the world as part of our logo mosaic.</p>
+					<!-- Here goes the text explaining how Firefox Twitter Party works. -->
+					<p>Be part of Team Firefox! Tweet about Firefox 4 with the <span class="hashtag">#fx4</span> hashtag and your avatar will join thousands of others from around the world as part of our logo mosaic.</p>
 
-				<div id="twitter-counter">
-					<dl>
-						<dt><a href="#" title="Tweet" rel="external">Tweet</a></dt>
-						<dd><span>15,234</span></dd>
-					</dl>
-				</div><!-- twitter-counter -->
-
-
-				<form id="search-box" role="search">
-					<h3>Who's at the party?</h3>
-					<label for="search-input" accesskey="f">Find a Twitter username</label>
-					<input type="text" name="search-input" id="search-input" value="Find a Twitter username" tabindex="1" />
-					<button type="submit" name="search-button" id="search-submit-bttn" value="Find" tabindex="2" title="Find" class="button">Find</button>
-				</form><!-- search-box -->
+					<div id="twitter-counter">
+						<dl>
+							<dt><a href="#" title="Tweet" rel="external">Tweet</a></dt>
+							<dd><span>15,234</span></dd>
+						</dl>
+					</div><!-- twitter-counter -->
 
 
-			</aside><!-- main-content -->
+					<form id="search-box" role="search">
+						<h3>Who's at the party?</h3>
+						<label for="search-input" accesskey="f">Find a Twitter username</label>
+						<input type="text" name="search-input" id="search-input" value="Find a Twitter username" tabindex="1" />
+						<button type="submit" name="search-button" id="search-submit-bttn" value="Find" tabindex="2" title="Find" class="button">Find</button>
+					</form><!-- search-box -->
 
 
-			<div id="download">
+				</aside><!-- main-content -->
 
-				<ul class="home-download">
-					<li class="os_windows hide">
-						<a class="download-link download-firefox" onclick="init_download('http://download.mozilla.org/?product=firefox-3.6.13&amp;os=win&amp;lang=en-US');" href="http://www.mozilla.com/products/download.html?product=firefox-3.6.13&amp;os=win&amp;lang=en-US" ><span class="download-content"><span class="download-title">Firefox 4</span>Free Download</span></a>
-					</li>
-					<li class="os_linux hide">
-						<a class="download-link download-firefox" onclick="init_download('http://download.mozilla.org/?product=firefox-3.6.13&amp;os=linux&amp;lang=en-US');" href="http://www.mozilla.com/products/download.html?product=firefox-3.6.13&amp;os=linux&amp;lang=en-US" ><span class="download-content"><span class="download-title">Firefox 4</span>Free Download</span></a>
-					</li>
-					<li class="os_osx">
-						<a class="download-link download-firefox" onclick="init_download('http://download.mozilla.org/?product=firefox-3.6.13&amp;os=osx&amp;lang=en-US');" href="http://www.mozilla.com/products/download.html?product=firefox-3.6.13&amp;os=osx&amp;lang=en-US" ><span class="download-content"><span class="download-title">Firefox 4</span>Free Download</span></a>
-					</li>
-				</ul> <!-- home-download -->
 
-			</div><!-- download -->
-		</div><!-- wrapper -->
+				<div id="download">
+
+					<ul class="home-download">
+						<li class="os_windows hide">
+							<a class="download-link download-firefox" onclick="init_download('http://download.mozilla.org/?product=firefox-3.6.13&amp;os=win&amp;lang=en-US');" href="http://www.mozilla.com/products/download.html?product=firefox-3.6.13&amp;os=win&amp;lang=en-US" ><span class="download-content"><span class="download-title">Firefox 4</span>Free Download</span></a>
+						</li>
+						<li class="os_linux hide">
+							<a class="download-link download-firefox" onclick="init_download('http://download.mozilla.org/?product=firefox-3.6.13&amp;os=linux&amp;lang=en-US');" href="http://www.mozilla.com/products/download.html?product=firefox-3.6.13&amp;os=linux&amp;lang=en-US" ><span class="download-content"><span class="download-title">Firefox 4</span>Free Download</span></a>
+						</li>
+						<li class="os_osx">
+							<a class="download-link download-firefox" onclick="init_download('http://download.mozilla.org/?product=firefox-3.6.13&amp;os=osx&amp;lang=en-US');" href="http://www.mozilla.com/products/download.html?product=firefox-3.6.13&amp;os=osx&amp;lang=en-US" ><span class="download-content"><span class="download-title">Firefox 4</span>Free Download</span></a>
+						</li>
+					</ul> <!-- home-download -->
+
+				</div><!-- download -->
+			</div><!-- wrapper -->
 
 		<section id="mosaic">
 			<h2>Firefox Twitter Mosaic</h2>
@@ -141,7 +141,7 @@ function main()
 
 
 	</div><!-- container -->
-	
+
 		<!-- FOOTER -->
 		<footer>
 

@@ -16,11 +16,11 @@
 	1. General
 		typography
 		controls, inputs
-	2. Structure	
-	3. Mosaic
-	.
-	.
-	.
+	2. Structure
+	3. Control Panel
+	4. Mosaic
+	5. Widgets	
+	
 	7. Dialogs
  
  */ /* 1. General */
@@ -30,6 +30,7 @@ body { /* HACK prevents dragging being interrupted by FF s */
 }
 
 /* -- typography */
+/*
 body {
 	font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
 	font-size: 11px;
@@ -53,8 +54,10 @@ h3 {
 	font-size: 14px;
 	margin-bottom: 10px;
 }
+*/
 
 /* -- submit, cancel */
+/*
 input {
 	text-align: center;
 	line-height: normal;
@@ -66,14 +69,10 @@ input {
 input.disabled,input.disabled:hover {
 	cursor: default;
 }
-
-/* -- upload */
-input.upload {
-	border: none;
-	background: none;
-}
+*/
 
 /* -- link */
+
 button.link {
 	font-size: 12px;
 	border: none;
@@ -84,7 +83,9 @@ button.link.disabled,button.link.disabled:hover {
 	cursor: default;
 }
 
+
 /* -- close button */
+
 .hasCloseButton {
 	position: relative;
 }
@@ -114,13 +115,210 @@ button.close span {
 	border: 1px solid transparent;
 }
 
-footer {
+
+/* 3. Control Panel */
+
+/* overrides */
+
+#brand {
+	-moz-transform: none;
+	-webkit-transform: none;
+	transform: none;
+	background-image: none;
+	background-color: #1B5898;
+	border-radius: 20px;
+	-moz-border-radius: 20px;
+	height: 140px;
+}
+
+#brand h1 {
+	margin-bottom: 0px;
+}
+
+#brand h1 a,
+#brand .option {
+	background: none;
+	text-indent: 0px;
+	color: #fff;
+	font-family: 'MetaBlack';
+	text-decoration: none;
+	-moz-transform: none;
+	-webkit-transform: none;
+	transform: none;
+}
+
+#brand h1 a {
+	font-size: 30px;
+	height: 60px;
+	line-height: 60px;
+	padding-top: 10px;
+	width: 250px;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+#brand .option {
+	display: block;
+	float: left;
+	font-size: 18px;
+	line-height: 20px;
+	width: 120px;
+	margin: 0 5px 10px 0;
+	text-align: center;
+}
+
+/* SEARCH */
+
+.counter {
+	width:260px;
+	margin: 0 0 20px 0;
+	text-align: center;
+}
+
+.counter dl{
+	display: block;
+	line-height: 40px;
+	margin-bottom: 10px;
+	height:40px;
+}
+
+.counter dt, .counter dd  {
+	float: left;
+}
+
+.counter a, .counter span {
+	color:#1b5898;
+	display:block;
+	font-family: 'MetaBlack';
+	font-size:22px;
+	padding: 0 10px;
+	text-decoration: none;
+	text-shadow: 0 1px 0px #fff,  0 0 20px rgba(255, 255, 255, 0.4);
+	height:40px;
+	overflow: hidden;
+}
+
+.counter dt {
+	margin-right:10px;
+}
+
+.counter dt span {
+	-moz-border-radius: 5px; border-radius: 5px;
+}
+
+.counter dd {
+	border: 1px solid #87b7dd;
+	-moz-border-radius: 5px; border-radius: 5px;
+}
+
+.counter dd span {
+	background: url(../images/layout/twitter-arrow.png) left center no-repeat;
+	padding-left:20px;
+	margin-left:-7px;
+}
+
+/* SEARCH */
+
+.control-box {
+	background: url(../images/layout/aside-ornament.png) center top no-repeat;
+	padding-top: 30px;
+	padding-bottom: 20px;
 	clear: both;
 }
 
-/* 3. Mosaic */
+.control-box h3 {
+	color:#303030;
+	font-style: italic;
+	font-size: 18px;
+	margin-bottom: 10px;
+}
+
+.control-box label{
+	text-indent: -9999px;
+	position: absolute;
+	top:0;
+}
+
+.control-box input {
+	background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, #fff), color-stop(1, #f0f7fc));
+	background-image: -moz-linear-gradient( center bottom, #fff 0%, #f0f7fc 100%);
+	border: 1px solid #87b7dd;
+	-moz-border-radius: 5px; border-radius: 5px;
+	color:#6f7fA3;
+	display: block;
+	float:left;
+	height:20px;
+	line-height: 20px;
+	padding:4px 40px 4px 4px;
+	width:220px;
+	z-index: 100;
+}
+
+.control-box .decorator {
+	background: url(../images/layout/search-icon-bg.png) center center no-repeat;
+	width:16px;
+	height:16px;
+	display: block;
+	float:right;
+	border: 0 none;
+	outline: 0 none;
+	text-indent: -9999px;
+	overflow: hidden;
+	z-index: 300;
+	margin:-22px 0 0 0px;
+}
+
+.control-box .submit {
+	border: none;
+	padding: none;
+	background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(213,230,239)), color-stop(1, rgb(255,255,255)));
+	background-image: -moz-linear-gradient( center bottom, rgb(213,230,239) 0%, rgb(255,255,255) 100%);
+	margin-right:10px;
+	border: 1px solid #87b7dd;
+	-moz-border-radius: 5px; border-radius: 5px;
+	color:#1b5898;
+	display:block;
+	font-family: 'MetaBlack';
+	font-size:22px;
+	padding: 0 5px;
+	text-decoration: none;
+	text-shadow: 0 1px 0px #fff,  0 0 20px rgba(255, 255, 255, 0.4);
+	height:30px;
+	float: left;
+	overflow: hidden;
+}
+
+.control-box .submit:active {
+	background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(255,255,255)), color-stop(1, rgb(213,230,239)));
+	background-image: -moz-linear-gradient( center bottom, rgb(255,255,255) 0%, rgb(213,230,239) 100%);
+	-moz-box-shadow:inset 0 -1px 0 #fff;
+	-webkit-box-shadow:inset 0 -1px 0 #fff;
+	box-shadow:inset 0 -1px 0 #fff;
+}
+
+.control-box.page #page-no {
+	text-align: left;
+	width: 30px;
+	margin-right: 10px;
+}
+
+/* 4. Mosaic */
 #mosaic {
 	
+}
+
+/* 5. Widgets */ 
+
+widget {
+	background-color: white;
+	margin: 50px 0px 20px 0px;
+	padding: 135px 20px 20px;
+	width: 260px;
+	-moz-box-shadow: 0px 0px 3px #A6BFCC;
+	-webkit-box-shadow: 0px 0px 3px #A6BFCC;
+	box-shadow: 0px 0px 3px #A6BFCC;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
 }
 
 /* 7. Dialogs */
@@ -156,26 +354,4 @@ footer {
 	z-index: 1001;
 	left: 50%;
 	display: block;
-}
-
-/* 8. Temp */
-
-input#page-no,
-input#z {
-	text-align: left;
-	color: #000;
-	border: 1px solid #000;
-	background-color: #fff;
-	width: 30px;
-}
-
-#main {
-	position: relative;
-	top: 100px;
-	left: 100px;
-}
-
-header,
-footer {
-	display: none;
 }
