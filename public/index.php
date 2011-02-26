@@ -131,6 +131,7 @@ function main()
 
 		<section id="mosaic">
 			<h2>Firefox Twitter Mosaic</h2>
+			<p id="loading"></p>
 		</section>
 
 		<div id="mozilla-badge">
