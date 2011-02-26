@@ -213,17 +213,22 @@ function main()
 
 			alert('<?=$config['UI']['options']['store_url']?>/pages/page_' + pageNo + '.json');
 
-			$.getJSON('<?=$config['UI']['options']['store_url']?>/pages/page_' + pageNo + '.json', function(data) {
+			$.ajax( {
+				type: 'GET',
+				url: '<?=$config['UI']['options']['store_url']?>/pages/page_' + pageNo + '.json',
+				dataType: 'text',
+				success: function(data) {
+					console.log(data);
+					return;
 
-				console.log(data);
-
-				lastId = data.payload.lastId;
-				$('#last-tweet span').text(data.payload.lastId);
-				var count = showTweets(data.payload.tweets);
-				if (!count) {
-					alert('empty page, TODO proper dialog');
+					lastId = data.payload.lastId;
+					$('#last-tweet span').text(data.payload.lastId);
+					var count = showTweets(data.payload.tweets);
+					if (!count) {
+						alert('empty page, TODO proper dialog');
+					}
+					else lastId = data.payload.lastId;
 				}
-				else lastId = data.payload.lastId;
 			});
 
 

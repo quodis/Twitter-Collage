@@ -5,7 +5,7 @@ App:
     # url
     url: http://twitterparty.quodis.worker
 Store:
-    path: /servers/store/twitterparty
+    path: /servers/sites/quodis/twitterparty/public/store
     filePermissions: 664
     dirPermissions: 775
     group: www-data

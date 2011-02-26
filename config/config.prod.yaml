@@ -5,7 +5,7 @@ App:
     # url
     url: http://dev.twitterparty.quodis.com
 Store:
-    path: /servers/store/twitterparty
+    path: /servers/develop/twitterparty/store
     filePermissions: 644
     dirPermissions: 755
     group: root
@@ -89,4 +89,4 @@ UI:
         mosaic: "/assets/css/mosaic.css?v=1"
     pollLimit: 100
     options:
-        store_url: http://twitterparty.quodis.com/store
+        store_url: http://dev.twitterparty.quodis.com/store
