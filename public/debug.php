@@ -205,7 +205,7 @@ function main()
 
 		function loadPage(pageNo, z)
 		{
-			$('#main img').remove();
+			$('#mosaic img').remove();
 			$('<div id="loading"></div>').appendTo('#mosaic');
 
 			var params = {}
@@ -225,7 +225,10 @@ function main()
 					lastId = data.payload.lastId;
 					$('#last-tweet span').text(data.payload.lastId);
 					var count = showTweets(data.payload.tweets);
-					if (!count) alert('empty page, todo proper dialog');
+					if (!count) {
+						alert('empty page, TODO proper dialog');
+					}
+					else lastId = data.payload.lastId;
 				}.bind(this),
 					error: function() {
 				}.bind(this)
@@ -246,10 +249,15 @@ function main()
 				data: params,
 				dataType: 'json',
 				success: function(data) {
-					lastId = data.payload.lastId;
 					$('#last-tweet span').text(data.payload.lastId);
 					var count = showTweets(data.payload.tweets);
-					if (!count) alert('empty poll, todo proper dialog');
+					if (!count) {
+						alert('empty poll, TODO proper dialog');
+					}
+					else {
+						lastId = data.payload.lastId;
+						alert(count + 'tweets, TODO proper dialog');
+					}
 				}.bind(this),
 					error: function() {
 				}.bind(this)
