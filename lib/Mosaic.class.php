@@ -249,7 +249,7 @@ class Mosaic
 		{
 			$pageNo++;
 
-			if (!file_exists(self::pageExists($pageNo))) break;
+			if (self::pageExists($pageNo)) break;
 
 			$fileData = self::getPageData($pageNo);
 
