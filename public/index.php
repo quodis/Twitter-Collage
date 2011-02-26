@@ -24,6 +24,8 @@ function main()
 	include '../bootstrap.php';
 	session_cache_limiter("nocache");
 
+	$config['UI']['options']['last_page'] = Mosaic::getCurrentWorkingPageNo() - 1;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -174,6 +176,14 @@ function main()
 			</div><!-- footer-copyright -->
 
 		</footer>
+
+	<script type="text/javascript">
+	//<![CDATA[
+	(function($) {
+		$.extend(party, <?=json_encode($config['UI']['options'])?>);
+	})(jQuery);
+	//]]>
+	</script>
 
 	</body>
 

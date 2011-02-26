@@ -9,6 +9,14 @@ Store:
     filePermissions: 664
     dirPermissions: 775
     group: quodis
+Data:
+    path: /servers/data/twitterparty
+    filePermissions: 664
+    dirPermissions: 775
+    group: quodis
+Config:
+    filePermissions: 664
+    group: quodis
 Twitter:
     urlSearch: "http://search.twitter.com/search.json"
     terms: "wordsthatcanstartawar"
@@ -20,7 +28,7 @@ Twitter:
 Mosaic:
     logoFile: assets/logo48x47.png
     defaultPic: assets/default48x48.png
-    configFile: assets/config48x47.config.php
+    configFile: config/mosaic-48x47.config.php
     cols: 48
     rows: 47
     tileSize: 12
@@ -80,3 +88,4 @@ UI:
         main: "/assets/css/ftp.css?v=1"
         mosaic: "/assets/css/mosaic.css?v=1"
     pollLimit: 100
+    storeUrl: http://store.twitterparty.quodis.com

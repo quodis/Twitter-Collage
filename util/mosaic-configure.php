@@ -42,7 +42,9 @@ function main()
 	}
 
 	// store the configuration
-	Mosaic::setPageGrid($data);
+	$configFileName = Mosaic::setPageGrid($data);
+
+	Debug::logMsg('config stored into file: ' . $configFileName);
 
 	$config = Mosaic::getPageConfig();
 

@@ -23,26 +23,19 @@ function main()
 	include '../bootstrap.php';
 
 	// specific page
-	if (isset($_REQUEST['page']))
-	{
-		$pageNo = (int)$_REQUEST['page'];
-		if ($pageNo == 0) $pageNo = 1;
-	}
-	// last (complete) page
-	else
-	{
-		// current page (minus one)
-		$pageNo = Mosaic::getCurrentWorkingPageNo() - 1;
-		// minus optional Z parameter
-		$z = (isset($_REQUEST['z'])) ? (int)$_REQUEST['z'] : 0;
-		$pageNo = $pageNo - $z;
-	}
+	$pageNo = (isset($_REQUEST['page'])) ? (int)$_REQUEST['page'] : 0;
+	// counting from last
+	if ($pageNo <= 0) $pageNo = Mosaic::getCurrentWorkingPageNo() - 1 - $pageNo;
+
+	$includeRecent = (isset($_REQUEST['include_recent']) && $_REQUEST['include_recent']);
+
+	$recent = array();
 
 	// init response
 
 	$data = array(
 		'pageNo' => $pageNo,
-		'tweets' => array(),
+		'tiles' => array(),
 		'lastId' => null,
 		'msg' => null
 	);
@@ -52,18 +45,18 @@ function main()
 	if ($pageNo)
 	{
 		$lastId = 0;
-		$pageTweets = Mosaic::getPageData($pageNo);
+		$tweets = Mosaic::getPageData($pageNo);
 
-		$tweets = array();
-		foreach ($pageTweets as $tweet)
+		$tiles = array();
+		foreach ($tweets as $tweet)
 		{
-			$tweets[] = $tweet;
+			$tiles[] = $tweet;
 			if ($tweet['id'] > $lastId) $lastId = $tweet['id'];
 		}
 
-		if (count($tweets))
+		if (count($tiles))
 		{
-			$data['tweets'] = $tweets;
+			$data['tiles'] = $tiles;
 			$data['lastId'] = $lastId;
 		}
 	}
