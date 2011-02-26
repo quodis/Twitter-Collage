@@ -34,9 +34,8 @@ function main()
 	// init response
 
 	$data = array(
-		'pageNo' => $pageNo,
 		'tiles' => array(),
-		'lastId' => null,
+		'last_id' => null,
 		'msg' => null
 	);
 
@@ -57,7 +56,7 @@ function main()
 		if (count($tiles))
 		{
 			$data['tiles'] = $tiles;
-			$data['lastId'] = $lastId;
+			$data['last_id'] = $lastId;
 		}
 	}
 	else

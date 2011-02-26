@@ -151,19 +151,40 @@ class Mosaic
 	 */
 	public static function updatePage($pageNo)
 	{
-		$tweets = Tweet::getByPageWithImage($pageNo);
+		$result = Tweet::getByPageWithImage($pageNo);
+
+		$fileData = array(
+			'tiles' => array(),
+			'last_id' => null,
+			'newest_tiles' => array(),
+		);
 
 		$i = 0;
+		$lastId = 0;
 
-		$fileData = array();
-		while ($tweet = $tweets->row())
+		$tiles = array();
+		$tileIndex = array();
+		while ($tweet = $result->row())
 		{
-			if (isset($fileData[$tweet['position']])) continue;
-			$i++;
-			$fileData[$tweet['position']] = $tweet;
+			if (isset($tiles[$tweet['position']])) continue;
+			$tileIndex[$tweet['id']] = array(
+				'id'       => $tweet['id'],
+				'position' => $tweet['position'],
+			);
+			$tiles[$tweet['position']] = $tweet;
+			if ($tweet['id'] > $lastId) $lastId = $tweet['id'];
 		}
 
-		if ($i < $tweets->count()) Debug::logError('#wtf#');
+		// keep only the last 200 newest tiles in the index
+		// TODO configure MAGIC NUMBER 200
+		$tileIndex = array_slice($tileIndex, -200);
+
+		if (count($tiles))
+		{
+			$fileData['tiles'] = $tiles;
+			$fileData['last_id'] = $lastId;
+			$fileData['newest_tiles'] = $tileIndex;
+		}
 
 		$fileName = self::_getPageDataFileName($pageNo);
 
@@ -212,13 +233,11 @@ class Mosaic
 	 */
 	public static function getPageData($pageNo)
 	{
+		if (!self::pageExists($pageNo)) return array();
+
 		$filename = self::_getPageDataFileName($pageNo);
 
-		if (file_exists($filename))
-		{
-			return json_decode(file_get_contents($filename), TRUE);
-		}
-		else return array();
+		return json_decode(file_get_contents($filename), TRUE);
 	}
 
 

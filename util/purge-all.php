@@ -24,7 +24,6 @@ function main()
 	Cache::delete(Mosaic::CACHE_KEY_LAST_TWEET);
 	Cache::delete(Mosaic::CACHE_KEY_LAST_TWEET_WITH_IMAGE);
 
-	shell_exec('rm -R ' . $config['Data']['path'] . '/tiles/*');
 	shell_exec('rm -R ' . $config['Data']['path'] . '/original/*');
 	shell_exec('rm -R ' . $config['Data']['path'] . '/processed/*');
 	shell_exec('rm -R ' . $config['Store']['path'] . '/pages/*');
