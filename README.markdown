@@ -16,9 +16,11 @@
 
 # Requirements
 
-* PHP 5.3.2
-	* Imagick 3.0.1
-* ImageMagick 6.5.7-8 2009-11-26 Q16
+* PHP >= 5.3.2
+	* Imagick >= 3.0.1
+* ImageMagick >= 6.5
+* Mysql >= 5.1
+* HTTP server with gzip compression enabled
 
 ## execute
 
