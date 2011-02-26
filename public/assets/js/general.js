@@ -151,12 +151,18 @@ var party = party || {};
 		}
 		
 		counter_current += inc;
-		counter_canvas.text(counter_current);
+		party.counter_canvas.text(counter_current);
 		
 	}
 	
 	// Get the last complete page of tiles
 	function getVisibleTiles() {
+		
+		// Check if we have a complete page. If not, try again later
+		if (last_page == 0) {
+			setTimeout(getVisibleTiles, 60 * 1000);
+			return;
+		}
 		
 		// Request URL
 		var url = party.store_url + '/pages/page_' + party.last_page + '.json';
@@ -189,6 +195,12 @@ var party = party || {};
 	
 	// Get the previous
 	function getHiddenTiles() {
+		
+		// Check if we have a second complete page. If not, try again later
+		if ((last_page-1) == 0) {
+			setTimeout(getHiddenTiles, 60 * 1000);
+			return;
+		}
 		
 		// Request URL
 		var url = party.store_url + '/pages/page_' + (party.last_page-1) + '.json';
