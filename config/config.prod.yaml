@@ -5,7 +5,7 @@ App:
     # url
     url: http://dev.twitterparty.quodis.com
 Store:
-    path: /servers/develop/twitterparty/store
+    path: /servers/develop/twitterparty/public/store
     filePermissions: 644
     dirPermissions: 755
     group: root
