@@ -55,10 +55,14 @@ function main()
 
 				try
 				{
+					// make image with
 					$encoded = Image::makeTile($fileName, $tweet['id'], $tweet['position']);
 				}
 				catch(Exception $e)
 				{
+					Debug::logError('Fail Image::makeTile(). Defaulting to egg. Details follow.... id:' . $tweet['id'] . ' page:' . $tweet['page'] . ' position: ' . $tweet['position'] . ' from url:' . $tweet['imageUrl'] . ' into:' . Image::fileName('processed', md5($tweet['id']), 'gif') . ' with error: ' . $e->getMessage());
+
+					// make default
 					$defaultPic = $config['App']['path'] . '/' . $config['Mosaic']['defaultPic'];
 					$encoded = Image::makeTile($defaultPic, $tweet['id'], $tweet['position']);
 				}

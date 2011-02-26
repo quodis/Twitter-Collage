@@ -31,61 +31,121 @@ function main()
 	if ($isOldBrowser) $classes[] = 'old-browser';
 
 	?>
-<!doctype html>
-<html dir="ltr" lang="en-US">
-<head>
+<!DOCTYPE html>
+<html lang="en">
 
-<meta charset="utf-8" />
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="keywords" content="<?=$config['UI']['keywords']?>" />
-<meta name="description" content="<?=$config['UI']['description']?>" />
-<meta name="author" content="Quodis" />
-<meta name="copyright" content="© 2011" />
-<meta name="distribution" content="global" />
+	<head>
 
-<link rel="shortcut icon" href="/assets/imgs/favicon.png">
+		<meta charset="utf-8" />
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="keywords" content="<?=$config['UI']['keywords']?>" />
+		<meta name="description" content="<?=$config['UI']['description']?>" />
+		<meta name="author" content="Quodis" />
+		<meta name="copyright" content="© 2011" />
+		<meta name="distribution" content="global" />
 
-<title><?=$config['UI']['title']?></title>
+		<link rel="shortcut icon" href="/assets/imgs/favicon.png">
 
-<link href="assets/css/reset.css" type="text/css" rel="stylesheet" />
-<link href="assets/css/debug.css" type="text/css" rel="stylesheet" />
+		<title><?=$config['UI']['title']?></title>
 
-	<?php if (!$isOldBrowser) { ?>
-<script type="text/javascript" src="assets/js/jquery-1.4.2.min.js" charset="utf-8"></script>
+		<link href="assets/css/reset.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="<?=$config['UI']['css']['main']?>" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="<?=$config['UI']['css']['mosaic']?>" type="text/css" media="screen, projection" />
+		<link href="assets/css/debug.css" type="text/css" rel="stylesheet" />
 
-	<?php }?>
+		<script type="text/javascript" src="assets/js/jquery-1.4.2.min.js" charset="utf-8"></script>
 
-	<?php if ($config['UI']['gaEnabled']) { ?>
-		<script type="text/javascript">
-		//<![CDATA[
-			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', '<?=$config['UI']['gaId']?>']);
-			_gaq.push(['_trackPageview']);
+	</head>
 
-			(function() {
-				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-			})();
+	<body>
 
-		//]]>
-		</script>
-	<?php } ?>
+		<div id="container">
 
-</head>
-<body class="<?=implode(" ", $classes)?>" >
+			<div class="wrapper">
 
-	<label>Last Page:<span><?=Mosaic::getCurrentWorkingPageNo()?></span></label>
-	<label>PageNo:</label>
-	<input type="text" id="page-no" value="<?=Mosaic::getCurrentWorkingPageNo()?>"/>
-	<label>Z:</label>
-	<input type="text" id="z" value=""/>
-	<button id ="bt-page-load">Go</button>
-	<button id ="bt-poll">Poll</button>
-	<label id="last-tweet">Last Tweet:<span>?</span></label>
-	<div id="main"></div>
+				<!-- HEADER -->
+				<header id="brand">
+					<h1><a href="#" title="Join the Firefox 4 Twitter Party">Dashboard</a></h1>
+					<a href="#" class="option">button</a>
+					<a href="#" class="option">reset</a>
+					<a href="#" class="option">foo</a>
+					<a href="#" class="option">bar</a>
+				</header>
+
+
+				<!-- CONTENT -->
+				<aside id="main-content" class="clearfix">
+
+					<!-- Here goes the text explaining how Firefox Twitter Party works. -->
+					<p>Some text required here?</p>
+
+					<div class="counter tweets">
+						<dl>
+							<dt><a href="#" title="Tweet" rel="external">Last Tweet</a></dt>
+							<dd id="last-tweet"><span></span></dd>
+						</dl>
+					</div><!-- twitter-counter -->
+
+					<div class="counter pages">
+						<dl>
+							<dt><a href="#" title="Tweet" rel="external">Cooked Pages</a></dt>
+							<dd id="last-page"><span><?=(Mosaic::getCurrentWorkingPageNo() - 1)?></span></dd>
+						</dl>
+					</div><!-- twitter-counter -->
+
+					<div class="control-box page clearfix">
+						<h3>Go To Page</h3>
+						<label for="find-user" accesskey="p">PageNo</label>
+						<input type="text" id="page-no" value="0" tabindex="1" />
+						<button class="submit" type="submit" id="page-load-bttn" value="Go" tabindex="2" title="Go" class="button">Go</button>
+						<button class="submit" type="submit" id="force-poll-bttn" value="Force Poll" tabindex="3" title="Force Poll" class="button">Force Poll</button>
+					</div><!-- control-box page -->
+
+					<div class="control-box user clearfix" role="search">
+						<h3>Find User</h3>
+						<label for="find-user" accesskey="f">Twitter username</label>
+						<input type="text" id="find-user" value="Find a Twitter username" tabindex="4" />
+						<button class="decorator" type="submit" id="find-user-submit-bttn" value="Find" tabindex="5" title="Find" class="button">Find</button>
+					</div><!-- control-box user -->
+
+					<div class="control-box terms clearfix" role="search">
+						<h3>Search Tweets</h3>
+						<label for="search-input" accesskey="s">Search terms</label>
+						<input type="text" id="search-tweets" value="Find tweets that match" tabindex="6" />
+						<button class="decorator" type="submit" id="search-tweets-submit-bttn" value="Search" tabindex="7" title="Search" class="button">Search</button>
+					</div><!-- control-box terms -->
+
+
+				</aside><!-- main-content -->
+
+			</div><!-- wrapper -->
+
+		<section id="mosaic">
+			<h2>Firefox Twitter Mosaic</h2>
+		</section>
+
+
+	</div><!-- container -->
+
+		<!-- FOOTER -->
+		<footer>
+
+			<div id="footer-copyright">
+
+				<p id="footer-links">
+					<a href="/en-US/privacy-policy.html">Privacy Policy</a> &nbsp;|&nbsp;
+					<a href="/en-US/about/legal.html">Legal Notices</a> &nbsp;|&nbsp;
+					<a href="/en-US/legal/fraud-report/index.html">Report Trademark Abuse</a>
+				</p>
+
+				<p>Except where otherwise <a href="/en-US/about/legal.html#site">noted</a>, content on this site is licensed under the <br /><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.</p>
+			</div><!-- footer-copyright -->
+
+		</footer>
+
+	</body>
 
 <script type="text/javascript">
 	//<![CDATA[
@@ -132,6 +192,7 @@ function main()
 		}
 
 		var lastId = 0;
+		var lastPage = '<?=(Mosaic::getCurrentWorkingPageNo() - 1)?>';
 
 		function addImage(data, i)
 		{
@@ -139,19 +200,19 @@ function main()
 			var y = config.index[i].y;
 			var offsetX = config.tileSize * x;
 			var offsetY = config.tileSize * y;
-			$('#main').append('<img id="image-' + i + '" src="data:image/gif;base64,' + data + '" style="width:12px; height:12px; position: absolute; top: ' + offsetY +'px; left: ' + offsetX + 'px" />');
+			$('#mosaic').append('<img id="image-' + i + '" src="data:image/gif;base64,' + data + '" style="width:12px; height:12px; position: absolute; top: ' + offsetY +'px; left: ' + offsetX + 'px" />');
 		}
 
 		function loadPage(pageNo, z)
 		{
-
 			$('#main img').remove();
+			$('<div id="loading"></div>').appendTo('#mosaic');
 
 			var params = {}
-			if (pageNo) {
+			if (pageNo > 0) {
 				params.page = pageNo;
-				params.z = z;
 			}
+			else params.z = z;
 
 			console.log('PAGE > PARAMS', params);
 
@@ -163,12 +224,8 @@ function main()
 				success: function(data) {
 					lastId = data.payload.lastId;
 					$('#last-tweet span').text(data.payload.lastId);
-					var imageData, i;
-					for (i in data.payload.tweets) {
-						imageData = data.payload.tweets[i].imageData;
-						addImage(imageData, data.payload.tweets[i].position);
-						// fetch position from index
-					}
+					var count = showTweets(data.payload.tweets);
+					if (!count) alert('empty page, todo proper dialog');
 				}.bind(this),
 					error: function() {
 				}.bind(this)
@@ -191,27 +248,33 @@ function main()
 				success: function(data) {
 					lastId = data.payload.lastId;
 					$('#last-tweet span').text(data.payload.lastId);
-					var imageData, i;
-					for (i in data.payload.tweets) {
-						imageData = data.payload.tweets[i].imageData;
-						addImage(imageData, data.payload.tweets[i].position);
-						// fetch position from index
-					}
+					var count = showTweets(data.payload.tweets);
+					if (!count) alert('empty poll, todo proper dialog');
 				}.bind(this),
 					error: function() {
 				}.bind(this)
 			});
 		}
 
-		loadPage();
+		function showTweets(tweets)
+		{
+			var imageData, i, count = 0;
+			for (i in tweets) {
+				count++;
+				imageData = tweets[i].imageData;
+				addImage(imageData, tweets[i].position);
+				// fetch position from index
+			}
+			return count;
+		}
 
-		$('#bt-page-load').click( function() {
+		$('#page-load-bttn').click( function() {
 
 			loadPage($('#page-no').val());
 
 		} );
 
-		$('#bt-poll').click( function() {
+		$('#force-poll-bttn').click( function() {
 
 			poll();
 
@@ -223,7 +286,7 @@ function main()
 	})(jQuery);
 	//]]>
 	</script>
-</body>
+
 </html>
 <?php
 
