@@ -209,29 +209,24 @@ function main()
 			$('#mosaic img').remove();
 			$('<div id="loading"></div>').appendTo('#mosaic');
 
-			var params = {
-				page: pageNo
-			}
+			console.log('PAGE > PAGE NO', pageNo);
 
-			console.log('PAGE > PARAMS', params);
+			alert('<?=$config['UI']['options']['store_url']?>/pages/page_' + pageNo + '.json');
 
-			$.ajax( {
-				type: 'GET',
-				url: 'page.php',
-				data: params,
-				dataType: 'json',
-				success: function(data) {
-					lastId = data.payload.lastId;
-					$('#last-tweet span').text(data.payload.lastId);
-					var count = showTweets(data.payload.tweets);
-					if (!count) {
-						alert('empty page, TODO proper dialog');
-					}
-					else lastId = data.payload.lastId;
-				}.bind(this),
-					error: function() {
-				}.bind(this)
+			$.getJSON('<?=$config['UI']['options']['store_url']?>/pages/page_' + pageNo + '.json', function(data) {
+
+				console.log(data);
+
+				lastId = data.payload.lastId;
+				$('#last-tweet span').text(data.payload.lastId);
+				var count = showTweets(data.payload.tweets);
+				if (!count) {
+					alert('empty page, TODO proper dialog');
+				}
+				else lastId = data.payload.lastId;
 			});
+
+
 		}
 
 		function poll()
