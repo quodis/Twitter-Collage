@@ -1,9 +1,9 @@
 var party = party || {};
 
 (function () {
-	var initial_draw_interval,
-		loading_message_interval,
-		polling_interval,
+	var initial_draw_timer,
+		loading_message_timer,
+		polling_timer,
 		loading_message_index,
 		tile_counter = 0,
 		frame_counter = 0,
@@ -11,13 +11,15 @@ var party = party || {};
 		hidden_tiles = {},
 		last_id = 0, // The ID of the newest tile
 		polled_tiles = {}, // Tiles got from the server in "real-time"
-		counter_current
+		counter_current = 0,
+		counter_target = 0,
+		counter_timer;
 		
 	// Draw the Initial Mosaic
 	function initialDraw() {
 		
 		// Start the recursive call for each frame
-		initial_draw_interval = setInterval(initialDrawFrame, (1000/party.initial_frames_per_second) );
+		initial_draw_timer = setInterval(initialDrawFrame, (1000/party.initial_frames_per_second) );
 		
 	}
 	
@@ -71,7 +73,7 @@ var party = party || {};
 		} else {
 			
 			// No Tiles were built - task is complete
-			clearInterval(initial_draw_interval);
+			clearInterval(initial_draw_timer);
 			
 		}
 		
@@ -101,14 +103,14 @@ var party = party || {};
 		loading_message_index = Math.floor(Math.random() * party.loading_messages.length);
 		
 		// Loop through the array
-		loading_message_interval = setInterval(loadingMessage, (party.loading_message_seconds * 1000) );
+		loading_message_timer = setInterval(loadingMessage, (party.loading_message_seconds * 1000) );
 		
 	}
 	
 	// Hide the loading message
 	function loadingHide() {
 		$('#loading').hide();
-		clearInterval(loading_message_interval);
+		clearInterval(loading_message_timer);
 	}
 	
 	// First to be called
@@ -117,8 +119,40 @@ var party = party || {};
 		party.performance_mode = $.browser.msie;
 		// Cache the canvas
 		party.canvas = $('#mosaic');
+		// Cache the counter DOM
+		party.counter_canvas = $('#twitter-counter dd span');
 		// Get the page of visible tiles
 		getVisibleTiles();
+		// Start the counter
+		counter_timer = setInterval(counterDraw, 100);
+	}
+	
+	// Increment the counter's target
+	function counterIncrement(increment_by) {
+		counter_target += increment_by;
+	}
+	
+	// Update the counter UI
+	function counterDraw() {
+		var dif = (counter_target - counter_current),
+			inc = 1;
+		
+		// Check if we have anything to do
+		if (dif = 0) {
+			return;
+		}
+		
+		if (dif > 10000) {
+			inc = 19;
+		} else if (dif > 1000) {
+			inc = 9;
+		} else if (dif > 100) {
+			inc = 3;
+		}
+		
+		counter_current += inc;
+		counter_canvas.text(counter_current);
+		
 	}
 	
 	// Get the last complete page of tiles
@@ -142,10 +176,10 @@ var party = party || {};
 			// Update last id
 			if (data.last_id > last_id) {
 				last_id = data.last_id;
+				counterIncrement(last_id);
 			}
 			// Write the data locally
 			visible_tiles = data.tiles;
-			console.log('Got ' + visible_tiles.length + ' visible tiles');
 			
 			// Draw the mosaic!
 			initialDraw();
@@ -165,11 +199,11 @@ var party = party || {};
 			// Update last id
 			if (data.last_id > last_id) {
 				last_id = data.last_id;
+				counterIncrement(last_id);
 			}
 			
 			// Write the data locally
 			hidden_tiles = data.tiles;
-			console.log('Got ' + hidden_tiles.length + ' hidden tiles');
 			
 			// Start the Real-time polling
 			startPolling();
@@ -183,7 +217,7 @@ var party = party || {};
 		// Start the recursive "tile updater"
 		
 		// Start the recursive poller
-		polling_interval = setInterval(poll, (party.polling_interval_seconds * 1000));
+		polling_timer = setInterval(poll, (party.polling_timer_seconds * 1000));
 		
 	}
 	
@@ -201,7 +235,6 @@ var party = party || {};
 				
 				// Append the data locally
 				$.extend(polled_tiles, data.tiles);
-				console.log('Got ' + data.tiles.length + ' polled tiles');
 				
 			}
 		});
@@ -218,7 +251,7 @@ var party = party || {};
 			"Cooling drinks to ideal temperature",
 			"Handing out name-tags"],
 		"loading_message_seconds": 2,
-		"polling_interval_seconds": 60, 
+		"polling_timer_seconds": 60, 
 		"cols": 48,
 		"rows": 47,
 		"tile_size": 12,
