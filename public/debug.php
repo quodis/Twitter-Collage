@@ -98,7 +98,7 @@ function main()
 					<div class="control-box page clearfix">
 						<h3>Go To Page</h3>
 						<label for="find-user" accesskey="p">PageNo</label>
-						<input type="text" id="page-no" value="0" tabindex="1" />
+						<input type="text" id="page-no" value="" tabindex="1" />
 						<button class="submit" type="submit" id="page-load-bttn" value="Go" tabindex="2" title="Go" class="button">Go</button>
 						<button class="submit" type="submit" id="force-poll-bttn" value="Force Poll" tabindex="3" title="Force Poll" class="button">Force Poll</button>
 					</div><!-- control-box page -->
@@ -203,7 +203,7 @@ function main()
 			$('#mosaic').append('<img id="image-' + i + '" src="data:image/gif;base64,' + data + '" style="width:12px; height:12px; position: absolute; top: ' + offsetY +'px; left: ' + offsetX + 'px" />');
 		}
 
-		function loadPage(pageNo, z)
+		function loadPage(pageNo)
 		{
 			$('#mosaic img').remove();
 			$('<div id="loading"></div>').appendTo('#mosaic');
@@ -212,7 +212,7 @@ function main()
 			if (pageNo > 0) {
 				params.page = pageNo;
 			}
-			else params.z = z;
+			else params.z = pageNo;
 
 			console.log('PAGE > PARAMS', params);
 
