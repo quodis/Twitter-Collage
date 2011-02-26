@@ -88,4 +88,5 @@ UI:
         main: "/assets/css/ftp.css?v=1"
         mosaic: "/assets/css/mosaic.css?v=1"
     pollLimit: 100
-    storeUrl: http://store.twitterparty.quodis.com
+    options:
+        store_url: http://store.twitterparty.quodis.com
