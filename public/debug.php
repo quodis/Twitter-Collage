@@ -85,6 +85,7 @@ function main()
 	<button id ="bt-page-load">Go</button>
 	<button id ="bt-poll">Poll</button>
 	<label id="last-tweet">Last Tweet:<span>?</span></label>
+	<div id="main"></div>
 
 <script type="text/javascript">
 	//<![CDATA[
