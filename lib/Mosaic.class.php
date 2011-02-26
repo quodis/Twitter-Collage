@@ -133,7 +133,10 @@ class Mosaic
 		file_put_contents($fileName, json_encode(self::$_pageConfig));
 		chmod($fileName, octdec(self::$_config['Config']['filePermissions']));
 		chgrp($fileName, self::$_config['Config']['group']);
+
+		return $fileName;
 	}
+
 
 
 	// ---- pages
