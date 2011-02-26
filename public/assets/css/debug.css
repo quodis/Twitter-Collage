@@ -176,13 +176,14 @@ button.close span {
 }
 
 .counter dl{
-	display: inline-block;
+	display: block;
 	line-height: 40px;
+	margin-bottom: 10px;
 	height:40px;
 }
 
 .counter dt, .counter dd  {
-	float:left;
+	float: left;
 }
 
 .counter a, .counter span {
@@ -198,24 +199,11 @@ button.close span {
 }
 
 .counter dt {
-	background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(213,230,239)), color-stop(1, rgb(255,255,255)));
-	background-image: -moz-linear-gradient( center bottom, rgb(213,230,239) 0%, rgb(255,255,255) 100%);
 	margin-right:10px;
 }
 
-.counter dt a {
-	background: url(../images/layout/twitter-bird-bg.png) 8px center no-repeat;
-	padding-left: 40px;
-	border: 1px solid #87b7dd;
+.counter dt span {
 	-moz-border-radius: 5px; border-radius: 5px;
-}
-
-.counter dt:active {
-	background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(255,255,255)), color-stop(1, rgb(213,230,239)));
-	background-image: -moz-linear-gradient( center bottom, rgb(255,255,255) 0%, rgb(213,230,239) 100%);
-		-moz-box-shadow:inset 0 -1px 0 #fff;
-	-webkit-box-shadow:inset 0 -1px 0 #fff;
-	box-shadow:inset 0 -1px 0 #fff;
 }
 
 .counter dd {
@@ -280,6 +268,39 @@ button.close span {
 	margin:-22px 0 0 0px;
 }
 
+.control-box .submit {
+	border: none;
+	padding: none;
+	background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(213,230,239)), color-stop(1, rgb(255,255,255)));
+	background-image: -moz-linear-gradient( center bottom, rgb(213,230,239) 0%, rgb(255,255,255) 100%);
+	margin-right:10px;
+	border: 1px solid #87b7dd;
+	-moz-border-radius: 5px; border-radius: 5px;
+	color:#1b5898;
+	display:block;
+	font-family: 'MetaBlack';
+	font-size:22px;
+	padding: 0 5px;
+	text-decoration: none;
+	text-shadow: 0 1px 0px #fff,  0 0 20px rgba(255, 255, 255, 0.4);
+	height:30px;
+	float: left;
+	overflow: hidden;
+}
+
+.control-box .submit:active {
+	background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(255,255,255)), color-stop(1, rgb(213,230,239)));
+	background-image: -moz-linear-gradient( center bottom, rgb(255,255,255) 0%, rgb(213,230,239) 100%);
+	-moz-box-shadow:inset 0 -1px 0 #fff;
+	-webkit-box-shadow:inset 0 -1px 0 #fff;
+	box-shadow:inset 0 -1px 0 #fff;
+}
+
+.control-box.page #page-no {
+	text-align: left;
+	width: 30px;
+	margin-right: 10px;
+}
 
 /* 4. Mosaic */
 #mosaic {
@@ -333,15 +354,4 @@ widget {
 	z-index: 1001;
 	left: 50%;
 	display: block;
-}
-
-/* 8. Temp */
-
-input#page-no,
-input#z {
-	text-align: left;
-	color: #000;
-	border: 1px solid #000;
-	background-color: #fff;
-	width: 30px;
 }

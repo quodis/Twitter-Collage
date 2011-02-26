@@ -81,17 +81,18 @@ function main()
 					<!-- Here goes the text explaining how Firefox Twitter Party works. -->
 					<p>Some text required here?</p>
 
-					<div class="counter tweets">
-						<dl>
-							<dt><a href="#" title="Tweet" rel="external">Last Tweet</a></dt>
+					<div class="counter">
+						<dl class="tweets">
+							<dt><span>Last Tweet</span></dt>
 							<dd id="last-tweet"><span></span></dd>
 						</dl>
-					</div><!-- twitter-counter -->
-
-					<div class="counter pages">
-						<dl>
-							<dt><a href="#" title="Tweet" rel="external">Cooked Pages</a></dt>
+						<dl class="pages">
+							<dt><span>Cooked Pages</span></dt>
 							<dd id="last-page"><span><?=(Mosaic::getCurrentWorkingPageNo() - 1)?></span></dd>
+						</dl>
+						<dl class="delay">
+							<dt><span>Delay</span></dt>
+							<dd id="job-delay"><span></span></dd>
 						</dl>
 					</div><!-- twitter-counter -->
 
@@ -99,22 +100,22 @@ function main()
 						<h3>Go To Page</h3>
 						<label for="find-user" accesskey="p">PageNo</label>
 						<input type="text" id="page-no" value="" tabindex="1" />
-						<button class="submit" type="submit" id="page-load-bttn" value="Go" tabindex="2" title="Go" class="button">Go</button>
-						<button class="submit" type="submit" id="force-poll-bttn" value="Force Poll" tabindex="3" title="Force Poll" class="button">Force Poll</button>
+						<button class="submit" type="submit" id="page-load-bttn" tabindex="2" title="Go" class="button"><span>Go</span></button>
+						<button class="submit" type="submit" id="force-poll-bttn" tabindex="3" title="Force Poll" class="button"><span>Poll Now</span></button>
 					</div><!-- control-box page -->
 
 					<div class="control-box user clearfix" role="search">
 						<h3>Find User</h3>
 						<label for="find-user" accesskey="f">Twitter username</label>
 						<input type="text" id="find-user" value="Find a Twitter username" tabindex="4" />
-						<button class="decorator" type="submit" id="find-user-submit-bttn" value="Find" tabindex="5" title="Find" class="button">Find</button>
+						<button class="decorator" type="submit" id="find-user-submit-bttn" tabindex="5" title="Find" class="button">Find</button>
 					</div><!-- control-box user -->
 
 					<div class="control-box terms clearfix" role="search">
 						<h3>Search Tweets</h3>
 						<label for="search-input" accesskey="s">Search terms</label>
 						<input type="text" id="search-tweets" value="Find tweets that match" tabindex="6" />
-						<button class="decorator" type="submit" id="search-tweets-submit-bttn" value="Search" tabindex="7" title="Search" class="button">Search</button>
+						<button class="decorator" type="submit" id="search-tweets-submit-bttn" tabindex="7" title="Search" class="button">Search</button>
 					</div><!-- control-box terms -->
 
 
@@ -256,7 +257,7 @@ function main()
 					}
 					else {
 						lastId = data.payload.lastId;
-						alert(count + 'tweets, TODO proper dialog');
+						alert(count + ' tweets, TODO proper dialog');
 					}
 				}.bind(this),
 					error: function() {
