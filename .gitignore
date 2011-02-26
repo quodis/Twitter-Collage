@@ -7,7 +7,8 @@
 # configuration
 config/config.yaml
 config/*.php
+config/mosaic*
 
-# data files
+# data files (legacy)
 assets/*.php
 
