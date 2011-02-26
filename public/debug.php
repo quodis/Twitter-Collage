@@ -79,7 +79,7 @@ function main()
 				<aside id="main-content" class="clearfix">
 
 					<!-- Here goes the text explaining how Firefox Twitter Party works. -->
-					<p>Some text required here?</p>
+					<p>Now feeding on hash <span class="hashtag"><?=$config['Twitter']['terms']?></span>.</p>
 
 					<div class="counter">
 						<dl class="tweets">
@@ -99,7 +99,7 @@ function main()
 					<div class="control-box page clearfix">
 						<h3>Go To Page</h3>
 						<label for="find-user" accesskey="p">PageNo</label>
-						<input type="text" id="page-no" value="" tabindex="1" />
+						<input type="text" id="page-no" value="<?=(Mosaic::getCurrentWorkingPageNo())?>" tabindex="1" />
 						<button class="submit" type="submit" id="page-load-bttn" tabindex="2" title="Go" class="button"><span>Go</span></button>
 						<button class="submit" type="submit" id="force-poll-bttn" tabindex="3" title="Force Poll" class="button"><span>Poll Now</span></button>
 					</div><!-- control-box page -->
