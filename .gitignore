@@ -12,3 +12,6 @@ config/mosaic*
 # data files (legacy)
 assets/*.php
 
+# store files
+public/store/*
+
