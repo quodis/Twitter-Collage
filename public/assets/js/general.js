@@ -8,7 +8,9 @@ var party = party || {};
 		tile_counter = 0,
 		frame_counter = 0,
 		visible_tiles = {},
-		hidden_tiles = {};
+		hidden_tiles = {},
+		last_id = 0, // The ID of the newest tile
+		polled_tiles = {}; // Tiles got from the server in "real-time"
 		
 	// Build the Initial Mosaic
 	function initialBuild() {
@@ -74,6 +76,7 @@ var party = party || {};
 		
 	}
 	
+	// Iterate through the loading messages
 	function loadingMessage() {
 		
 		// Set the loading text
@@ -87,6 +90,7 @@ var party = party || {};
 		
 	}
 	
+	// Randomnize and show the loading message
 	function loadingShow() {
 		
 		// Show the loading DOM element
@@ -100,11 +104,13 @@ var party = party || {};
 		
 	}
 	
+	// Hide the loading message
 	function loadingHide() {
 		$('#loading').hide();
 		clearInterval(loading_message_interval);
 	}
 	
+	// First to be called
 	function init() {
 		// Check the browser's performance
 		party.performance_mode = $.browser.msie;
@@ -114,51 +120,88 @@ var party = party || {};
 		getVisibleTiles();
 	}
 	
+	// Get the last complete page of tiles
 	function getVisibleTiles() {
+		
 		// Show the loading
 		loadingShow();
+		
 		// Get the first visible page from server
-		$.ajax({
-		  url: 'page.php',
-		  dataType: 'json',
-		  data: {page: 0},
-		  success: function(data) {
-				// Hide the Loading
-				loadingHide();
-				// Get the invisible tiles page from the server
-				getHiddenTiles();
-				// Write the data locally
-				visible_tiles = data.payload.tweets;
-				console.log('Got ' + visible_tiles.length + ' visible tiles');
-				// Build the mosaic!
-				initialBuild();
+		$.getJSON(party.store_url + '/pages/page_' + (party.last_page-1) + '.json', function(data) {
+			
+			// Hide the Loading
+			loadingHide();
+			
+			// Get the invisible tiles page from the server
+			getHiddenTiles();
+			
+			// Update last id
+			if (data.payload.last_id > last_id) {
+				last_id = data.payload.last_id;
 			}
+			// Write the data locally
+			visible_tiles = data.payload.tiles;
+			console.log('Got ' + visible_tiles.length + ' visible tiles');
+			
+			// Build the mosaic!
+			initialBuild();
+			
 		});
 	}
 	
+	// Get the previous
 	function getHiddenTiles() {
-		$.ajax({
-		  url: 'page.php',
-		  dataType: 'json',
-		  data: {page: -1},
-		  success: function(data) {
-				// Write the data locally
-				hidden_tiles = data.payload.tweets;
-				console.log('Got ' + hidden_tiles.length + ' hidden tiles');
-				// Initiate the Real-time polling
-				polling_interval = setInterval(poll, (polling_interval_seconds * 1000));
+		
+		$.getJSON(party.store_url + '/pages/page_' + (party.last_page-1) + '.json', function(data) {
+
+			// Update last id
+			if (data.payload.last_id > last_id) {
+				last_id = data.payload.last_id;
 			}
+			
+			// Write the data locally
+			hidden_tiles = data.payload.tiles;
+			console.log('Got ' + hidden_tiles.length + ' hidden tiles');
+			
+			// Start the Real-time polling
+			startPolling();
+			
 		});
+	}
+	
+	// Start the Real-time polling
+	function startPolling() {
+		
+		// Start the recursive "tile updater"
+		
+		// Start the recursive poller
+		polling_interval = setInterval(poll, (party.polling_interval_seconds * 1000));
+		
 	}
 	
 	function poll() {
-		
+		$.ajax({
+		  url: '/poll.php',
+		  dataType: 'json',
+		  data: {last_id: last_id},
+		  success: function(data) {
+			
+				// Update last id
+				if (data.payload.last_id > last_id) {
+					last_id = data.payload.last_id;
+				}
+				
+				// Append the data locally
+				$.extend(polled_tiles, data.payload.tiles);
+				console.log('Got ' + data.payload.tiles.length + ' polled tiles');
+				
+			}
+		});
 	}
 	
 	$.extend(party, {
 		"initial_frames_per_second": 24,
 		"initial_tiles_per_frame": 10,
-		"initialBuild": initialBuild,
 		"loading_messages": [
 			"Sorting guest list alphabetically",
 			"Waiting for eye-contact with club bouncer",
@@ -167,8 +210,6 @@ var party = party || {};
 			"Cooling drinks to ideal temperature",
 			"Handing out name-tags"],
 		"loading_message_seconds": 2,
-		"loadingShow": loadingShow,
-		"loadingHide": loadingHide,
 		"polling_interval_seconds": 60, 
 		"cols": 48,
 		"rows": 47,
@@ -182,5 +223,8 @@ var party = party || {};
 
 
 $(document).ready(function() {
+	
+	// Let's get it started!
 	party.init();
+	
 });
