@@ -42,7 +42,7 @@ function main()
 		$data['last_id'] = $lastId;
 	}
 
-	Debug::msg('lastId:' .  $lastId . ' count:' . count($data['tiles']) . ' lastId:' . $data['lastId']);
+	Debug::logMsg('lastId:' .  $lastId . ' count:' . count($data['tiles']) . ' lastId:' . $data['last_id']);
 
 	Dispatch::now(1, 'POLL OK', $data);
 
