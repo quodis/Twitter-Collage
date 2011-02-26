@@ -41,8 +41,8 @@ class Image
 	 *
 	 * @param string $url
 	 * @param string $id
-	 * @return
-	 * 		true if the file is saved, regardless if downloaded or default
+	 *
+	 * @return string fileName if file was saved, regardless if downloaded or default
 	 */
 	public static function download($url, $id)
 	{
@@ -51,12 +51,12 @@ class Image
 		// define a sufix based on the extension key from the path info
 		$sufix = isset($pathinfo['extension']) ? $pathinfo['extension'] : '';
 		// define the cache file filename
-		$cacheFile = self::fileName('original', md5($url), $sufix);
+		$fileName = self::fileName('original', md5($url), $sufix);
 		// get the file from the url and save it to disk as cache file with the required permissions
 		$options = array(
 			'timeout' => self::$_config['Twitter']['timeout']['imgFile'],
 			'cache' => array(
-				'file' => $cacheFile,
+				'file' => $fileName,
 				'dirPermissions' => self::$_config['Store']['dirPermissions'],
 				'filePermissions' => self::$_config['Store']['filePermissions'],
 				'group' => self::$_config['Store']['group']
@@ -68,11 +68,9 @@ class Image
 		// use a default image if we're unable to fetch/save the url
 		if (!$fileData)
 		{
-			$fileData = file_get_contents(self::$_config['App']['path'] . '/' . self::$_config['Mosaic']['defaultPic']);
+			return self::$_config['App']['path'] . '/' . self::$_config['Mosaic']['defaultPic'];
 		}
-
-		// return true if we have fileData
-		return !!$fileData;
+		else return $fileName;
 	}
 
 
@@ -118,30 +116,13 @@ class Image
 	 * @return
 	 * 		base64 encoded Tile data
 	 */
-	public static function makeTile($url, $id, $position)
+	public static function makeTile($fileName, $id, $position)
 	{
 //		$start = microtime(TRUE);
 //		$time = array();
 
-		// fetch the pathinfo from the $url
-		$pathinfo = pathinfo($url);
-		// fetch the suffix(file extension) from the pathinfo array
-		$sufix = isset($pathinfo['extension']) ? $pathinfo['extension'] : '';
-		// generate the file path for the destination/cache file
-		$cacheFile = self::fileName('original', md5($url), $sufix);
-
-		try
-		{
-			// new Imagick object from cacheFile
-			$image = new Imagick($cacheFile);
-		}
-		catch (Exception $e)
-		{
-			// use default twitter avatar when we can't open the cached Tile
-			$default = self::$_config['App']['path'] .'/'. self::$_config['Mosaic']['defaultPic'];
-			// new Imagick object from default twitter avatar, usually in the assets folder inside app root
-			$image = new Imagick($default);
-		}
+		// new Imagick object from fileName
+		$image = new Imagick($fileName);
 
 		// resize the image to the tile size
 		$tileSize = self::$_config['Mosaic']['tileSize'];
@@ -166,7 +147,11 @@ class Image
 		if (TRUE || self::$_config['Mosaic']['internalComposite'])
 		{
 			$overlay = new Imagick($overlayFile);
-			$image->setImageColorspace($overlay->getImageColorspace() );
+			//$image->setImageColorspace($overlay->getImageColorspace() );
+
+			dd('colorspace overlay:' . $overlay->getImageDepth());
+			dd('colorspace image:' . $image->getImageDepth());
+
 			$image->compositeImage($overlay, Imagick::COMPOSITE_HARDLIGHT, 0, 0);
 			$image->writeImage($destination);
 
@@ -175,9 +160,11 @@ class Image
 			// discover the binary path - currently returning a new line, simple fix
 			$binary_path = '/usr/bin/convert';
 			// build the cmd arguments
-			$cmd_arguments = "$destination -colors $colors";
+			$cmd_arguments = "$destination -colors $colors +profile '*' 2>&1";
 			// reprocess the first pass image using shell_exec
-			shell_exec("$binary_path $cmd_arguments $destination");
+			exec("$binary_path $cmd_arguments $destination", $output, $code);
+
+			if ($code > 0) throw new Exception(implode("\n", $output));
 
 //			$time['convert'] = microtime(TRUE);
 		}
@@ -187,9 +174,11 @@ class Image
 			// discover the binary path - currently returning a new line, simple fix
 			$binary_path = '/usr/bin/composite';
 			// build the cmd arguments
-			$cmd_arguments = "$overlayFile $destination -colors $colors -compose hardlight";
+			$cmd_arguments = "$overlayFile $destination -colors $colors -compose hardlight +profile '*' 2>&1";
 			// reprocess the first pass image using shell_exec
-			shell_exec("$binary_path $cmd_arguments $destination");
+			exec("$binary_path $cmd_arguments $destination", $output, $code);
+
+			if ($code > 0) throw new Exception(implode("\n", $output));
 
 //			$time['composite'] = microtime(TRUE);
 		}

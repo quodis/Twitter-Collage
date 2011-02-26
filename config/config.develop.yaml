@@ -11,7 +11,7 @@ Store:
     group: quodis
 Twitter:
     urlSearch: "http://search.twitter.com/search.json"
-    terms: "pleasedonttext"
+    terms: "wordsthatcanstartawar"
     rpp: 100
     pageLimit: 30
     timeout:
@@ -24,7 +24,7 @@ Mosaic:
     cols: 48
     rows: 47
     tileSize: 12
-    colorDepth: 12
+    colorDepth: 16
     internalComposite: 0
 Jobs:
     twitter-search:

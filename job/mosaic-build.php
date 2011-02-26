@@ -16,8 +16,8 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include dirname(__FILE__) . '/../bootstrap.php';
 
-	Debug::setLogMsgFile($config['App']['pathLog'] .'/mosaic-build.msg.php');
-	Debug::setLogErrorFile($config['App']['pathLog'] .'/mosaic-build.error.php');
+	Debug::setLogMsgFile($config['App']['pathLog'] .'/mosaic-build.msg.log');
+	Debug::setLogErrorFile($config['App']['pathLog'] .'/mosaic-build.error.log');
 	Debug::setForceLogToFile(TRUE);
 
 	$period = $config['Jobs']['mosaic-build']['period'];

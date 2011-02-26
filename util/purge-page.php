@@ -18,16 +18,13 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include dirname(__FILE__) . '/../bootstrap.php';
 
-	$sql = 'UPDATE tweet SET imageData = NULL';
+	// argument 1 = pageNo
 
-	Debug::logMsg($sql);
+	$pageNo = (int)$argv[1];
 
-	Db::execute($sql);
+	Mosaic::purgePage($pageNo);
 
-	shell_exec('rm -R ' . $config['Store']['path'] . '/processed/*');
-	shell_exec('rm -R ' . $config['Store']['path'] . '/pages/*');
-
-	Dispatch::now(1, 'OK', $data);
+	Dispatch::now(1, 'OK');
 
 } // main()
 
