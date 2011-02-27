@@ -14,15 +14,16 @@ var party = party || {};
 		new_tiles = {}, // Tiles got from the server in "real-time"
 		counter_current = 0,
 		counter_target = 0,
-		counter_timer;
+		counter_timer,
+		total_positions = 0,
+		draw_tiles_timer;
 		
 	// Draw the Initial Mosaic
 	function initialDraw() {
 		
 		// Create an array for the random order
-		var vtl = objectLength(visible_tiles),
-			i;
-		for (i = 0; i < vtl; i += 1) {
+		var i;
+		for (i = 0; i < total_positions; i += 1) {
 			visible_tiles_random.push(i);
 		}
 		// Randomnize!
@@ -128,8 +129,6 @@ var party = party || {};
 		party.performance_mode = $.browser.msie;
 		// Cache the canvas
 		party.canvas = $('#mosaic');
-		// TODO
-		party.last_page = 4;
 		// Cache the counter DOM
 		party.counter_canvas = $('#twitter-counter dd span');
 		// Get the page of visible tiles
@@ -214,6 +213,7 @@ var party = party || {};
 			}
 			// Write the data locally
 			visible_tiles = data.tiles;
+			total_positions = objectLength(visible_tiles);
 			
 			// Draw the mosaic!
 			initialDraw();
@@ -252,18 +252,40 @@ var party = party || {};
 	}
 	
 	function drawNewTiles() {
-		// What tiles to draw?
-		// At what speed?
-		// Hide previous
-			// Choosing which to keep
-			
+		// Get a random position
+		var pos = 1 + Math.floor(Math.random() * total_positions),
+			old_visible;
+		
+		console.log('Current visible:');
+		console.log(visible_tiles[pos]);
+		console.log('Current hidden:');
+		console.log(hidden_tiles[pos]);
+		
+		// Copy the visible
+		old_visible = $.extend({}, visible_tiles[pos]);
+		// Replace the visible with the hidden
+		$.extend(visible_tiles[pos], hidden_tiles[pos]);
+		// Replace the hidden with the visible
+		$.extend(hidden_tiles[pos], old_visible);
+		
+		
+		console.log('New visible:');
+		console.log(visible_tiles[pos]);
+		console.log('New hidden:');
+		console.log(hidden_tiles[pos]);
+		
+		// Update
+		$('#' + pos).css({
+			'background-image': 'none'
+		});
+		
 	}
 	
 	// Start the Real-time polling
 	function startPolling() {
 
 		// Start the recursive "tile updater"
-		
+		draw_tiles_timer = setInterval(drawNewTiles, 100);
 		// Start the recursive poller
 		poll();
 		polling_timer = setInterval(poll, (party.polling_timer_seconds * 1000));
@@ -282,9 +304,6 @@ var party = party || {};
 				if (data.payload.last_id > last_id) {
 					last_id = data.payload.last_id;
 				}
-				console.log('data.payload.last_id: ' + data.payload.last_id);
-				console.log('last_id: ' + last_id);
-				console.log(objectLength(new_tiles));
 				
 				// Append the data locally
 				$.extend(new_tiles, data.payload.tiles);
