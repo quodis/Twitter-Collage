@@ -97,6 +97,7 @@ var party = party || {};
 		loading_message_index = Math.floor(Math.random() * party.loading_messages.length);
 		
 		// Loop through the array
+		loadingMessage();
 		loading_message_timer = setInterval(loadingMessage, (party.loading_message_seconds * 1000) );
 		
 	}
@@ -240,6 +241,7 @@ var party = party || {};
 		// Start the recursive "tile updater"
 		
 		// Start the recursive poller
+		poll();
 		polling_timer = setInterval(poll, (party.polling_timer_seconds * 1000));
 		
 	}
@@ -258,7 +260,7 @@ var party = party || {};
 				}
 				console.log('data.payload.last_id: ' + data.payload.last_id);
 				console.log('last_id: ' + last_id);
-				console.log('new_tiles.length: ' + new_tiles.length);
+				console.log(new_tiles);
 				
 				// Append the data locally
 				$.extend(new_tiles, data.payload.tiles);
