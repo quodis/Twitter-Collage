@@ -198,7 +198,7 @@ var party = party || {};
 	
 	// Get the previous
 	function getHiddenTiles() {
-		
+		console.log('Getting hidden tiles...');
 		// Check if we have a second complete page. If not, try again later
 		if ((party.last_page-1) == 0) {
 			reloadPage();
@@ -219,7 +219,7 @@ var party = party || {};
 			
 			// Write the data locally
 			hidden_tiles = data.tiles;
-			
+			console.log('Got hidden tiles');
 			// Start the Real-time polling
 			startPolling();
 			
@@ -236,7 +236,7 @@ var party = party || {};
 	
 	// Start the Real-time polling
 	function startPolling() {
-		
+		console.log('Starting polling...');
 		// Start the recursive "tile updater"
 		
 		// Start the recursive poller
@@ -245,6 +245,7 @@ var party = party || {};
 	}
 	
 	function poll() {
+		console.log('Getting poll...');
 		$.ajax({
 		  url: '/poll.php',
 		  dataType: 'json',
@@ -257,6 +258,7 @@ var party = party || {};
 				}
 				console.log('data.payload.last_id: ' + data.payload.last_id);
 				console.log('last_id: ' + last_id);
+				console.log('new_tiles.length: ' + new_tiles.length);
 				
 				// Append the data locally
 				$.extend(new_tiles, data.payload.tiles);
