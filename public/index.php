@@ -24,7 +24,7 @@ function main()
 	include '../bootstrap.php';
 	session_cache_limiter("nocache");
 
-	$config['UI']['options']['last_page'] = Mosaic::getCurrentWorkingPageNo() - 1;
+	$config['UI']['options']['last_page'] = Mosaic::getCurrentWorkingPageNo();
 
 	$jsMosaicConfig = $config['Store']['url'] . $config['UI']['js-config']['grid'];
 
