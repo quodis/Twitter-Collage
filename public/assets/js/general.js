@@ -20,7 +20,7 @@ var party = party || {};
 	function initialDraw() {
 		
 		// Create an array for the random order
-		var vtl = visible_tiles.length,
+		var vtl = objectLength(visible_tiles),
 			i;
 		for (i = 0; i < vtl; i += 1) {
 			visible_tiles_random.push(i);
@@ -136,6 +136,16 @@ var party = party || {};
 		getVisibleTiles();
 		// Start the counter
 		counter_timer = setInterval(counterDraw, 60);
+	}
+	
+	// Get an object's length
+	function objectLength(obj) {
+		var length = 0,
+			key;
+	    for (key in obj) {
+	        if (obj.hasOwnProperty(key)) length += 1;
+	    }
+	    return length;
 	}
 	
 	// Increment the counter's target
@@ -274,7 +284,7 @@ var party = party || {};
 				}
 				console.log('data.payload.last_id: ' + data.payload.last_id);
 				console.log('last_id: ' + last_id);
-				console.log(new_tiles.length);
+				console.log(objectLength(new_tiles));
 				
 				// Append the data locally
 				$.extend(new_tiles, data.payload.tiles);
