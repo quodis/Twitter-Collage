@@ -32,7 +32,7 @@ function main()
 	$tiles = array();
 	while ($tweet = $result->row())
 	{
-		$tiles[$tweet['position']] = $tweet;
+		$tiles[] = $tweet;
 		if ($tweet['id'] > $lastId) $lastId = $tweet['id'];
 	}
 
