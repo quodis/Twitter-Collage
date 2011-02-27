@@ -39,7 +39,7 @@ var party = party || {};
 		}
 		
 		// Add it to the HTML to draw
-		tiles_to_draw = tiles_to_draw + '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + tile.imageData + '); left: ' + (index.x*12) + 'px; top: ' + (index.y*12) + 'px;"></div>';
+		return '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + tile.imageData + '); left: ' + (index.x*12) + 'px; top: ' + (index.y*12) + 'px;"></div>';
 	}
 	
 	// Construct each frame for the initial draw
@@ -120,7 +120,7 @@ var party = party || {};
 		// Get the page of visible tiles
 		getVisibleTiles();
 		// Start the counter
-		counter_timer = setInterval(counterDraw, 100);
+		counter_timer = setInterval(counterDraw, 60);
 	}
 	
 	// Increment the counter's target
@@ -138,13 +138,13 @@ var party = party || {};
 			return;
 		}
 		
-		if (dif > 10000) {
+		if (dif > 3200) {
 			inc = 73;
-		} else if (dif > 1000) {
+		} else if (dif > 800) {
 			inc = 39;
-		} else if (dif > 500) {
+		} else if (dif > 200) {
 			inc = 17;
-		} else if (dif > 100) {
+		} else if (dif > 50) {
 			inc = 3;
 		}
 		
