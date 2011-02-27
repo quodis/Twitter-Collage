@@ -274,10 +274,9 @@ var party = party || {};
 		// Update the new tile
 		$('#' + pos).css({
 			'background-image': 'url(data:image/gif;base64,' + visible_tiles[pos].imageData + ')',
-			//'border': '2px solid rgb(' + party.index[pos].c.join(',') + ')',
+			'border': '2px solid rgb(' + party.grid[pos].c.join(',') + ')',
 			'z-index': '10'
 		});
-		console.log(party.index[pos].c);
 		
 	}
 	
@@ -293,7 +292,7 @@ var party = party || {};
 	}
 	
 	function poll() {
-		console.log('Getting poll...');
+
 		$.ajax({
 		  url: '/poll.php',
 		  dataType: 'json',
