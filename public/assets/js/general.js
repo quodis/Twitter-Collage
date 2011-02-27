@@ -274,7 +274,8 @@ var party = party || {};
 		// Update the new tile
 		$('#' + pos).css({
 			'background-image': 'url(data:image/gif;base64,' + visible_tiles[pos].imageData + ')',
-			'border': '2px solid rgb(' + party.grid[pos].c.join(',') + ')',
+			//'border': '2px solid rgb(' + party.grid[pos].c.join(',') + ')',
+			'border': '2px solid #3d5ea5',
 			'z-index': '10'
 		});
 		
