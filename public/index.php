@@ -97,8 +97,8 @@ function main()
 
 					<div id="twitter-counter">
 						<dl>
-							<dt><a href="#" title="Tweet" rel="external">Tweet</a></dt>
-							<dd><span>15,234</span></dd>
+							<dt><a href="http://twitter.com/share?related=firefox&text=Join+me+at+the+Firefox+4+Twitter+Party+and+celebrate+the+newest+version&url=http%3A%2F%2Ftwitterparty.mozilla.com&via=firefox" title="Tweet" rel="external">Tweet</a></dt>
+							<dd><span>-</span></dd>
 						</dl>
 					</div><!-- twitter-counter -->
 

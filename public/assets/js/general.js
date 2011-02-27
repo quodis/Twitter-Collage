@@ -10,7 +10,7 @@ var party = party || {};
 		visible_tiles = {},
 		hidden_tiles = {},
 		last_id = 0, // The ID of the newest tile
-		polled_tiles = {}, // Tiles got from the server in "real-time"
+		new_tiles = {}, // Tiles got from the server in "real-time"
 		counter_current = 0,
 		counter_target = 0,
 		counter_timer;
@@ -20,44 +20,38 @@ var party = party || {};
 		
 		// Start the recursive call for each frame
 		initial_draw_timer = setInterval(initialDrawFrame, (1000/party.initial_frames_per_second) );
+	}
+	
+	function tileHtml(tile) {
+		var position,
+			index;
+			
+		// Make sure this is an existing data entry
+		if (!tile) {
+		  return;
+		}
 		
+		// Cache the tile's position
+		position = tile.position;
+		index = party.index[position];
+		if (!index) {
+		  return;
+		}
+		
+		// Add it to the HTML to draw
+		tiles_to_draw = tiles_to_draw + '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + tile.imageData + '); left: ' + (index.x*12) + 'px; top: ' + (index.y*12) + 'px;"></div>';
 	}
 	
 	// Construct each frame for the initial draw
 	function initialDrawFrame() {
 		
 		var tiles_to_draw = "",
-			tile,
-      position,
-      index,
-      x = 0,
-      y = 0,
 			i = 0,
 			j = (tile_counter + party.initial_tiles_per_frame);
 		
 		// Draw tiles_per_frame tiles and draw them
 		for (i = tile_counter; i < j; i += 1) {
-			
-			// Make sure this is an existing data entry
-			tile = visible_tiles[i];
-			if (!tile) {
-			  continue;
-			}
-			
-			// Cache the tile's position
-			position = tile.position;
-			index = party.index[position];
-			if (!index) {
-			  continue;
-			}
-			
-			// Calculate top/left position of the tile
-			x = index.x * party.tile_size;
-			y = index.y * party.tile_size;
-			
-			// Add it to the HTML to draw
-			tiles_to_draw = tiles_to_draw + '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + tile.imageData + '); left: ' + x + 'px; top: ' + y + 'px;"></div>';
-
+			tiles_to_draw = tiles_to_draw + tileHtml(visible_tiles[i]);
 		}
 		tile_counter = i;
 		
@@ -126,7 +120,7 @@ var party = party || {};
 		// Get the page of visible tiles
 		getVisibleTiles();
 		// Start the counter
-		counter_timer = setInterval(counterDraw, 100);
+		counter_timer = setInterval(counterDraw, 60);
 	}
 	
 	// Increment the counter's target
@@ -145,9 +139,11 @@ var party = party || {};
 		}
 		
 		if (dif > 10000) {
-			inc = 19;
+			inc = 73;
+		} else if (dif > 2000) {
+			inc = 39;
 		} else if (dif > 1000) {
-			inc = 9;
+			inc = 17;
 		} else if (dif > 100) {
 			inc = 3;
 		}
@@ -157,20 +153,25 @@ var party = party || {};
 		
 	}
 	
+	// Reload the whole page
+	function reloadPage() {
+		window.location = window.location;
+	}
+	
 	// Get the last complete page of tiles
 	function getVisibleTiles() {
 		
 		// Check if we have a complete page. If not, try again later
 		if (party.last_page == 0) {
-			setTimeout(getVisibleTiles, 60 * 1000);
+			reloadPage();
 			return;
 		}
 		
-		// Request URL
-		var url = party.store_url + '/pages/page_' + party.last_page + '.json';
-		
 		// Show the loading
 		loadingShow();
+		
+		// Request URL
+		var url = party.store_url + '/pages/page_' + party.last_page + '.json';
 		
 		// Get the first visible page from server
 		$.getJSON(url, function(data) {
@@ -200,7 +201,7 @@ var party = party || {};
 		
 		// Check if we have a second complete page. If not, try again later
 		if ((party.last_page-1) == 0) {
-			setTimeout(getHiddenTiles, 60 * 1000);
+			reloadPage();
 			return;
 		}
 		
@@ -225,6 +226,14 @@ var party = party || {};
 		});
 	}
 	
+	function drawNewTiles() {
+		// What tiles to draw?
+		// At what speed?
+		// Hide previous
+			// Choosing which to keep
+			
+	}
+	
 	// Start the Real-time polling
 	function startPolling() {
 		
@@ -246,9 +255,11 @@ var party = party || {};
 				if (data.last_id > last_id) {
 					last_id = data.last_id;
 				}
+				console.log('data.last_id: ' + data.last_id);
+				console.log('last_id: ' + last_id);
 				
 				// Append the data locally
-				$.extend(polled_tiles, data.tiles);
+				$.extend(new_tiles, data.tiles);
 				
 			}
 		});
