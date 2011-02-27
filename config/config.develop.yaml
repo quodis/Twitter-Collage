@@ -5,6 +5,7 @@ App:
     # url
     url: http://dev.twitterparty.quodis.com
 Store:
+    url: http://dev.twitterparty.quodis.com/store
     path: /servers/develop/twitterparty/public/store
     filePermissions: 664
     dirPermissions: 775
@@ -19,7 +20,7 @@ Config:
     group: quodis
 Twitter:
     urlSearch: "http://search.twitter.com/search.json"
-    terms: "wordsthatcanstartawar"
+    terms: "#marchwish"
     rpp: 100
     pageLimit: 30
     timeout:
@@ -79,11 +80,13 @@ UI:
     gaEnabled: "0"
     gaId: ""
     title: "Firefox 4 Twitter Party"
-    keywords: "Mozilla,Firefox, Firefox 4, Collage, Twitter,Tweet"
+    keywords: "Mozilla,Firefox, Firefox 4, Collage, Twitter, Tweet"
     description: "Firefox 4 Twitter Party is a visualization of Firefox 4 activity on Twitter. It is an experiment with exclusively open web tools and technologies."
     js: 
         general: "/assets/js/general.js?v=1"
         config: "/assets/js/config.js?v=1"
+    js-config:
+        grid: "/config/grid.js?v=1"
     css:
         main: "/assets/css/ftp.css?v=1"
         mosaic: "/assets/css/mosaic.css?v=1"

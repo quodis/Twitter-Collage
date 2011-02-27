@@ -5,6 +5,7 @@ App:
     # url
     url: http://twitterparty.quodis.worker
 Store:
+    url: http://twitterparty.quodis.worker/store
     path: /servers/sites/quodis/twitterparty/public/store
     filePermissions: 664
     dirPermissions: 775
@@ -19,9 +20,9 @@ Config:
     group: www-data
 Twitter:
     urlSearch: "http://search.twitter.com/search.json"
-    terms: "wordsthatcanstartawar"
+    terms: "#marchwish"
     rpp: 100
-    pageLimit: 1
+    pageLimit: 15
     timeout:
         apiCall: 5
         imgFile: 1
@@ -39,8 +40,8 @@ Jobs:
         period: 10
     image-process:
         period: 1
-        dbLimit: 10
-        imgLimit: 100
+        dbLimit: 100
+        imgLimit: 2500
     mosaic-build:
         period: 5
 Cache:
@@ -84,6 +85,8 @@ UI:
     js: 
         general: "/assets/js/general.js?v=1"
         config: "/assets/js/config.js?v=1"
+    js-config:
+        grid: "/config/grid.js?v=1"
     css:
         main: "/assets/css/ftp.css?v=1"
         mosaic: "/assets/css/mosaic.css?v=1"

@@ -28,7 +28,7 @@ function main()
 
 	// NOTE: first loop sleep, avoids sending too many requests to twitter if loop is crashing
 	// - if process crashes it is restarted within 1 sec by superivise, and it is likely to crash again, and again...
-	$sleep = ceil($period / 2);
+	$sleep = 3;
 
 	while (TRUE && $processed < $imgLimit)
 	{
@@ -51,7 +51,7 @@ function main()
 			// download
 			if ($fileName = Image::download($tweet['imageUrl'], $tweet['id']))
 			{
-				$time['download'] = microtime(TRUE);
+				$time['dwnld'] = microtime(TRUE);
 
 				try
 				{
@@ -67,32 +67,32 @@ function main()
 					$encoded = Image::makeTile($defaultPic, $tweet['id'], $tweet['position']);
 				}
 
-				$time['make-tile'] = microtime(TRUE);
+				$time['tile'] = microtime(TRUE);
 
 				// update db with image data
 				Tweet::updateImage($tweet['id'], $encoded);
 
-				$time['update-db'] = microtime(TRUE);
+				$time['db'] = microtime(TRUE);
 
-				Debug::logMsg('updated tweet id: ' . $tweet['id'] . ' page:' . $tweet['page'] . ' position:' . $tweet['position'] . ' [' . strlen($encoded) . ' bytes] '. Image::fileName('processed', md5($tweet['id']), 'gif'));
+				// debug
+				$log = array();
+				$previous = $start;
+				$value = $start;
+				foreach ($time as $key => $value)
+				{
+					$log[] = $key . ':' . ceil(($value - $previous) * 1000) / 1000;
+					$previous = $value;
+				}
+				$log = 'TIME:' . (ceil(($value - $start) * 1000) / 1000) . ', ' .implode(', ', $log);
+				Debug::logMsg('id:' . $tweet['id'] . ' [' . $tweet['page'] . ',' . $tweet['position'] . '] [' . strlen($encoded) . ' bytes] ' . $log .' > ' .Image::fileName('processed', md5($tweet['id']), 'gif'));
 			}
 			else Debug::logError('fail download tweet id:' . $tweet['id'] . ' page:' . $tweet['page'] . ' position: ' . $tweet['position'] . ' from url:' . $tweet['imageUrl']);
-
-			$log = array();
-			$previous = $start;
-			$value = $start;
-			foreach ($time as $key => $value)
-			{
-				$log[] = $key . ': ' . ceil(($value - $previous) * 1000) / 1000;
-				$previous = $value;
-			}
-			dd('TIME! id:' . $tweet['id'] . ' > total:' . (ceil(($value - $start) * 1000) / 1000) . ', ' .implode(', ', $log));
 		}
 
 		// sleep?
 		$elapsed = time() - $start;
 		$sleep = $period - $elapsed;
-		if ($sleep < 1) $sleep = 1;
+		if ($sleep < 0) $sleep = 0;
 
 		Debug::logMsg('OK! ... images processed: ' . $processed . '/' . $imgLimit . ' ... sleeping for ' . $sleep . ' seconds ...');
 	}
