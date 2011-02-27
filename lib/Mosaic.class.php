@@ -192,7 +192,7 @@ class Mosaic
 		chmod($fileName, octdec(self::$_config['Store']['filePermissions']));
 		chgrp($fileName, self::$_config['Store']['group']);
 
-		return count($fileData);
+		return count($fileData['tiles']);
 	}
 
 
@@ -275,7 +275,7 @@ class Mosaic
 
 			$fileData = self::getPageData($pageNo);
 
-			if (count($fileData) < self::getPageSize()) break;
+			if (!isset($fileData ['tiles']) || count($fileData ['tiles']) < self::getPageSize()) break;
 		}
 		while (TRUE);
 
