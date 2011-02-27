@@ -274,9 +274,10 @@ var party = party || {};
 		// Update the new tile
 		$('#' + pos).css({
 			'background-image': 'url(data:image/gif;base64,' + visible_tiles[pos].imageData + ')',
-			'border': '2px solid rgb(' + party.index[pos].c.join(',') + ')',
+			//'border': '2px solid rgb(' + party.index[pos].c.join(',') + ')',
 			'z-index': '10'
 		});
+		console.log(party.index[pos].c);
 		
 	}
 	
@@ -284,7 +285,7 @@ var party = party || {};
 	function startPolling() {
 
 		// Start the recursive "tile updater"
-		draw_tiles_timer = setInterval(drawNewTiles, 250);
+		draw_tiles_timer = setInterval(drawNewTiles, 1250);
 		// Start the recursive poller
 		poll();
 		polling_timer = setInterval(poll, (party.polling_timer_seconds * 1000));
