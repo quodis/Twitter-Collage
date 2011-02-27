@@ -18,7 +18,7 @@ var party = party || {};
 		total_positions = 0,
 		draw_tiles_timer,
 		draw_tiles_previous_pos = 0;
-		
+	
 	// Draw the Initial Mosaic
 	function initialDraw() {
 		
