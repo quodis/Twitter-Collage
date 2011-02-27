@@ -148,10 +148,7 @@ class Image
 		{
 			$overlay = new Imagick($overlayFile);
 			//$image->setImageColorspace($overlay->getImageColorspace() );
-
-			dd('colorspace overlay:' . $overlay->getImageDepth());
-			dd('colorspace image:' . $image->getImageDepth());
-
+			//dd('colorspace overlay:' . $overlay->getImageDepth() . ' image:' . $image->getImageDepth());
 			$image->compositeImage($overlay, Imagick::COMPOSITE_HARDLIGHT, 0, 0);
 			$image->writeImage($destination);
 
