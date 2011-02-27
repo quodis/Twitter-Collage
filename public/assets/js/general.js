@@ -28,14 +28,14 @@ var party = party || {};
 			
 		// Make sure this is an existing data entry
 		if (!tile) {
-		  return;
+		  return '';
 		}
 		
 		// Cache the tile's position
 		position = tile.position;
 		index = party.index[position];
 		if (!index) {
-		  return;
+		  return '';
 		}
 		
 		// Add it to the HTML to draw
@@ -255,7 +255,7 @@ var party = party || {};
 				if (data.payload.last_id > last_id) {
 					last_id = data.payload.last_id;
 				}
-				console.log('data.last_id: ' + data.last_id);
+				console.log('data.payload.last_id: ' + data.payload.last_id);
 				console.log('last_id: ' + last_id);
 				
 				// Append the data locally
