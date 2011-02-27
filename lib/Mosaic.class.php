@@ -102,22 +102,41 @@ class Mosaic
 	/**
 	 * set (and index) page data
 	 *
-	 * @param $grid array (by reference)
+	 * @param Imagick $image
 	 */
-	public static function setPageGrid(array & $grid)
+	public static function setConfigFromImage($image)
 	{
-		$index = 0;
+		// analyse image
+		$grid = array();
+		$iterator = $image->getPixelIterator();
+		foreach($iterator as $rowIx => $rowPixels)
+		{
+			foreach ($rowPixels as $columnIx => $pixel)
+			{
+				$color = $pixel->getColor();
 
+				if (implode($color) == '2552552551') continue;
+
+				$grid[$rowIx][$columnIx] = array($color['r'], $color['g'], $color['b']);
+			}
+		}
+
+		// make config (grid + index)
+		$index = 0;
 		foreach ($grid as $rowIx => $rowPixels)
 		{
 			foreach ($rowPixels as $columnIx => $color)
 			{
+				// store grid
+
 				self::$_pageConfig['grid'][$rowIx][$columnIx] = array(
 					'c' => $color,
 					'x' => $columnIx,
 					'y' => $rowIx,
 					'i' => $index,
 				);
+
+				// and index
 
 				self::$_pageConfig['index'][$index] = array(
 					'x' => $columnIx,
@@ -127,7 +146,10 @@ class Mosaic
 				$index++;
 			}
 		}
+	}
 
+	public static function saveConfig()
+	{
 		$fileName = self::_getPageConfigFileName();
 
 		file_put_contents($fileName, json_encode(self::$_pageConfig));
@@ -137,6 +159,39 @@ class Mosaic
 		return $fileName;
 	}
 
+	public static function saveJsConfig()
+	{
+		$fileName = self::$_config['Store']['path'] . '/config/grid.js';
+
+		$contents = '/**
+ * Firefox 4 Twitter Party
+ * by Mozilla, Quodis © 2011
+ * http://www.mozilla.com
+ * http://www.quodis.com
+ *
+ * Licensed under a Creative Commons Attribution Share-Alike License v3.0 http://creativecommons.org/licenses/by-sa/3.0/
+ */
+
+/**
+ * data file generated: ' . date('Y-m-d H:i:s') . '
+ */
+
+/**
+ * party.mosaic.grid = array of rows
+ *   row - { 23: cell, ... } // index is column index
+ *   cell - { c: [r,g,b], x: 34, y: 23, i: 1} // i = position
+ * party.mosaic.index = array of pos
+ *   pos - {x: 34, y: 23}
+ */
+party.mosaic = ' . json_encode(self::$_pageConfig) . ';
+';
+
+		file_put_contents($fileName, $contents);
+		chmod($fileName, octdec(self::$_config['Store']['filePermissions']));
+		chgrp($fileName, self::$_config['Store']['group']);
+
+		return $fileName;
+	}
 
 
 	// ---- pages
@@ -207,12 +262,12 @@ class Mosaic
 	{
 		// delete from filesys
 		$command = 'rm ' . self::_getPageDataFileName($pageNo);
-		Debug::logMsg('purgePage page:' .$pageNo , ' command:' . $command);
+		Debug::logMsg('purgePage page:' .$pageNo . ' command:' . $command);
 		shell_exec($command);
 
 		// TODO delete cached page
 
-		// TODO delete current working page from cache (force job to rebuild this page)
+		// TODO delete current working pageN from coache (force job to rebuild this page)
 	}
 
 

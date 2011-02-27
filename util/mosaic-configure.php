@@ -27,36 +27,17 @@ function main()
 	if ($image->getImageWidth() != $config['Mosaic']['cols']) Dispatch::now(0, 'FAIL - invalid width is:' . $image->getImageWidth() . ' should be:' . $config['Mosaic']['cols']);
 	if ($image->getImageHeight() != $config['Mosaic']['rows']) Dispatch::now(0, 'FAIL - invalid height is:' . $image->getImageHeight() . ' should be:' . $config['Mosaic']['rows']);
 
-	$iterator = $image->getPixelIterator();
+	// set configuration
+	Mosaic::setConfigFromImage($image);
 
-	foreach($iterator as $rowIx => $rowPixels)
-	{
-		foreach ($rowPixels as $columnIx => $pixel)
-		{
-			$color = $pixel->getColor();
+	// store php config file
+	$configFileName = Mosaic::saveConfig();
 
-			if (implode($color) == '2552552551') continue;
+	Debug::logMsg('PHP config stored: ' . $configFileName);
 
-			$data[$rowIx][$columnIx] = array($color['r'], $color['g'], $color['b']);
-		}
-	}
+	$jsFileName = Mosaic::saveJsConfig();
 
-	// store the configuration
-	$configFileName = Mosaic::setPageGrid($data);
-
-	Debug::logMsg('config stored into file: ' . $configFileName);
-
-	$config = Mosaic::getPageConfig();
-
-	// get config (meanwhile indexed)
-	foreach ($config['index'] as $position => $foo)
-	{
-		$file = Image::makeTileOverlay($position);
-
-		if (!$file) Dispatch::now(0, 'FAIL pos:' . $position);
-
-		Debug::logMsg('generated: ' . $position . ' > ' . $file);
-	}
+	Debug::logMsg('JS config stored: ' . $jsFileName);
 
 	Dispatch::now(1, 'OK');
 
