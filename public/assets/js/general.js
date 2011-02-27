@@ -11,7 +11,7 @@ var party = party || {};
 		visible_tiles_random = [],
 		hidden_tiles = {},
 		last_id = 0, // The ID of the newest tile
-		new_tiles = {}, // Tiles got from the server in "real-time"
+		new_tiles = [], // Tiles got from the server in "real-time"
 		counter_current = 0,
 		counter_target = 0,
 		counter_timer,
@@ -47,7 +47,7 @@ var party = party || {};
 		
 		// Cache the tile's position
 		position = tile.position;
-		index = party.index[position];
+		index = party.mosaic.index[position];
 		if (!index) {
 		  return '';
 		}
@@ -188,7 +188,7 @@ var party = party || {};
 		
 		// Check if we have a complete page. If not, try again later
 		if (party.last_page == 0) {
-			reloadPage();
+			setTimeout(reloadPage, 60 * 1000);
 			return;
 		}
 		
@@ -227,7 +227,7 @@ var party = party || {};
 
 		// Check if we have a second complete page. If not, try again later
 		if ((party.last_page-1) == 0) {
-			reloadPage();
+			setTimeout(reloadPage, 60 * 1000);
 			return;
 		}
 		
@@ -254,15 +254,36 @@ var party = party || {};
 	
 	function drawNewTiles() {
 		// Get a random position
-		var pos = 1 + Math.floor(Math.random() * total_positions),
-			old_visible;
+		var pos,
+			old_visible,
+			new_tile,
+			i;
 			
-		// Copy the visible
-		old_visible = $.extend({}, visible_tiles[pos]);
-		// Replace the visible with the hidden
-		$.extend(visible_tiles[pos], hidden_tiles[pos]);
-		// Replace the hidden with the visible
-		$.extend(hidden_tiles[pos], old_visible);
+		// Priority to new tiles
+		new_tile = new_tiles[0];
+		if (new_tile) {
+			// Get the position
+			pos = new_tile.position;
+			// Check if we should keep the visible or hidden tile from this position
+			// depending on which is the most recent
+			if (visible_tiles[pos].id > hidden_tiles[pos].id) {
+				$.extend(hidden_tiles[pos], old_visible);
+			}
+			// Write the new tile over the visible
+			$.extend(visible_tiles[pos], new_tile);
+			// Remove this tile from the new tiles
+			new_tiles.shift();
+			
+		} else {
+			// Choose a random position
+			pos = 1 + Math.floor(Math.random() * total_positions);
+			// Copy the visible
+			old_visible = $.extend({}, visible_tiles[pos]);
+			// Replace the visible with the hidden
+			$.extend(visible_tiles[pos], hidden_tiles[pos]);
+			// Replace the hidden with the visible
+			$.extend(hidden_tiles[pos], old_visible);
+		}
 		
 		// Hide the previous tiles' border and z-index
 		$('#' + draw_tiles_previous_pos).css({
@@ -271,11 +292,13 @@ var party = party || {};
 		});
 		draw_tiles_previous_pos = pos;
 		
+		// Get the color of this tile
+		i = party.mosaic.index[pos];
+		
 		// Update the new tile
 		$('#' + pos).css({
 			'background-image': 'url(data:image/gif;base64,' + visible_tiles[pos].imageData + ')',
-			//'border': '2px solid rgb(' + party.grid[pos].c.join(',') + ')',
-			'border': '2px solid #3d5ea5',
+			'border': '1px solid rgb(' + party.mosaic.grid[i.x][i.y].c.join(',') + ')',
 			'z-index': '10'
 		});
 		
@@ -285,7 +308,7 @@ var party = party || {};
 	function startPolling() {
 
 		// Start the recursive "tile updater"
-		draw_tiles_timer = setInterval(drawNewTiles, 1250);
+		draw_tiles_timer = setInterval(drawNewTiles, 250);
 		// Start the recursive poller
 		poll();
 		polling_timer = setInterval(poll, (party.polling_timer_seconds * 1000));
@@ -306,7 +329,7 @@ var party = party || {};
 				}
 				
 				// Append the data locally
-				$.extend(new_tiles, data.payload.tiles);
+				new_tiles.concat(data.payload.tiles);
 				
 			}
 		});
