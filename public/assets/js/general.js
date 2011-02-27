@@ -8,6 +8,7 @@ var party = party || {};
 		tile_counter = 0,
 		frame_counter = 0,
 		visible_tiles = {},
+		visible_tiles_random = [],
 		hidden_tiles = {},
 		last_id = 0, // The ID of the newest tile
 		new_tiles = {}, // Tiles got from the server in "real-time"
@@ -17,6 +18,17 @@ var party = party || {};
 		
 	// Draw the Initial Mosaic
 	function initialDraw() {
+		
+		// Create an array for the random order
+		var vtl = visible_tiles.length,
+			i;
+		for (i = 0; i < vtl; i += 1) {
+			visible_tiles_random.push(i);
+		}
+		// Randomnize!
+		visible_tiles_random.sort(function(){
+			return (Math.round(Math.random())-0.5);
+		});
 		
 		// Start the recursive call for each frame
 		initial_draw_timer = setInterval(initialDrawFrame, (1000/party.initial_frames_per_second) );
@@ -47,11 +59,13 @@ var party = party || {};
 		
 		var tiles_to_draw = "",
 			i = 0,
-			j = (tile_counter + party.initial_tiles_per_frame);
+			j = (tile_counter + party.initial_tiles_per_frame),
+			p;
 		
 		// Draw tiles_per_frame tiles and draw them
 		for (i = tile_counter; i < j; i += 1) {
-			tiles_to_draw = tiles_to_draw + tileHtml(visible_tiles[i]);
+			p = visible_tiles_random[i];
+			tiles_to_draw = tiles_to_draw + tileHtml(visible_tiles[p]);
 		}
 		tile_counter = i;
 		
@@ -199,7 +213,7 @@ var party = party || {};
 	
 	// Get the previous
 	function getHiddenTiles() {
-		console.log('Getting hidden tiles...');
+
 		// Check if we have a second complete page. If not, try again later
 		if ((party.last_page-1) == 0) {
 			reloadPage();
@@ -220,7 +234,7 @@ var party = party || {};
 			
 			// Write the data locally
 			hidden_tiles = data.tiles;
-			console.log('Got hidden tiles');
+
 			// Start the Real-time polling
 			startPolling();
 			
@@ -237,7 +251,7 @@ var party = party || {};
 	
 	// Start the Real-time polling
 	function startPolling() {
-		console.log('Starting polling...');
+
 		// Start the recursive "tile updater"
 		
 		// Start the recursive poller
@@ -260,7 +274,7 @@ var party = party || {};
 				}
 				console.log('data.payload.last_id: ' + data.payload.last_id);
 				console.log('last_id: ' + last_id);
-				console.log(new_tiles);
+				console.log(new_tiles.length);
 				
 				// Append the data locally
 				$.extend(new_tiles, data.payload.tiles);
