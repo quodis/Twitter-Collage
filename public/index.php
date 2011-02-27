@@ -26,6 +26,8 @@ function main()
 
 	$config['UI']['options']['last_page'] = Mosaic::getCurrentWorkingPageNo() - 1;
 
+	$jsMosaicConfig = $config['Store']['url'] . $config['UI']['js-config']['grid'];
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,6 +37,7 @@ function main()
 		<title><?=$config['UI']['title']?></title>
 
 		<meta charset="utf-8" />
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="keywords" content="<?=$config['UI']['keywords']?>" />
 		<meta name="description" content="<?=$config['UI']['description']?>" />
@@ -55,7 +58,7 @@ function main()
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
 		<script type="text/javascript" src="/assets/js/jquery.tipsy.js"></script>
 		<script type="text/javascript" src="<?=$config['UI']['js']['general']?>"></script>
-		<script type="text/javascript" src="<?=$config['UI']['js']['config']?>"></script>
+		<script type="text/javascript" src="<?=$jsMosaicConfig?>"></script>
 		<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
 

@@ -30,32 +30,44 @@ function main()
 	$classes = array();
 	if ($isOldBrowser) $classes[] = 'old-browser';
 
+	$config['UI']['options']['last_page'] = Mosaic::getCurrentWorkingPageNo() - 1;
+
+	$jsMosaicConfig = $config['Store']['url'] . $config['UI']['js-config']['grid'];
+
 	?>
 <!DOCTYPE html>
 <html lang="en">
 
 	<head>
 
+		<title><?=$config['UI']['title']?></title>
+
 		<meta charset="utf-8" />
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="keywords" content="<?=$config['UI']['keywords']?>" />
 		<meta name="description" content="<?=$config['UI']['description']?>" />
 		<meta name="author" content="Quodis" />
 		<meta name="copyright" content="© 2011" />
 		<meta name="distribution" content="global" />
 
-		<link rel="shortcut icon" href="/assets/imgs/favicon.png">
-
-		<title><?=$config['UI']['title']?></title>
-
+		<!-- stylesheets -->
 		<link href="assets/css/reset.css" type="text/css" rel="stylesheet" />
 		<link rel="stylesheet" href="<?=$config['UI']['css']['main']?>" type="text/css" media="screen, projection" />
 		<link rel="stylesheet" href="<?=$config['UI']['css']['mosaic']?>" type="text/css" media="screen, projection" />
-		<link href="assets/css/debug.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="<?=$config['UI']['css']['dashboard']?>" type="text/css" media="screen, projection" />
 
-		<script type="text/javascript" src="assets/js/jquery-1.4.2.min.js" charset="utf-8"></script>
+		<link rel="shortcut icon" href="assets/img/global/favicon.ico" />
+		<link rel="apple-touch-icon" type="image/png" href="">
+		<link rel="image_src" href="">
+
+		<!-- scripts -->
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+		<script type="text/javascript" src="/assets/js/jquery.tipsy.js"></script>
+		<script type="text/javascript" src="<?=$config['UI']['js']['general']?>"></script>
+		<script type="text/javascript" src="<?=$jsMosaicConfig?>"></script>
+		<script type="text/javascript" src="<?=$config['UI']['js']['dashboard']?>"></script>
+		<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
 	</head>
 
@@ -153,7 +165,9 @@ function main()
 	(function($) {
 <?php if (!$isOldBrowser) { ?>
 
-		eval('var config = <?=json_encode(Mosaic::getPageConfig())?>');
+		$.extend(party, <?=json_encode($config['UI']['options'])?>);
+
+		Dashboard.init( <?=json_encode($config['UI']['options'])?> );
 
 		config.tileSize = <?=$config['Mosaic']['tileSize']?>;
 
