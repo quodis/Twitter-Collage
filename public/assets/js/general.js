@@ -120,7 +120,7 @@ var party = party || {};
 		// Get the page of visible tiles
 		getVisibleTiles();
 		// Start the counter
-		counter_timer = setInterval(counterDraw, 60);
+		counter_timer = setInterval(counterDraw, 100);
 	}
 	
 	// Increment the counter's target
@@ -140,9 +140,9 @@ var party = party || {};
 		
 		if (dif > 10000) {
 			inc = 73;
-		} else if (dif > 2000) {
-			inc = 39;
 		} else if (dif > 1000) {
+			inc = 39;
+		} else if (dif > 500) {
 			inc = 17;
 		} else if (dif > 100) {
 			inc = 3;
@@ -252,14 +252,14 @@ var party = party || {};
 		  success: function(data) {
 			
 				// Update last id
-				if (data.last_id > last_id) {
-					last_id = data.last_id;
+				if (data.payload.last_id > last_id) {
+					last_id = data.payload.last_id;
 				}
 				console.log('data.last_id: ' + data.last_id);
 				console.log('last_id: ' + last_id);
 				
 				// Append the data locally
-				$.extend(new_tiles, data.tiles);
+				$.extend(new_tiles, data.payload.tiles);
 				
 			}
 		});
