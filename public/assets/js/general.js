@@ -255,12 +255,7 @@ var party = party || {};
 		// Get a random position
 		var pos = 1 + Math.floor(Math.random() * total_positions),
 			old_visible;
-		
-		console.log('Current visible:');
-		console.log(visible_tiles[pos]);
-		console.log('Current hidden:');
-		console.log(hidden_tiles[pos]);
-		
+			
 		// Copy the visible
 		old_visible = $.extend({}, visible_tiles[pos]);
 		// Replace the visible with the hidden
@@ -268,15 +263,10 @@ var party = party || {};
 		// Replace the hidden with the visible
 		$.extend(hidden_tiles[pos], old_visible);
 		
-		
-		console.log('New visible:');
-		console.log(visible_tiles[pos]);
-		console.log('New hidden:');
-		console.log(hidden_tiles[pos]);
-		
 		// Update
 		$('#' + pos).css({
-			'background-image': 'none'
+			'background-image': 'url(data:image/gif;base64,' + visible_tiles[pos].imageData + ')',
+			'border': '2px solid #ff0000'
 		});
 		
 	}
@@ -285,7 +275,7 @@ var party = party || {};
 	function startPolling() {
 
 		// Start the recursive "tile updater"
-		draw_tiles_timer = setInterval(drawNewTiles, 100);
+		draw_tiles_timer = setInterval(drawNewTiles, 400);
 		// Start the recursive poller
 		poll();
 		polling_timer = setInterval(poll, (party.polling_timer_seconds * 1000));
