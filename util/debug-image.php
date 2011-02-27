@@ -12,11 +12,19 @@
  */
 function main()
 {
+	global $argv;
+
 	DEFINE('CLIENT', 'script');
 	DEFINE('CONTEXT', __FILE__);
 	include dirname(__FILE__) .  '/../bootstrap.php';
 
-	$tweet = Tweet::getById('4012');
+	if (!isset($argv[1])) Dispatch::now(0, 'usage: debug-image 3121');
+
+	$id = (int)$argv[1];
+
+	$tweet = Tweet::getById($id);
+
+	if (!$tweet) Dispatch::now(0, 'not found');
 
 	$url = $tweet['imageUrl'];
 
@@ -32,7 +40,7 @@ function main()
 
 	dd('processed:' . $processed);
 
-	Dispatch::now(1);
+	Dispatch::now(1, ';-)');
 
 } // main()
 

@@ -22,6 +22,8 @@ function main()
 
 	$period = $config['Jobs']['mosaic-build']['period'];
 
+	$pageSize = Mosaic::getPageSize();
+
 	while (TRUE)
 	{
 		// start time
@@ -37,6 +39,8 @@ function main()
 		$elapsed = time() - $start;
 		$sleep = $period - $elapsed;
 		if ($sleep < 1) $sleep = 1;
+
+		if ($tweetCount == $pageSize) $sleep = 0;
 
 		Debug::logMsg('OK! ... updated page:' . $pageNo . ' ... page has ' . $tweetCount . ' tweets ... sleeping for ' . $sleep . ' seconds ...');
 		sleep($sleep);

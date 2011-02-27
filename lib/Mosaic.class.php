@@ -129,7 +129,7 @@ class Mosaic
 			{
 				// store grid
 
-				self::$_pageConfig['grid'][$rowIx][$columnIx] = array(
+				self::$_pageConfig['grid'][$columnIx][$rowIx] = array(
 					'c' => $color,
 					'x' => $columnIx,
 					'y' => $rowIx,

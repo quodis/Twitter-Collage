@@ -169,8 +169,10 @@ function main()
 
 		Dashboard.init( <?=json_encode($config['UI']['options'])?> );
 
+
 		config.tileSize = <?=$config['Mosaic']['tileSize']?>;
 
+		alert("!");
 		//console.log('GRID CONFIG', config);
 
 		/**
