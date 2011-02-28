@@ -187,7 +187,7 @@ function main()
 	<script type="text/javascript">
 	//<![CDATA[
 	(function($) {
-		$.extend(party, <?=json_encode($config['UI']['options'])?>);
+		$.extend(party, <?=json_encode($uiOptions)?>);
 	})(jQuery);
 	//]]>
 	</script>
