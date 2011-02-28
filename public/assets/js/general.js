@@ -18,6 +18,37 @@ var party = party || {};
 		total_positions = 0,
 		draw_tiles_timer;
 	
+	/**
+	 * NOTE: jQuery handling of scroll position has poor bruwser-compatibility
+	 * borrowed from
+	 * http://www.softcomplex.com/docs/get_window_size_and_scrollbar_position.html
+	 * 
+	 * @return integer
+	 */
+	function f_scrollLeft() 
+	{
+	    return f_filterResults (
+	        window.pageXOffset ? window.pageXOffset : 0,
+	        document.documentElement ? document.documentElement.scrollLeft : 0,
+	        document.body ? document.body.scrollLeft : 0
+	    );
+	}
+	/**
+	 * NOTE: jQuery handling of scroll position has poor bruwser-compatibility
+	 * borrowed from
+	 * http://www.softcomplex.com/docs/get_window_size_and_scrollbar_position.html
+	 * 
+	 * @return integer
+	 */
+	function f_scrollTop() 
+	{
+	    return f_filterResults (
+	        window.pageYOffset ? window.pageYOffset : 0,
+	        document.documentElement ? document.documentElement.scrollTop : 0,
+	        document.body ? document.body.scrollTop : 0
+	    );
+	}
+	
 	// Draw the Initial Mosaic
 	function initialDraw() {
 		
@@ -150,8 +181,8 @@ var party = party || {};
 		// Bind the hover action
         party.canvas.bind('mousemove', function(ev) {
             var offset = party.canvas.offset(),
-				x = Math.ceil((ev.clientX - offset.left) / 12) - 1,
-				y = Math.ceil((ev.clientY - offset.top) / 12) - 1,
+				x = Math.ceil((ev.clientX + f_scrollLeft() - offset.left) / 12) - 1,
+				y = Math.ceil((ev.clientY + f_scrollTop() - offset.top) / 12) - 1,
 				pos;
 				
             if (x < 0 || y < 0) {
@@ -177,13 +208,16 @@ var party = party || {};
 		}
 		
 		b.container.hide();
-		b.username_a.text(tile.userName).attr('title', tile.userName).attr('href', 'http://twitter.com/' + tile.userName);
+		b.username_a.text(tile.userName).attr('href', 'http://twitter.com/' + tile.userName);
 		b.avatar_a.attr('title', tile.userName).attr('href', 'http://twitter.com/' + tile.userName);
-		b.avatar_img.attr('src', tile.imageUrl).attr('alt', tile.userName);
+		b.avatar_img.attr('src', tile.imageUrl);
 		b.p.text(tile.contents);
+		b.time_a.attr('href', 'http://twitter.com/' + tile.userName + '/status/' + tile.twitterId).text(tile.createdDate);
+		b.time.attr('datetime', tile.createdDate);
+		
 		b.container.css({
-			left: (x * 12) + 'px',
-			top: (y * 12) + 'px'
+			left: ((x * 12) + 8) + 'px',
+			top: ((y * 12) - 10) + 'px'
 		}).removeClass().addClass('bubble dark-orange top-left').show();
 		
 	}
@@ -339,9 +373,6 @@ var party = party || {};
 			// Replace the hidden with the visible
 			$.extend(hidden_tiles[pos], old_visible);
 		}
-		
-		// Get the color of this tile
-		i = party.mosaic.index[pos];
 		
 		// Update the new tile
 		$('#' + pos).css({

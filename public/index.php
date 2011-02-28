@@ -144,12 +144,12 @@ function main()
 			
 				<header>
 										
-					<h1><a href="#" title="" rel="author external"></a><span> wrote</span></h1>
+					<h1><a href="#" title="Twitter profile" rel="author external"></a><span> wrote</span></h1>
 					<a href="#" title="" rel="author external" class="twitter-avatar">	
-					  <img src="" alt="" width="48" height="48" />
+					  <img src="" alt="Twitter profile picture" width="48" height="48" />
 					</a>
 				
-				  <time datetime="" pubdate><a href="#" rel="bookmark external" title="permalink"></a></time>
+				  <time datetime="" pubdate><a href="#" rel="bookmark external" title="Permalink"></a></time>
 					
 				</header>
 				
