@@ -168,8 +168,8 @@ var party = party || {};
 	}
 	
 	
-	function showBubble(pos) {
-		var tile = party.visible_tiles[pos],
+	function showBubble(pos, x, y) {
+		var tile = visible_tiles[pos],
 			b = party.bubble;
 		if (!tile || !b) {
 			return;
@@ -184,6 +184,7 @@ var party = party || {};
 		b.avatar_img.attr('src', tile.imageUrl);
 		b.avatar_img.attr('alt', tile.userName);
 		b.p.text(tile.contents);
+		b.container.removeClass().addClass('dark-orange, top-left');
 		b.container.show();
 		
 	}
