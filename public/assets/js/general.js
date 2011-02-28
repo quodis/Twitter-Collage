@@ -336,6 +336,7 @@ var party = party || {};
 			}
 		});
 	}
+	
 	function getLastId() {
 		return last_id;
 	}
