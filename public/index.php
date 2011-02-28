@@ -16,7 +16,7 @@ include('../lib/localization.php');
 /**
  * escape from global scope
  */
-function main($locale)
+function main($language)
 {
 	header("ETag: PUB" . time());
 	header("Last-Modified: " . gmdate("D, d M Y H:i:s", time()-10) . " GMT");
@@ -39,7 +39,7 @@ function main($locale)
 
 ?>
 <!DOCTYPE html>
-<html lang="<?= $locale ?>">
+<html lang="<?= $language ?>">
 
 	<head>
 
@@ -205,7 +205,7 @@ function main($locale)
 
 try
 {
-	main($locale);
+	main($request_uri[1][0]);
 }
 catch(Exception $e) {
 	Debug::logError($e, 'EXCEPTION ' . $e->getMessage());
