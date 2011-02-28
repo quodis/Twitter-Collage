@@ -52,7 +52,7 @@ var party = party || {};
 		}
 		
 		// Add it to the HTML to draw
-		return '<img class="tile" id="' + position + '" src="data:image/gif;base64,' + tile.imageData + '" style="left: ' + (index.x*12) + 'px; top: ' + (index.y*12) + 'px;" />';
+		return '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + tile.imageData + '); left: ' + (index.x*12) + 'px; top: ' + (index.y*12) + 'px;"></div>';
 	}
 	
 	// Construct each frame for the initial draw
@@ -129,6 +129,11 @@ var party = party || {};
 		party.performance_mode = $.browser.msie;
 		// Cache the canvas
 		party.canvas = $('#mosaic');
+		// Chache the bubble elements
+		party.bubble = {
+			bubble = $('#bubble'),
+			username = this.bubble
+		}
 		// Cache the counter DOM
 		party.counter_canvas = $('#twitter-counter dd span');
 		// Get the page of visible tiles
@@ -293,8 +298,9 @@ var party = party || {};
 		i = party.mosaic.index[pos];
 		
 		// Update the new tile
-		$('#' + pos).attr('src', 'data:image/gif;base64,' + visible_tiles[pos].imageData);
-		
+		$('#' + pos).css({
+			'background-image': 'url(data:image/gif;base64,' + visible_tiles[pos].imageData + ')'
+		});
 		
 	}
 	

@@ -141,6 +141,24 @@ function main()
 		<section id="mosaic">
 			<h2>Firefox Twitter Mosaic</h2>
 			<p id="loading"></p>
+      
+			<article id="bubble" class="bubble">
+			
+				<header>
+										
+					<h1><a href="#" title="" rel="author external"></a><span> wrote</span></h1>
+					<a href="#" title="" rel="author external">	
+					  <img src="" alt="" width="48" height="48" class="twitter-avatar" />
+					</a>
+				
+				  <time datetime="2009-10-09" pubdate><a href="#" rel="bookmark external" title="permalink"></a></time>
+					
+				</header>
+				
+				<p></p>
+				<!-- <span class="hashtag">#fx4</span> -->
+			</article><!-- bubble -->
+			
 		</section>
 
 		<div id="mozilla-badge">
