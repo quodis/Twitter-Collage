@@ -245,7 +245,7 @@ http://www.opensource.org/licenses/mit-license.php
 }
 
 .bubble.bottom-right header{ 
-	background-position-y: bottom; 
+	background-position-y: top; 
 	background-position-x: -640px;
 }
 
