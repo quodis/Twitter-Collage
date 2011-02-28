@@ -50,11 +50,9 @@ var party = party || {};
 		if (!index) {
 		  return '';
 		}
-		var img = new Image();
-		img.src = 'data:image/gif;base64,' + tile.imageData;
 		
 		// Add it to the HTML to draw
-		return '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + img.src + '); left: ' + (index.x*12) + 'px; top: ' + (index.y*12) + 'px;"></div>';
+		return '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + tile.imageData + '); left: ' + (index.x*12) + 'px; top: ' + (index.y*12) + 'px;"></div>';
 	}
 	
 	// Construct each frame for the initial draw
@@ -294,12 +292,9 @@ var party = party || {};
 		// Get the color of this tile
 		i = party.mosaic.index[pos];
 		
-		var img = new Image();
-		img.src = 'data:image/gif;base64,' + visible_tiles[pos].imageData;
-		
 		// Update the new tile
 		$('#' + pos).css({
-			'background-image': 'url(' + img.src + ')'
+			'background-image': 'url(data:image/gif;base64,' + visible_tiles[pos].imageData + ')'
 		});
 		
 	}
