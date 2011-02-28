@@ -486,20 +486,12 @@ var party = party || {};
 }());
 
 
-$(document).ready(function() {
-	
-	// Let's get it started!
-	party.init();
-	
-});
-
-
-/** 
- * jQuery (methods) 
- */
 (function($) {	
 	
-	$.fn.extend({
+	/** 
+	 * jQuery (methods) 
+	 */
+	$.fn.extend( {
 		
 		/**
 		 * rolls numbers to 
@@ -563,5 +555,9 @@ $(document).ready(function() {
 				}, frameMsecs, this, to, milisecs, formatCallback, iteration);
 			}
 		}
-	});
+	} );
+	
+	// Let's get it started!
+	party.init();
+	
 })(jQuery);
