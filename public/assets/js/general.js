@@ -292,9 +292,12 @@ var party = party || {};
 		// Get the color of this tile
 		i = party.mosaic.index[pos];
 		
+		var img = new Image();
+		img.src = 'data:image/gif;base64,' + visible_tiles[pos].imageData;
+		
 		// Update the new tile
 		$('#' + pos).css({
-			'background-image': 'url(data:image/gif;base64,' + visible_tiles[pos].imageData + ')'
+			'background-image': 'url(' + img.src + ')'
 		});
 		
 	}
