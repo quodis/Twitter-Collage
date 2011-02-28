@@ -16,7 +16,10 @@ var party = party || {};
 		counter_target = 0,
 		counter_timer,
 		total_positions = 0,
-		draw_tiles_timer;
+		draw_tiles_timer,
+		state = {
+			active_bubble_pos: 0
+		};
 	
 	/**
 	 * NOTE: jQuery handling of scroll position has poor bruwser-compatibility
@@ -201,8 +204,13 @@ var party = party || {};
 
             // is valid x,y
             if (pos) {
-				showBubble(pos.i, x, y);
-            }
+				if (state.active_bubble_pos != pos.i) {
+					state.active_bubble_pos = pos.i;
+					showBubble(pos.i, x, y);
+				}
+            } else {
+				party.bubble.container.hide();
+			}
         });
 
 	}
