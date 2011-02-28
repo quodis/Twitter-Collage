@@ -354,7 +354,7 @@ body.shade #mosaic {
 	position: relative;
 	display: block;
 	background-color: white;
-	margin: 0 0 20px;
+	margin: 0 0 40px;
 	padding: 40px 10px 10px 10px;
 	-moz-box-shadow: 0px 0px 3px #A6BFCC;
 	-webkit-box-shadow: 0px 0px 3px #A6BFCC;
@@ -362,21 +362,35 @@ body.shade #mosaic {
 	-moz-border-radius: 10px;
 	border-radius: 10px;
 }
-.widget .widget-title {
-	margin-top: -30px;
+.widget h3 {
+	height: 48px;
+	margin: -62px 0 10px;
+	padding: 0 10px;
+	color: white;
+	line-height: 48px;
+	background-color: #1B5898;
+	border-radius: 20px;
+	-moz-border-radius: 20px;
 }
 
 #highlight {
 	min-height: 10px;
 }
 
-body.highlight #highlight {
-	padding: 20px;
-	font-size: 24px;
+#highlight.excite {
+	padding: 10px;
+}
+#highlight.excite h3 {
+	display: none;
 }
 
-body.highlight #highlight p {
-	font-size: 14px;
+#highlight.excite img {
+	width: 32px;
+	height: 32px;
+}
+#highlight.excite p {
+	font-size: 11px;
+	line-height: 16px;
 }
 
 /* -- tweet --*/

@@ -115,6 +115,7 @@ var party = party || {};
 					if ('undefined' !== typeof this.tiles[tile.i]) {
 						$('#' + tile.i).addClass('excite');
 						this.highlightTilePos(tile.i);
+						$('#highlight').addClass('excite');
 					}
 				}
 			}.bind(this) );
@@ -162,7 +163,6 @@ var party = party || {};
 			}
 
 			Dashboard.load( 'poll.php', params, function(data) {
-				console.log(data);
 				$('#last-tweet span').text(data.last_id);
 				var count = this.addTiles(data.tiles);
 				if (count) {
@@ -177,6 +177,7 @@ var party = party || {};
 			$('body').removeClass('user');
 			$('body').removeClass('user-list');
 			$('body').removeClass('tweet-list');
+			$('body').removeClass('user-tweets');
 			$('#highlight').remove();
 			$('#user-list').remove();
 			$('#tweet-list').remove();
@@ -219,7 +220,7 @@ var party = party || {};
 			}
 			$('#highlight .tweet').remove();
 			$('#highlight .user').remove();
-			$('<div class="tweet">' + this.getTweetHtml(tile) + '</div>').appendTo('#widgets #highlight');
+			$('<article class="tweet"><h3>Tweet ' + tile.id + '</h3>' + this.getTweetHtml(tile) + '</article>').appendTo('#widgets #highlight');
 		},
 		
 		getTweetHtml : function(tweet)
@@ -261,14 +262,18 @@ var party = party || {};
 			
 			this.load('/users-by-terms.php', {'terms' : user_name}, function(data) {
 				
+				if (!$('#user-list').length) {
+					var title = 'found ' + data.count;
+					if (data.count == data.total) title += '/' + data.total;
+					title = '<h3>' + title + ' users matching «' + user_name + '»</h3>';
+					$('<div id="user-list" class="widget clearfix">' + title + '</div>').appendTo('#widgets');
+				}
+				
 				if (!data.total) return;
 				
 				for (i = 0; i < data.users.length; i++) {
-					if (!$('#user-list').length) {
-						$('<div id="user-list" class="widget clearfix"></div>').appendTo('#widgets');
-					}
 					for (i = 0; i < data.users.length; i++) {
-						$('<div class="user">' + this.getUserHtml(data.users[i]) + '</div>').appendTo('#widgets #user-list');
+						$('<article class="user">' + this.getUserHtml(data.users[i]) + '</article>').appendTo('#widgets #user-list');
 					}
 					// user-name click
 					$('#user-list .user').click( function(ev) {
@@ -288,20 +293,27 @@ var party = party || {};
 			$('body').addClass('shade user-tweets');
 			
 			if (!$('#highlight').length) {
-				$('<div id="highlight" class="widget clearfix"></div>').appendTo('#widgets');
+				$('<article id="highlight" class="widget clearfix"></article>').appendTo('#widgets');
 			}
-			$('<div class="user"><img src="' + picture_url + '" /><p class="user-name">' + name + '</p></div>').appendTo('#widgets #highlight');
+			var html = '<h3>User</h3>\
+				<img src="' + picture_url + '" />\
+				<p class="user-name">' + name + '</p>';
+			$('<article class="user">' + html + '</article>').appendTo('#widgets #highlight');
 			
 			// load
 			this.load('/tweets-by-username.php', {'user_name' : name}, function(data) {
 				
+				if (!$('#tweet-list').length) {
+					var title = 'found ' + data.count;
+					if (data.count == data.total) title += '/' + data.total;
+					title = '<h3>' + title + ' by «' + name + '»</h3>';
+					$('<div id="tweet-list" class="widget clearfix">' + title + '</div>').appendTo('#widgets');
+				}
+				
 				if (!data.total) return;
 				
-				if (!$('#tweet-list').length) {
-					$('<div id="tweet-list" class="widget clearfix"><div class="widget-title">TITLE</div></div>').appendTo('#widgets');
-				}
 				for (i = 0; i < data.tweets.length; i++) {
-					$('<div class="tweet">' + this.getTweetHtml(data.tweets[i]) + '</div>').appendTo('#widgets #tweet-list');
+					$('<article class="tweet">' + this.getTweetHtml(data.tweets[i]) + '</article>').appendTo('#widgets #tweet-list');
 				}
 			}.bind(this), 'users-by-terms' );
 		},
@@ -314,11 +326,15 @@ var party = party || {};
 			
 			this.load('/tweets-by-terms.php', {'terms' : terms}, function(data) {
 				
+				if (!$('#tweet-list').length) {
+					var title = 'found ' + data.count;
+					if (data.count == data.total) title += '/' + data.total;
+					title = '<h3>' + title + ' tweets matching «' + terms + '»</h3>';
+					$('<div id="tweet-list" class="widget clearfix">' + title + '</div>').appendTo('#widgets');
+				}
+				
 				if (!data.total) return;
 				
-				if (!$('#tweet-list').length) {
-					$('<div id="tweet-list" class="widget clearfix"></div>').appendTo('#widgets');
-				}
 				for (i = 0; i < data.tweets.length; i++) {
 					$('<div class="tweet">' + this.getTweetHtml(data.tweets[i]) + '</div>').appendTo('#widgets #tweet-list');
 				}
@@ -812,8 +828,6 @@ var party = party || {};
 				// jitter
 				else delta += Math.random() * 3 * direction;
 				delta = Math.ceil(delta);
-				
-				console.log(framesRemaining, direction, delta);
 				
 				if (this.num < to) {
 					this.num += delta;
