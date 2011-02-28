@@ -543,76 +543,7 @@ Array.prototype.shuffle = function (){
 }());
 
 
-(function($) {	
-	
-	/** 
-	 * jQuery (methods) 
-	 */
-	$.fn.extend( {
-		
-		/**
-		 * rolls numbers to 
-		 * 
-		 * @param integer to
-		 * @param integer milisecs 
-		 * @param function callback function(value) returns formatted value
-		 * @param integer iteration (used on recursion)
-		 */
-		rollNumbers : function(to, milisecs, formatCallback, iteration) 
-		{
-			var frameMsecs = 100;
-			
-			if (!iteration) {
-				
-				iteration = 0;
-				
-				if (!to) to = 0;
-				this.to = to;
-				this.num = parseInt(this.text());
-				if (!this.num) this.num = 0;
-			}
-			else if (this.to != to) return;
-			iteration++;
-			
-			var milisecs = milisecs - frameMsecs;
-		
-			if (milisecs <= 0) {
-				this.num = to;
-			}
-			else {
-				var framesRemaining = Math.ceil(milisecs / frameMsecs);
-				var direction = this.num > to ? 1 : -1;
-				var delta;
-				
-				if (Math.abs(to - this.num) / framesRemaining > 10) delta = Math.abs(to - this.num) / 10;
-				if (Math.abs(to - this.num) / framesRemaining < 2) {
-					// slow down
-					delta = Math.abs(to - this.num) / 2;
-				}
-				// jitter
-				else delta += Math.random() * 3 * direction;
-				delta = Math.ceil(delta);
-				 
-				console.log(framesRemaining, direction, delta);
-				
-				if (this.num < to) {
-					this.num += delta;
-					if (this.num > to) this.num = to;
-				}
-				else if (this.num > to) {
-					this.num -= delta;
-					if (this.num < to) this.num = to;
-				}
-			}
-			text = ('function' == typeof formatCallback) ? formatCallback(this.num) : this.num;
-			this.text(text);
-			if (this.num != to) {
-				setTimeout( function(el, to, milisecs, formatCallback, iteration) {
-					el.rollNumbers(to, milisecs, formatCallback, iteration);
-				}, frameMsecs, this, to, milisecs, formatCallback, iteration);
-			}
-		}
-	});
+$(document).ready(function() {
 	
 	// Let's get it started!
 	party.init();
@@ -622,4 +553,4 @@ Array.prototype.shuffle = function (){
 		state.mosaic_offset = party.canvas.offset();
 	});
 	
-})(jQuery);
+});
