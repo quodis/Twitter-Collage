@@ -283,12 +283,19 @@ Array.prototype.shuffle = function (){
 	}
 	
 	function showBubble(pos, x, y) {
-		var tile = visible_tiles[pos],
+		var tile,
 			b = party.bubble,
 			position_class,
-			position_css;
-			
+			position_css,
+			g;
+		
+		tile =  = visible_tiles[pos];
 		if (!tile || !b) {
+			return;
+		}
+		
+		g = party.mosaic.grid[pos];
+		if (!g) {
 			return;
 		}
 		
@@ -338,7 +345,7 @@ Array.prototype.shuffle = function (){
 		b.p.text(tile.contents);
 		b.time_a.attr('href', 'http://twitter.com/' + tile.userName + '/status/' + tile.twitterId).text(tile.createdDate);
 		b.time.attr('datetime', tile.createdDate);
-		b.container.css(position_css).removeClass().addClass('bubble dark-orange ' + position_class).show();
+		b.container.css(position_css).removeClass().addClass('bubble ' + position_class + ' color-' + g.r).show();
 		
 	}
 	
