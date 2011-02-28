@@ -14,21 +14,25 @@ function main()
 {
 	global $argv;
 
+	$usage = 'USAGE: page-update 1 OR page-update 1-5 OR page-update 2,3,7,8';
+
 	DEFINE('CLIENT', 'script');
 	DEFINE('CONTEXT', __FILE__);
 	include dirname(__FILE__) . '/../bootstrap.php';
 
-	Db::executeFile(dirname(__FILE__) .'/../schema/tables.sql');
+	// fetch/validate list of pages
+	if (!isset($argv[1])) Dispatch::now(0, $usage);
+	$pageList = Req::getIntegerListFromArg($argv[1]);
+	if (!count($pageList)) Dispatch::now(0, $usage);
 
-	Twitter::reset();
-	Cache::delete(Mosaic::CACHE_KEY_LAST_TWEET);
-	Cache::delete(Mosaic::CACHE_KEY_LAST_TWEET_WITH_IMAGE);
+	// update pages
+	foreach ($pageList as $pageNo)
+	{
+		Debug::logMsg('update page:' . $pageNo . ' to file:' . Mosaic::getPageDataFileName($pageNo));
+		Mosaic::updatePage($pageNo);
+	}
 
-	shell_exec('rm -R ' . $config['Data']['path'] . '/original/*');
-	shell_exec('rm -R ' . $config['Data']['path'] . '/processed/*');
-	shell_exec('rm -R ' . $config['Store']['path'] . '/pages/*');
-
-	Dispatch::now(1, 'OK', $data);
+	Dispatch::now(1, 'OK');
 
 } // main()
 

@@ -32,8 +32,8 @@ function main()
 		$fileName = $configDir . '/config.php';
 
 		file_put_contents($fileName, $contents);
-		chmod($fileName, octdec($data['Store']['filePermissions']));
-		chgrp($fileName, $data['Store']['group']);
+		chmod($fileName, octdec($data['Config']['filePermissions']));
+		chgrp($fileName, $data['Config']['group']);
 	}
 	else
 	{

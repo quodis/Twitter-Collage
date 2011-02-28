@@ -5,22 +5,31 @@ App:
     # url
     url: http://twitterparty.quodis.worker
 Store:
-    path: /servers/store/twitterparty
+    url: http://twitterparty.quodis.worker/store
+    path: /servers/sites/quodis/twitterparty/public/store
     filePermissions: 664
     dirPermissions: 775
     group: www-data
+Data:
+    path: /servers/data/twitterparty
+    filePermissions: 664
+    dirPermissions: 775
+    group: www-data
+Config:
+    filePermissions: 664
+    group: www-data
 Twitter:
     urlSearch: "http://search.twitter.com/search.json"
-    terms: "wordsthatcanstartawar"
+    terms: "#marchwish"
     rpp: 100
-    pageLimit: 1
+    pageLimit: 15
     timeout:
         apiCall: 5
         imgFile: 1
 Mosaic:
     logoFile: assets/logo48x47.png
     defaultPic: assets/default48x48.png
-    configFile: assets/config48x47.config.php
+    configFile: config/mosaic-48x47.config.php
     cols: 48
     rows: 47
     tileSize: 12
@@ -31,8 +40,8 @@ Jobs:
         period: 10
     image-process:
         period: 1
-        dbLimit: 10
-        imgLimit: 100
+        dbLimit: 100
+        imgLimit: 2500
     mosaic-build:
         period: 5
 Cache:
@@ -76,7 +85,14 @@ UI:
     js: 
         general: "/assets/js/general.js?v=1"
         config: "/assets/js/config.js?v=1"
+        dashboard: "/assets/js/dashboard.js?v=1"
+    js-config:
+        grid: "/config/grid.js?v=1"
     css:
         main: "/assets/css/ftp.css?v=1"
         mosaic: "/assets/css/mosaic.css?v=1"
+        dashboard: "/assets/css/dashboard.css?v=1"
     pollLimit: 100
+    resultsLimit: 100
+    options:
+        store_url: http://twitterparty.quodis.worker/store

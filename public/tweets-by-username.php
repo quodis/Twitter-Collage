@@ -16,35 +16,25 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include '../bootstrap.php';
 
-	$lastId = (isset($_REQUEST['last_id'])) ? (int)$_REQUEST['last_id'] : null;
+	$userName = (isset($_REQUEST['user_name'])) ? $_REQUEST['user_name'] : null;
 
-	$result = Tweet::getSinceLastIdWithImage($lastId, $config['UI']['pollLimit']);
+	$result = Tweet::getByUserNameWithImage($userName, $config['UI']['resultsLimit']);
 
 	// init response
 
 	$data = array(
-		'tiles' => array(),
-		'last_id' => null,
-		'msg' => null
+		'tweets' => array()
+	,
+		'total' => $result->total(),
+		'count' => $result->count()
 	);
 
-	$lastId = null;
-	$tiles = array();
 	while ($tweet = $result->row())
 	{
-		$tiles[] = $tweet;
-		if ($tweet['id'] > $lastId) $lastId = $tweet['id'];
+		$data['tweets'][] = $tweet;
 	}
 
-	if (count($tiles))
-	{
-		$data['tiles'] = $tiles;
-		$data['last_id'] = $lastId;
-	}
-
-	Debug::logMsg('lastId:' .  $lastId . ' count:' . count($data['tiles']) . ' lastId:' . $data['last_id']);
-
-	Dispatch::now(1, 'POLL OK', $data);
+	Dispatch::now(1, 'OK', $data);
 
 } // main()
 

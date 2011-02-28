@@ -102,22 +102,41 @@ class Mosaic
 	/**
 	 * set (and index) page data
 	 *
-	 * @param $grid array (by reference)
+	 * @param Imagick $image
 	 */
-	public static function setPageGrid(array & $grid)
+	public static function setConfigFromImage($image)
 	{
-		$index = 0;
+		// analyse image
+		$grid = array();
+		$iterator = $image->getPixelIterator();
+		foreach($iterator as $rowIx => $rowPixels)
+		{
+			foreach ($rowPixels as $columnIx => $pixel)
+			{
+				$color = $pixel->getColor();
 
+				if (implode($color) == '2552552551') continue;
+
+				$grid[$rowIx][$columnIx] = array($color['r'], $color['g'], $color['b']);
+			}
+		}
+
+		// make config (grid + index)
+		$index = 0;
 		foreach ($grid as $rowIx => $rowPixels)
 		{
 			foreach ($rowPixels as $columnIx => $color)
 			{
-				self::$_pageConfig['grid'][$rowIx][$columnIx] = array(
+				// store grid
+
+				self::$_pageConfig['grid'][$columnIx][$rowIx] = array(
 					'c' => $color,
 					'x' => $columnIx,
 					'y' => $rowIx,
 					'i' => $index,
 				);
+
+				// and index
 
 				self::$_pageConfig['index'][$index] = array(
 					'x' => $columnIx,
@@ -127,12 +146,51 @@ class Mosaic
 				$index++;
 			}
 		}
+	}
 
+	public static function saveConfig()
+	{
 		$fileName = self::_getPageConfigFileName();
 
 		file_put_contents($fileName, json_encode(self::$_pageConfig));
+		chmod($fileName, octdec(self::$_config['Config']['filePermissions']));
+		chgrp($fileName, self::$_config['Config']['group']);
+
+		return $fileName;
+	}
+
+	public static function saveJsConfig()
+	{
+		$fileName = self::$_config['Store']['path'] . '/config/grid.js';
+
+		$contents = '/**
+ * Firefox 4 Twitter Party
+ * by Mozilla, Quodis © 2011
+ * http://www.mozilla.com
+ * http://www.quodis.com
+ *
+ * Licensed under a Creative Commons Attribution Share-Alike License v3.0 http://creativecommons.org/licenses/by-sa/3.0/
+ */
+
+/**
+ * data file generated: ' . date('Y-m-d H:i:s') . '
+ */
+
+/**
+ * party.mosaic.grid = array of rows
+ *   row - { 23: cell, ... } // index is column index
+ *   cell - { c: [r,g,b], x: 34, y: 23, i: 1} // i = position
+ * party.mosaic.index = array of pos
+ *   pos - {x: 34, y: 23}
+ */
+party.mosaic = ' . json_encode(self::$_pageConfig) . ';
+';
+
+		file_put_contents($fileName, $contents);
 		chmod($fileName, octdec(self::$_config['Store']['filePermissions']));
 		chgrp($fileName, self::$_config['Store']['group']);
+
+		return $fileName;
 	}
 
 
@@ -148,27 +206,50 @@ class Mosaic
 	 */
 	public static function updatePage($pageNo)
 	{
-		$tweets = Tweet::getByPageWithImage($pageNo);
+		$result = Tweet::getByPageWithImage($pageNo);
+
+		$fileData = array(
+			'tiles' => array(),
+			'last_id' => null,
+			'newest_tiles' => array(),
+		);
 
 		$i = 0;
+		$lastId = 0;
 
-		$fileData = array();
-		while ($tweet = $tweets->row())
+		if (!$result->count()) return;
+
+		$tiles = array();
+		$tileIndex = array();
+		while ($tweet = $result->row())
 		{
-			if (isset($fileData[$tweet['position']])) continue;
-			$i++;
-			$fileData[$tweet['position']] = $tweet;
+			if (isset($tiles[$tweet['position']])) continue;
+			$tileIndex[$tweet['id']] = array(
+				'id'       => $tweet['id'],
+				'position' => $tweet['position'],
+			);
+			$tiles[$tweet['position']] = $tweet;
+			if ($tweet['id'] > $lastId) $lastId = $tweet['id'];
 		}
 
-		if ($i < $tweets->count()) Debug::logError('#wtf#');
+		// keep only the last 200 newest tiles in the index
+		// TODO configure MAGIC NUMBER 200
+		$tileIndex = array_slice($tileIndex, -200);
 
-		$fileName = self::_getPageDataFileName($pageNo);
+		if (count($tiles))
+		{
+			$fileData['tiles'] = $tiles;
+			$fileData['last_id'] = $lastId;
+			$fileData['newest_tiles'] = $tileIndex;
+		}
+
+		$fileName = self::getPageDataFileName($pageNo);
 
 		file_put_contents($fileName, json_encode($fileData));
 		chmod($fileName, octdec(self::$_config['Store']['filePermissions']));
 		chgrp($fileName, self::$_config['Store']['group']);
 
-		return count($fileData);
+		return count($fileData['tiles']);
 	}
 
 
@@ -182,13 +263,8 @@ class Mosaic
 	public static function purgePage($pageNo)
 	{
 		// delete from filesys
-		$command = 'rm -R ' . self::$_config['Store']['path'] . '/pages/page' . $pageNo . '.php';
-		Debug::logMsg('purgePage page:' .$pageNo , ' command:' . $command);
+		$command = 'rm ' . self::getPageDataFileName($pageNo);
 		shell_exec($command);
-
-		// TODO delete cached page
-
-		// TODO delete current working page from cache (force job to rebuild this page)
 	}
 
 
@@ -198,7 +274,7 @@ class Mosaic
 	 */
 	public static function pageExists($pageNo)
 	{
-		return file_exists(self::_getPageDataFileName($pageNo));
+		return file_exists(self::getPageDataFileName($pageNo));
 	}
 
 	/**
@@ -209,13 +285,11 @@ class Mosaic
 	 */
 	public static function getPageData($pageNo)
 	{
-		$filename = self::_getPageDataFileName($pageNo);
+		if (!self::pageExists($pageNo)) return array();
 
-		if (file_exists($filename))
-		{
-			return json_decode(file_get_contents($filename), TRUE);
-		}
-		else return array();
+		$filename = self::getPageDataFileName($pageNo);
+
+		return json_decode(file_get_contents($filename), TRUE);
 	}
 
 
@@ -253,7 +327,7 @@ class Mosaic
 
 			$fileData = self::getPageData($pageNo);
 
-			if (count($fileData) < self::getPageSize()) break;
+			if (!isset($fileData ['tiles']) || count($fileData ['tiles']) < self::getPageSize()) break;
 		}
 		while (TRUE);
 
@@ -385,9 +459,9 @@ class Mosaic
 	 *
 	 * @return string
 	 */
-	private static function _getPageDataFileName($pageNo)
+	public static function getPageDataFileName($pageNo)
 	{
-		$filename = self::$_config['Store']['path'] . '/pages/page' . $pageNo . '.php';
+		$filename = self::$_config['Store']['path'] . '/pages/page_' . $pageNo . '.json';
 
 		if (!is_dir(dirname($filename)))
 		{

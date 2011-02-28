@@ -146,6 +146,41 @@ class Req
 		return base64_decode($str);
 	}
 
+
+	// ---- cli arguments
+
+
+	/**
+	 * @param string $arg (number, number range (1-23) or number list (23,34,..)
+	 *
+	 * @return array
+	 */
+	public static function getIntegerListFromArg($arg)
+	{
+		$retList = array();
+
+		$arg = trim($arg);
+
+		$range = explode('-', $arg);
+
+		$list = explode(',', $arg);
+
+		if (count($range) == 2)
+		{
+			if ($range[0] && $range[0] <= $range[1])
+			{
+				for ($i = $range[0]; $i <= $range[1]; $i++) $retList[] = $i;
+			}
+		}
+		elseif (count($list) > 1)
+		{
+			foreach($list as $v) if ($v && (int)$v == $v) $retList[] = $v;
+		}
+		else if ($arg && (int)$arg == $arg) $retList = array($arg);
+
+		return $retList;
+	}
+
 }
 
 /**

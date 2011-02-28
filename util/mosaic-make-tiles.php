@@ -12,22 +12,32 @@
  */
 function main()
 {
-	global $argv;
-
 	DEFINE('CLIENT', 'script');
 	DEFINE('CONTEXT', __FILE__);
 	include dirname(__FILE__) . '/../bootstrap.php';
 
-	// argument 1 = pageNo
+	/**
+	 * TODO generate config.js
+	 * 'party.grid = <?=json_encode(Mosaic::getPageConfig())?>';
+	 **/
 
-	$pageNo = (int)$argv[1];
+	$config = Mosaic::getPageConfig();
 
-	Mosaic::purgePage($pageNo);
+	// -- MAKE TILE OVERLAYS
+
+	// get config (meanwhile indexed)
+	foreach ($config['index'] as $position => $foo)
+	{
+		$file = Image::makeTileOverlay($position);
+
+		if (!$file) Dispatch::now(0, 'FAIL pos:' . $position);
+
+		Debug::logMsg('generated: ' . $position . ' > ' . $file);
+	}
 
 	Dispatch::now(1, 'OK');
 
 } // main()
-
 
 try
 {

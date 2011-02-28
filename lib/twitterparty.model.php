@@ -213,7 +213,7 @@ final class Tweet
 	 */
 	public static function getUnprocessed($limit = null)
 	{
-		$limit = Db::escape($limit);
+		$limit = (int)$limit;
 		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
 
 		$sql = "SELECT * FROM `tweet` WHERE `imageData` IS NULL LIMIT $limit";
@@ -283,9 +283,9 @@ final class Tweet
 	public static function getSinceLastIdWithImage($lastId, $limit = null)
 	{
 		$lastId = Db::escape($lastId);
-		$limit = Db::escape($limit);
-		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
 
+		$limit = (int)$limit;
+		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
 
 		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
 		$sql.= " WHERE `imageData` IS NOT NULL";
@@ -306,6 +306,112 @@ final class Tweet
 
 		return $result;
 	}
+
+
+	/**
+	 * tweets of this "user"
+	 *
+	 * @param string $terms
+	 * @param $limit = null
+	 *
+	 * @return array
+	 */
+	public static function getUsersByTerms($terms, $limit = null)
+	{
+		$terms = Db::escape($terms);
+
+		$limit = (int)$limit;
+		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
+
+		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
+		$sql.= " WHERE `userName` LIKE '%$terms%'";
+		$sql.= " GROUP BY `userName`";
+		$sql.= " ORDER BY `userName` ASC";
+		$sql.= " LIMIT $limit";
+
+		$result = Db::query($sql);
+
+		if ($result->count() == $limit)
+		{
+			$sql = "SELECT count(distinct userName) AS cnt FROM `tweet` ";
+			$sql.= " WHERE `userName` LIKE '%$terms%'";
+			$total = Db::queryValue($sql, 'cnt');
+			if ($total) $result->setTotal($total);
+		}
+
+		return $result;
+	}
+
+
+	/**
+	 * tweets by terms
+	 *
+	 * @param string $userName
+	 * @param $limit = null
+	 *
+	 * @return array
+	 */
+	public static function getByUsernameWithImage($userName, $limit = null)
+	{
+		$userName = Db::escape($userName);
+
+		$limit = (int)$limit;
+		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
+
+		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
+		$sql.= " WHERE `imageData` IS NOT NULL";
+		$sql.= "   AND `userName` = '$userName'";
+		$sql.= " ORDER BY `id` DESC";
+		$sql.= " LIMIT $limit";
+
+		$result = Db::query($sql);
+
+		if ($result->count() == $limit)
+		{
+			$sql = "SELECT count(1) AS cnt FROM `tweet` ";
+			$sql.= " WHERE `userName` = '$userName'";
+			$total = Db::queryValue($sql, 'cnt');
+			if ($total) $result->setTotal($total);
+		}
+
+		return $result;
+	}
+
+
+	/**
+	 * tweets by terms
+	 *
+	 * @param string $terms
+	 * @param $limit = null
+	 *
+	 * @return array
+	 */
+	public static function getByTermsWithImage($terms, $limit = null)
+	{
+		$terms = Db::escape($terms);
+
+		$limit = (int)$limit;
+		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
+
+		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
+		$sql.= " WHERE `userName` LIKE '%$terms%'";
+		$sql.= " ORDER BY `id` DESC";
+		$sql.= " LIMIT $limit";
+
+		$result = Db::query($sql);
+
+		if ($result->count() == $limit)
+		{
+			$sql = "SELECT count(1) AS cnt FROM `tweet` ";
+			$sql.= " WHERE `imageData` IS NOT NULL";
+			$sql.= "   AND `contents` LIKE '%$terms%'";
+			$total = Db::queryValue($sql, 'cnt');
+			if ($total) $result->setTotal($total);
+		}
+
+		return $result;
+	}
+
 
 }
 

@@ -5,13 +5,22 @@ App:
     # url
     url: http://dev.twitterparty.quodis.com
 Store:
-    path: /servers/store/twitterparty
+    url: http://dev.twitterparty.quodis.com/store
+    path: /servers/develop/twitterparty/public/store
     filePermissions: 664
     dirPermissions: 775
     group: quodis
+Data:
+    path: /servers/data/twitterparty
+    filePermissions: 664
+    dirPermissions: 775
+    group: quodis
+Config:
+    filePermissions: 664
+    group: quodis
 Twitter:
     urlSearch: "http://search.twitter.com/search.json"
-    terms: "wordsthatcanstartawar"
+    terms: "#marchwish"
     rpp: 100
     pageLimit: 30
     timeout:
@@ -20,7 +29,7 @@ Twitter:
 Mosaic:
     logoFile: assets/logo48x47.png
     defaultPic: assets/default48x48.png
-    configFile: assets/config48x47.config.php
+    configFile: config/mosaic-48x47.config.php
     cols: 48
     rows: 47
     tileSize: 12
@@ -71,12 +80,19 @@ UI:
     gaEnabled: "0"
     gaId: ""
     title: "Firefox 4 Twitter Party"
-    keywords: "Mozilla,Firefox, Firefox 4, Collage, Twitter,Tweet"
+    keywords: "Mozilla,Firefox, Firefox 4, Collage, Twitter, Tweet"
     description: "Firefox 4 Twitter Party is a visualization of Firefox 4 activity on Twitter. It is an experiment with exclusively open web tools and technologies."
     js: 
         general: "/assets/js/general.js?v=1"
         config: "/assets/js/config.js?v=1"
+        dashboard: "/assets/js/dashboard.js?v=1"
+    js-config:
+        grid: "/config/grid.js?v=1"
     css:
         main: "/assets/css/ftp.css?v=1"
         mosaic: "/assets/css/mosaic.css?v=1"
+        dashboard: "/assets/css/dashboard.css?v=1"
     pollLimit: 100
+    resultsLimit: 100
+    options:
+        store_url: http://dev.twitterparty.quodis.com/store

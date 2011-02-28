@@ -30,32 +30,51 @@ function main()
 	$classes = array();
 	if ($isOldBrowser) $classes[] = 'old-browser';
 
+	// mosaic config file
+	$jsMosaicConfig = $config['Store']['url'] . $config['UI']['js-config']['grid'];
+
+	// js config
+	$uiOptions = $config['UI']['options'];
+	$uiOptions['tile_size'] = $config['Mosaic']['tileSize'];
+
+	// dashboard state
+	$dashboardState = array(
+		'last_page' => Mosaic::getCurrentWorkingPageNo() - 1
+	);
+
 	?>
 <!DOCTYPE html>
 <html lang="en">
 
 	<head>
 
+		<title><?=$config['UI']['title']?></title>
+
 		<meta charset="utf-8" />
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="keywords" content="<?=$config['UI']['keywords']?>" />
 		<meta name="description" content="<?=$config['UI']['description']?>" />
 		<meta name="author" content="Quodis" />
 		<meta name="copyright" content="© 2011" />
 		<meta name="distribution" content="global" />
 
-		<link rel="shortcut icon" href="/assets/imgs/favicon.png">
-
-		<title><?=$config['UI']['title']?></title>
-
+		<!-- stylesheets -->
 		<link href="assets/css/reset.css" type="text/css" rel="stylesheet" />
 		<link rel="stylesheet" href="<?=$config['UI']['css']['main']?>" type="text/css" media="screen, projection" />
 		<link rel="stylesheet" href="<?=$config['UI']['css']['mosaic']?>" type="text/css" media="screen, projection" />
-		<link href="assets/css/debug.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="<?=$config['UI']['css']['dashboard']?>" type="text/css" media="screen, projection" />
 
-		<script type="text/javascript" src="assets/js/jquery-1.4.2.min.js" charset="utf-8"></script>
+		<link rel="shortcut icon" href="assets/img/global/favicon.ico" />
+		<link rel="apple-touch-icon" type="image/png" href="">
+		<link rel="image_src" href="">
+
+		<!-- scripts -->
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+		<script type="text/javascript" src="/assets/js/jquery.tipsy.js"></script>
+		<script type="text/javascript" src="<?=$config['UI']['js']['dashboard']?>"></script>
+		<script type="text/javascript" src="<?=$jsMosaicConfig?>"></script>
+		<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
 	</head>
 
@@ -94,9 +113,9 @@ function main()
 							<dt><span>Delay</span></dt>
 							<dd id="job-delay"><span></span></dd>
 						</dl>
-					</div><!-- twitter-counter -->
+					</div><!-- counters -->
 
-					<div class="control-box page clearfix">
+					<div class="control-box page first clearfix">
 						<h3>Go To Page</h3>
 						<label for="find-user" accesskey="p">PageNo</label>
 						<input type="text" id="page-no" value="<?=(Mosaic::getCurrentWorkingPageNo())?>" tabindex="1" />
@@ -127,6 +146,9 @@ function main()
 			<h2>Firefox Twitter Mosaic</h2>
 		</section>
 
+		<section id="widgets">
+		</section>
+
 
 	</div><!-- container -->
 
@@ -153,141 +175,9 @@ function main()
 	(function($) {
 <?php if (!$isOldBrowser) { ?>
 
-		eval('var config = <?=json_encode(Mosaic::getPageConfig())?>');
+		$.extend(party, <?=json_encode($uiOptions)?>);
 
-		config.tileSize = <?=$config['Mosaic']['tileSize']?>;
-
-		//console.log('GRID CONFIG', config);
-
-		/**
-		 * mock support for window.console
-		 */
-		if (!window.console || !window.console.log) {
-			window.console = {};
-			window.console.log = function(whatever) {};
-			window.console.dir = function(whenever) {};
-		}
-
-		/**
-		 * add support for prototype like bind()
-		 */
-		Function.prototype.bind = function(){
-			if (arguments.length < 2 && arguments[0] === undefined) {
-				return this;
-			}
-			var _method = this;
-			var lesArguments = [];
-			var that = arguments[0];
-			for(var i=1, l=arguments.length; i<l; i++){
-				lesArguments.push(arguments[i]);
-			}
-			return function(){
-				return _method.apply(that, lesArguments.concat(function(tmpArgs){
-					 var leArgument2 = [];
-					 for (var j=0, total=tmpArgs.length; j < total; j++) {
-						 leArgument2.push(tmpArgs[j]);
-					 }
-					 return leArgument2;
-				 }(arguments)));
-			};
-		}
-
-		var lastId = 0;
-		var lastPage = '<?=(Mosaic::getCurrentWorkingPageNo() - 1)?>';
-
-		function addImage(data, i)
-		{
-			var x = config.index[i].x;
-			var y = config.index[i].y;
-			var offsetX = config.tileSize * x;
-			var offsetY = config.tileSize * y;
-			$('#mosaic').append('<img id="image-' + i + '" src="data:image/gif;base64,' + data + '" style="width:12px; height:12px; position: absolute; top: ' + offsetY +'px; left: ' + offsetX + 'px" />');
-		}
-
-		function loadPage(pageNo)
-		{
-			$('#mosaic img').remove();
-			$('<div id="loading"></div>').appendTo('#mosaic');
-
-			var params = {}
-			if (pageNo > 0) {
-				params.page = pageNo;
-			}
-			else params.z = pageNo;
-
-			console.log('PAGE > PARAMS', params);
-
-			$.ajax( {
-				type: 'GET',
-				url: 'page.php',
-				data: params,
-				dataType: 'json',
-				success: function(data) {
-					lastId = data.payload.lastId;
-					$('#last-tweet span').text(data.payload.lastId);
-					var count = showTweets(data.payload.tweets);
-					if (!count) {
-						alert('empty page, TODO proper dialog');
-					}
-					else lastId = data.payload.lastId;
-				}.bind(this),
-					error: function() {
-				}.bind(this)
-			});
-		}
-
-		function poll()
-		{
-			var params = {
-				'lastId' : lastId
-			}
-
-			console.log('POLL > PARAMS', params);
-
-			$.ajax( {
-				type: 'GET',
-				url: 'poll.php',
-				data: params,
-				dataType: 'json',
-				success: function(data) {
-					$('#last-tweet span').text(data.payload.lastId);
-					var count = showTweets(data.payload.tweets);
-					if (!count) {
-						alert('empty poll, TODO proper dialog');
-					}
-					else {
-						lastId = data.payload.lastId;
-						alert(count + ' tweets, TODO proper dialog');
-					}
-				}.bind(this),
-					error: function() {
-				}.bind(this)
-			});
-		}
-
-		function showTweets(tweets)
-		{
-			var imageData, i, count = 0;
-			for (i in tweets) {
-				count++;
-				imageData = tweets[i].imageData;
-				addImage(imageData, tweets[i].position);
-				// fetch position from index
-			}
-			return count;
-		}
-
-		$('#page-load-bttn').click( function() {
-
-			loadPage($('#page-no').val());
-
-		} );
-
-		$('#force-poll-bttn').click( function() {
-
-			poll();
-
-		} );
+		Dashboard.init( <?=json_encode($uiOptions)?>, <?=json_encode($dashboardState) ?>);
 
 <?php } else { ?>
 

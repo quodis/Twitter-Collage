@@ -32,6 +32,14 @@ function main()
 	// if there's a language_argument, load the appropriate .po file
 	
 
+	// mosaic config file
+	$jsMosaicConfig = $config['Store']['url'] . $config['UI']['js-config']['grid'];
+
+	// js config
+	$uiOptions = $config['UI']['options'];
+	$uiOptions['last_page'] = Mosaic::getCurrentWorkingPageNo() - 1;
+	$uiOptions['tile_size'] = $config['Mosaic']['tileSize'] + 20;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,6 +49,7 @@ function main()
 		<title><?=$config['UI']['title']?></title>
 
 		<meta charset="utf-8" />
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="keywords" content="<?=$config['UI']['keywords']?>" />
 		<meta name="description" content="<?=$config['UI']['description']?>" />
@@ -61,7 +70,7 @@ function main()
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
 		<script type="text/javascript" src="/assets/js/jquery.tipsy.js"></script>
 		<script type="text/javascript" src="<?=$config['UI']['js']['general']?>"></script>
-		<script type="text/javascript" src="<?=$config['UI']['js']['config']?>"></script>
+		<script type="text/javascript" src="<?=$jsMosaicConfig?>"></script>
 		<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
 
@@ -103,8 +112,8 @@ function main()
 
 					<div id="twitter-counter">
 						<dl>
-							<dt><a href="#" title="Tweet" rel="external">Tweet</a></dt>
-							<dd><span>15,234</span></dd>
+							<dt><a href="http://twitter.com/share?related=firefox&text=Join+me+at+the+Firefox+4+Twitter+Party+and+celebrate+the+newest+version&url=http%3A%2F%2Ftwitterparty.mozilla.com&via=firefox" title="Tweet" rel="external">Tweet</a></dt>
+							<dd><span>-</span></dd>
 						</dl>
 					</div><!-- twitter-counter -->
 
@@ -139,6 +148,7 @@ function main()
 
 		<section id="mosaic">
 			<h2>Firefox Twitter Mosaic</h2>
+			<p id="loading"></p>
 		</section>
 
 		<div id="mozilla-badge">
@@ -181,6 +191,14 @@ function main()
 			</div><!-- footer-copyright -->
 
 		</footer>
+
+	<script type="text/javascript">
+	//<![CDATA[
+	(function($) {
+		$.extend(party, <?=json_encode($uiOptions)?>);
+	})(jQuery);
+	//]]>
+	</script>
 
 	</body>
 
