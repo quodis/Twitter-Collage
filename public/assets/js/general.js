@@ -270,12 +270,12 @@ Array.prototype.shuffle = function (){
 		// Store the original search input caption
 		search.original_caption = search.input_dom.val();
 		
-		search.focus(function(){
+		search.input_dom.focus(function(){
 			if ($(this).val() === search.original_caption) {
 				$(this).val('');
 			}
 		});
-		search.blur(function(){
+		search.input_dom.blur(function(){
 			if ($(this).val() == '') {
 				$(this).val(search.original_caption);
 			}
