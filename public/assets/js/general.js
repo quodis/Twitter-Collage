@@ -195,7 +195,7 @@ Array.prototype.shuffle = function (){
 		if ($.browser.msie) {
 			party.performance = party.available_performances.low;
 		} else {
-			party.performance = party.available_performances.high;
+			party.performance = party.available_performances.medium;
 		}
 		
 		// Cache the canvas
@@ -263,14 +263,22 @@ Array.prototype.shuffle = function (){
 		if (x > 24) {
 			if (y > 24) {
 				position_class = "bottom-right";
+				position_css = {
+					right: (572 - (x * 12)) + 'px',
+					bottom: (564 - (y * 12)) + 'px'
+				}
 			} else {
 				position_class = "bottom-left";
+				position_css = {
+					left: ((x * 12) + 8) + 'px',
+					bottom: (564 - (y * 12)) + 'px'
+				}
 			}
 		} else {
 			if (y > 24) {
 				position_class = "top-right";
 				position_css = {
-					right: ((x * 12) + 8) + 'px',
+					right: (572 - (x * 12)) + 'px',
 					top: ((y * 12) - 10) + 'px'
 				}
 			} else {
@@ -289,7 +297,7 @@ Array.prototype.shuffle = function (){
 		b.p.text(tile.contents);
 		b.time_a.attr('href', 'http://twitter.com/' + tile.userName + '/status/' + tile.twitterId).text(tile.createdDate);
 		b.time.attr('datetime', tile.createdDate);
-		b.container.css(position_css).removeClass().addClass('bubble dark-orange top-left').show();
+		b.container.css(position_css).removeClass().addClass('bubble dark-orange ' + position_class).show();
 		
 	}
 	
