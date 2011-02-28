@@ -316,11 +316,27 @@
 
 		// configuration
 		defaults : {
-			isOldBrowser : false,
-			publicUrl : null
+			'store_url' : '',
+			'tile_size' : 0,
+			'idle_timeout' : 5
+		},
+		options : { },
+
+		// state
+		state : {
+			'party_on' : 'wild',
+			'last_page' : 0,
+			'last_id' : 0,
+			'idle_timeout' : null
 		},
 		
-		options : {},
+		
+		// stores ongoing requests (indexed by id) to prevent obsoletes ... see load()
+		load_requests : { },
+		
+		// hey, who let this guy in?
+		mosaic : party.mosaic,
+		
 		
 		dialog : null,
 
@@ -329,56 +345,193 @@
 		 * 
 		 * @param mixed options
 		 */
-		init : function(options) 
+		init : function(options, state) 
 		{
-			
 			this.options = $.extend(this.defaults, options);
-			
-			// prevent selection
-			$('#' + this.options.pageContainer).mousedown( function(ev) { 
-				if (ev.cancelable) { ev.preventDefault(); } 
-				ev.stopPropagation();
-			} );
+			this.state = $.extend(this.state, state);
 			
 			this.buildInterface();
+		},
+
+
+		// ---- build ui
+
+		/**
+		 * binds, the works
+		 */
+		buildInterface : function() 
+		{
+			// bind search user
 			
-			var confirmBrowseAway = function() {
-				return "You are about to navigate away from this page. If you do that " +
-				"now, you will loose all that sticker work!";
-			}.bind(this);
-			// bind only for working browsers
-			if (!this.options.isOldBrowser) {
-				window.onbeforeunload = confirmBrowseAway;
-			}
+			// bind search tweets
+			
+			// bind go to page
+			$('#page-load-bttn').click( function() {
+				this.loadPage($('#page-no').val());
+			}.bind(this) );
+			
+			// bind poll
+			$('#force-poll-bttn').click( function() {
+				this.poll();
+			}.bind(this) );
 		},
 		
 		
-		// ---- ajax
-		loadRequests : {},
-		load : function(url, id, params, callback) 
-		{
-			var date = new Date();
-			this.loadRequests[id] = 'id:' + Math.ceil(Math.random() * 1000) + ':' + date.getTime();
-				
-			var requestId = this.loadRequests[id];
+		// ---- state
+		
+		
+		/**
+		 * bummer
+		 */
+		partyPause : function() {
+
+			// don't resume party, afterall
+			window.clearTimeout(this.state.idle_timeout);
+			// update state
+			this.state.party_on = false;
 			
-			console.log(url, requestId);
+			// psssshhhhhh!
+			party.pause();
+			// hide all the guests
+			$('.tile').hide();
+			
+			// resume if idle after idle_timeout seconds
+			this.state.idle_timeout = window.setTimeout( function() {
+				this.partyResume();
+			}.bind(this), this.options.idle_timeout * 1000); 
+		},
+		
+		/**
+		 * yeahhh!
+		 */
+		partyResume : function() {
+			if (this.state.party_on) return;
+			
+			// remove dashboard traces
+			$('#mosaic img').remove();
+			
+			// recall guests
+			$('.tile').show();
+			// and resume 
+			this.state.party_on = 'wild again';
+			party.resume();
+		},
+
+		// ---- 
+
+		addImage : function(data, pos)
+		{
+			console.log(pos)
+			var x = this.mosaic.index[pos].x;
+			var y = this.mosaic.index[pos].y;
+			var offsetX = this.options.tile_size * x;
+			var offsetY = this.options.tile_size * y;
+			$('#mosaic').append('<img id="image-' + i + '" src="data:image/gif;base64,' + data + '" style="width:12px; height:12px; position: absolute; top: ' + offsetY +'px; left: ' + offsetX + 'px" />');
+		},
+
+		loadPage : function(page)
+		{
+			this.partyPause();
+			
+			$('#mosaic img').remove();
+			
+			$('<div id="loading"></div>').appendTo('#mosaic');
+
+			console.log('PAGE > PAGE NO', page);
+
+			// load 
+			var url = this.options.store_url+ '/pages/page_' + page + '.json';
+			var params = {
+				'page' : page
+			}
+			this.load(url, params, function(data) {
+				console.log(data);
+				this.state.last_id = data.payload.last_id;
+				$('#last-tweet span').text(data.payload.last_id);
+				var count = showTweets(data.payload.tweets);
+				if (!count) {
+					alert('empty page, TODO proper dialog');
+				}
+			}, 'page:' . page);
+		},
+
+		poll : function()
+		{
+			var params = {
+				'last_id' : last_id
+			}
+
+			console.log('POLL > PARAMS', params);
+
+			$.ajax( {
+				type: 'GET',
+				url: '/poll.php',
+				data: params,
+				dataType: 'json',
+				success: function(data) {
+					console.log(data);
+					$('#last-tweet span').text(data.payload.last_id);
+					var count = showTweets(data.payload.tweets);
+					if (!count) {
+						alert('empty poll, TODO proper dialog');
+					}
+					else {
+						last_id = data.payload.last_id;
+						alert(count + ' tweets, TODO proper dialog');
+					}
+				}.bind(this),
+					error: function() {
+				}.bind(this)
+			});
+		},
+
+		showTweets : function(tweets)
+		{
+			var imageData, i, count = 0;
+			for (i in tweets) {
+				count++;
+				imageData = tweets[i].imageData;
+				addImage(imageData, tweets[i].position);
+				// fetch position from index
+			}
+			return count;
+		},
+
+
+		// ---- ajax helpers
+
+
+		/**
+		 * a request_key is generated if id param is given (representing a resource) 
+		 * if two requests are made with same id, obsolete responses will be muted
+		 * 
+		 * @param string url
+		 * @param object params
+		 * @param function callback
+		 * @param string id
+		 */
+		load : function(url, params, callback, id) 
+		{
+			// generate a new key for this request?
+			if (id) {
+				var date = new Date();
+				var request_key = Math.ceil(Math.random() * 1000) + ':' + date.getTime();
+				this.load_requests[id] = request_key;
+			}
+			
+			console.log(url, request_key);
 			
 			return $.ajax( {
-				type: 'GET',
-				url: 'json/' + url,
-				dataType: 'json',
-				data: params,
-				success: function(data) {
-					if (this.loadRequests[id] != requestId) return;
+				'type': 'GET',
+				'url': url,
+				'dataType': 'json',
+				'data': params,
+				'success': function(data) {
+					// ignore obsolete responses
+					if (id && this.load_requests[id] != request_key) return;
+					// welformed data
 					if (!data) {
 						this.loadError('NO_DATA', data);
-					}
-					else if ("undefined" == typeof data.code) {
-						this.loadError('NO_CODE', data);
-					}
-					else if (data.code != 1) {
-						this.loadError('ERROR_CODE:' + data.code, data);
 					}
 					else if ("undefined" == typeof data.payload) {
 						this.loadError('NO_PAYLOAD', data);
@@ -395,7 +548,7 @@
 
 		loadError : function() 
 		{
-			console.log(arguments);
+			console.log('load fail, error:', arguments);
 		},
 		
 		post : function(url, params, callback, noFeedback) 
@@ -439,21 +592,9 @@
 		postSuccess : function(message) 
 		{
 			console.log('post ok, message:', message);
-		},		
-
-		// ---- build ui
-
-
-		buildInterface : function() 
-		{
-			// bind search user
-			
-			// bind search tweets
-			
-			// bind go to page
 		},
-		
-		
+
+
 		// ---- url fragments
 
 

@@ -24,9 +24,13 @@ function main()
 	include '../bootstrap.php';
 	session_cache_limiter("nocache");
 
-	$config['UI']['options']['last_page'] = Mosaic::getCurrentWorkingPageNo() - 1;
-
+	// mosaic config file
 	$jsMosaicConfig = $config['Store']['url'] . $config['UI']['js-config']['grid'];
+
+	// js config
+	$uiOptions = $config['UI']['options'];
+	$uiOptions['last_page'] = Mosaic::getCurrentWorkingPageNo() - 1;
+	$uiOptions['tile_size'] = $config['Mosaic']['tileSize'] + 20;
 
 ?>
 <!DOCTYPE html>

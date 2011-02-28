@@ -30,9 +30,18 @@ function main()
 	$classes = array();
 	if ($isOldBrowser) $classes[] = 'old-browser';
 
-	$config['UI']['options']['last_page'] = Mosaic::getCurrentWorkingPageNo() - 1;
-
+	// mosaic config file
 	$jsMosaicConfig = $config['Store']['url'] . $config['UI']['js-config']['grid'];
+
+	// js config
+	$uiOptions = $config['UI']['options'];
+	$uiOptions['last_page'] = Mosaic::getCurrentWorkingPageNo() - 1;
+	$uiOptions['tile_size'] = $config['Mosaic']['tileSize'] + 20;
+
+	// dashboard state
+	$dashboardState = array(
+		'last_page' => Mosaic::getCurrentWorkingPageNo() - 1
+	);
 
 	?>
 <!DOCTYPE html>
@@ -93,6 +102,13 @@ function main()
 					<!-- Here goes the text explaining how Firefox Twitter Party works. -->
 					<p>Now feeding on hash <span class="hashtag"><?=$config['Twitter']['terms']?></span>.</p>
 
+					<div id="twitter-counter">
+						<dl>
+							<dt><a href="http://twitter.com/share?related=firefox&text=Join+me+at+the+Firefox+4+Twitter+Party+and+celebrate+the+newest+version&url=http%3A%2F%2Ftwitterparty.mozilla.com&via=firefox" title="Tweet" rel="external">Tweet</a></dt>
+							<dd><span>-</span></dd>
+						</dl>
+					</div><!-- twitter-counter -->
+
 					<div class="counter">
 						<dl class="tweets">
 							<dt><span>Last Tweet</span></dt>
@@ -106,7 +122,7 @@ function main()
 							<dt><span>Delay</span></dt>
 							<dd id="job-delay"><span></span></dd>
 						</dl>
-					</div><!-- twitter-counter -->
+					</div><!-- other counters -->
 
 					<div class="control-box page clearfix">
 						<h3>Go To Page</h3>
@@ -165,142 +181,9 @@ function main()
 	(function($) {
 <?php if (!$isOldBrowser) { ?>
 
-		$.extend(party, <?=json_encode($config['UI']['options'])?>);
+		$.extend(party, <?=json_encode($uiOptions)?>);
 
-		Dashboard.init( <?=json_encode($config['UI']['options'])?> );
-
-
-		config.tileSize = <?=$config['Mosaic']['tileSize']?>;
-
-		alert("!");
-		//console.log('GRID CONFIG', config);
-
-		/**
-		 * mock support for window.console
-		 */
-		if (!window.console || !window.console.log) {
-			window.console = {};
-			window.console.log = function(whatever) {};
-			window.console.dir = function(whenever) {};
-		}
-
-		/**
-		 * add support for prototype like bind()
-		 */
-		Function.prototype.bind = function(){
-			if (arguments.length < 2 && arguments[0] === undefined) {
-				return this;
-			}
-			var _method = this;
-			var lesArguments = [];
-			var that = arguments[0];
-			for(var i=1, l=arguments.length; i<l; i++){
-				lesArguments.push(arguments[i]);
-			}
-			return function(){
-				return _method.apply(that, lesArguments.concat(function(tmpArgs){
-					 var leArgument2 = [];
-					 for (var j=0, total=tmpArgs.length; j < total; j++) {
-						 leArgument2.push(tmpArgs[j]);
-					 }
-					 return leArgument2;
-				 }(arguments)));
-			};
-		}
-
-		var last_id = 0;
-		var lastPage = '<?=(Mosaic::getCurrentWorkingPageNo() - 1)?>';
-
-		function addImage(data, i)
-		{
-			var x = config.index[i].x;
-			var y = config.index[i].y;
-			var offsetX = config.tileSize * x;
-			var offsetY = config.tileSize * y;
-			$('#mosaic').append('<img id="image-' + i + '" src="data:image/gif;base64,' + data + '" style="width:12px; height:12px; position: absolute; top: ' + offsetY +'px; left: ' + offsetX + 'px" />');
-		}
-
-		function loadPage(pageNo)
-		{
-			$('#mosaic img').remove();
-			$('<div id="loading"></div>').appendTo('#mosaic');
-
-			console.log('PAGE > PAGE NO', pageNo);
-
-			$.ajax( {
-				type: 'GET',
-				url: '<?=$config['UI']['options']['store_url']?>/pages/page_' + pageNo + '.json',
-				dataType: 'json',
-				success: function(data) {
-					console.log(data);
-					return;
-
-					last_id = data.payload.last_id;
-					$('#last-tweet span').text(data.payload.last_id);
-					var count = showTweets(data.payload.tweets);
-					if (!count) {
-						alert('empty page, TODO proper dialog');
-					}
-					else last_id = data.payload.last_id;
-				}
-			});
-
-
-		}
-
-		function poll()
-		{
-			var params = {
-				'last_id' : last_id
-			}
-
-			console.log('POLL > PARAMS', params);
-
-			$.ajax( {
-				type: 'GET',
-				url: 'poll.php',
-				data: params,
-				dataType: 'json',
-				success: function(data) {
-					console.log(data);
-					$('#last-tweet span').text(data.payload.last_id);
-					var count = showTweets(data.payload.tweets);
-					if (!count) {
-						alert('empty poll, TODO proper dialog');
-					}
-					else {
-						last_id = data.payload.last_id;
-						alert(count + ' tweets, TODO proper dialog');
-					}
-				}.bind(this),
-					error: function() {
-				}.bind(this)
-			});
-		}
-
-		function showTweets(tweets)
-		{
-			var imageData, i, count = 0;
-			for (i in tweets) {
-				count++;
-				imageData = tweets[i].imageData;
-				addImage(imageData, tweets[i].position);
-				// fetch position from index
-			}
-			return count;
-		}
-
-		$('#page-load-bttn').click( function() {
-
-			loadPage($('#page-no').val());
-
-		} );
-
-		$('#force-poll-bttn').click( function() {
-
-			poll();
-
-		} );
+		Dashboard.init( <?=json_encode($uiOptions)?>, <?=json_encode($dashboardState) ?>);
 
 <?php } else { ?>
 
