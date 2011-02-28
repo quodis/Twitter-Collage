@@ -267,8 +267,8 @@ Array.prototype.shuffle = function (){
 				position_class = "bottom-right";
 				position_css = {
 					top: '',
-					right: (572 - (x * 12)) + 'px',
-					bottom: (564 - (y * 12)) + 'px',
+					right: (564 - (x * 12)) + 'px',
+					bottom: (540 - (y * 12)) + 'px',
 					left: ''
 				}
 			} else {
@@ -276,7 +276,7 @@ Array.prototype.shuffle = function (){
 				position_css = {
 					top: '',
 					right: '',
-					bottom: (564 - (y * 12)) + 'px',
+					bottom: (540 - (y * 12)) + 'px',
 					left: ((x * 12) + 8) + 'px'
 				}
 			}
@@ -285,7 +285,7 @@ Array.prototype.shuffle = function (){
 				position_class = "top-right";
 				position_css = {
 					top: ((y * 12) - 10) + 'px',
-					right: (572 - (x * 12)) + 'px',
+					right: (564 - (x * 12)) + 'px',
 					bottom: '',
 					left: ''
 				}
