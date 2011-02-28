@@ -148,6 +148,8 @@ Array.prototype.shuffle = function (){
 			// No Tiles were built - task is complete
 			clearInterval(initial_draw_timer);
 			
+			// Start the recursive "tile updater"
+			draw_tiles_timer = setInterval(drawNewTiles, (1000/party.performance.new_tiles_per_second));
 		}
 		
 	}
@@ -260,8 +262,8 @@ Array.prototype.shuffle = function (){
 		}
 		
 		// Choose the arrow's position
-		if (x > 24) {
-			if (y > 24) {
+		if (y > 24) {
+			if (x > 24) {
 				position_class = "bottom-right";
 				position_css = {
 					right: (572 - (x * 12)) + 'px',
@@ -275,7 +277,7 @@ Array.prototype.shuffle = function (){
 				}
 			}
 		} else {
-			if (y > 24) {
+			if (x > 24) {
 				position_class = "top-right";
 				position_css = {
 					right: (572 - (x * 12)) + 'px',
@@ -468,8 +470,6 @@ Array.prototype.shuffle = function (){
 	// Start the Real-time polling
 	function startPolling() {
 
-		// Start the recursive "tile updater"
-		draw_tiles_timer = setInterval(drawNewTiles, (1000/party.performance.new_tiles_per_second));
 		// Start the recursive poller
 		poll();
 		polling_timer = setInterval(poll, (party.polling_timer_seconds * 1000));
