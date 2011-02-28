@@ -245,7 +245,7 @@ Array.prototype.shuffle = function (){
 		// Hide the bubble if the mouse leavese the mosaic
 		party.canvas.bind('mouseout', function() {
 			hideBubble();
-		}
+		});
 	}
 	
 	
