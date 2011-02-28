@@ -139,7 +139,7 @@ class Mosaic
 
 				if (!isset($reducedColors[$color])) $reducedColors[$color] = count($reducedColors);
 
-				if (!isset($grid[$rowIx][$columnIx])) die("[$rowIx][$columnIx]$color");
+				if (!isset($grid[$rowIx][$columnIx])) throw Exception();
 
 				$grid[$rowIx][$columnIx]['r'] = $reducedColors[$color];
 			}

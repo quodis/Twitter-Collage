@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_URI'] == '/')
 bindtextdomain("all", dirname(__FILE__) . "/../locale");
 
 // find the language code in the REQUEST_URI
-preg_match_all("/.*?(?:[a-z][a-z0-9_]*).*?((?:[a-z][a-z0-9_]*))/is", $_SERVER['REQUEST_URI'], $request_uri);
+preg_match_all("/.*?([a-z]{2}-[A-Z]{2})/is", $_SERVER['REQUEST_URI'], $request_uri);
 // set the locale
 $locale = str_replace('-', '_', $request_uri[1][0]) . '.utf8';
 putenv("LC_ALL=$locale");

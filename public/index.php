@@ -8,7 +8,7 @@
  */
 
 /**
- * load localization lib
+ * load localization lib - provides: $locale, $request_uri, $accept_language
  *
  */
 include('../lib/localization.php');
@@ -30,14 +30,6 @@ function main()
 	include '../bootstrap.php';
 	session_cache_limiter("nocache");
 	
-	/**
-	 * Handle l18n negotiation
-	 */
-	// if there's no language argument: /en /pt
-		// redirect the user based on Accept-Language header
-	// if there's a language_argument, load the appropriate .po file
-	
-
 	// mosaic config file
 	$jsMosaicConfig = $config['Store']['url'] . $config['UI']['js-config']['grid'];
 
@@ -47,11 +39,11 @@ function main()
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= $locale ?>">
 
 	<head>
 
-		<title><?=$config['UI']['title']?></title>
+		<title><?= _($config['UI']['title']) ?></title>
 
 		<meta charset="utf-8" />
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -76,23 +68,6 @@ function main()
 		<script type="text/javascript" src="<?=$jsMosaicConfig?>"></script>
 		<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
-
-		<?php if ($config['UI']['gaEnabled']) { ?>
-		<script type="text/javascript">
-		//<![CDATA[
-			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', '<?=$config['UI']['gaId']?>']);
-			_gaq.push(['_trackPageview']);
-
-			(function() {
-				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-			})();
-		//]]>
-		</script>
-		<?php } ?>
-
 	</head>
 
 	<body>
@@ -103,7 +78,7 @@ function main()
 
 				<!-- HEADER -->
 				<header id="brand">
-					<h1><a href="#" title="Join the Firefox 4 Twitter Party">Join the Firefox 4 Twitter Party</a></h1>
+					<h1><a href="#" title="<?= _('Join the Firefox 4 Twitter Party') ?>"><?= _('Join the Firefox 4 Twitter Party') ?></a></h1>
 				</header>
 
 
@@ -111,21 +86,21 @@ function main()
 				<aside id="main-content" class="clearfix">
 
 					<!-- Here goes the text explaining how Firefox Twitter Party works. -->
-					<p>Be part of Team Firefox! Tweet about Firefox 4 with the <span class="hashtag">#fx4</span> hashtag and your avatar will join thousands of others from around the world as part of our logo mosaic.</p>
+					<p><?= _('Be part of Team Firefox! Tweet about Firefox 4 with the <span class="hashtag">#fx4</span> hashtag and your avatar will join thousands of others from around the world as part of our logo mosaic.') ?></p>
 
 					<div id="twitter-counter">
 						<dl>
-							<dt><a href="http://twitter.com/share?related=firefox&text=Join+me+at+the+Firefox+4+Twitter+Party+and+celebrate+the+newest+version&url=http%3A%2F%2Ftwitterparty.mozilla.com&via=firefox" title="Tweet" rel="external">Tweet</a></dt>
+							<dt><a href="http://twitter.com/share?related=firefox&text=<?= urlencode(_('Join me at the Firefox 4 Twitter Party and celebrate the newest version http://t.co/PowZdhA via @firefox')) ?>" title="<?= _('Tweet') ?>" rel="external"><?= _('Tweet') ?></a></dt>
 							<dd><span>-</span></dd>
 						</dl>
 					</div><!-- twitter-counter -->
 
 
 					<form id="search-box" role="search">
-						<h3>Who's at the party?</h3>
-						<label for="search-input" accesskey="f">Find a Twitter username</label>
-						<input type="text" name="search-input" id="search-input" value="Find a Twitter username" tabindex="1" />
-						<button type="submit" name="search-button" id="search-submit-bttn" value="Find" tabindex="2" title="Find" class="button">Find</button>
+						<h3><?= _("Who's at the party?") ?></h3>
+						<label for="search-input" accesskey="f"><?= _('Find a Twitter username') ?></label>
+						<input type="text" name="search-input" id="search-input" value="<?= _('Find a Twitter username') ?>" tabindex="1" />
+						<button type="submit" name="search-button" id="search-submit-bttn" value="<?= _('Find') ?>" tabindex="2" title="<?= _('Find') ?>" class="button"><?= _('Find') ?></button>
 					</form><!-- search-box -->
 
 
@@ -150,7 +125,7 @@ function main()
 			</div><!-- wrapper -->
 
 		<section id="mosaic">
-			<h2>Firefox Twitter Mosaic</h2>
+			<h2><?= _('Firefox Twitter Mosaic') ?></h2>
 			<p id="loading"></p>
 
 			<article id="bubble" class="bubble">
@@ -159,10 +134,10 @@ function main()
 
 					<h1><a href="#" title="Twitter profile" rel="author external"></a><span> wrote</span></h1>
 					<a href="#" title="" rel="author external" class="twitter-avatar">
-					  <img src="" alt="Twitter profile picture" width="48" height="48" />
+					  <img src="" alt="<?= _('Twitter profile picture') ?>" width="48" height="48" />
 					</a>
 
-				  <time datetime="" pubdate><a href="#" rel="bookmark external" title="Permalink"></a></time>
+				  <time datetime="" pubdate><a href="#" rel="bookmark external" title="<?= _('Permalink') ?>"></a></time>
 
 				</header>
 
@@ -173,7 +148,7 @@ function main()
 		</section>
 
 		<div id="mozilla-badge">
-			<a href="http://www.mozilla.org/" class="mozilla" title="Visit Mozilla" rel="external">Visit Mozilla</a>
+			<a href="http://www.mozilla.org/" class="mozilla" title="<?= _('Visit Mozilla') ?>" rel="external"><?= _('Visit Mozilla') ?></a>
 		</div><!-- mozilla-badge -->
 
 
@@ -185,17 +160,17 @@ function main()
 
 			<div id="sub-footer">
 
-				<h3>Let's be <span>Friends!</span></h3>
+				<h3><?= _("Let's be <span>Friends!</span>") ?></h3>
 
 				<ul>
-					<li id="footer-twitter"><a href="http://twitter.com/firefox">Twitter</a></li>
-					<li id="footer-facebook"><a href="http://Facebook.com/Firefox">Facebook</a></li>
-					<li id="footer-connect"><a href="/en-US/firefox/connect/">More Ways to Connect</a></li>
+					<li id="footer-twitter"><a href="http://twitter.com/firefox"><?= _('Twitter') ?></a></li>
+					<li id="footer-facebook"><a href="http://Facebook.com/Firefox"><?= _('Facebook') ?></a></li>
+					<li id="footer-connect"><a href="/en-US/firefox/connect/"><?= _('More Ways to Connect') ?></a></li>
 				</ul>
 
 				<p id="sub-footer-newsletter">
-					<span class="intro">Want us to keep in touch?</span>
-					<a href="/en-US/newsletter/">Get Monthly News <span>»</span></a>
+					<span class="intro"><?= _('Want us to keep in touch?') ?></span>
+					<a href="/en-US/newsletter/"><?= _('Get Monthly News') ?> <span>»</span></a>
 				</p>
 
 			</div><!-- sub-footer -->
@@ -203,12 +178,12 @@ function main()
 			<div id="footer-copyright">
 
 				<p id="footer-links">
-					<a href="/en-US/privacy-policy.html">Privacy Policy</a> &nbsp;|&nbsp;
-					<a href="/en-US/about/legal.html">Legal Notices</a> &nbsp;|&nbsp;
-					<a href="/en-US/legal/fraud-report/index.html">Report Trademark Abuse</a>
+					<a href="/en-US/privacy-policy.html"><?= _('Privacy Policy') ?></a> &nbsp;|&nbsp;
+					<a href="/en-US/about/legal.html"><?= _('Legal Notices') ?></a> &nbsp;|&nbsp;
+					<a href="/en-US/legal/fraud-report/index.html"><?= _('Report Trademark Abuse') ?></a>
 				</p>
 
-				<p>Except where otherwise <a href="/en-US/about/legal.html#site">noted</a>, content on this site is licensed under the <br /><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.</p>
+				<p><?= _('Except where otherwise <a href="/en-US/about/legal.html#site">noted</a>, content on this site is licensed under the <br /><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.') ?></p>
 			</div><!-- footer-copyright -->
 
 		</footer>
