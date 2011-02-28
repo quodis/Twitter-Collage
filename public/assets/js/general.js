@@ -176,19 +176,14 @@ var party = party || {};
 		}
 		
 		b.container.hide();
-		b.username_a.text(tile.userName);
-		b.username_a.attr('title', tile.userName);
-		b.username_a.attr('href', 'http://twitter.com/' + tile.userName);
-		b.avatar_a.attr('title', tile.userName);
-		b.avatar_a.attr('href', 'http://twitter.com/' + tile.userName);
-		b.avatar_img.attr('src', tile.imageUrl);
-		b.avatar_img.attr('alt', tile.userName);
+		b.username_a.text(tile.userName).attr('title', tile.userName).attr('href', 'http://twitter.com/' + tile.userName);
+		b.avatar_a.attr('title', tile.userName).attr('href', 'http://twitter.com/' + tile.userName);
+		b.avatar_img.attr('src', tile.imageUrl).attr('alt', tile.userName);
 		b.p.text(tile.contents);
 		b.container.css({
 			left: (x * 12) + 'px',
 			top: (y * 12) + 'px'
-		}}).removeClass().addClass('dark-orange, top-left');
-		b.container.show();
+		}).removeClass().addClass('dark-orange, top-left').show();
 		
 	}
 	
