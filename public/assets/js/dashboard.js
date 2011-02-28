@@ -5,9 +5,399 @@
  * http://www.quodis.com
  * 
  * Licensed under a Creative Commons Attribution Share-Alike License v3.0 http://creativecommons.org/licenses/by-sa/3.0/ 
- */ 
+ */
+
+/**
+ * Party mock
+ */
+var party = party || {};
+
+/**
+ * ready
+ */
 (function($) {  
 	
+	/**
+	 * Dashboard static class
+	 */	
+	Dashboard = {}; 
+	$.extend(Dashboard, {
+
+		// configuration
+		defaults : {
+			'store_url' : '',
+			'tile_size' : 0,
+			'idle_timeout' : 120 * 1000,
+			'highlight_timeout' : 500
+		},
+		options : { },
+
+		// state
+		state : {
+			'party_on' : 'wild',
+			'last_page' : 0,
+			'last_id' : 0,
+			'idle_timeout' : null,
+			'highlight_timeout' : null
+		},
+		
+		
+		// stores ongoing requests (indexed by id) to prevent obsoletes ... see
+		// load()
+		load_requests : { },
+		
+		// borrow from party (hey, who let this guy in?)
+		mosaic : party.mosaic,
+		
+		// visible tiles
+		tiles : {},
+		
+		dialog : null,
+
+		/**
+		 * init
+		 * 
+		 * @param mixed options
+		 */
+		init : function(options, state) 
+		{
+			this.mosaic = party.mosaic;
+			this.options = $.extend(this.defaults, options);
+			this.state = $.extend(this.state, state);
+			
+			this.buildInterface();
+		},
+
+
+		// ---- build ui
+
+		/**
+		 * binds, the works
+		 */
+		buildInterface : function() 
+		{
+			// bind search user
+			$('#find-user').inputDefault().inputState( { 'onEnter' : function() { 
+				this.findUser($('#find-user').val());
+			}.bind(this) } );
+			
+			// bind search tweets
+			$('#search-tweets').inputDefault().inputState( { 'onEnter' : function() { 
+				this.searchTweets($('#search-tweets').val());
+			}.bind(this) } );
+			
+			// bind go to page
+			$('#page-load-bttn').click( function() {
+				this.loadPage($('#page-no').val());
+			}.bind(this) );
+			
+			// bind poll
+			$('#force-poll-bttn').click( function() {
+				this.poll();
+			}.bind(this) );
+			$('#mosaic').mousemove( function(ev) {
+				var offset = $('#mosaic').offset();
+				var x = Math.ceil((ev.clientX + f_scrollLeft() - offset.left) / 12) - 1;
+				var y = Math.ceil((ev.clientY + f_scrollTop() - offset.top) / 12) - 1;
+				if (x < 0 || y < 0) return;
+				var tile = this.mosaic.grid[x][y];
+				// is valid x,y
+				if ('undefined' != typeof tile) {
+					$('#mosaic').find('img').removeClass('excite');
+					// is loaded tile
+					if ('undefined' !== typeof this.tiles[tile.i]) {
+						$('#' + tile.i).addClass('excite');
+						this.highlightTilePos(tile.i);
+					}
+				}
+			}.bind(this) );
+		},
+		
+		
+		// ---- state
+
+		// ----
+
+		loadPage : function(page)
+		{
+			$('#mosaic img').remove();
+			
+			$('<div id="loading"></div>').appendTo('#mosaic');
+
+			console.log('PAGE > PAGE NO', page);
+
+			// load
+			var url = this.freshUrl(this.options.store_url+ '/pages/page_' + page + '.json');
+			this.load(url, {}, function(data) {
+				this.state.last_id = data.last_id;
+				$('#last-tweet span').text(data.last_id);
+				var count = this.addTiles(data.tiles);
+				if (!count) {
+					alert('empty page, TODO proper dialog');
+				}
+			}.bind(this), 'page:' . page);
+		},
+
+		poll : function()
+		{
+			var params = {
+				'last_id' : last_id
+			}
+
+			console.log('POLL > PARAMS', params);
+
+			Dashboard.load( 'poll.php', params, function(data) {
+				console.log(data);
+				$('#last-tweet span').text(data.payload.last_id);
+				var count = addTiles(data.payload.tiles);
+				if (count) {
+					last_id = data.payload.last_id;
+				}
+			}.bind(this) );
+		},
+		
+		reset : function() {
+			$('body').removeClass('shade');
+			$('body').removeClass('highlight');
+			$('body').removeClass('user-list');
+			$('body').removeClass('tweet-list');
+			$('#highlight').remove();
+			$('#user-list').remove();
+			$('#tweet-list').remove();
+		},
+
+		addTiles : function(tiles)
+		{
+			var imageData, i = 0, count = 0;
+			for (i in tiles) {
+				count++;
+				this.addTile(tiles[i])
+			}
+			return count;
+		},
+
+		addTile : function(tile)
+		{
+			this.tiles[tile.position] = tile;
+			$('#' + tile.position).remove();
+			var x = this.mosaic.index[tile.position].x;
+			var y = this.mosaic.index[tile.position].y;
+			var offsetX = this.options.tile_size * x;
+			var offsetY = this.options.tile_size * y;
+			var html = '<img id="' + tile.position + '" src="data:image/gif;base64,' + tile.imageData + '" style="position: absolute; top: ' + offsetY +'px; left: ' + offsetX + 'px" />';
+			$(html).appendTo('#mosaic');
+			$('#' + tile.position).click( function(ev) {
+				this.openTile(tile.position);
+			}.bind(this) );
+		},
+		
+		highlightTilePos : function(position)
+		{
+			if ('undefined' == typeof this.tiles[position]) return;
+
+			var tile = this.tiles[position];
+			
+			if (!$('#highlight').length) {
+				$('<div id="highlight" class="widget"></div>').appendTo('#widgets');
+			}
+			$('#highlight .tweet').remove();
+			$('<div class="tweet">' + this.getTweetHtml(tile) + '</div>').appendTo('#widgets #highlight');
+		},
+		
+		getTweetHtml : function(tweet)
+		{
+			console.log(tweet);
+			// page, position, twitterId, userId, isoLanguage
+			var contents = '<img src="' + tweet.imageUrl + '">\
+				<p class="contents">' + tweet.contents + '</p>\
+				<p class="user-name">' + tweet.userName + '</p>\
+				<p class="created-date">' + tweet.createdDate + '</p>';
+			return contents;
+		},
+		
+		openTile : function(position)
+		{
+			this.reset();
+			
+			$('body').addClass('shade highlight');
+			
+			this.highlightTilePos(position);
+			$('#highlight').click( function() {
+				this.reset();
+			}.bind(this) );
+			
+		},
+		
+		findUser : function(user_name)
+		{
+			this.reset();
+			
+			$('body').addClass('shade users');
+			
+			this.load('/users-by-terms.php', {'user_name' : user_name}, function(data) {
+				for (i = 0; i < data.users.length; i++) {
+					console.log(data.users[i].userName);
+				}
+			}.bind(this), 'users-by-terms' );
+		},
+		
+		searchTweets : function(terms)
+		{
+			this.reset();
+			
+			$('body').addClass('shade tweets');
+			
+			this.load('/tweets-by-terms.php', {'terms' : terms}, function(data) {
+				console.log(data);
+				if (data.total) {
+					if (!$('#tweet-list').length) {
+						$('<div id="tweet-list" class="widget"></div>').appendTo('#widgets');
+					}
+					for (i = 0; i < data.tweets.length; i++) {
+						$('<div class="tweet">' + this.getTweetHtml(data.tweets[i]) + '</div>').appendTo('#widgets #tweet-list');
+					}
+				}
+			}.bind(this), 'tweets-by-terms' );
+		},
+
+		// ---- ajax helpers
+
+
+		/**
+		 * a request_key is generated if id param is given (representing a
+		 * resource) if two requests are made with same id, obsolete responses
+		 * will be muted
+		 * 
+		 * @param string url
+		 * @param object params
+		 * @param function callback
+		 * @param string id
+		 */
+		load : function(url, params, callback, id) 
+		{
+			// generate a new key for this request?
+			var request_key = null;
+			if (id) {
+				var date = new Date();
+				this.load_requests[id] = request_key;
+			}
+			
+			console.log(url, request_key);
+			
+			return $.ajax( {
+				'type': 'GET',
+				'url': url,
+				'dataType': 'json',
+				'data': params,
+				'success': function(data) {
+					// ignore obsolete responses
+					if (id && this.load_requests[id] != request_key) return;
+					// welformed data
+					if (!data) {
+						this.loadError('NO_DATA', data);
+					}
+					else if ("undefined" == typeof data.payload) {
+						callback(data);
+					}
+					else if ("function" == typeof callback) {
+						callback(data.payload);
+					}
+				}.bind(this),
+				error: function() {
+					this.loadError(arguments);
+				}.bind(this)
+			});
+		},
+
+		loadError : function() 
+		{
+			console.log('load fail, error:', arguments);
+		},
+		
+		post : function(url, params, callback, noFeedback) 
+		{
+			$.ajax( {
+				type: 'POST',
+				url: 'json/' + url,
+				dataType: 'json',
+				data: params,
+				success: function(data) {
+					var noFeedback = ("undefined" == typeof noFeedback) ? noFeedback : false; 
+					if (!data) {
+						this.postError('NO_DATA', data);
+					}
+					else if ("undefined" == typeof data.code) {
+						this.postError('NO_CODE', data);
+					}
+					else if (data.code != 1) {
+						this.postError('ERROR_CODE:' + data.code, data);
+					}
+					else if ("function" == typeof callback) {
+						var payload = ("undefined" != typeof data.payload) ? data.payload : {}; 
+						callback(payload);
+					}
+					if (!noFeedback) {
+						var message = ("undefined" != typeof data.msg) ? data.msg : null;
+						this.postSuccess(message);
+					}
+				}.bind(this),
+				error: function() {
+					this.postError(arguments);
+				}.bind(this)
+			});
+		},
+		
+		postError : function() 
+		{
+			console.log('post fail, error:', arguments);
+		},
+		
+		postSuccess : function(message) 
+		{
+			console.log('post ok, message:', message);
+		},
+
+		
+		// urls
+		
+		/**
+		 * freshness, appends ?r=123456789 to file url to bypass browser cache
+		 * 
+		 * @param string fileUrl
+		 * @return string
+		 */
+		freshUrl : function(fileUrl) 
+		{
+			return fileUrl + '?r=' + new Date().getTime();
+		},
+
+
+		/**
+		 * updates urlFragment
+		 * 
+		 * @param string fragment
+		 */
+		urlFragment : function(fragment) 
+		{
+			var href = document.location.href;
+			href = href.replace(/#.*$/, '');
+			document.location.href = href + '#' + fragment;
+		},
+
+
+		/**
+		 * @return string
+		 */
+		getUrlFragment : function() 
+		{
+			var href = document.location.href;
+			var pos = href.indexOf('#');
+			return (pos > 0) ? href.substring(pos + 1) : null
+		}
+
+	});
+
+
 	/**
 	 * mock support for window.console
 	 */
@@ -17,7 +407,7 @@
 		window.console.dir = function(whenever) {};
 	}
 
-	
+
 	$.fn.extend( {
 	
 		/**
@@ -45,8 +435,8 @@
 
 
 		/**
-		 * element toggles class + data attr on click 
-		 * activate/deactivate callbacks
+		 * element toggles class + data attr on click activate/deactivate
+		 * callbacks
 		 */
 		toggleSwitch: function(options) 
 		{
@@ -87,9 +477,8 @@
 		},
 		
 		/**
-		 * collection of sort control buttons with asc/desc toggle
-		 * applies to all children elements classed .sort-button
-		 * onChange callback
+		 * collection of sort control buttons with asc/desc toggle applies to
+		 * all children elements classed .sort-button onChange callback
 		 */
 		sortControl : function(options) 
 		{
@@ -143,9 +532,8 @@
 		},
 
 		/**
-		 * input aware of state and ENTER key
-		 * onChange: callback
-		 * onEnter: callback
+		 * input aware of state and ENTER key onChange: callback onEnter:
+		 * callback
 		 */
 		inputState : function(options) 
 		{
@@ -197,9 +585,8 @@
 		},
 		
 		/**
-		 * input aware of state and ENTER key
-		 * onChange: callback
-		 * onEnter: callback
+		 * input aware of state and ENTER key onChange: callback onEnter:
+		 * callback
 		 */
 		inputAutoComplete : function(options) 
 		{
@@ -283,6 +670,7 @@
 		}
 	} );
 
+
 	/**
 	 * add support for prototype like bind()
 	 */
@@ -306,452 +694,6 @@
 				 return leArgument2;
 			 }(arguments)));
 		};
-	}		
-
-	/**
-	 * Dashboard static class
-	 */	
-	Dashboard = {}; 
-	$.extend(Dashboard, {
-
-		// configuration
-		defaults : {
-			'store_url' : '',
-			'tile_size' : 0,
-			'idle_timeout' : 5
-		},
-		options : { },
-
-		// state
-		state : {
-			'party_on' : 'wild',
-			'last_page' : 0,
-			'last_id' : 0,
-			'idle_timeout' : null
-		},
-		
-		
-		// stores ongoing requests (indexed by id) to prevent obsoletes ... see load()
-		load_requests : { },
-		
-		// hey, who let this guy in?
-		mosaic : party.mosaic,
-		
-		
-		dialog : null,
-
-		/**
-		 * init 
-		 * 
-		 * @param mixed options
-		 */
-		init : function(options, state) 
-		{
-			this.options = $.extend(this.defaults, options);
-			this.state = $.extend(this.state, state);
-			
-			this.buildInterface();
-		},
-
-
-		// ---- build ui
-
-		/**
-		 * binds, the works
-		 */
-		buildInterface : function() 
-		{
-			// bind search user
-			
-			// bind search tweets
-			
-			// bind go to page
-			$('#page-load-bttn').click( function() {
-				this.loadPage($('#page-no').val());
-			}.bind(this) );
-			
-			// bind poll
-			$('#force-poll-bttn').click( function() {
-				this.poll();
-			}.bind(this) );
-		},
-		
-		
-		// ---- state
-		
-		
-		/**
-		 * bummer
-		 */
-		partyPause : function() {
-
-			// don't resume party, afterall
-			window.clearTimeout(this.state.idle_timeout);
-			// update state
-			this.state.party_on = false;
-			
-			// psssshhhhhh!
-			party.pause();
-			// hide all the guests
-			$('.tile').hide();
-			
-			// resume if idle after idle_timeout seconds
-			this.state.idle_timeout = window.setTimeout( function() {
-				this.partyResume();
-			}.bind(this), this.options.idle_timeout * 1000); 
-		},
-		
-		/**
-		 * yeahhh!
-		 */
-		partyResume : function() {
-			if (this.state.party_on) return;
-			
-			// remove dashboard traces
-			$('#mosaic img').remove();
-			
-			// recall guests
-			$('.tile').show();
-			// and resume 
-			this.state.party_on = 'wild again';
-			party.resume();
-		},
-
-		// ---- 
-
-		addImage : function(data, pos)
-		{
-			console.log(pos)
-			var x = this.mosaic.index[pos].x;
-			var y = this.mosaic.index[pos].y;
-			var offsetX = this.options.tile_size * x;
-			var offsetY = this.options.tile_size * y;
-			$('#mosaic').append('<img id="image-' + i + '" src="data:image/gif;base64,' + data + '" style="width:12px; height:12px; position: absolute; top: ' + offsetY +'px; left: ' + offsetX + 'px" />');
-		},
-
-		loadPage : function(page)
-		{
-			this.partyPause();
-			
-			$('#mosaic img').remove();
-			
-			$('<div id="loading"></div>').appendTo('#mosaic');
-
-			console.log('PAGE > PAGE NO', page);
-
-			// load 
-			var url = this.options.store_url+ '/pages/page_' + page + '.json';
-			var params = {
-				'page' : page
-			}
-			this.load(url, params, function(data) {
-				console.log(data);
-				this.state.last_id = data.payload.last_id;
-				$('#last-tweet span').text(data.payload.last_id);
-				var count = showTweets(data.payload.tweets);
-				if (!count) {
-					alert('empty page, TODO proper dialog');
-				}
-			}, 'page:' . page);
-		},
-
-		poll : function()
-		{
-			var params = {
-				'last_id' : last_id
-			}
-
-			console.log('POLL > PARAMS', params);
-
-			$.ajax( {
-				type: 'GET',
-				url: '/poll.php',
-				data: params,
-				dataType: 'json',
-				success: function(data) {
-					console.log(data);
-					$('#last-tweet span').text(data.payload.last_id);
-					var count = showTweets(data.payload.tweets);
-					if (!count) {
-						alert('empty poll, TODO proper dialog');
-					}
-					else {
-						last_id = data.payload.last_id;
-						alert(count + ' tweets, TODO proper dialog');
-					}
-				}.bind(this),
-					error: function() {
-				}.bind(this)
-			});
-		},
-
-		showTweets : function(tweets)
-		{
-			var imageData, i, count = 0;
-			for (i in tweets) {
-				count++;
-				imageData = tweets[i].imageData;
-				addImage(imageData, tweets[i].position);
-				// fetch position from index
-			}
-			return count;
-		},
-
-
-		// ---- ajax helpers
-
-
-		/**
-		 * a request_key is generated if id param is given (representing a resource) 
-		 * if two requests are made with same id, obsolete responses will be muted
-		 * 
-		 * @param string url
-		 * @param object params
-		 * @param function callback
-		 * @param string id
-		 */
-		load : function(url, params, callback, id) 
-		{
-			// generate a new key for this request?
-			if (id) {
-				var date = new Date();
-				var request_key = Math.ceil(Math.random() * 1000) + ':' + date.getTime();
-				this.load_requests[id] = request_key;
-			}
-			
-			console.log(url, request_key);
-			
-			return $.ajax( {
-				'type': 'GET',
-				'url': url,
-				'dataType': 'json',
-				'data': params,
-				'success': function(data) {
-					// ignore obsolete responses
-					if (id && this.load_requests[id] != request_key) return;
-					// welformed data
-					if (!data) {
-						this.loadError('NO_DATA', data);
-					}
-					else if ("undefined" == typeof data.payload) {
-						this.loadError('NO_PAYLOAD', data);
-					}
-					else if ("function" == typeof callback) {
-						callback(data.payload);
-					}
-				}.bind(this),
-				error: function() {
-					this.loadError(arguments);
-				}.bind(this)
-			});
-		},
-
-		loadError : function() 
-		{
-			console.log('load fail, error:', arguments);
-		},
-		
-		post : function(url, params, callback, noFeedback) 
-		{
-			$.ajax( {
-				type: 'POST',
-				url: 'json/' + url,
-				dataType: 'json',
-				data: params,
-				success: function(data) {
-					var noFeedback = ("undefined" == typeof noFeedback) ? noFeedback : false; 
-					if (!data) {
-						this.postError('NO_DATA', data);
-					}
-					else if ("undefined" == typeof data.code) {
-						this.postError('NO_CODE', data);
-					}
-					else if (data.code != 1) {
-						this.postError('ERROR_CODE:' + data.code, data);
-					}
-					else if ("function" == typeof callback) {
-						var payload = ("undefined" != typeof data.payload) ? data.payload : {}; 
-						callback(payload);
-					}
-					if (!noFeedback) {
-						var message = ("undefined" != typeof data.msg) ? data.msg : null;
-						this.postSuccess(message);
-					}
-				}.bind(this),
-				error: function() {
-					this.postError(arguments);
-				}.bind(this)
-			});
-		},
-		
-		postError : function() 
-		{
-			console.log('post fail, error:', arguments);
-		},
-		
-		postSuccess : function(message) 
-		{
-			console.log('post ok, message:', message);
-		},
-
-
-		// ---- url fragments
-
-
-		/**
-		 * updates urlFragment
-		 * 
-		 * @param string fragment
-		 */
-		urlFragment : function(fragment) 
-		{
-			var href = document.location.href;
-			href = href.replace(/#.*$/, '');
-			document.location.href = href + '#' + fragment;
-		},
-
-
-		/**
-		 * @return string
-		 */
-		getUrlFragment : function() 
-		{
-			var href = document.location.href;
-			var pos = href.indexOf('#');
-			return (pos > 0) ? href.substring(pos + 1) : null
-		}
-
-	});
-	
-	/**
-	 * MovieList class
-	 */	
-	Dashboard.List = function(container, options) {
-		
-		this.defaults = {};
-		
-		this.options = $.extend(this.defaults, options);
-		
-		this.app = app;
-		
-		this.id = 'results';
-		
-		this.loaded = false;
-		
-		this.loadedResults = 0;
-		
-		/**
-		 * init
-		 * 
-		 * @param mixed options
-		 */
-		this.init = function() {
-			
-		}
-		
-		this.loadResults = function(more)
-		{
-			if (!more) {
-				this.loadedResults = 0;
-			}
-			
-			var tagSets = this.app.getTagSetFilters();
-			
-			var params = {
-				'offset' : this.loadedResults,
-				'terms' : $("#search-q").val() != '...' ? $("#search-q").val() : '',
-				'extended' : $("#search-extend").hasClass('toggle-on'),
-				'has-media' : $("#search-media").attr('data-toggle-three'),
-				'has-trailer' : $("#search-trailer").attr('data-toggle-three'),
-				'has-poster' : $("#search-poster").attr('data-toggle-three'),
-				'year-after' : $("#search-year-after").val(),
-				'year-before' : $("#search-year-before").val(),
-			};
-			
-			params.sort = $("#results-sort-control").attr('data-field') + ' ' + $("#results-sort-control").attr('data-direction');
-			
-			for (set in tagSets)
-			{
-				for (tagId in tagSets[set])
-				{
-					if ("undefined" == typeof params.tagFilter) params.tagFilter = {};
-					
-					if ("undefined" == typeof params.tagFilter[set]) params.tagFilter[set] = [];
-					
-					params.tagFilter[set].push({
-						'id' : tagSets[set][tagId].id,
-						'tagSet' : tagSets[set][tagId].tagSetId,
-					});
-				}
-			}
-			
-			console.log(params);
-			
-			if (!more) {
-				$('#results .load-more').remove();
-				$('#results .ruler').remove();
-				$('#results .result').remove();
-			}
-			
-			$('#results').addClass('loading');
-			
-			var loadId = 'tweetList';
-			
-			Dashboard.load('getMovies', loadId, params, function(movies) {
-				
-				this.loaded = true;
-				$('#results').addClass('loaded');
-				
-				$('#results').removeClass('loading');
-				
-				if (more) {
-					$('#results .load-more').remove();
-					var node = $('<li class="ruler"><hr/></li>').appendTo('#results .result-items');
-				}
-				var firstMovie, loadedMovie;
-				for (i in movies.results) {
-					this.loadedResults ++;
-					if (!movies.results[i]) continue;
-					loadedMovie = this.addMovie(movies.results[i]);
-					if (!firstMovie) firstMovie = loadedMovie;
-				}
-				
-				var loadedTotal = (parseInt(movies.offset) + parseInt(movies.count));
-				var resultsLeft = movies.total - loadedTotal;
-				
-				if (more) {
-					console.log('more');
-					var scroll = $('#results .result-items').scrollTop(); 
-					$('#results .result-items').animate( { 'scrollTop' : scroll + 200 }, 300, function() {
-						if (more) $("#results .load-more").show();
-					} );
-				}
-				
-				if (movies.total > loadedTotal) {
-					$('#results h2.result-summary').text('showing ' + loadedTotal + ' of ' + movies.total);
-					var button = $('<li class="load-more"><a>load more (' + resultsLeft + ') </a></li>').appendTo('#results .result-items');
-					if (more) $("#results .load-more").hide();
-					button.find('a').click( function() {
-						this.loadResults(true);
-					}.bind(this) );
-				}
-				else if (movies.count && !more) {
-					$('#results h2').text('showing all ' + movies.count + ' results');
-				}
-				else if (!more) {
-					$('#results h2').text('no results');
-				}
-			}.bind(this) );
-		}
-		
-		this.addMovie = function(movie)
-		{
-			var newMovie = new Movies.Movie('#results .result-items', movie);
-			Movies.registerMovie(newMovie);
-			return newMovie;
-		}
-		
-		this.init();
 	};
 
 })(jQuery);
@@ -775,8 +717,9 @@ function getTinyUrl(longUrl, success)
 
 
 /**
- * NOTE: jQuery handling of scroll position has poor bruwser-compatibility  
- * borrowed from http://www.softcomplex.com/docs/get_window_size_and_scrollbar_position.html 
+ * NOTE: jQuery handling of scroll position has poor bruwser-compatibility
+ * borrowed from
+ * http://www.softcomplex.com/docs/get_window_size_and_scrollbar_position.html
  * 
  * @return integer
  */
@@ -790,7 +733,8 @@ function f_scrollLeft()
 }
 /**
  * NOTE: jQuery handling of scroll position has poor bruwser-compatibility
- * borrowed from http://www.softcomplex.com/docs/get_window_size_and_scrollbar_position.html
+ * borrowed from
+ * http://www.softcomplex.com/docs/get_window_size_and_scrollbar_position.html
  * 
  * @return integer
  */
@@ -803,7 +747,8 @@ function f_scrollTop()
 	);
 }
 /**
- * borrowed from http://www.softcomplex.com/docs/get_window_size_and_scrollbar_position.html
+ * borrowed from
+ * http://www.softcomplex.com/docs/get_window_size_and_scrollbar_position.html
  */
 function f_clientWidth() 
 {

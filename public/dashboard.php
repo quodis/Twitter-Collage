@@ -35,8 +35,7 @@ function main()
 
 	// js config
 	$uiOptions = $config['UI']['options'];
-	$uiOptions['last_page'] = Mosaic::getCurrentWorkingPageNo() - 1;
-	$uiOptions['tile_size'] = $config['Mosaic']['tileSize'] + 20;
+	$uiOptions['tile_size'] = $config['Mosaic']['tileSize'];
 
 	// dashboard state
 	$dashboardState = array(
@@ -73,9 +72,8 @@ function main()
 		<!-- scripts -->
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
 		<script type="text/javascript" src="/assets/js/jquery.tipsy.js"></script>
-		<script type="text/javascript" src="<?=$config['UI']['js']['general']?>"></script>
-		<script type="text/javascript" src="<?=$jsMosaicConfig?>"></script>
 		<script type="text/javascript" src="<?=$config['UI']['js']['dashboard']?>"></script>
+		<script type="text/javascript" src="<?=$jsMosaicConfig?>"></script>
 		<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
 	</head>
@@ -102,13 +100,6 @@ function main()
 					<!-- Here goes the text explaining how Firefox Twitter Party works. -->
 					<p>Now feeding on hash <span class="hashtag"><?=$config['Twitter']['terms']?></span>.</p>
 
-					<div id="twitter-counter">
-						<dl>
-							<dt><a href="http://twitter.com/share?related=firefox&text=Join+me+at+the+Firefox+4+Twitter+Party+and+celebrate+the+newest+version&url=http%3A%2F%2Ftwitterparty.mozilla.com&via=firefox" title="Tweet" rel="external">Tweet</a></dt>
-							<dd><span>-</span></dd>
-						</dl>
-					</div><!-- twitter-counter -->
-
 					<div class="counter">
 						<dl class="tweets">
 							<dt><span>Last Tweet</span></dt>
@@ -122,9 +113,9 @@ function main()
 							<dt><span>Delay</span></dt>
 							<dd id="job-delay"><span></span></dd>
 						</dl>
-					</div><!-- other counters -->
+					</div><!-- counters -->
 
-					<div class="control-box page clearfix">
+					<div class="control-box page first clearfix">
 						<h3>Go To Page</h3>
 						<label for="find-user" accesskey="p">PageNo</label>
 						<input type="text" id="page-no" value="<?=(Mosaic::getCurrentWorkingPageNo())?>" tabindex="1" />
@@ -153,6 +144,9 @@ function main()
 
 		<section id="mosaic">
 			<h2>Firefox Twitter Mosaic</h2>
+		</section>
+
+		<section id="widgets">
 		</section>
 
 

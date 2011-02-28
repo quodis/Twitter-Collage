@@ -220,10 +220,13 @@ button.close span {
 /* SEARCH */
 
 .control-box {
-	background: url(../images/layout/aside-ornament.png) center top no-repeat;
-	padding-top: 30px;
 	padding-bottom: 20px;
 	clear: both;
+}
+
+.control-box.first {
+	padding-top: 30px;
+	background: url(../images/layout/aside-ornament.png) center top no-repeat;
 }
 
 .control-box h3 {
@@ -307,19 +310,99 @@ button.close span {
 	
 }
 
-/* 5. Widgets */ 
+#mosaic img {
+	width: 12px;
+	height: 12px;
+}
 
-widget {
+#mosaic img.excite {
+	z-index: 1001;
+	width: 36px;
+	height: 36px;
+	margin-top: -20px;
+	margin-left: -12px;
+	border: 1px solid white;
+	box-shadow: 0px 0px 5px white; 
+}
+
+/* 5. Widgets */
+
+#widgets {
+	position: absolute;
+	top: 20px;
+	left: 362px;
+	width: 576px;
+	border: 1px solud black;
+}
+
+body.shade #widgets {
+	min-height: 650px;
+	padding-top: 110px;
+}
+
+body.shade #mosaic {
+	opacity: 0.5;
+}
+
+.widget {
+	display: block;
 	background-color: white;
-	margin: 50px 0px 20px 0px;
-	padding: 135px 20px 20px;
-	width: 260px;
+	margin: 0 0 20px;
+	padding: 10px;
 	-moz-box-shadow: 0px 0px 3px #A6BFCC;
 	-webkit-box-shadow: 0px 0px 3px #A6BFCC;
 	box-shadow: 0px 0px 3px #A6BFCC;
 	-moz-border-radius: 10px;
 	border-radius: 10px;
 }
+
+#highlight {
+	min-height: 10px;
+}
+
+body.highlight #highlight {
+	padding: 20px;
+	font-size: 24px;
+}
+
+body.highlight #highlight p {
+	font-size: 14px;
+}
+
+/* -- tweet --*/
+
+.tweet {
+	min-height: 48px;
+}
+
+.tweet img {
+	float: left;
+	margin-right: 10px;
+}
+
+.tweet .contents {
+	display: inline;
+	font-size: 11px;
+	line-height: 24px;
+}
+
+.tweet .user-name {
+	clear: both;
+	font-weight: bold;
+}
+.tweet .user-name,
+.tweet .created-date {	
+	display: inline;
+	font-size: 11px;
+	line-height: 24px;
+} 
+
+/* -- tweet-list -- */
+
+#tweet-list .tweet {
+	margin-bottom: 10px;
+}
+				  
 
 /* 7. Dialogs */
 #overlay,.overlay {
