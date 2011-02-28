@@ -18,7 +18,7 @@ function main()
 
 	$userName = (isset($_REQUEST['user_name'])) ? $_REQUEST['user_name'] : null;
 
-	$result = Tweet::getByUserNameWithImage($userName, $config['UI']['resultsLimit']);
+	$result = Tweet::getByUserName($userName, $config['UI']['resultsLimit'], TRUE);
 
 	// init response
 

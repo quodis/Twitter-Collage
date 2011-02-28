@@ -18,7 +18,7 @@ function main()
 
 	$lastId = (isset($_REQUEST['last_id'])) ? (int)$_REQUEST['last_id'] : null;
 
-	$result = Tweet::getSinceLastIdWithImage($lastId, $config['UI']['pollLimit']);
+	$result = Tweet::getSinceLastId($lastId, $config['UI']['pollLimit'], TRUE);
 
 	// init response
 
