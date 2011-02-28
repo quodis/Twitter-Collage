@@ -235,7 +235,7 @@ class Image
 		// fetch
 		$index = $config['index'][$position];
 		// fetch the tile
-		$tile  = $config['grid'][$index['y']][$index['x']];
+		$tile  = $config['grid'][$index['x']][$index['y']];
 		// tile color
 		$color = $tile['c'];
 		$rgbColor = str_pad(dechex($color[0]), 2, '0', STR_PAD_LEFT);
