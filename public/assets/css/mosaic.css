@@ -34,6 +34,7 @@ http://www.opensource.org/licenses/mit-license.php
 	width: 290px;
 	position: absolute;
 	display: none;
+	z-index: 20;
 }
 
 .bubble a,
