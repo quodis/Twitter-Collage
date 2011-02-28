@@ -27,7 +27,7 @@ Array.prototype.shuffle = function (){
 			last_page: 0,
 			mosaic_offset: {}
 		},
-		available_performances: {
+		available_performances = {
 			high: {
 				initial_frames_per_second: 24,
 				initial_tiles_per_frame: 10,
