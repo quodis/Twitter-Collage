@@ -266,28 +266,36 @@ Array.prototype.shuffle = function (){
 			if (x > 24) {
 				position_class = "bottom-right";
 				position_css = {
-					right: (572 - (x * 12)) + 'px',
-					bottom: (564 - (y * 12)) + 'px'
+					top: '',
+					right: (564 - (x * 12)) + 'px',
+					bottom: (540 - (y * 12)) + 'px',
+					left: ''
 				}
 			} else {
 				position_class = "bottom-left";
 				position_css = {
-					left: ((x * 12) + 8) + 'px',
-					bottom: (564 - (y * 12)) + 'px'
+					top: '',
+					right: '',
+					bottom: (540 - (y * 12)) + 'px',
+					left: ((x * 12) + 8) + 'px'
 				}
 			}
 		} else {
 			if (x > 24) {
 				position_class = "top-right";
 				position_css = {
-					right: (572 - (x * 12)) + 'px',
-					top: ((y * 12) - 10) + 'px'
+					top: ((y * 12) - 10) + 'px',
+					right: (564 - (x * 12)) + 'px',
+					bottom: '',
+					left: ''
 				}
 			} else {
 				position_class = "top-left";
 				position_css = {
+					top: ((y * 12) - 10) + 'px',
+					right: '',
 					left: ((x * 12) + 8) + 'px',
-					top: ((y * 12) - 10) + 'px'
+					bottom: ''
 				}
 			}	
 		}
@@ -325,6 +333,7 @@ Array.prototype.shuffle = function (){
 	
 	// Update the counter UI
 	function counterDraw() {
+		return;
 		var dif = (counter_target - counter_current),
 			inc = 1;
 		
