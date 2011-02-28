@@ -8,7 +8,7 @@
  */
 
 /**
- * load localization lib
+ * load localization lib - provides: $locale, $request_uri, $accept_language
  *
  */
 include('../lib/localization.php');
@@ -30,14 +30,6 @@ function main()
 	include '../bootstrap.php';
 	session_cache_limiter("nocache");
 	
-	/**
-	 * Handle l18n negotiation
-	 */
-	// if there's no language argument: /en /pt
-		// redirect the user based on Accept-Language header
-	// if there's a language_argument, load the appropriate .po file
-	
-
 	// mosaic config file
 	$jsMosaicConfig = $config['Store']['url'] . $config['UI']['js-config']['grid'];
 
@@ -47,7 +39,7 @@ function main()
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= $locale ?>">
 
 	<head>
 
@@ -98,7 +90,7 @@ function main()
 
 					<div id="twitter-counter">
 						<dl>
-							<dt><a href="http://twitter.com/share?related=firefox&text=<?= urlencode(_('Join me at the Firefox 4 Twitter Party and celebrate the newest version http://t.co/PowZdhA via @firefox')) ?>" title="Tweet" rel="external">Tweet</a></dt>
+							<dt><a href="http://twitter.com/share?related=firefox&text=<?= urlencode(_('Join me at the Firefox 4 Twitter Party and celebrate the newest version http://t.co/PowZdhA via @firefox')) ?>" title="<?= _('Tweet') ?>" rel="external"><?= _('Tweet') ?></a></dt>
 							<dd><span>-</span></dd>
 						</dl>
 					</div><!-- twitter-counter -->
