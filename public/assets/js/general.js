@@ -169,21 +169,21 @@ var party = party || {};
 	
 	
 	function showBubble(pos) {
-		var tweet = party.visible_tweets[pos],
+		var tile = party.visible_tiles[pos],
 			b = party.bubble;
-		if (!tweet || !b) {
+		if (!tile || !b) {
 			return;
 		}
 		
 		b.container.hide();
-		b.username_a.text(tweet.userName);
-		b.username_a.attr('title', tweet.userName);
-		b.username_a.attr('href', 'http://twitter.com/' + tweet.userName);
-		b.avatar_a.attr('title', tweet.userName);
-		b.avatar_a.attr('href', 'http://twitter.com/' + tweet.userName);
-		b.avatar_img.attr('src', tweet.imageUrl);
-		b.avatar_img.attr('alt', tweet.userName);
-		b.p.text(tweet.contents);
+		b.username_a.text(tile.userName);
+		b.username_a.attr('title', tile.userName);
+		b.username_a.attr('href', 'http://twitter.com/' + tile.userName);
+		b.avatar_a.attr('title', tile.userName);
+		b.avatar_a.attr('href', 'http://twitter.com/' + tile.userName);
+		b.avatar_img.attr('src', tile.imageUrl);
+		b.avatar_img.attr('alt', tile.userName);
+		b.p.text(tile.contents);
 		b.container.show();
 		
 	}
