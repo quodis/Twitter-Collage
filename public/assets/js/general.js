@@ -220,8 +220,8 @@ Array.prototype.shuffle = function (){
 		counter_timer = setInterval(counterDraw, 200);
 		// Bind the hover action
         party.canvas.bind('mousemove', function(ev) {
-            var x = Math.ceil((ev.clientX + f_scrollLeft() - offset.left) / 12) - 1,
-				y = Math.ceil((ev.clientY + f_scrollTop() - offset.top) / 12) - 1,
+            var x = Math.ceil((ev.clientX + f_scrollLeft() - state.mosaic_offset.left) / 12) - 1,
+				y = Math.ceil((ev.clientY + f_scrollTop() - state.mosaic_offset.top) / 12) - 1,
 				pos;
 				
             if (x < 0 || y < 0) {
@@ -295,7 +295,7 @@ Array.prototype.shuffle = function (){
 	
 	function hideBubble() {
 		state.active_bubble_pos = 0;
-		party.bubble.hide();
+		party.bubble.container.hide();
 	}
 	
 	// Get an object's length
