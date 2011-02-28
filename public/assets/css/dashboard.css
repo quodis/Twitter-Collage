@@ -402,7 +402,30 @@ body.highlight #highlight p {
 #tweet-list .tweet {
 	margin-bottom: 10px;
 }
-				  
+
+/* -- user -- */
+
+.user img {
+	float: left;
+	margin-right: 10px;
+}
+
+.user .user-name {
+	clear: both;
+	display: inline;
+	font-size: 14px;
+	line-height: 48px;
+	font-weight: bold;
+}
+
+/* -- user-list -- */
+
+#user-list .user {
+	float: left;
+	width: 265px;
+	min-height: 48px;
+	margin: 0 10px 10px 0;
+}
 
 /* 7. Dialogs */
 #overlay,.overlay {

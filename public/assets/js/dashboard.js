@@ -87,12 +87,14 @@ var party = party || {};
 			}.bind(this) } );
 			
 			// bind go to page
-			$('#page-load-bttn').click( function() {
+			$('#page-load-bttn').click( function(ev) {
+				ev.stopPropagation();
 				this.loadPage($('#page-no').val());
 			}.bind(this) );
 			
 			// bind poll
 			$('#force-poll-bttn').click( function() {
+				ev.stopPropagation();
 				this.poll();
 			}.bind(this) );
 			$('#mosaic').mousemove( function(ev) {
@@ -111,6 +113,9 @@ var party = party || {};
 					}
 				}
 			}.bind(this) );
+			
+			// bind reset
+			$('body').click( this.reset );
 		},
 		
 		
@@ -123,8 +128,6 @@ var party = party || {};
 			$('#mosaic img').remove();
 			
 			$('<div id="loading"></div>').appendTo('#mosaic');
-
-			console.log('PAGE > PAGE NO', page);
 
 			// load
 			var url = this.freshUrl(this.options.store_url+ '/pages/page_' + page + '.json');
@@ -144,10 +147,7 @@ var party = party || {};
 				'last_id' : last_id
 			}
 
-			console.log('POLL > PARAMS', params);
-
 			Dashboard.load( 'poll.php', params, function(data) {
-				console.log(data);
 				$('#last-tweet span').text(data.payload.last_id);
 				var count = addTiles(data.payload.tiles);
 				if (count) {
@@ -159,6 +159,7 @@ var party = party || {};
 		reset : function() {
 			$('body').removeClass('shade');
 			$('body').removeClass('highlight');
+			$('body').removeClass('user');
 			$('body').removeClass('user-list');
 			$('body').removeClass('tweet-list');
 			$('#highlight').remove();
@@ -187,6 +188,7 @@ var party = party || {};
 			var html = '<img id="' + tile.position + '" src="data:image/gif;base64,' + tile.imageData + '" style="position: absolute; top: ' + offsetY +'px; left: ' + offsetX + 'px" />';
 			$(html).appendTo('#mosaic');
 			$('#' + tile.position).click( function(ev) {
+				ev.stopPropagation();
 				this.openTile(tile.position);
 			}.bind(this) );
 		},
@@ -198,20 +200,28 @@ var party = party || {};
 			var tile = this.tiles[position];
 			
 			if (!$('#highlight').length) {
-				$('<div id="highlight" class="widget"></div>').appendTo('#widgets');
+				$('<div id="highlight" class="widget clearfix"></div>').appendTo('#widgets');
 			}
 			$('#highlight .tweet').remove();
+			$('#highlight .user').remove();
 			$('<div class="tweet">' + this.getTweetHtml(tile) + '</div>').appendTo('#widgets #highlight');
 		},
 		
 		getTweetHtml : function(tweet)
 		{
-			console.log(tweet);
 			// page, position, twitterId, userId, isoLanguage
 			var contents = '<img src="' + tweet.imageUrl + '">\
 				<p class="contents">' + tweet.contents + '</p>\
 				<p class="user-name">' + tweet.userName + '</p>\
 				<p class="created-date">' + tweet.createdDate + '</p>';
+			return contents;
+		},
+		
+		getUserHtml : function(tweet)
+		{
+			// page, position, twitterId, userId, isoLanguage
+			var contents = '<img src="' + tweet.imageUrl + '">\
+				<p class="user-name">' + tweet.userName + '</p>';
 			return contents;
 		},
 		
@@ -232,11 +242,51 @@ var party = party || {};
 		{
 			this.reset();
 			
-			$('body').addClass('shade users');
+			$('body').addClass('shade user-list');
 			
 			this.load('/users-by-terms.php', {'user_name' : user_name}, function(data) {
+				
+				if (!data.total) return;
+				
 				for (i = 0; i < data.users.length; i++) {
-					console.log(data.users[i].userName);
+					if (!$('#user-list').length) {
+						$('<div id="user-list" class="widget clearfix"></div>').appendTo('#widgets');
+					}
+					for (i = 0; i < data.users.length; i++) {
+						$('<div class="user">' + this.getUserHtml(data.users[i]) + '</div>').appendTo('#widgets #user-list');
+					}
+					// user-name click
+					$('#user-list .user').click( function(ev) {
+						ev.stopPropagation();
+						var el = $(ev.target).hasClass('user') ? $(ev.target) : $(ev.target).parents('.user');
+						this.showUser(el.find('.user-name').text(), el.find('img').attr('src'));
+					}.bind(this) );
+				}
+			}.bind(this), 'users-by-terms' );
+		},
+		
+		
+		showUser : function(name, picture_url)
+		{
+			this.reset();
+			
+			$('body').addClass('shade user-tweets');
+			
+			if (!$('#highlight').length) {
+				$('<div id="highlight" class="widget clearfix"></div>').appendTo('#widgets');
+			}
+			$('<div class="user"><img src="' + picture_url + '" /><p class="user-name">' + name + '</p></div>').appendTo('#widgets #highlight');
+			
+			// load
+			this.load('/tweets-by-username.php', {'user_name' : name}, function(data) {
+				
+				if (!data.total) return;
+				
+				if (!$('#tweet-list').length) {
+					$('<div id="tweet-list" class="widget clearfix"></div>').appendTo('#widgets');
+				}
+				for (i = 0; i < data.tweets.length; i++) {
+					$('<div class="tweet">' + this.getTweetHtml(data.tweets[i]) + '</div>').appendTo('#widgets #tweet-list');
 				}
 			}.bind(this), 'users-by-terms' );
 		},
@@ -245,18 +295,24 @@ var party = party || {};
 		{
 			this.reset();
 			
-			$('body').addClass('shade tweets');
+			$('body').addClass('shade tweet-list');
 			
 			this.load('/tweets-by-terms.php', {'terms' : terms}, function(data) {
-				console.log(data);
-				if (data.total) {
-					if (!$('#tweet-list').length) {
-						$('<div id="tweet-list" class="widget"></div>').appendTo('#widgets');
-					}
-					for (i = 0; i < data.tweets.length; i++) {
-						$('<div class="tweet">' + this.getTweetHtml(data.tweets[i]) + '</div>').appendTo('#widgets #tweet-list');
-					}
+				
+				if (!data.total) return;
+				
+				if (!$('#tweet-list').length) {
+					$('<div id="tweet-list" class="widget clearfix"></div>').appendTo('#widgets');
 				}
+				for (i = 0; i < data.tweets.length; i++) {
+					$('<div class="tweet">' + this.getTweetHtml(data.tweets[i]) + '</div>').appendTo('#widgets #tweet-list');
+				}
+				// user-name click
+				$('#tweet-list .tweet').click( function(ev) {
+					ev.stopPropagation();
+					var el = $(ev.target).hasClass('tweet') ? $(ev.target) : $(ev.target).parents('.tweet');
+					this.showUser(el.find('.user-name').text(), el.find('img').attr('src'));
+				}.bind(this) );
 			}.bind(this), 'tweets-by-terms' );
 		},
 
@@ -282,7 +338,7 @@ var party = party || {};
 				this.load_requests[id] = request_key;
 			}
 			
-			console.log(url, request_key);
+			console.log(url, params, request_key);
 			
 			return $.ajax( {
 				'type': 'GET',
@@ -609,8 +665,6 @@ var party = party || {};
 				
 				var updateResults = function(results)
 				{
-					console.log('update', results, 'text', inputText);
-					
 					var cnt = 0;
 					for (id in results) {
 						cnt++;
@@ -624,10 +678,6 @@ var party = party || {};
 					else if (!cnt) {
 						match = null;
 					}
-					
-					// TODO show/navitage matches (callback)
-					
-					console.log('match', match)
 				}
 				
 				$(this).addClass('auto-filter');
