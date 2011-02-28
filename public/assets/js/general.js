@@ -20,7 +20,7 @@ Array.prototype.shuffle = function (){
 		counter_timer,
 		total_positions = 0,
 		draw_tiles_timer,
-		performance: {},
+		performance = {},
 		state = {
 			active_bubble_pos: 0,
 			last_id: 0,
@@ -30,15 +30,18 @@ Array.prototype.shuffle = function (){
 		available_performances: {
 			high: {
 				initial_frames_per_second: 24,
-				initial_tiles_per_frame: 10
+				initial_tiles_per_frame: 10,
+				new_tiles_per_second: 12
 			},
 			medium: {
 				initial_frames_per_second: 12,
-				initial_tiles_per_frame: 20
+				initial_tiles_per_frame: 20,
+				new_tiles_per_second: 6
 			},
 			low: {
 				initial_frames_per_second: 1,
-				initial_tiles_per_frame: 200
+				initial_tiles_per_frame: 200,
+				new_tiles_per_second: 3
 			}
 		}
 	
@@ -458,7 +461,7 @@ Array.prototype.shuffle = function (){
 	function startPolling() {
 
 		// Start the recursive "tile updater"
-		draw_tiles_timer = setInterval(drawNewTiles, 100);
+		draw_tiles_timer = setInterval(drawNewTiles, (1000/party.performance.new_tiles_per_second));
 		// Start the recursive poller
 		poll();
 		polling_timer = setInterval(poll, (party.polling_timer_seconds * 1000));
@@ -588,7 +591,7 @@ Array.prototype.shuffle = function (){
 				// jitter
 				else delta += Math.random() * 3 * direction;
 				delta = Math.ceil(delta);
-				
+				 
 				console.log(framesRemaining, direction, delta);
 				
 				if (this.num < to) {
