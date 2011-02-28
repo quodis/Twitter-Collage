@@ -48,7 +48,7 @@ Array.prototype.shuffle = function (){
 				initial_tiles_per_frame: 200,
 				new_tiles_per_second: 3
 			}
-		}
+		};
 	
 	/**
 	 * NOTE: jQuery handling of scroll position has poor bruwser-compatibility
@@ -101,7 +101,7 @@ Array.prototype.shuffle = function (){
 		visible_tiles_random.shuffle();
 		
 		// Start the recursive call for each frame
-		initial_draw_timer = setInterval(initialDrawFrame, (1000/party.performance.initial_frames_per_second) );
+		initial_draw_timer = window.setInterval(initialDrawFrame, (1000/party.performance.initial_frames_per_second) );
 	}
 	
 	function tileHtml(tile) {
@@ -158,10 +158,10 @@ Array.prototype.shuffle = function (){
 		} else {
 			
 			// No Tiles were built - task is complete
-			clearInterval(initial_draw_timer);
+			window.clearInterval(initial_draw_timer);
 			
 			// Start the recursive "tile updater"
-			draw_tiles_timer = setInterval(drawNewTiles, (1000/party.performance.new_tiles_per_second));
+			draw_tiles_timer = window.setInterval(drawNewTiles, (1000/party.performance.new_tiles_per_second));
 		}
 		
 	}
@@ -191,14 +191,14 @@ Array.prototype.shuffle = function (){
 		
 		// Loop through the array
 		loadingMessage();
-		loading_message_timer = setInterval(loadingMessage, (party.performance.loading_message_seconds * 1000) );
+		loading_message_timer = window.setInterval(loadingMessage, (party.performance.loading_message_seconds * 1000));
 		
 	}
 	
 	// Hide the loading message
 	function loadingHide() {
 		$('#loading').hide();
-		clearInterval(loading_message_timer);
+		window.clearInterval(loading_message_timer);
 	}
 	
 	
@@ -233,7 +233,7 @@ Array.prototype.shuffle = function (){
 		// Get the page of visible tiles
 		getVisibleTiles();
 		// Start the counter
-		counter_timer = setInterval(counterDraw, 200);
+		counter_timer = window.setInterval(counterDraw, 200);
 		// Bind the hover action
         party.canvas.bind('mousemove', function(ev) {
             var x = Math.ceil((ev.clientX + f_scrollLeft() - state.mosaic_offset.left) / 12) - 1,
@@ -270,11 +270,11 @@ Array.prototype.shuffle = function (){
 		// Store the original search input caption
 		search.original_caption = search.input_dom.val();
 		
-		search.focus(function({
+		search.focus(function(){
 			if ($(this).val() === search.original_caption) {
 				$(this).val('');
 			}
-		}))
+		});
 		search.blur(function(){
 			if ($(this).val() == '') {
 				$(this).val(search.original_caption);
@@ -289,7 +289,7 @@ Array.prototype.shuffle = function (){
 			position_css,
 			g;
 		
-		tile =  = visible_tiles[pos];
+		tile = visible_tiles[pos];
 		if (!tile || !b) {
 			return;
 		}
@@ -519,7 +519,7 @@ Array.prototype.shuffle = function (){
 
 		// Start the recursive poller
 		poll();
-		polling_timer = setInterval(poll, (party.polling_timer_seconds * 1000));
+		polling_timer = window.setInterval(poll, (party.polling_timer_seconds * 1000));
 		
 	}
 	
@@ -559,8 +559,8 @@ Array.prototype.shuffle = function (){
 	 * @return
 	 */
 	function pause() {
-		clearInterval(draw_tiles_timer);
-		clearInterval(polling_timer);
+		window.clearInterval(draw_tiles_timer);
+		window.clearInterval(polling_timer);
 	}
 
 	
