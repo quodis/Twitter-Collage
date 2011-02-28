@@ -1,3 +1,18 @@
+/*
+
+Firefox Twitter Party
+Design and development by Mozilla/Quodis:
+www.mozilla.com
+www.quodis.com 
+
+Licensed under the MIT license: 
+http://www.opensource.org/licenses/mit-license.php
+
+*/
+
+
+/* 1.General */
+
 #mosaic > .tile {
 	position: absolute;
 	width: 12px;
@@ -9,3 +24,247 @@
 	text-align: center;
 	margin: 230px auto 0 auto;
 }
+
+/* 2.Bubbles */
+
+.bubble {
+	float:left;
+	font-size: 13px;
+	min-height: 130px;
+	width: 290px;
+	position: absolute;
+	display: none;
+	z-index: 20;
+}
+
+.bubble a,
+.bubble a:link,
+.bubble a:visited {
+	text-decoration: none;
+/*
+	-moz-transition:text-shadow 0.2s ease-out;
+	-webkit-transition:text-shadow 0.2s ease-out;
+*/
+}
+
+.bubble a:hover,
+.bubble a:active {
+	text-decoration: underline;
+/*
+	text-shadow:1px 1px 2px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.6);
+	-moz-transition:text-shadow 0.1s ease-out;
+	-webkit-transition:text-shadow 0.1s ease-out;
+*/
+}
+
+.bubble header {
+	position: relative;
+}
+
+.bubble h1 {
+	font-size: 20px;
+	font-style: italic;
+	padding-left: 65px;
+	margin: 0;
+}
+
+.bubble h1 span {
+	font-size: 13px;
+	font-style: normal;
+}
+
+.bubble .twitter-avatar {
+	background-color: #fff;
+	width: 48px;
+	height: 48px;
+	padding: 2px;
+	position: absolute;
+	
+	-moz-transform: rotate(-3deg);
+	-webkit-transform: rotate(-3deg);
+	transform: rotate(-3deg);
+}
+
+.bubble header time {
+	padding-left: 65px;
+	font-style: italic;
+}
+
+.bubble p {
+	background-position-y: 0px;
+	font-size: 13px;
+	text-align: center;
+	margin: 0;
+	position: relative;
+}
+
+/* 3.Bubbles Colors */
+
+.dark-orange.top-left header, .dark-orange.top-left p,
+.dark-orange.bottom-left header, .dark-orange.bottom-left p,
+.dark-orange.top-right header, .dark-orange.top-right p,
+.dark-orange.bottom-right header, .dark-orange.bottom-right p {
+	background-image: url(../images/layout/bubble-dark-orange.png);
+	background-repeat: no-repeat;
+}
+
+.bubble.dark-orange, 
+.bubble.dark-orange h1 span,
+.bubble.dark-orange .hashtag {
+	color:#fde9c7;
+	font-weight: normal;
+}
+
+.bubble.dark-orange a {
+	color:#e8d683;
+}
+
+.yellow.top-left header, .yellow.top-left p,
+.yellow.bottom-left header, .yellow.bottom-left p,
+.yellow.top-right header, .yellow.top-right p,
+.yellow.bottom-right header, .yellow.bottom-right p {
+	background-image: url(../images/layout/bubble-yellow.png);
+	background-repeat: no-repeat;
+}
+
+.bubble.yellow, 
+.bubble.yellow h1 span,
+.bubble.yellow .hashtag {
+	color:#7d1c20;
+	font-weight: normal;
+}
+
+.bubble.yellow a {
+	color:#c21924;
+}
+
+.light-blue.top-left header, .light-blue.top-left p,
+.light-blue.bottom-left header, .light-blue.bottom-left p,
+.light-blue.top-right header, .light-blue.top-right p,
+.light-blue.bottom-right header, .light-blue.bottom-right p {
+	background-image: url(../images/layout/bubble-light-blue.png);
+	background-repeat: no-repeat;
+}
+
+.bubble.light-blue, 
+.bubble.light-blue h1 span,
+.bubble.light-blue .hashtag {
+	color:#fde9c7;
+	font-weight: normal;
+}
+
+.bubble.light-blue a {
+	color:#e8d683;
+}
+
+.dark-blue.top-left header, .dark-blue.top-left p,
+.dark-blue.bottom-left header, .dark-blue.bottom-left p,
+.dark-blue.top-right header, .dark-blue.top-right p,
+.dark-blue.bottom-right header, .dark-blue.bottom-right p {
+	background-image: url(../images/layout/bubble-dark-blue.png);
+	background-repeat: no-repeat;
+}
+
+.bubble.dark-blue, 
+.bubble.dark-blue h1 span,
+.bubble.dark-blue .hashtag {
+	color:#fde9c7;
+	font-weight: normal;
+}
+
+.bubble.dark-blue a {
+	color:#e8d683;
+}
+
+/* 4. Bubble Positions */
+
+.bubble.top-left .twitter-avatar,
+.bubble.bottom-left .twitter-avatar {
+	top: 20px;
+	left: 52px;
+}
+ 
+.bubble.top-right .twitter-avatar,
+.bubble.bottom-right .twitter-avatar {
+	top: 20px;
+	left: 30px;
+}
+
+.bubble.top-left header, 
+.bubble.bottom-left header { 
+	padding: 25px 25px 10px 45px; 
+}
+
+.bubble.top-left p, 
+.bubble.bottom-left p { 
+	padding: 0px 25px 30px 45px; 
+}
+
+.bubble.top-right header, 
+.bubble.bottom-right header { 
+	padding: 25px 45px 10px 25px; 
+}
+
+.bubble.top-right p, 
+.bubble.bottom-right p { 
+	padding: 0px 45px 30px 25px; 
+}
+
+.bubble.top-left header{ 
+	background-position: top left; 
+}
+
+.bubble.top-left p{ 
+	background-position-y: bottom; 
+	background-position-x: -616px;
+}
+
+.bubble.bottom-left header{ 
+	background-position-y: top; 
+	background-position-x: -616px;
+}
+
+.bubble.bottom-left p{ background-position: bottom left; }
+
+.bubble.top-right header{ 
+	background-position-y: top; 
+	background-position-x: -320px;
+}
+
+.bubble.top-right p{
+	background-position-y: bottom; 
+	background-position-x: -640px;
+}
+
+.bubble.bottom-right header{ 
+	background-position-y: bottom; 
+	background-position-x: -640px;
+}
+
+.bubble.bottom-right p{ 
+	background-position-y: bottom; 
+	background-position-x: -320px;
+}
+
+
+/*
+#bubble-1 {
+	top:390px;
+	left:200px;
+}
+
+#bubble-2 {
+	top:220px;
+	left:250px;
+}
+
+#bubble-3 {
+	top:20px;
+	left:200px;
+}
+
+#bubble-4 {
+	top:120px;
+	left:20px;
+}
+*/

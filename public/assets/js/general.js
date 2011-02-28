@@ -17,7 +17,48 @@ var party = party || {};
 		counter_timer,
 		total_positions = 0,
 		draw_tiles_timer,
-		draw_tiles_previous_pos = 0;
+		state = {
+			active_bubble_pos: 0
+		};
+	
+	/**
+	 * NOTE: jQuery handling of scroll position has poor bruwser-compatibility
+	 * borrowed from
+	 * http://www.softcomplex.com/docs/get_window_size_and_scrollbar_position.html
+	 * 
+	 * @return integer
+	 */
+	function f_scrollLeft() 
+	{
+	    return f_filterResults (	
+	        window.pageXOffset ? window.pageXOffset : 0,
+	        document.documentElement ? document.documentElement.scrollLeft : 0,
+	        document.body ? document.body.scrollLeft : 0
+	    );
+	}
+	/**
+	 * NOTE: jQuery handling of scroll position has poor bruwser-compatibility
+	 * borrowed from
+	 * http://www.softcomplex.com/docs/get_window_size_and_scrollbar_position.html
+	 * 
+	 * @return integer
+	 */
+	function f_scrollTop() 
+	{
+	    return f_filterResults (
+	        window.pageYOffset ? window.pageYOffset : 0,
+	        document.documentElement ? document.documentElement.scrollTop : 0,
+	        document.body ? document.body.scrollTop : 0
+	    );
+	}
+	
+	function f_filterResults(n_win, n_docel, n_body) 
+	{
+	    var n_result = n_win ? n_win : 0;
+	    if (n_docel && (!n_result || (n_result > n_docel)))
+	        n_result = n_docel;
+	    return n_body && (!n_result || (n_result > n_body)) ? n_body : n_result;
+	}
 	
 	// Draw the Initial Mosaic
 	function initialDraw() {
@@ -124,18 +165,77 @@ var party = party || {};
 		clearInterval(loading_message_timer);
 	}
 	
+	
 	// First to be called
 	function init() {
+		var bubble = $('#bubble');
 		// Check the browser's performance
 		party.performance_mode = $.browser.msie;
 		// Cache the canvas
 		party.canvas = $('#mosaic');
+		// Chache the bubble elements
+		party.bubble = {
+			container: bubble,
+			username_a: bubble.find('h1 a'),
+			avatar_a: bubble.find('a.twitter-avatar'),
+			avatar_img: bubble.find('a.twitter-avatar > img'),
+			time: bubble.find('time'),
+			time_a: bubble.find('time > a'),
+			p: bubble.find('p')
+		}
 		// Cache the counter DOM
 		party.counter_canvas = $('#twitter-counter dd span');
 		// Get the page of visible tiles
 		getVisibleTiles();
 		// Start the counter
-		counter_timer = setInterval(counterDraw, 60);
+		counter_timer = setInterval(counterDraw, 80);
+		// Bind the hover action
+        party.canvas.bind('mousemove', function(ev) {
+            var offset = party.canvas.offset(),
+				x = Math.ceil((ev.clientX + f_scrollLeft() - offset.left) / 12) - 1,
+				y = Math.ceil((ev.clientY + f_scrollTop() - offset.top) / 12) - 1,
+				pos;
+				
+            if (x < 0 || y < 0) {
+				return;
+			}
+			
+            pos = party.mosaic.grid[x][y];
+
+            // is valid x,y
+            if (pos) {
+				if (state.active_bubble_pos != pos.i) {
+					state.active_bubble_pos = pos.i;
+					showBubble(pos.i, x, y);
+				}
+            } else {
+				party.bubble.container.hide();
+			}
+        });
+
+	}
+	
+	
+	function showBubble(pos, x, y) {
+		var tile = visible_tiles[pos],
+			b = party.bubble;
+		if (!tile || !b) {
+			return;
+		}
+		
+		b.container.hide();
+		b.username_a.text(tile.userName).attr('href', 'http://twitter.com/' + tile.userName);
+		b.avatar_a.attr('title', tile.userName).attr('href', 'http://twitter.com/' + tile.userName);
+		b.avatar_img.attr('src', tile.imageUrl);
+		b.p.text(tile.contents);
+		b.time_a.attr('href', 'http://twitter.com/' + tile.userName + '/status/' + tile.twitterId).text(tile.createdDate);
+		b.time.attr('datetime', tile.createdDate);
+		
+		b.container.css({
+			left: ((x * 12) + 8) + 'px',
+			top: ((y * 12) - 10) + 'px'
+		}).removeClass().addClass('bubble dark-orange top-left').show();
+		
 	}
 	
 	// Get an object's length
@@ -163,13 +263,17 @@ var party = party || {};
 			return;
 		}
 		
-		if (dif > 3200) {
+		if (dif > 2048) {
+			inc = 379;
+		} else if (dif > 1024) {
+			inc = 197;
+		} else if (dif > 512) {
 			inc = 73;
-		} else if (dif > 800) {
+		} else if (dif > 256) {
 			inc = 39;
-		} else if (dif > 200) {
+		} else if (dif > 128) {
 			inc = 17;
-		} else if (dif > 50) {
+		} else if (dif > 64) {
 			inc = 3;
 		}
 		
@@ -286,21 +390,9 @@ var party = party || {};
 			$.extend(hidden_tiles[pos], old_visible);
 		}
 		
-		// Hide the previous tiles' border and z-index
-		$('#' + draw_tiles_previous_pos).css({
-			'border': '0 none',
-			'z-index': '0'
-		});
-		draw_tiles_previous_pos = pos;
-		
-		// Get the color of this tile
-		i = party.mosaic.index[pos];
-		
 		// Update the new tile
 		$('#' + pos).css({
-			'background-image': 'url(data:image/gif;base64,' + visible_tiles[pos].imageData + ')',
-			'border': '1px solid rgb(' + party.mosaic.grid[i.x][i.y].c.join(',') + ')',
-			'z-index': '10'
+			'background-image': 'url(data:image/gif;base64,' + visible_tiles[pos].imageData + ')'
 		});
 		
 	}
@@ -309,7 +401,7 @@ var party = party || {};
 	function startPolling() {
 
 		// Start the recursive "tile updater"
-		draw_tiles_timer = setInterval(drawNewTiles, 250);
+		draw_tiles_timer = setInterval(drawNewTiles, 100);
 		// Start the recursive poller
 		poll();
 		polling_timer = setInterval(poll, (party.polling_timer_seconds * 1000));
@@ -388,6 +480,7 @@ var party = party || {};
 		"getLastId": getLastId,
 		"pause": pause,
 		"resume": resume,
+		"showBubble": showBubble
 	});
 	
 }());
