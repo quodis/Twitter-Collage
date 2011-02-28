@@ -217,6 +217,8 @@ party.mosaic = ' . json_encode(self::$_pageConfig) . ';
 		$i = 0;
 		$lastId = 0;
 
+		if (!$result->count()) return;
+
 		$tiles = array();
 		$tileIndex = array();
 		while ($tweet = $result->row())
@@ -241,7 +243,7 @@ party.mosaic = ' . json_encode(self::$_pageConfig) . ';
 			$fileData['newest_tiles'] = $tileIndex;
 		}
 
-		$fileName = self::_getPageDataFileName($pageNo);
+		$fileName = self::getPageDataFileName($pageNo);
 
 		file_put_contents($fileName, json_encode($fileData));
 		chmod($fileName, octdec(self::$_config['Store']['filePermissions']));
@@ -261,13 +263,8 @@ party.mosaic = ' . json_encode(self::$_pageConfig) . ';
 	public static function purgePage($pageNo)
 	{
 		// delete from filesys
-		$command = 'rm ' . self::_getPageDataFileName($pageNo);
-		Debug::logMsg('purgePage page:' .$pageNo . ' command:' . $command);
+		$command = 'rm ' . self::getPageDataFileName($pageNo);
 		shell_exec($command);
-
-		// TODO delete cached page
-
-		// TODO delete current working pageN from coache (force job to rebuild this page)
 	}
 
 
@@ -277,7 +274,7 @@ party.mosaic = ' . json_encode(self::$_pageConfig) . ';
 	 */
 	public static function pageExists($pageNo)
 	{
-		return file_exists(self::_getPageDataFileName($pageNo));
+		return file_exists(self::getPageDataFileName($pageNo));
 	}
 
 	/**
@@ -290,7 +287,7 @@ party.mosaic = ' . json_encode(self::$_pageConfig) . ';
 	{
 		if (!self::pageExists($pageNo)) return array();
 
-		$filename = self::_getPageDataFileName($pageNo);
+		$filename = self::getPageDataFileName($pageNo);
 
 		return json_decode(file_get_contents($filename), TRUE);
 	}
@@ -462,7 +459,7 @@ party.mosaic = ' . json_encode(self::$_pageConfig) . ';
 	 *
 	 * @return string
 	 */
-	private static function _getPageDataFileName($pageNo)
+	public static function getPageDataFileName($pageNo)
 	{
 		$filename = self::$_config['Store']['path'] . '/pages/page_' . $pageNo . '.json';
 
