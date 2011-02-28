@@ -131,8 +131,8 @@ var party = party || {};
 		party.canvas = $('#mosaic');
 		// Chache the bubble elements
 		party.bubble = {
-			bubble = $('#bubble'),
-			username = this.bubble
+			bubble: $('#bubble'),
+			username: this.bubble
 		}
 		// Cache the counter DOM
 		party.counter_canvas = $('#twitter-counter dd span');
