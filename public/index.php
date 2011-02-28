@@ -78,7 +78,7 @@ function main($language)
 
 				<!-- HEADER -->
 				<header id="brand">
-					<h1><a href="#" title="<?= _('Join the Firefox 4 Twitter Party'),  ?>"><?= _('Join the Firefox 4 Twitter Party') ?></a></h1>
+					<h1><a href="#" title="<?= _('Join the Firefox 4 Twitter Party') ?>"><?= _('Join the Firefox 4 Twitter Party') ?></a></h1>
 				</header>
 
 
