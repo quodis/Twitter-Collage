@@ -126,19 +126,20 @@ var party = party || {};
 	
 	// First to be called
 	function init() {
+		var bubble = $('#bubble');
 		// Check the browser's performance
 		party.performance_mode = $.browser.msie;
 		// Cache the canvas
 		party.canvas = $('#mosaic');
 		// Chache the bubble elements
 		party.bubble = {
-			container: $('#bubble'),
-			username_a: $(party.bubble.container).find('h1 a'),
-			avatar_a: $(party.bubble.container).find('a.twitter-avatar'),
-			avatar_img: $(party.bubble.container).find('a.twitter-avatar > img'),
-			time: $(party.bubble.container).find('time'),
-			time_a: $(party.bubble.container).find('time > a'),
-			p: $(party.bubble.container).find('p')
+			container: bubble,
+			username_a: bubble.find('h1 a'),
+			avatar_a: bubble.find('a.twitter-avatar'),
+			avatar_img: bubble.find('a.twitter-avatar > img'),
+			time: bubble.find('time'),
+			time_a: bubble.find('time > a'),
+			p: bubble.find('p')
 		}
 		// Cache the counter DOM
 		party.counter_canvas = $('#twitter-counter dd span');
