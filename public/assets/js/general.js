@@ -153,12 +153,16 @@ var party = party || {};
 				x = Math.ceil((ev.clientX - offset.left) / 12) - 1,
 				y = Math.ceil((ev.clientY - offset.top) / 12) - 1,
 				pos;
+				console.log('x', x);
+				console.log('y', y);
 				
             if (x < 0 || y < 0) {
 				return;
 			}
 			
             pos = party.mosaic.grid[x][y];
+			console.log('pos', pos);
+
             // is valid x,y
             if (pos) {
 				showBubble(pos, x, y);
@@ -183,7 +187,7 @@ var party = party || {};
 		b.container.css({
 			left: (x * 12) + 'px',
 			top: (y * 12) + 'px'
-		}).removeClass().addClass('dark-orange, top-left').show();
+		}).removeClass().addClass('bubble dark-orange top-left').show();
 		
 	}
 	
