@@ -43,8 +43,7 @@ function main()
 
 	// js config
 	$uiOptions = $config['UI']['options'];
-	$uiOptions['last_page'] = Mosaic::getCurrentWorkingPageNo() - 1;
-	$uiOptions['tile_size'] = $config['Mosaic']['tileSize'] + 20;
+	$uiOptions['state']['last_page'] = Mosaic::getCurrentWorkingPageNo() - 1;
 
 ?>
 <!DOCTYPE html>
@@ -153,24 +152,24 @@ function main()
 		<section id="mosaic">
 			<h2>Firefox Twitter Mosaic</h2>
 			<p id="loading"></p>
-      
+
 			<article id="bubble" class="bubble">
-			
+
 				<header>
-										
+
 					<h1><a href="#" title="Twitter profile" rel="author external"></a><span> wrote</span></h1>
-					<a href="#" title="" rel="author external" class="twitter-avatar">	
+					<a href="#" title="" rel="author external" class="twitter-avatar">
 					  <img src="" alt="Twitter profile picture" width="48" height="48" />
 					</a>
-				
+
 				  <time datetime="" pubdate><a href="#" rel="bookmark external" title="Permalink"></a></time>
-					
+
 				</header>
-				
+
 				<p></p>
-				
+
 			</article><!-- bubble -->
-			
+
 		</section>
 
 		<div id="mozilla-badge">

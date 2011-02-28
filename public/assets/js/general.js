@@ -1,5 +1,9 @@
 var party = party || {};
 
+Array.prototype.shuffle = function (){ 
+	for(var rnd, tmp, i=this.length; i; rnd=parseInt(Math.random()*i), tmp=this[--i], this[i]=this[rnd], this[rnd]=tmp);
+};
+
 (function () {
 	var initial_draw_timer,
 		loading_message_timer,
@@ -10,16 +14,36 @@ var party = party || {};
 		visible_tiles = {},
 		visible_tiles_random = [],
 		hidden_tiles = {},
-		last_id = 0, // The ID of the newest tile
 		new_tiles = [], // Tiles got from the server in "real-time"
 		counter_current = 0,
 		counter_target = 0,
 		counter_timer,
 		total_positions = 0,
 		draw_tiles_timer,
+		performance = {},
 		state = {
-			active_bubble_pos: 0
-		};
+			active_bubble_pos: 0,
+			last_id: 0,
+			last_page: 0,
+			mosaic_offset: {}
+		},
+		available_performances = {
+			high: {
+				initial_frames_per_second: 24,
+				initial_tiles_per_frame: 10,
+				new_tiles_per_second: 12
+			},
+			medium: {
+				initial_frames_per_second: 12,
+				initial_tiles_per_frame: 20,
+				new_tiles_per_second: 6
+			},
+			low: {
+				initial_frames_per_second: 1,
+				initial_tiles_per_frame: 200,
+				new_tiles_per_second: 3
+			}
+		}
 	
 	/**
 	 * NOTE: jQuery handling of scroll position has poor bruwser-compatibility
@@ -69,12 +93,10 @@ var party = party || {};
 			visible_tiles_random.push(i);
 		}
 		// Randomnize!
-		visible_tiles_random.sort(function(){
-			return (Math.round(Math.random())-0.5);
-		});
+		visible_tiles_random.shuffle();
 		
 		// Start the recursive call for each frame
-		initial_draw_timer = setInterval(initialDrawFrame, (1000/party.initial_frames_per_second) );
+		initial_draw_timer = setInterval(initialDrawFrame, (1000/party.performance.initial_frames_per_second) );
 	}
 	
 	function tileHtml(tile) {
@@ -102,7 +124,7 @@ var party = party || {};
 		
 		var tiles_to_draw = "",
 			i = 0,
-			j = (tile_counter + party.initial_tiles_per_frame),
+			j = (tile_counter + party.performance.initial_tiles_per_frame),
 			p;
 		
 		// Draw tiles_per_frame tiles and draw them
@@ -126,6 +148,8 @@ var party = party || {};
 			// No Tiles were built - task is complete
 			clearInterval(initial_draw_timer);
 			
+			// Start the recursive "tile updater"
+			draw_tiles_timer = setInterval(drawNewTiles, (1000/party.performance.new_tiles_per_second));
 		}
 		
 	}
@@ -155,7 +179,7 @@ var party = party || {};
 		
 		// Loop through the array
 		loadingMessage();
-		loading_message_timer = setInterval(loadingMessage, (party.loading_message_seconds * 1000) );
+		loading_message_timer = setInterval(loadingMessage, (party.performance.loading_message_seconds * 1000) );
 		
 	}
 	
@@ -170,9 +194,16 @@ var party = party || {};
 	function init() {
 		var bubble = $('#bubble');
 		// Check the browser's performance
-		party.performance_mode = $.browser.msie;
+		if ($.browser.msie) {
+			party.performance = party.available_performances.low;
+		} else {
+			party.performance = party.available_performances.medium;
+		}
+		
 		// Cache the canvas
 		party.canvas = $('#mosaic');
+		state.mosaic_offset = party.canvas.offset();
+		
 		// Chache the bubble elements
 		party.bubble = {
 			container: bubble,
@@ -188,12 +219,11 @@ var party = party || {};
 		// Get the page of visible tiles
 		getVisibleTiles();
 		// Start the counter
-		counter_timer = setInterval(counterDraw, 80);
+		counter_timer = setInterval(counterDraw, 200);
 		// Bind the hover action
         party.canvas.bind('mousemove', function(ev) {
-            var offset = party.canvas.offset(),
-				x = Math.ceil((ev.clientX + f_scrollLeft() - offset.left) / 12) - 1,
-				y = Math.ceil((ev.clientY + f_scrollTop() - offset.top) / 12) - 1,
+            var x = Math.ceil((ev.clientX + f_scrollLeft() - state.mosaic_offset.left) / 12) - 1,
+				y = Math.ceil((ev.clientY + f_scrollTop() - state.mosaic_offset.top) / 12) - 1,
 				pos;
 				
             if (x < 0 || y < 0) {
@@ -204,23 +234,62 @@ var party = party || {};
 
             // is valid x,y
             if (pos) {
+				// Check if this is not the already opened bubble
 				if (state.active_bubble_pos != pos.i) {
 					state.active_bubble_pos = pos.i;
 					showBubble(pos.i, x, y);
 				}
             } else {
-				party.bubble.container.hide();
+				// Not a tile
+				hideBubble();
 			}
         });
-
+		// Hide the bubble if the mouse leavese the mosaic
+		party.canvas.bind('mouseout', function() {
+			hideBubble();
+		});
 	}
 	
 	
 	function showBubble(pos, x, y) {
 		var tile = visible_tiles[pos],
-			b = party.bubble;
+			b = party.bubble,
+			position_class,
+			position_css;
+			
 		if (!tile || !b) {
 			return;
+		}
+		
+		// Choose the arrow's position
+		if (y > 24) {
+			if (x > 24) {
+				position_class = "bottom-right";
+				position_css = {
+					right: (572 - (x * 12)) + 'px',
+					bottom: (564 - (y * 12)) + 'px'
+				}
+			} else {
+				position_class = "bottom-left";
+				position_css = {
+					left: ((x * 12) + 8) + 'px',
+					bottom: (564 - (y * 12)) + 'px'
+				}
+			}
+		} else {
+			if (x > 24) {
+				position_class = "top-right";
+				position_css = {
+					right: (572 - (x * 12)) + 'px',
+					top: ((y * 12) - 10) + 'px'
+				}
+			} else {
+				position_class = "top-left";
+				position_css = {
+					left: ((x * 12) + 8) + 'px',
+					top: ((y * 12) - 10) + 'px'
+				}
+			}	
 		}
 		
 		b.container.hide();
@@ -230,12 +299,13 @@ var party = party || {};
 		b.p.text(tile.contents);
 		b.time_a.attr('href', 'http://twitter.com/' + tile.userName + '/status/' + tile.twitterId).text(tile.createdDate);
 		b.time.attr('datetime', tile.createdDate);
+		b.container.css(position_css).removeClass().addClass('bubble dark-orange ' + position_class).show();
 		
-		b.container.css({
-			left: ((x * 12) + 8) + 'px',
-			top: ((y * 12) - 10) + 'px'
-		}).removeClass().addClass('bubble dark-orange top-left').show();
-		
+	}
+	
+	function hideBubble() {
+		state.active_bubble_pos = 0;
+		party.bubble.container.hide();
 	}
 	
 	// Get an object's length
@@ -291,7 +361,7 @@ var party = party || {};
 	function getVisibleTiles() {
 		
 		// Check if we have a complete page. If not, try again later
-		if (party.last_page == 0) {
+		if (party.state.last_page == 0) {
 			setTimeout(reloadPage, 60 * 1000);
 			return;
 		}
@@ -300,7 +370,7 @@ var party = party || {};
 		loadingShow();
 		
 		// Request URL
-		var url = party.store_url + '/pages/page_' + party.last_page + '.json';
+		var url = party.store_url + '/pages/page_' + party.state.last_page + '.json';
 		
 		// Get the first visible page from server
 		$.getJSON(url, function(data) {
@@ -312,9 +382,9 @@ var party = party || {};
 			getHiddenTiles();
 			
 			// Update last id
-			if (data.last_id > last_id) {
-				last_id = data.last_id;
-				counterIncrement(last_id);
+			if (data.last_id > state.last_id) {
+				state.last_id = data.last_id;
+				counterIncrement(state.last_id);
 			}
 			// Write the data locally
 			visible_tiles = data.tiles;
@@ -330,21 +400,21 @@ var party = party || {};
 	function getHiddenTiles() {
 
 		// Check if we have a second complete page. If not, try again later
-		if ((party.last_page-1) == 0) {
+		if ((party.state.last_page-1) == 0) {
 			setTimeout(reloadPage, 60 * 1000);
 			return;
 		}
 		
 		// Request URL
-		var url = party.store_url + '/pages/page_' + (party.last_page-1) + '.json';
+		var url = party.store_url + '/pages/page_' + (party.state.last_page-1) + '.json';
 		
 		// Get the previous completed page
 		$.getJSON(url, function(data) {
 
 			// Update last id
-			if (data.last_id > last_id) {
-				last_id = data.last_id;
-				counterIncrement(last_id);
+			if (data.last_id > state.last_id) {
+				state.last_id = data.last_id;
+				counterIncrement(state.last_id);
 			}
 			
 			// Write the data locally
@@ -400,8 +470,6 @@ var party = party || {};
 	// Start the Real-time polling
 	function startPolling() {
 
-		// Start the recursive "tile updater"
-		draw_tiles_timer = setInterval(drawNewTiles, 100);
 		// Start the recursive poller
 		poll();
 		polling_timer = setInterval(poll, (party.polling_timer_seconds * 1000));
@@ -413,12 +481,12 @@ var party = party || {};
 		$.ajax({
 		  url: '/poll.php',
 		  dataType: 'json',
-		  data: {last_id: last_id},
+		  data: {last_id: state.last_id},
 		  success: function(data) {
 			
 				// Update last id
-				if (data.payload.last_id > last_id) {
-					last_id = data.payload.last_id;
+				if (data.payload.last_id > state.last_id) {
+					state.last_id = data.payload.last_id;
 				}
 				
 				// Append the data locally
@@ -434,7 +502,7 @@ var party = party || {};
 	 * @return integer
 	 */
 	function getLastId() {
-		return last_id;
+		return state.last_id;
 	}
 	
 	
@@ -460,8 +528,6 @@ var party = party || {};
 	
 	
 	$.extend(party, {
-		"initial_frames_per_second": 24,
-		"initial_tiles_per_frame": 10,
 		"loading_messages": [
 			"Sorting guest list alphabetically",
 			"Waiting for eye-contact with club bouncer",
@@ -471,93 +537,28 @@ var party = party || {};
 			"Handing out name-tags"],
 		"loading_message_seconds": 2,
 		"polling_timer_seconds": 60, 
-		"cols": 48,
-		"rows": 47,
-		"tile_size": 12,
 		"grid": [],
 		"index": [],
 		"init": init,
 		"getLastId": getLastId,
 		"pause": pause,
 		"resume": resume,
-		"showBubble": showBubble
+		"showBubble": showBubble,
+		"performance": performance,
+		"available_performances": available_performances
 	});
 	
 }());
 
 
-(function($) {	
-	
-	/** 
-	 * jQuery (methods) 
-	 */
-	$.fn.extend( {
-		
-		/**
-		 * rolls numbers to 
-		 * 
-		 * @param integer to
-		 * @param integer milisecs 
-		 * @param function callback function(value) returns formatted value
-		 * @param integer iteration (used on recursion)
-		 */
-		rollNumbers : function(to, milisecs, formatCallback, iteration) 
-		{
-			var frameMsecs = 100;
-			
-			if (!iteration) {
-				
-				iteration = 0;
-				
-				if (!to) to = 0;
-				this.to = to;
-				this.num = parseInt(this.text());
-				if (!this.num) this.num = 0;
-			}
-			else if (this.to != to) return;
-			iteration++;
-			
-			var milisecs = milisecs - frameMsecs;
-		
-			if (milisecs <= 0) {
-				this.num = to;
-			}
-			else {
-				var framesRemaining = Math.ceil(milisecs / frameMsecs);
-				var direction = this.num > to ? 1 : -1;
-				var delta;
-				
-				if (Math.abs(to - this.num) / framesRemaining > 10) delta = Math.abs(to - this.num) / 10;
-				if (Math.abs(to - this.num) / framesRemaining < 2) {
-					// slow down
-					delta = Math.abs(to - this.num) / 2;
-				}
-				// jitter
-				else delta += Math.random() * 3 * direction;
-				delta = Math.ceil(delta);
-				
-				console.log(framesRemaining, direction, delta);
-				
-				if (this.num < to) {
-					this.num += delta;
-					if (this.num > to) this.num = to;
-				}
-				else if (this.num > to) {
-					this.num -= delta;
-					if (this.num < to) this.num = to;
-				}
-			}
-			text = ('function' == typeof formatCallback) ? formatCallback(this.num) : this.num;
-			this.text(text);
-			if (this.num != to) {
-				setTimeout( function(el, to, milisecs, formatCallback, iteration) {
-					el.rollNumbers(to, milisecs, formatCallback, iteration);
-				}, frameMsecs, this, to, milisecs, formatCallback, iteration);
-			}
-		}
-	} );
+$(document).ready(function() {
 	
 	// Let's get it started!
 	party.init();
+
+	// Resize listener
+	$(window).resize(function() {
+		state.mosaic_offset = party.canvas.offset();
+	});
 	
-})(jQuery);
+});
