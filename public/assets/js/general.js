@@ -150,8 +150,8 @@ var party = party || {};
 		// Bind the hover action
         party.canvas.bind('mousemove', function(ev) {
             var offset = party.canvas.offset(),
-				x = Math.ceil((ev.clientX + f_scrollLeft() - offset.left) / 12) - 1,
-				y = Math.ceil((ev.clientY + f_scrollTop() - offset.top) / 12) - 1,
+				x = Math.ceil((ev.clientX - offset.left) / 12) - 1,
+				y = Math.ceil((ev.clientY - offset.top) / 12) - 1,
 				pos;
 				
             if (x < 0 || y < 0) {
