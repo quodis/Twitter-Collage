@@ -293,7 +293,7 @@ var party = party || {};
 		i = party.mosaic.index[pos];
 		
 		// Update the new tile
-		$('#' + pos).attr('src', 'url(data:image/gif;base64,' + visible_tiles[pos].imageData + ')');
+		$('#' + pos).attr('src', 'data:image/gif;base64,' + visible_tiles[pos].imageData);
 		
 		
 	}
