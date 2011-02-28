@@ -21,6 +21,8 @@
 * ImageMagick >= 6.5
 * Mysql >= 5.1
 * HTTP server with gzip compression enabled
+* memcache server and php5-memcache lib
+* php5-curl
 
 ## execute
 

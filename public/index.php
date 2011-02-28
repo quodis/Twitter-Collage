@@ -1,6 +1,6 @@
 <?php
 /**
- * @pacjage    Firefox 4 Twitter Party
+ * @package    Firefox 4 Twitter Party
  * @subpackage front-end
  * @version    v.0.1
  * @author     Andre Torgal <andre@quodis.com>, Leonardo Xavier <leo@quodis.com>, Leihla Pinho <leihla@quodis.com>, Luis Abreu <luis@quodis.com>
@@ -23,6 +23,14 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include '../bootstrap.php';
 	session_cache_limiter("nocache");
+	
+	/**
+	 * Handle l18n negotiation
+	 */
+	// if there's no language argument: /en /pt
+		// redirect the user based on Accept-Language header
+	// if there's a language_argument, load the appropriate .po file
+	
 
 ?>
 <!DOCTYPE html>
