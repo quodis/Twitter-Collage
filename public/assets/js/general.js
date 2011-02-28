@@ -16,8 +16,7 @@ var party = party || {};
 		counter_target = 0,
 		counter_timer,
 		total_positions = 0,
-		draw_tiles_timer,
-		draw_tiles_previous_pos = 0;
+		draw_tiles_timer;
 	
 	// Draw the Initial Mosaic
 	function initialDraw() {
@@ -135,7 +134,7 @@ var party = party || {};
 		// Get the page of visible tiles
 		getVisibleTiles();
 		// Start the counter
-		counter_timer = setInterval(counterDraw, 60);
+		counter_timer = setInterval(counterDraw, 80);
 	}
 	
 	// Get an object's length
@@ -163,13 +162,17 @@ var party = party || {};
 			return;
 		}
 		
-		if (dif > 3200) {
+		if (dif > 2048) {
+			inc = 379;
+		} else if (dif > 1024) {
+			inc = 197;
+		} else if (dif > 512) {
 			inc = 73;
-		} else if (dif > 800) {
+		} else if (dif > 256) {
 			inc = 39;
-		} else if (dif > 200) {
+		} else if (dif > 128) {
 			inc = 17;
-		} else if (dif > 50) {
+		} else if (dif > 64) {
 			inc = 3;
 		}
 		
@@ -286,21 +289,12 @@ var party = party || {};
 			$.extend(hidden_tiles[pos], old_visible);
 		}
 		
-		// Hide the previous tiles' border and z-index
-		$('#' + draw_tiles_previous_pos).css({
-			'border': '0 none',
-			'z-index': '0'
-		});
-		draw_tiles_previous_pos = pos;
-		
 		// Get the color of this tile
 		i = party.mosaic.index[pos];
 		
 		// Update the new tile
 		$('#' + pos).css({
-			'background-image': 'url(data:image/gif;base64,' + visible_tiles[pos].imageData + ')',
-			'border': '1px solid rgb(' + party.mosaic.grid[i.x][i.y].c.join(',') + ')',
-			'z-index': '10'
+			'background-image': 'url(data:image/gif;base64,' + visible_tiles[pos].imageData + ')'
 		});
 		
 	}
@@ -309,7 +303,7 @@ var party = party || {};
 	function startPolling() {
 
 		// Start the recursive "tile updater"
-		draw_tiles_timer = setInterval(drawNewTiles, 250);
+		draw_tiles_timer = setInterval(drawNewTiles, 100);
 		// Start the recursive poller
 		poll();
 		polling_timer = setInterval(poll, (party.polling_timer_seconds * 1000));
