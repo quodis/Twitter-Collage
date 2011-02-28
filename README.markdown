@@ -18,11 +18,21 @@
 
 * PHP >= 5.3.2
 	* Imagick >= 3.0.1
+	* php5-memcache
+	* php5-curl
 * ImageMagick >= 6.5
 * Mysql >= 5.1
-* HTTP server with gzip compression enabled
-* memcache server and php5-memcache lib
-* php5-curl
+* HTTP server with deflate and rewrite enabled, or equivalent
+* memcache server
+
+## lighttpd
+	for lighttpd and servers that do not support htaccess you need to create the rewrite in the vhost
+	lighttpd example /pt_PT -> index.php?locale=$1:
+<code>
+	url.rewrite-once = (
+        "^/([a-z]{2}_[A-Z]{2})$" => "index.php?locale=$1"
+    )
+</code>
 
 ## execute
 

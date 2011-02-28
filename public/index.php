@@ -8,6 +8,12 @@
  */
 
 /**
+ * load localization lib
+ *
+ */
+include('../lib/localization.php');
+
+/**
  * escape from global scope
  */
 function main()
