@@ -208,6 +208,11 @@ Array.prototype.shuffle = function (){
 		// Check the browser's performance
 		if ($.browser.msie) {
 			party.performance = party.available_performances.low;
+		} else if ($.browser.mozilla) {
+			// Remove the download button if this is already firefox >= 4
+			if ($.browser.version >= 4) {
+				$('#download').remove();
+			}
 		} else {
 			party.performance = party.available_performances.medium;
 		}
@@ -592,7 +597,8 @@ Array.prototype.shuffle = function (){
 		"resume": resume,
 		"showBubble": showBubble,
 		"performance": performance,
-		"available_performances": available_performances
+		"available_performances": available_performances,
+		"state": state
 	});
 	
 }());
@@ -605,7 +611,7 @@ $(document).ready(function() {
 
 	// Resize listener
 	$(window).resize(function() {
-		state.mosaic_offset = party.canvas.offset();
+		party.state.mosaic_offset = party.canvas.offset();
 	});
 	
 });
