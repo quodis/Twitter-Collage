@@ -536,7 +536,8 @@ Array.prototype.shuffle = function (){
 		"pause": pause,
 		"resume": resume,
 		"showBubble": showBubble,
-		"performance": performance
+		"performance": performance,
+		"available_performances": available_performances
 	});
 	
 }());
