@@ -276,7 +276,7 @@ var party = party || {};
 			
 		} else {
 			// Choose a random position
-			pos = 1 + Math.floor(Math.random() * total_positions);
+			pos = Math.floor(Math.random() * total_positions);
 			// Copy the visible
 			old_visible = $.extend({}, visible_tiles[pos]);
 			// Replace the visible with the hidden
@@ -294,6 +294,8 @@ var party = party || {};
 		
 		// Get the color of this tile
 		i = party.mosaic.index[pos];
+		
+		if ('undefined' == typeof visible_tiles[pos]) alert(pos);
 		
 		// Update the new tile
 		$('#' + pos).css({
@@ -334,7 +336,9 @@ var party = party || {};
 			}
 		});
 	}
-	
+	function getLastId() {
+		return last_id;
+	}
 	$.extend(party, {
 		"initial_frames_per_second": 24,
 		"initial_tiles_per_frame": 10,
@@ -352,7 +356,8 @@ var party = party || {};
 		"tile_size": 12,
 		"grid": [],
 		"index": [],
-		"init": init
+		"init": init,
+		"getLastId": getLastId
 	});
 	
 }());
