@@ -21,11 +21,16 @@ Array.prototype.shuffle = function (){
 		total_positions = 0,
 		draw_tiles_timer,
 		performance = {},
+		search = {
+			input: null,
+			original_caption: null
+		},
 		state = {
 			active_bubble_pos: 0,
 			last_id: 0,
 			last_page: 0,
-			mosaic_offset: {}
+			mosaic_offset: {},
+			new_tiles_per_second_incremental: 1
 		},
 		available_performances = {
 			high: {
@@ -124,8 +129,15 @@ Array.prototype.shuffle = function (){
 		
 		var tiles_to_draw = "",
 			i = 0,
-			j = (tile_counter + party.performance.initial_tiles_per_frame),
+			j = 0,
 			p;
+		
+		// Next time draw one tile more towards new_tiles_per_second
+		if (state.new_tiles_per_second_incremental < party.performance.initial_tiles_per_frame) {
+			state.new_tiles_per_second_incremental += 0.5;
+		}
+		
+		j = (tile_counter + state.new_tiles_per_second_incremental);
 		
 		// Draw tiles_per_frame tiles and draw them
 		for (i = tile_counter; i < j; i += 1) {
@@ -216,6 +228,8 @@ Array.prototype.shuffle = function (){
 		}
 		// Cache the counter DOM
 		party.counter_canvas = $('#twitter-counter dd span');
+		// Setup the search functionality
+		searchInit();
 		// Get the page of visible tiles
 		getVisibleTiles();
 		// Start the counter
@@ -250,6 +264,23 @@ Array.prototype.shuffle = function (){
 		});
 	}
 	
+	function searchInit() {
+		// Cache the search input DOM
+		search.input_dom = $('#search-input');
+		// Store the original search input caption
+		search.original_caption = search.input_dom.val();
+		
+		search.focus(function({
+			if ($(this).val() === search.original_caption) {
+				$(this).val('');
+			}
+		}))
+		search.blur(function(){
+			if ($(this).val() == '') {
+				$(this).val(search.original_caption);
+			}
+		});
+	}
 	
 	function showBubble(pos, x, y) {
 		var tile = visible_tiles[pos],
