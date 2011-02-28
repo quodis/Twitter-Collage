@@ -1,6 +1,6 @@
 <?php
 /**
- * @pacjage    Firefox 4 Twitter Party
+ * @package    Firefox 4 Twitter Party
  * @subpackage server
  * @version    v.0.4
  * @author     Andre Torgal <andre@quodis.com>

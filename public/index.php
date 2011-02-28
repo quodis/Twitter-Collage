@@ -1,11 +1,17 @@
 <?php
 /**
- * @pacjage    Firefox 4 Twitter Party
+ * @package    Firefox 4 Twitter Party
  * @subpackage front-end
  * @version    v.0.1
  * @author     Andre Torgal <andre@quodis.com>, Leonardo Xavier <leo@quodis.com>, Leihla Pinho <leihla@quodis.com>, Luis Abreu <luis@quodis.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php BSD License
  */
+
+/**
+ * load localization lib
+ *
+ */
+include('../lib/localization.php');
 
 /**
  * escape from global scope
@@ -23,6 +29,14 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include '../bootstrap.php';
 	session_cache_limiter("nocache");
+	
+	/**
+	 * Handle l18n negotiation
+	 */
+	// if there's no language argument: /en /pt
+		// redirect the user based on Accept-Language header
+	// if there's a language_argument, load the appropriate .po file
+	
 
 	// mosaic config file
 	$jsMosaicConfig = $config['Store']['url'] . $config['UI']['js-config']['grid'];
