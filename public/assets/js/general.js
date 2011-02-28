@@ -123,6 +123,7 @@ var party = party || {};
 		clearInterval(loading_message_timer);
 	}
 	
+	
 	// First to be called
 	function init() {
 		// Check the browser's performance
@@ -131,8 +132,13 @@ var party = party || {};
 		party.canvas = $('#mosaic');
 		// Chache the bubble elements
 		party.bubble = {
-			bubble: $('#bubble'),
-			username: this.bubble
+			container: $('#bubble'),
+			username_a: $(party.bubble.container).find('h1 a'),
+			avatar_a: $(party.bubble.container).find('a.twitter-avatar'),
+			avatar_img: $(party.bubble.container).find('a.twitter-avatar > img'),
+			time: $(party.bubble.container).find('time'),
+			time_a: $(party.bubble.container).find('time > a'),
+			p: $(party.bubble.container).find('p')
 		}
 		// Cache the counter DOM
 		party.counter_canvas = $('#twitter-counter dd span');
@@ -140,6 +146,45 @@ var party = party || {};
 		getVisibleTiles();
 		// Start the counter
 		counter_timer = setInterval(counterDraw, 80);
+		// Bind the hover action
+        party.canvas.bind('mousemove', function(ev) {
+            var offset = party.canvas.offset(),
+				x = Math.ceil((ev.clientX + f_scrollLeft() - offset.left) / 12) - 1,
+				y = Math.ceil((ev.clientY + f_scrollTop() - offset.top) / 12) - 1,
+				pos;
+				
+            if (x < 0 || y < 0) {
+				return;
+			}
+			
+            pos = party.mosaic.grid[x][y];
+            // is valid x,y
+            if (pos) {
+				showBubble(pos);
+            }
+        });
+
+	}
+	
+	
+	function showBubble(pos) {
+		var tweet = visible_tweets[pos],
+			b = party.bubble;
+		if (!tweet) {
+			return;
+		}
+		
+		b.container.hide();
+		b.username_a.text(tweet.userName);
+		b.username_a.attr('title', tweet.userName);
+		b.username_a.attr('href', 'http://twitter.com/' + tweet.userName);
+		b.avatar_a.attr('title', tweet.userName);
+		b.avatar_a.attr('href', 'http://twitter.com/' + tweet.userName);
+		b.avatar_img.attr('src', tweet.imageUrl);
+		b.avatar_img.attr('alt', tweet.userName);
+		b.p.text(tweet.contents);
+		b.container.show();
+		
 	}
 	
 	// Get an object's length
@@ -387,6 +432,7 @@ var party = party || {};
 		"getLastId": getLastId,
 		"pause": pause,
 		"resume": resume,
+		"showBubble": showBubble
 	});
 	
 }());

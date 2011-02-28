@@ -52,7 +52,6 @@ function main()
 		<!-- stylesheets -->
 		<link rel="stylesheet" href="<?=$config['UI']['css']['main']?>" type="text/css" media="screen, projection" />
 		<link rel="stylesheet" href="<?=$config['UI']['css']['mosaic']?>" type="text/css" media="screen, projection" />
-		<link rel="stylesheet" href="/assets/css/tipsy.css" type="text/css" media="screen, projection" />
 
 		<link rel="shortcut icon" href="assets/img/global/favicon.ico" />
 		<link rel="apple-touch-icon" type="image/png" href="">
@@ -60,7 +59,6 @@ function main()
 
 		<!-- scripts -->
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
-		<script type="text/javascript" src="/assets/js/jquery.tipsy.js"></script>
 		<script type="text/javascript" src="<?=$config['UI']['js']['general']?>"></script>
 		<script type="text/javascript" src="<?=$jsMosaicConfig?>"></script>
 		<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -147,16 +145,16 @@ function main()
 				<header>
 										
 					<h1><a href="#" title="" rel="author external"></a><span> wrote</span></h1>
-					<a href="#" title="" rel="author external">	
-					  <img src="" alt="" width="48" height="48" class="twitter-avatar" />
+					<a href="#" title="" rel="author external" class="twitter-avatar">	
+					  <img src="" alt="" width="48" height="48" />
 					</a>
 				
-				  <time datetime="2009-10-09" pubdate><a href="#" rel="bookmark external" title="permalink"></a></time>
+				  <time datetime="" pubdate><a href="#" rel="bookmark external" title="permalink"></a></time>
 					
 				</header>
 				
 				<p></p>
-				<!-- <span class="hashtag">#fx4</span> -->
+				
 			</article><!-- bubble -->
 			
 		</section>
