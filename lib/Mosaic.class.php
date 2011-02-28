@@ -102,13 +102,14 @@ class Mosaic
 	/**
 	 * set (and index) page data
 	 *
-	 * @param Imagick $image
+	 * @param Imagick $imageOriginal
+	 * @param Imagick $imageReduced
 	 */
-	public static function setConfigFromImage($image)
+	public static function setConfigFromImages($imageOriginal, $imageReduced)
 	{
-		// analyse image
+		// analyse original image
 		$grid = array();
-		$iterator = $image->getPixelIterator();
+		$iterator = $imageOriginal->getPixelIterator();
 		foreach($iterator as $rowIx => $rowPixels)
 		{
 			foreach ($rowPixels as $columnIx => $pixel)
@@ -116,8 +117,31 @@ class Mosaic
 				$color = $pixel->getColor();
 
 				if (implode($color) == '2552552551') continue;
+				if (implode($color) == '2552552550') continue;
 
-				$grid[$rowIx][$columnIx] = array($color['r'], $color['g'], $color['b']);
+				$grid[$rowIx][$columnIx] = array(
+					'c' => array($color['r'], $color['g'], $color['b'])
+				);
+			}
+		}
+
+		// analyse reduced color image
+		$reducedColors = array();
+		$iterator = $imageReduced->getPixelIterator();
+		foreach($iterator as $rowIx => $rowPixels)
+		{
+			foreach ($rowPixels as $columnIx => $pixel)
+			{
+				$color = implode($pixel->getColor());
+
+				if ($color == '2552552551') continue;
+				if ($color == '2552552550') continue;
+
+				if (!isset($reducedColors[$color])) $reducedColors[$color] = count($reducedColors);
+
+				if (!isset($grid[$rowIx][$columnIx])) die("[$rowIx][$columnIx]$color");
+
+				$grid[$rowIx][$columnIx]['r'] = $reducedColors[$color];
 			}
 		}
 
@@ -125,12 +149,13 @@ class Mosaic
 		$index = 0;
 		foreach ($grid as $rowIx => $rowPixels)
 		{
-			foreach ($rowPixels as $columnIx => $color)
+			foreach ($rowPixels as $columnIx => $pos)
 			{
 				// store grid
 
 				self::$_pageConfig['grid'][$columnIx][$rowIx] = array(
-					'c' => $color,
+					'c' => $pos['c'],
+					'r' => $pos['r'],
 					'x' => $columnIx,
 					'y' => $rowIx,
 					'i' => $index,
@@ -206,7 +231,7 @@ party.mosaic = ' . json_encode(self::$_pageConfig) . ';
 	 */
 	public static function updatePage($pageNo)
 	{
-		$result = Tweet::getByPageWithImage($pageNo);
+		$result = Tweet::getByPage($pageNo, 0, TRUE);
 
 		$fileData = array(
 			'tiles' => array(),
@@ -436,7 +461,7 @@ party.mosaic = ' . json_encode(self::$_pageConfig) . ';
 		if (!isset(self::$_lastTweetWithImage))
 		{
 			// load from db
-			if ($row = Tweet::getLastWithImage()) self::setLastTweetWithImage($row);
+			if ($row = Tweet::getLast(TRUE)) self::setLastTweetWithImage($row);
 		}
 		return self::$_lastTweetWithImage;
 	}

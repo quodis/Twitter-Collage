@@ -1,6 +1,6 @@
 <?php
 /**
- * @package    Firefox 4 Twitter Party
+ * @pacjage    Firefox 4 Twitter Party
  * @subpackage server
  * @version    v.0.1
  * @author     Andre Torgal <andre@quodis.com>
@@ -16,23 +16,20 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include '../bootstrap.php';
 
-	$userName = (isset($_REQUEST['user_name'])) ? $_REQUEST['user_name'] : null;
+	$lastTweet = Mosaic::getLastTweet();
+	$lastProcessedTweet = Mosaic::getLastTweetWithImage();
+	$elapsed = Tweet::getAverageDelay(100);
+	$tweets = ($lastTweet['id'] - $lastProcessedTweet['id']);
 
-	$result = Tweet::getByUserName($userName, $config['UI']['resultsLimit'], TRUE);
-
-	// init response
-
+	// dashboard state
 	$data = array(
-		'tweets' => array()
-	,
-		'total' => $result->total(),
-		'count' => $result->count()
+		'last_page' => Mosaic::getCurrentWorkingPageNo() - 1,
+		'last_id' => $lastProcessedTweet['id'],
+		'delay' => array(
+			'tweets' => $tweets,
+			'seconds' => $elapsed
+		)
 	);
-
-	while ($tweet = $result->row())
-	{
-		$data['tweets'][] = $tweet;
-	}
 
 	Dispatch::now(1, 'OK', $data);
 

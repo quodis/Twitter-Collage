@@ -13,7 +13,7 @@
 function main()
 {
 	header("ETag: PUB" . time());
-	header("Last-Modified: " . gmdate("D, d M Y H:i:s", time()-10) . " GMT");
+	header("Last-Modified: " . gmdate("D, d M Y H:i:s", time()-10) . " GM	T");
 	header("Expires: " . gmdate("D, d M Y H:i:s", time() + 5) . " GMT");
 	header("Pragma: no-cache");
 	header("Cache-Control: max-age=1, s-maxage=1, no-cache, must-revalidate");
@@ -37,10 +37,23 @@ function main()
 	$uiOptions = $config['UI']['options'];
 	$uiOptions['tile_size'] = $config['Mosaic']['tileSize'];
 
+	$lastTweet = Mosaic::getLastTweet();
+	$lastProcessedTweet = Mosaic::getLastTweetWithImage();
+	$elapsed = Tweet::getAverageDelay(100);
+	$tweets = ($lastTweet['id'] - $lastProcessedTweet['id']);
+	if (!$tweets) $elapsed = 0;
+
 	// dashboard state
 	$dashboardState = array(
-		'last_page' => Mosaic::getCurrentWorkingPageNo() - 1
+		'last_page' => Mosaic::getCurrentWorkingPageNo() - 1,
+		'last_id' => $lastProcessedTweet['id'],
+		'delay' => array(
+			'tweets' => $tweets,
+			'seconds' => $elapsed
+		)
 	);
+
+	$delay = $elapsed . ' s <em>(' . $tweets . ' tw)</em>';
 
 	?>
 <!DOCTYPE html>
@@ -70,7 +83,8 @@ function main()
 		<link rel="image_src" href="">
 
 		<!-- scripts -->
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+<!--		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>-->
+		<script type="text/javascript" src="/assets/js/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="/assets/js/jquery.tipsy.js"></script>
 		<script type="text/javascript" src="<?=$config['UI']['js']['dashboard']?>"></script>
 		<script type="text/javascript" src="<?=$jsMosaicConfig?>"></script>
@@ -111,7 +125,7 @@ function main()
 						</dl>
 						<dl class="delay">
 							<dt><span>Delay</span></dt>
-							<dd id="job-delay"><span></span></dd>
+							<dd id="job-delay"><span><?=$delay?></span></dd>
 						</dl>
 					</div><!-- counters -->
 

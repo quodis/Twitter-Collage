@@ -19,7 +19,7 @@ function main()
 	$terms = (isset($_REQUEST['terms'])) ? $_REQUEST['terms'] : null;
 
 
-	$result = Tweet::getByTermsWithImage($terms, $config['UI']['resultsLimit']);
+	$result = Tweet::getByTerms($terms, $config['UI']['resultsLimit'], TRUE);
 
 	// init response
 

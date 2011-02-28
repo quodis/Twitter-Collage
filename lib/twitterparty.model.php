@@ -13,6 +13,10 @@
 /**
  * interface to table `tweet`
  */
+/**
+ * @author andrezero
+ *
+ */
 final class Tweet
 {
 
@@ -140,30 +144,20 @@ final class Tweet
 	/**
 	 * last tweet
 	 *
-	 * @param string $id
+	 * @param boolean $withImage (optional, defaults to FALSE)
 	 *
 	 * @return array
 	 */
-	public static function getLast()
+	public static function getLast($withImage = FALSE)
 	{
-		$sql = "SELECT * FROM `tweet` ORDER BY `id` DESC LIMIT 1";
-		$row = Db::queryRow($sql);
+		$withImage = !!$withImage;
 
-		return $row;
-	}
+		$sql = "SELECT * FROM `tweet` ";
 
+		if ($withImage) $sql.= " WHERE processedTs";
 
-	/**
-	 * last tweet with image
-	 *
-	 * @param string $id
-	 *
-	 * @return array
-	 */
-	public static function getLastWithImage()
-	{
-		// or from db
-		$sql = "SELECT * FROM `tweet` WHERE `imageData` ORDER BY `id` DESC LIMIT 1";
+		$sql.= " ORDER BY `id` DESC LIMIT 1";
+
 		$row = Db::queryRow($sql);
 
 		return $row;
@@ -180,7 +174,9 @@ final class Tweet
 	public static function getLastByUserId($userId)
 	{
 		$userId = Db::escape($userId);
-		$sql = "SELECT * FROM `tweet` WHERE `userid` = '$userId' ORDER BY `id` DESC LIMIT 1";
+		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData, processedTs FROM `tweet` ";
+		$sql.= " WHERE `userid` = '$userId' ORDER BY `id` DESC LIMIT 1";
+
 		$row = Db::queryRow($sql);
 
 		return $row;
@@ -197,7 +193,9 @@ final class Tweet
 	public static function getLastByUserName($userName)
 	{
 		$userName = Db::escape($userName);
-		$sql = "SELECT * FROM `tweet` WHERE `userName` = '$userName' ORDER BY `id` DESC LIMIT 1";
+		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData, processedTs FROM `tweet` ";
+		$sql.= " WHERE `userName` = '$userName' ORDER BY `id` DESC LIMIT 1";
+
 		$row = Db::queryRow($sql);
 
 		return $row;
@@ -207,7 +205,7 @@ final class Tweet
 	/**
 	 * tweets without processed image
 	 *
-	 * @param $limit = null
+	 * @param integer $limit (optional)
 	 *
 	 * @return array
 	 */
@@ -216,7 +214,8 @@ final class Tweet
 		$limit = (int)$limit;
 		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
 
-		$sql = "SELECT * FROM `tweet` WHERE `imageData` IS NULL LIMIT $limit";
+		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData, processedTs FROM `tweet` ";
+		$sql.= " WHERE `imageData` IS NULL LIMIT $limit";
 
 		$result = Db::query($sql);
 
@@ -229,43 +228,23 @@ final class Tweet
 	 *
 	 * @param integer $pageNo
 	 * @param integer $lastId
+	 * @param boolean $withImage (optional, defaults to FALSE)
 	 *
 	 * @return array
 	 */
-	public static function getByPage($pageNo, $lastId = null)
+	public static function getByPage($pageNo, $lastId = null, $withImage = FALSE)
 	{
 		$pageNo = (int)$pageNo;
 		$lastId = (int)$lastId;
+		$withImage = !!$withImage;
 
 		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
 		$sql.= " WHERE page = $pageNo ";
+
+		if ($withImage) $sql.= "  AND processedTs";
+
 		if ($lastId) $sql.= "  AND id > $lastId";
-		$sql.= " ORDER BY `id` ASC";
 
-		$result = Db::query($sql);
-
-		return $result;
-	}
-
-
-	/**
-	 * tweets of this page
-	 *
-	 * @param integer $pageNo
-	 * @param integer $pageSize
-	 * @param integer $lastId
-	 *
-	 * @return array
-	 */
-	public static function getByPageWithImage($pageNo, $lastId = null)
-	{
-		$pageNo = (int)$pageNo;
-		$lastId = (int)$lastId;
-
-		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
-		$sql.= " WHERE `imageData` IS NOT NULL";
-		$sql.= "  AND page = $pageNo ";
-		if ($lastId) $sql.= "  AND id > $lastId";
 		$sql.= " ORDER BY `id` ASC";
 
 		$result = Db::query($sql);
@@ -277,10 +256,11 @@ final class Tweet
 	/**
 	 *
 	 * @param integer $lastId
+	 * @para ingeger $limit (optional)
 	 *
 	 * @return array
 	 */
-	public static function getSinceLastIdWithImage($lastId, $limit = null)
+	public static function getSinceLastId($lastId, $limit = null)
 	{
 		$lastId = Db::escape($lastId);
 
@@ -312,19 +292,25 @@ final class Tweet
 	 * tweets of this "user"
 	 *
 	 * @param string $terms
-	 * @param $limit = null
+	 * @param integer $limit (optional)
+	 * @param boolean $withImage (optional, defaults to FALSE)
 	 *
 	 * @return array
 	 */
-	public static function getUsersByTerms($terms, $limit = null)
+	public static function getUsersByTerms($terms, $limit = null, $withImage = null)
 	{
 		$terms = Db::escape($terms);
 
 		$limit = (int)$limit;
 		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
 
+		$withImage = !!$withImage;
+
 		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
 		$sql.= " WHERE `userName` LIKE '%$terms%'";
+
+		if ($withImage) $sql.= "  AND processedTs";
+
 		$sql.= " GROUP BY `userName`";
 		$sql.= " ORDER BY `userName` ASC";
 		$sql.= " LIMIT $limit";
@@ -335,6 +321,7 @@ final class Tweet
 		{
 			$sql = "SELECT count(distinct userName) AS cnt FROM `tweet` ";
 			$sql.= " WHERE `userName` LIKE '%$terms%'";
+			if ($withImage) $sql.= "  AND processedTs";
 			$total = Db::queryValue($sql, 'cnt');
 			if ($total) $result->setTotal($total);
 		}
@@ -347,20 +334,25 @@ final class Tweet
 	 * tweets by terms
 	 *
 	 * @param string $userName
-	 * @param $limit = null
+	 * @param integer $limit (optional)
+	 * @param boolean $withImage (optional, defaults to FALSE)
 	 *
 	 * @return array
 	 */
-	public static function getByUsernameWithImage($userName, $limit = null)
+	public static function getByUsername($userName, $limit = null, $withImage = null)
 	{
 		$userName = Db::escape($userName);
 
 		$limit = (int)$limit;
 		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
 
+		$withImage = !!$withImage;
+
 		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
-		$sql.= " WHERE `imageData` IS NOT NULL";
-		$sql.= "   AND `userName` = '$userName'";
+		$sql.= " WHERE`userName` = '$userName'";
+
+		if ($withImage) $sql.= "  AND processedTs";
+
 		$sql.= " ORDER BY `id` DESC";
 		$sql.= " LIMIT $limit";
 
@@ -370,6 +362,7 @@ final class Tweet
 		{
 			$sql = "SELECT count(1) AS cnt FROM `tweet` ";
 			$sql.= " WHERE `userName` = '$userName'";
+			if ($withImage) $sql.= "  AND processedTs";
 			$total = Db::queryValue($sql, 'cnt');
 			if ($total) $result->setTotal($total);
 		}
@@ -382,19 +375,25 @@ final class Tweet
 	 * tweets by terms
 	 *
 	 * @param string $terms
-	 * @param $limit = null
+	 * @param integer $limit (optional)
+	 * @param boolean $withImage (optional, defaults to FALSE)
 	 *
 	 * @return array
 	 */
-	public static function getByTermsWithImage($terms, $limit = null)
+	public static function getByTerms($terms, $limit = null, $withImage = null)
 	{
 		$terms = Db::escape($terms);
 
 		$limit = (int)$limit;
 		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
 
+		$withImage = !!$withImage;
+
 		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
-		$sql.= " WHERE `userName` LIKE '%$terms%'";
+		$sql.= " WHERE `contents` LIKE '%$terms%'";
+
+		if ($withImage) $sql.= "  AND processedTs";
+
 		$sql.= " ORDER BY `id` DESC";
 		$sql.= " LIMIT $limit";
 
@@ -403,8 +402,8 @@ final class Tweet
 		if ($result->count() == $limit)
 		{
 			$sql = "SELECT count(1) AS cnt FROM `tweet` ";
-			$sql.= " WHERE `imageData` IS NOT NULL";
-			$sql.= "   AND `contents` LIKE '%$terms%'";
+			$sql.= " WHERE `contents` LIKE '%$terms%'";
+			if ($withImage) $sql.= "  AND processedTs";
 			$total = Db::queryValue($sql, 'cnt');
 			if ($total) $result->setTotal($total);
 		}
@@ -412,6 +411,33 @@ final class Tweet
 		return $result;
 	}
 
+	/**
+	 * tweets by terms
+	 *
+	 * @param integer $limit (optional)
+	 *
+	 * @return array
+	 */
+	public static function getAverageDelay($limit = null)
+	{
+		$limit = (int)$limit;
+		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
+
+		$sql = "SELECT createdTs, processedTs, (processedTs - createdTs) AS elapsed FROM `tweet` ";
+		$sql.= " WHERE `processedTs` AND `processedTs` >= `processedTs`";
+		$sql.=" ORDER BY id DESC ";
+		$sql.= " LIMIT 2";
+
+		$result = Db::query($sql);
+
+		$elapsed = 0;
+		while ($row = $result->row())
+		{
+			$elapsed += $row['elapsed'];
+		}
+
+		return floor($elapsed / $result->count());
+	}
 
 }
 
