@@ -161,7 +161,7 @@ var party = party || {};
             pos = party.mosaic.grid[x][y];
             // is valid x,y
             if (pos) {
-				showBubble(pos);
+				showBubble(pos, x, y);
             }
         });
 
@@ -184,7 +184,10 @@ var party = party || {};
 		b.avatar_img.attr('src', tile.imageUrl);
 		b.avatar_img.attr('alt', tile.userName);
 		b.p.text(tile.contents);
-		b.container.removeClass().addClass('dark-orange, top-left');
+		b.container.css({
+			left: (x * 12) + 'px',
+			top: (y * 12) + 'px'
+		}}).removeClass().addClass('dark-orange, top-left');
 		b.container.show();
 		
 	}
