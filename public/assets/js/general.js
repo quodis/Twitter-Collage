@@ -619,5 +619,6 @@ Array.prototype.shuffle = function (){
 	// Resize listener
 	$(window).resize(function() {
 		state.mosaic_offset = party.canvas.offset();
-	}
+	});
+	
 })(jQuery);
