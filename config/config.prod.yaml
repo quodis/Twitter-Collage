@@ -93,5 +93,6 @@ UI:
         mosaic: "/assets/css/mosaic.css?v=1"
         dashboard: "/assets/css/dashboard.css?v=1"
     pollLimit: 100
+    resultsLimit: 100
     options:
         store_url: http://dev.twitterparty.quodis.com/store
