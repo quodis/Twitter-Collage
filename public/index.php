@@ -3,7 +3,7 @@
  * @package    Firefox 4 Twitter Party
  * @subpackage front-end
  * @version    v.0.1
- * @author     Andre Torgal <andre@quodis.com>, Leonardo Xavier <leo@quodis.com>, Leihla Pinho <leihla@quodis.com>, Luis Abreu <luis@quodis.com>
+ * @author     Andre Torgal <andre@quodis.com>, Leo Xavier <leo@quodis.com>, Leihla Pinho <leihla@quodis.com>, Luis Abreu <luis@quodis.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -78,7 +78,7 @@ function main($language)
 
 				<!-- HEADER -->
 				<header id="brand">
-					<h1><a href="#" title="<?= _('Join the Firefox 4 Twitter Party') ?>"><?= _('Join the Firefox 4 Twitter Party') ?></a></h1>
+					<h1><a href="#" title="<?= _('Join the Firefox 4 Twitter Party'),  ?>"><?= _('Join the Firefox 4 Twitter Party') ?></a></h1>
 				</header>
 
 
@@ -86,11 +86,11 @@ function main($language)
 				<aside id="main-content" class="clearfix">
 
 					<!-- Here goes the text explaining how Firefox Twitter Party works. -->
-					<p><?= _('Be part of Team Firefox! Tweet about Firefox 4 with the <span class="hashtag">#fx4</span> hashtag and your avatar will join thousands of others from around the world as part of our logo mosaic.') ?></p>
+					<p><?= sprintf(_('Be part of Team Firefox! Tweet about Firefox 4 with the %s hashtag and your avatar will join thousands of others from around the world as part of our logo mosaic.'), '<span class="hashtag">#fx4</span>') ?></p>
 
 					<div id="twitter-counter">
 						<dl>
-							<dt><a href="http://twitter.com/share?related=firefox&text=<?= urlencode(_('Join me at the Firefox 4 Twitter Party and celebrate the newest version http://t.co/PowZdhA via @firefox')) ?>" title="<?= _('Tweet') ?>" rel="external"><?= _('Tweet') ?></a></dt>
+							<dt><a href="http://twitter.com/share?related=firefox&text=<?= urlencode(_('Join me at the Firefox 4 Twitter Party and celebrate the newest version')) ?>" title="<?= _('Tweet') ?>" rel="external"><?= _('Tweet') ?></a></dt>
 							<dd><span>-</span></dd>
 						</dl>
 					</div><!-- twitter-counter -->
@@ -132,7 +132,7 @@ function main($language)
 
 				<header>
 
-					<h1><a href="#" title="Twitter profile" rel="author external"></a><span> wrote</span></h1>
+					<h1><a href="#" title="<?= _('Twitter profile') ?>" rel="author external"></a><span> <?= _('wrote') ?></span></h1>
 					<a href="#" title="" rel="author external" class="twitter-avatar">
 					  <img src="" alt="<?= _('Twitter profile picture') ?>" width="48" height="48" />
 					</a>

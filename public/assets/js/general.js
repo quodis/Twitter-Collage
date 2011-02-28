@@ -214,7 +214,7 @@ Array.prototype.shuffle = function (){
 				$('#download').remove();
 			}
 		} else {
-			party.performance = party.available_performances.medium;
+			party.performance = party.available_performances.high;
 		}
 		
 		// Cache the canvas
@@ -243,19 +243,19 @@ Array.prototype.shuffle = function (){
         party.canvas.bind('mousemove', function(ev) {
             var x = Math.ceil((ev.clientX + f_scrollLeft() - state.mosaic_offset.left) / 12) - 1,
 				y = Math.ceil((ev.clientY + f_scrollTop() - state.mosaic_offset.top) / 12) - 1,
-				pos;
+				grid;
 				
             if (x < 0 || y < 0) {
 				return;
 			}
 			
-            pos = party.mosaic.grid[x][y];
+            grid = party.mosaic.grid[x][y];
 
             // is valid x,y
-            if (pos) {
+            if (grid) {
 				// Check if this is not the already opened bubble
-				if (state.active_bubble_pos != pos.i) {
-					state.active_bubble_pos = pos.i;
+				if (state.active_bubble_pos != grid.i) {
+					state.active_bubble_pos = grid.i;
 					showBubble(pos.i, x, y);
 				}
             } else {
@@ -299,7 +299,7 @@ Array.prototype.shuffle = function (){
 			return;
 		}
 		
-		g = party.mosaic.grid[pos];
+		g = party.mosaic.grid[x][y];
 		if (!g) {
 			return;
 		}
