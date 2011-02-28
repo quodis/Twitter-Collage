@@ -33,7 +33,7 @@ http://www.opensource.org/licenses/mit-license.php
 	min-height: 130px;
 	width: 290px;
 	position: absolute;
-	display: none;
+ 	display: none; 
 	z-index: 20;
 }
 
@@ -62,7 +62,7 @@ http://www.opensource.org/licenses/mit-license.php
 }
 
 .bubble h1 {
-	font-size: 20px;
+	font-size: 18px;
 	font-style: italic;
 	padding-left: 65px;
 	margin: 0;
@@ -74,7 +74,8 @@ http://www.opensource.org/licenses/mit-license.php
 }
 
 .bubble .twitter-avatar {
-	background-color: #fff;
+/* 	background-color: #fff; */
+	border: 1px solid #fde9c7;
 	width: 48px;
 	height: 48px;
 	padding: 2px;
@@ -96,6 +97,13 @@ http://www.opensource.org/licenses/mit-license.php
 	text-align: center;
 	margin: 0;
 	position: relative;
+	min-height: 30px;
+	
+	white-space: -moz-pre-wrap;
+/* 	white-space: -pre-wrap; */
+	white-space: -o-pre-wrap;
+	white-space: pre-wrap;
+	word-wrap: break-word;
 }
 
 /* 3.Bubbles Colors */
@@ -149,12 +157,12 @@ http://www.opensource.org/licenses/mit-license.php
 .bubble.light-blue, 
 .bubble.light-blue h1 span,
 .bubble.light-blue .hashtag {
-	color:#fde9c7;
+	color:#1B5898;
 	font-weight: normal;
 }
 
 .bubble.light-blue a {
-	color:#e8d683;
+	color:#1D2D67;
 }
 
 .dark-blue.top-left header, .dark-blue.top-left p,
@@ -180,8 +188,8 @@ http://www.opensource.org/licenses/mit-license.php
 
 .bubble.top-left .twitter-avatar,
 .bubble.bottom-left .twitter-avatar {
-	top: 20px;
-	left: 52px;
+	top: 25px;
+	left: 45px;
 }
  
 .bubble.top-right .twitter-avatar,
@@ -197,7 +205,7 @@ http://www.opensource.org/licenses/mit-license.php
 
 .bubble.top-left p, 
 .bubble.bottom-left p { 
-	padding: 0px 25px 30px 45px; 
+	padding: 10px 25px 30px 45px; 
 }
 
 .bubble.top-right header, 
@@ -207,7 +215,7 @@ http://www.opensource.org/licenses/mit-license.php
 
 .bubble.top-right p, 
 .bubble.bottom-right p { 
-	padding: 0px 45px 30px 25px; 
+	padding: 10px 45px 30px 25px; 
 }
 
 .bubble.top-left header{ 
@@ -216,7 +224,7 @@ http://www.opensource.org/licenses/mit-license.php
 
 .bubble.top-left p{ 
 	background-position-y: bottom; 
-	background-position-x: -616px;
+	background-position-x: -615px;
 }
 
 .bubble.bottom-left header{ 
@@ -247,9 +255,8 @@ http://www.opensource.org/licenses/mit-license.php
 }
 
 
-/*
 #bubble-1 {
-	top:390px;
+	top:420px;
 	left:200px;
 }
 
@@ -267,4 +274,4 @@ http://www.opensource.org/licenses/mit-license.php
 	top:120px;
 	left:20px;
 }
-*/
+

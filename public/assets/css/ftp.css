@@ -148,7 +148,7 @@ body {
 	-webkit-box-shadow: 0px 0px 3px #a6bfcc;
 	box-shadow: 0px 0px 3px #a6bfcc;
 	-moz-border-radius: 10px; border-radius: 10px;
-	behavior: url(ie-css3.htc);
+	border: 1px solid #d5e6ef;
 }
 
 #mosaic {
@@ -399,7 +399,7 @@ footer a:hover {
 #twitter-counter dt {
 	background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(213,230,239)), color-stop(1, rgb(255,255,255)));
 	background-image: -moz-linear-gradient( center bottom, rgb(213,230,239) 0%, rgb(255,255,255) 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#fff',  endColorstr='#d5e6ef', GradientType=0 );
+	filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff',  endColorstr='#d5e6ef', GradientType=0 );
 	margin-right:10px;
 }
 
@@ -456,7 +456,7 @@ footer a:hover {
 #search-box input {
 	background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, #fff), color-stop(1, #f0f7fc));
 	background-image: -moz-linear-gradient( center bottom, #fff 0%, #f0f7fc 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#fff',  endColorstr='#f0f7fc', GradientType=0 );
+	filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0f7fc',  endColorstr='#ffffff', GradientType=0 );
 	border: 1px solid #87b7dd;
 	-moz-border-radius: 5px; border-radius: 5px;
 	color:#6f7fA3;
@@ -726,8 +726,7 @@ abbr {
 	margin-left:25px;
 }
 
-#download .download-noscript
-h3 {
+#download .download-noscript h3 {
 	margin:0;
 }
 
