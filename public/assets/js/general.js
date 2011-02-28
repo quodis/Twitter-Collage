@@ -253,6 +253,7 @@ var party = party || {};
 	}
 	
 	function drawNewTiles() {
+		
 		// Get a random position
 		var pos,
 			old_visible,
@@ -295,8 +296,6 @@ var party = party || {};
 		// Get the color of this tile
 		i = party.mosaic.index[pos];
 		
-		if ('undefined' == typeof visible_tiles[pos]) alert(pos);
-		
 		// Update the new tile
 		$('#' + pos).css({
 			'background-image': 'url(data:image/gif;base64,' + visible_tiles[pos].imageData + ')',
@@ -336,10 +335,38 @@ var party = party || {};
 			}
 		});
 	}
-	
+
+	/**
+	 * public
+	 * 
+	 * @return integer
+	 */
 	function getLastId() {
 		return last_id;
 	}
+	
+	
+	/**
+	 * public, enable dashboard ui
+	 * 
+	 * @return
+	 */
+	function pause() {
+		clearInterval(draw_tiles_timer);
+		clearInterval(polling_timer);
+	}
+
+	
+	/**
+	 * public, enable dashboard ui
+	 * 
+	 * @return
+	 */
+	function resume() {
+		startPolling();
+	}
+	
+	
 	$.extend(party, {
 		"initial_frames_per_second": 24,
 		"initial_tiles_per_frame": 10,
@@ -358,7 +385,9 @@ var party = party || {};
 		"grid": [],
 		"index": [],
 		"init": init,
-		"getLastId": getLastId
+		"getLastId": getLastId,
+		"pause": pause,
+		"resume": resume,
 	});
 	
 }());
