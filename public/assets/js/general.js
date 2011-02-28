@@ -169,7 +169,7 @@ var party = party || {};
 	
 	
 	function showBubble(pos) {
-		var tweet = visible_tweets[pos],
+		var tweet = party.visible_tweets[pos],
 			b = party.bubble;
 		if (!tweet || !b) {
 			return;
