@@ -16,23 +16,20 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include '../bootstrap.php';
 
-	$terms = (isset($_REQUEST['terms'])) ? $_REQUEST['terms'] : null;
+	$lastTweet = Mosaic::getLastTweet();
+	$lastProcessedTweet = Mosaic::getLastTweetWithImage();
+	$elapsed = Tweet::getAverageDelay(100);
+	$tweets = ($lastTweet['id'] - $lastProcessedTweet['id']);
 
-
-	$result = Tweet::getByTerms($terms, $config['UI']['resultsLimit'], TRUE);
-
-	// init response
-
+	// dashboard state
 	$data = array(
-		'tweets' => array(),
-		'total' => $result->total(),
-		'count' => $result->count()
+		'last_page' => Mosaic::getCurrentWorkingPageNo() - 1,
+		'last_id' => $lastProcessedTweet['id'],
+		'delay' => array(
+			'tweets' => $tweets,
+			'seconds' => $elapsed
+		)
 	);
-
-	while ($tweet = $result->row())
-	{
-		$data['tweets'][] = $tweet;
-	}
 
 	Dispatch::now(1, 'OK', $data);
 

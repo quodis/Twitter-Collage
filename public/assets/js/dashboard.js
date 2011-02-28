@@ -28,7 +28,8 @@ var party = party || {};
 			'store_url' : '',
 			'tile_size' : 0,
 			'idle_timeout' : 120 * 1000,
-			'highlight_timeout' : 500
+			'highlight_timeout' : 500,
+			'short_stat_timeout' : 3000
 		},
 		options : { },
 
@@ -38,7 +39,8 @@ var party = party || {};
 			'last_page' : 0,
 			'last_id' : 0,
 			'idle_timeout' : null,
-			'highlight_timeout' : null
+			'highlight_timeout' : null,
+			'short_stat_timeout' : null
 		},
 		
 		
@@ -76,6 +78,9 @@ var party = party || {};
 		 */
 		buildInterface : function() 
 		{
+			// show last id
+			$('#last-tweet span').rollNumbers(this.state.last_id, 5000);
+			
 			// bind search user
 			$('#find-user').inputDefault().inputState( { 'onEnter' : function() { 
 				this.findUser($('#find-user').val());
@@ -93,7 +98,7 @@ var party = party || {};
 			}.bind(this) );
 			
 			// bind poll
-			$('#force-poll-bttn').click( function() {
+			$('#force-poll-bttn').click( function(ev) {
 				ev.stopPropagation();
 				this.poll();
 			}.bind(this) );
@@ -116,6 +121,17 @@ var party = party || {};
 			
 			// bind reset
 			$('body').click( this.reset );
+			
+			// stat timer
+			this.state.short_stat_timeout = window.setInterval( function() {
+				this.load('/stat-short.php', null, function(data) {
+					if (!data) return;
+					$.extend(this.state, data);
+					$('#last-tweet span').rollNumbers(this.state.last_id, 1000);
+					$('#last-page span').text(this.state.last_page);
+					$('#job-delay span').html(this.state.delay.seconds + ' s <em>(' + this.state.delay.tweets + ' tw)</em>');
+				}.bind(this) );
+			}.bind(this), this.options.short_stat_timeout);
 		},
 		
 		
@@ -132,11 +148,9 @@ var party = party || {};
 			// load
 			var url = this.freshUrl(this.options.store_url+ '/pages/page_' + page + '.json');
 			this.load(url, {}, function(data) {
-				this.state.last_id = data.last_id;
-				$('#last-tweet span').text(data.last_id);
 				var count = this.addTiles(data.tiles);
 				if (!count) {
-					alert('empty page, TODO proper dialog');
+					
 				}
 			}.bind(this), 'page:' . page);
 		},
@@ -144,14 +158,15 @@ var party = party || {};
 		poll : function()
 		{
 			var params = {
-				'last_id' : last_id
+				'last_id' : this.state.last_id
 			}
 
 			Dashboard.load( 'poll.php', params, function(data) {
-				$('#last-tweet span').text(data.payload.last_id);
-				var count = addTiles(data.payload.tiles);
+				console.log(data);
+				$('#last-tweet span').text(data.last_id);
+				var count = this.addTiles(data.tiles);
 				if (count) {
-					last_id = data.payload.last_id;
+					this.state.last_id = data.last_id;
 				}
 			}.bind(this) );
 		},
@@ -244,7 +259,7 @@ var party = party || {};
 			
 			$('body').addClass('shade user-list');
 			
-			this.load('/users-by-terms.php', {'user_name' : user_name}, function(data) {
+			this.load('/users-by-terms.php', {'terms' : user_name}, function(data) {
 				
 				if (!data.total) return;
 				
@@ -283,7 +298,7 @@ var party = party || {};
 				if (!data.total) return;
 				
 				if (!$('#tweet-list').length) {
-					$('<div id="tweet-list" class="widget clearfix"></div>').appendTo('#widgets');
+					$('<div id="tweet-list" class="widget clearfix"><div class="widget-title">TITLE</div></div>').appendTo('#widgets');
 				}
 				for (i = 0; i < data.tweets.length; i++) {
 					$('<div class="tweet">' + this.getTweetHtml(data.tweets[i]) + '</div>').appendTo('#widgets #tweet-list');
@@ -746,6 +761,78 @@ var party = party || {};
 		};
 	};
 
+})(jQuery);
+
+/** 
+ * jQuery (methods) 
+ */
+(function($) {	
+	
+	$.fn.extend({
+		
+		/**
+		 * rolls numbers to 
+		 * 
+		 * @param integer to
+		 * @param integer milisecs 
+		 * @param function callback function(value) returns formatted value
+		 * @param integer iteration (used on recursion)
+		 */
+		rollNumbers : function(to, milisecs, formatCallback, iteration) 
+		{
+			var frameMsecs = 100;
+			
+			if (!iteration) {
+				
+				iteration = 0;
+				
+				if (!to) to = 0;
+				this.to = to;
+				this.num = parseInt(this.text());
+				if (!this.num) this.num = 0;
+			}
+			else if (this.to != to) return;
+			iteration++;
+			
+			var milisecs = milisecs - frameMsecs;
+		
+			if (milisecs <= 0) {
+				this.num = to;
+			}
+			else {
+				var framesRemaining = Math.ceil(milisecs / frameMsecs);
+				var direction = this.num > to ? 1 : -1;
+				var delta;
+				
+				if (Math.abs(to - this.num) / framesRemaining > 10) delta = Math.abs(to - this.num) / 10;
+				if (Math.abs(to - this.num) / framesRemaining < 2) {
+					// slow down
+					delta = Math.abs(to - this.num) / 2;
+				}
+				// jitter
+				else delta += Math.random() * 3 * direction;
+				delta = Math.ceil(delta);
+				
+				console.log(framesRemaining, direction, delta);
+				
+				if (this.num < to) {
+					this.num += delta;
+					if (this.num > to) this.num = to;
+				}
+				else if (this.num > to) {
+					this.num -= delta;
+					if (this.num < to) this.num = to;
+				}
+			}
+			text = ('function' == typeof formatCallback) ? formatCallback(this.num) : this.num;
+			this.text(text);
+			if (this.num != to) {
+				setTimeout( function(el, to, milisecs, formatCallback, iteration) {
+					el.rollNumbers(to, milisecs, formatCallback, iteration);
+				}, frameMsecs, this, to, milisecs, formatCallback, iteration);
+			}
+		}
+	});
 })(jQuery);
 
 
