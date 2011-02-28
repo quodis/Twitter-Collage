@@ -16,19 +16,23 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include dirname(__FILE__) . '/../bootstrap.php';
 
-	$logo = $config['App']['path'] . '/' . $config['Mosaic']['logoFile'];
+	$originalFile = $config['App']['path'] . '/' . $config['Mosaic']['logoFile'];
+	$reducedFile  = $config['App']['path'] . '/' . $config['Mosaic']['reducedFile'];
 
-	Debug::logMsg('analysing file: ' . $logo);
+	Debug::logMsg('analysing original file:' . $originalFile);
+	Debug::logMsg('and reduced color file:' . $reducedFile);
 
-	if (!file_exists($logo)) Dispatch::now(0, 'FAIL - invalid file:' . $logo);
+	if (!file_exists($originalFile)) Dispatch::now(0, 'FAIL - invalid original file:' . $originalFile);
+	if (!file_exists($reducedFile)) Dispatch::now(0, 'FAIL - invalid reduced colors file:' . $reducedFile);
 
-	$image = new Imagick($logo);
+	$imageOriginal = new Imagick($originalFile);
+	$imageReduced = new Imagick($reducedFile);
 
-	if ($image->getImageWidth() != $config['Mosaic']['cols']) Dispatch::now(0, 'FAIL - invalid width is:' . $image->getImageWidth() . ' should be:' . $config['Mosaic']['cols']);
-	if ($image->getImageHeight() != $config['Mosaic']['rows']) Dispatch::now(0, 'FAIL - invalid height is:' . $image->getImageHeight() . ' should be:' . $config['Mosaic']['rows']);
+	if ($imageOriginal->getImageWidth() != $config['Mosaic']['cols']) Dispatch::now(0, 'FAIL - invalid width is:' . $image->getImageWidth() . ' should be:' . $config['Mosaic']['cols']);
+	if ($imageOriginal->getImageHeight() != $config['Mosaic']['rows']) Dispatch::now(0, 'FAIL - invalid height is:' . $image->getImageHeight() . ' should be:' . $config['Mosaic']['rows']);
 
 	// set configuration
-	Mosaic::setConfigFromImage($image);
+	Mosaic::setConfigFromImages($imageOriginal, $imageReduced);
 
 	// store php config file
 	$configFileName = Mosaic::saveConfig();
