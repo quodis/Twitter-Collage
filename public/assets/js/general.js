@@ -460,8 +460,8 @@ Array.prototype.shuffle = function (){
 			}
 			// Write the data locally
 			visible_tiles = data.tiles;
-			console.log(data);
 			newest_tiles = data.newest_tiles;
+			console.log(newest_tiles);
 			total_positions = objectLength(visible_tiles);
 			
 			// Draw the mosaic!
@@ -624,7 +624,6 @@ Array.prototype.shuffle = function (){
 		"performance": performance,
 		"available_performances": available_performances,
 		"state": state,
-		"newest_tiles": newest_tiles,
 		"new_tiles": new_tiles,
 		"draw_new_tiles_every": 4
 	});
