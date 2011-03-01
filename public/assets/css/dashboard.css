@@ -306,6 +306,7 @@ body.shade #mosaic {
 	position:relative;
 	display:block;
 	background-color:#f0f7fc;
+	background-color:rgba(239, 246, 252, 0.8);
 	margin:0 0 40px;
 	padding:60px 20px 20px 20px;
 	border: 1px solid #D5E6EF;
@@ -374,6 +375,10 @@ body.shade #mosaic {
 
 #highlight {
 	min-height:10px;
+	margin-bottom: 0px;
+}
+.user-tweets #highlight {
+	margin-bottom: 0px;
 }
 #highlight p {
 	font-size:14px;
@@ -383,13 +388,15 @@ body.shade #mosaic {
 	padding:10px;
 }
 #highlight.excite h3,
+#highlight.excite .user-link,
 #highlight.excite .delete {
 	display:none;
 }
 
-#highlight.excite img {
+#highlight.excite article img {
 	width:32px;
 	height:32px;
+	margin-bottom: 20px;
 }
 #highlight.excite p {
 	font-size:12px;
@@ -423,7 +430,28 @@ body.shade #mosaic {
 	display:inline;
 	font-size:11px;
 	line-height:24px;
-} 
+}
+
+#highlight .tweet img {
+	margin-bottom: 40px;
+}
+
+#highlight .tweet .user-link {
+	float:left;
+	clear: both;
+	margin: 10px 10px 0 0;
+	padding: 6px 0px;
+	font-weight: bold;
+	font-size: 14px;
+	color: #1B5898;
+	cursor: pointer;
+}
+#highlight .tweet .user-link:hover {
+	text-decoration: underline
+}
+#highlight .tweet .delete {
+	float: right;
+}
 
 /* -- user -- */
 
@@ -447,18 +475,18 @@ body.shade #mosaic {
 	cursor:pointer;
 	border: 1px solid #A6BFCC;
 	border-radius:4px;
-	background-color:#DAECF7;
+	background-color:#ffffff;
 	-moz-border-radius:4px;
 }
 .list article:hover {
-	background-color:#D5E6EF;
+	background-color:#DAECF7;
 }
 
 .user-tweets .list .tweet {
 	cursor:default;
 }
 .user-tweets .list .tweet:hover {
-	background-color:transparent;
+	background-color:#ffffff;
 }
 
 /* -- tweet-list -- */

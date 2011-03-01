@@ -156,9 +156,8 @@ function main()
 
 			</div><!-- wrapper -->
 
-		<section id="mosaic">
-			<h2>Firefox Twitter Mosaic</h2>
-		</section>
+		<ul id="mosaic">
+		</ul>
 
 		<div id="mozilla-badge">
 			<a href="http://www.mozilla.org/" class="mozilla" title="<?= _('Visit Mozilla') ?>" rel="external"><?= _('Visit Mozilla') ?></a>

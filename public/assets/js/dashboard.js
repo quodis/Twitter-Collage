@@ -244,12 +244,16 @@ var party = party || {};
 
 			var tile = this.tiles[position];
 			
-			if (!$('#highlight').length) {
-				$('<li id="highlight" class="widget clearfix"></li>').appendTo('#widgets');
-			}
+			$('#highlight').remove();
+			$('<div id="highlight" class="widget clearfix"></div>').appendTo('#widgets');
 			$('#highlight .tweet').remove();
 			$('#highlight .user').remove();
-			$('<article class="tweet clearfix">' + this.getTitleHtml('Tweet') + this.getTweetHtml(tile) + '<button class="delete">delete tweet</button></article>').appendTo('#widgets #highlight');
+			var deleteBtn ='<button class="delete">delete tweet</button>';
+			var userBtn = '<span class="user-link">all tweets by ' + tile.userName + '</span>';
+			$(this.getTitleHtml('Tweet') + '<article class="tweet clearfix">' + this.getTweetHtml(tile) + userBtn + deleteBtn + '</article>').appendTo('#widgets #highlight');
+			$('#highlight .user-link').click( function() {
+				this.showUser(tile.userName, tile.imageUrl);
+			}.bind(this)  );
 		},
 		
 		getTitleHtml : function(text) {
@@ -276,8 +280,10 @@ var party = party || {};
 		
 		openTile : function(position)
 		{
-			if ($('body').hasClass('shade')) return;
-			
+			if ($('body').hasClass('shade')) {
+				this.reset();
+				return;
+			}
 			this.reset();
 			
 			$('body').addClass('shade highlight');
@@ -299,6 +305,11 @@ var party = party || {};
 				
 				$('#loading').remove();
 				
+				if (data.total == 1) {
+					this.showUser(data.users[0].userName, data.users[0].imageUrl);
+					return;
+				}
+				
 				if (!$('#user-list').length) {
 					var title = 'Found ' + data.count;
 					if (data.count > data.total) title += '/' + data.total;
@@ -307,7 +318,6 @@ var party = party || {};
 				}
 				
 				if (!data.total) {
-					$('<li id="loading" class="empty">no users found...</li>').appendTo('#mosaic');
 					return;
 				}
 				
@@ -335,7 +345,7 @@ var party = party || {};
 			$('<li id="loading">loading user tweets...</li>').appendTo('#mosaic');
 			
 			if (!$('#highlight').length) {
-				$('<article id="highlight" class="widget clearfix"></article>').appendTo('#widgets');
+				$('<div id="highlight" class="widget clearfix"></div>').appendTo('#widgets');
 			}
 			var html = this.getTitleHtml('User') + '\
 				<img src="' + picture_url + '" />\
@@ -356,7 +366,6 @@ var party = party || {};
 				}
 				
 				if (!data.total) {
-					$('<li id="loading" class="empty">no tweets found...</li>').appendTo('#mosaic');
 					return;
 				}
 				
@@ -386,7 +395,6 @@ var party = party || {};
 				}
 				
 				if (!data.total) {
-					$('<li id="loading" class="empty">no tweets found...</li>').appendTo('#mosaic');
 					return;
 				}
 				
@@ -454,6 +462,8 @@ var party = party || {};
 		loadError : function() 
 		{
 			console.log('load fail, error:', arguments);
+			$('#loading').remove();
+			$('<li id="loading">...error...</li>').appendTo('#mosaic');
 		},
 		
 		post : function(url, params, callback, noFeedback) 
@@ -883,7 +893,6 @@ var party = party || {};
 					if (this.num < to) this.num = to;
 				}
 			}
-			console.log(iteration, this.num, to, delta);
 			var text = ('function' == typeof formatCallback) ? formatCallback(this.num) : this.num;
 			this.text(text);
 			if (this.num != to) {
