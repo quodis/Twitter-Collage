@@ -58,7 +58,7 @@ function main($language)
 		<link rel="stylesheet" href="<?=$config['UI']['css']['main']?>" type="text/css" media="screen, projection" />
 		<link rel="stylesheet" href="<?=$config['UI']['css']['mosaic']?>" type="text/css" media="screen, projection" />
 
-		<link rel="shortcut icon" href="assets/img/global/favicon.ico" />
+		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="apple-touch-icon" type="image/png" href="">
 		<link rel="image_src" href="">
 
