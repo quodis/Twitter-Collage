@@ -547,9 +547,14 @@ footer a:hover {
 }
 
 #search-box .error {
-	
-	padding:10px;
-	
+	background-color: #fff;
+	border: 1px solid #c52f14;
+	color: #c52f14;
+	display: none;
+	margin: 10px;
+	padding: 5px 10px;
+	font-size: 12px;
+	-moz-border-radius: 5px 5px 5px 5px; border-radius: 5px 5px 5px 5px;
 }
 
 /* Mozilla Badge */
