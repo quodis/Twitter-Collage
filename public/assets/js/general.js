@@ -138,7 +138,7 @@ Array.prototype.shuffle = function (){
 		
 		// Next time draw one tile more towards new_tiles_per_second
 		if (state.new_tiles_per_second_incremental < party.performance.initial_tiles_per_frame) {
-			state.new_tiles_per_second_incremental += 0.5;
+			state.new_tiles_per_second_incremental += 0.1;
 		}
 		
 		j = (tile_counter + state.new_tiles_per_second_incremental);
