@@ -112,13 +112,20 @@ final class Tweet
 	/**
 	 * count tweets
 	 *
+	 * @param boolean $withImage (optional, defaults to FALSE)
+	 *
 	 * @return array
 	 */
-	public static function getCount()
+	public static function getCount($withImage = FALSE)
 	{
+		$withImage = !!$withImage;
+
 		// or from db
-		$sql = "SELECT count(1) FROM `tweet`";
-		$row = Db::queryRow($sql);
+		$sql = "SELECT count(1) AS cnt FROM `tweet`";
+
+		if ($withImage) $sql.= " WHERE processedTs";
+
+		$row = Db::queryValue($sql, 'cnt');
 
 		return $row;
 	}
@@ -138,6 +145,74 @@ final class Tweet
 		$row = Db::queryRow($sql);
 
 		return $row;
+	}
+
+
+	/**
+	 * first incomplete page
+	 *
+	 * @param integer $pageSize
+	 *
+	 * @return integer
+	 */
+	public static function getFirstIncompletePage($pageSize)
+	{
+		$pageSize = Db::escape($pageSize);
+
+		$sql = "SELECT page, cnt FROM ";
+		$sql.="  (SELECT page, COUNT(1) AS cnt FROM tweet GROUP BY page) AS pages";
+		$sql.=" WHERE cnt < $pageSize ORDER BY page LIMIT 1";
+
+		return Db::queryValue($sql, 'page');
+	}
+
+
+	/**
+	 * last complete page
+	 *
+	 * @param integer $pageSize
+	 *
+	 * @return integer
+	 */
+	public static function getLastCompletePage($pageSize)
+	{
+		$pageSize = Db::escape($pageSize);
+
+		$sql = "SELECT page, cnt FROM ";
+		$sql.="  (SELECT page, COUNT(1) AS cnt FROM tweet GROUP BY page) AS pages";
+		$sql.=" WHERE cnt = $pageSize ORDER BY page DESC LIMIT 1";
+
+		return Db::queryValue($sql, 'page');
+	}
+
+
+	/**
+	 * pages modified since
+	 *
+	 * @param integer $processedTs
+	 *
+	 * @return integer
+	 */
+	public static function getProcessedPages($processedTs)
+	{
+		$processedTs = Db::escape($processedTs);
+
+		if (empty($processedTs)) $processedTs = 0;
+
+		$sql = "SELECT page FROM tweet WHERE processedTs > $processedTs GROUP BY page ORDER BY processedTs DESC";
+
+		return Db::query($sql);
+	}
+
+
+	/**
+	 * @return integer
+	 */
+	public static function getLastPage()
+	{
+		$sql = "SELECT MAX(page) AS page FROM `tweet`";
+
+		return Db::queryValue($sql, 'page');
 	}
 
 
@@ -267,7 +342,8 @@ final class Tweet
 		$limit = (int)$limit;
 		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
 
-		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
+		//$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
+		$sql = "SELECT id, position, twitterId, userName, imageUrl, createdTs, contents, imageData FROM `tweet` ";
 		$sql.= " WHERE `imageData` IS NOT NULL";
 
 		if ($lastId)
@@ -289,7 +365,25 @@ final class Tweet
 
 
 	/**
-	 * tweets of this "user"
+	 * users
+	 *
+	 * @param boolean $withImage (optional, defaults to FALSE)
+	 *
+	 * @return array
+	 */
+	public static function getUserCount($withImage = null)
+	{
+		$withImage = !!$withImage;
+
+		$sql = "SELECT COUNT(DISTINCT userId) AS cnt FROM `tweet` ";
+
+		if ($withImage) $sql.= " WHERE processedTs";
+
+		return Db::queryValue($sql, 'cnt');
+	}
+
+	/**
+	 * users by terms
 	 *
 	 * @param string $terms
 	 * @param integer $limit (optional)
@@ -306,7 +400,8 @@ final class Tweet
 
 		$withImage = !!$withImage;
 
-		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
+		//$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
+		$sql = "SELECT id, position, twitterId, userName, imageUrl, createdTs, contents, imageData FROM `tweet` ";
 		$sql.= " WHERE `userName` LIKE '%$terms%'";
 
 		if ($withImage) $sql.= "  AND processedTs";
@@ -331,7 +426,7 @@ final class Tweet
 
 
 	/**
-	 * tweets by terms
+	 * tweets by user
 	 *
 	 * @param string $userName
 	 * @param integer $limit (optional)
@@ -348,7 +443,8 @@ final class Tweet
 
 		$withImage = !!$withImage;
 
-		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
+		//$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
+		$sql = "SELECT id, position, twitterId, userName, imageUrl, createdTs, contents, imageData FROM `tweet` ";
 		$sql.= " WHERE`userName` = '$userName'";
 
 		if ($withImage) $sql.= "  AND processedTs";
@@ -436,7 +532,7 @@ final class Tweet
 			$elapsed += $row['elapsed'];
 		}
 
-		return floor($elapsed / $result->count());
+		return $elapsed ? floor($elapsed / $result->count()) : 0;
 	}
 
 }

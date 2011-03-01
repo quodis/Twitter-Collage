@@ -45,15 +45,17 @@ function main()
 
 	// dashboard state
 	$dashboardState = array(
-		'last_page' => Mosaic::getCurrentWorkingPageNo() - 1,
+		'last_page' => Mosaic::getLastCompletePage(),
 		'last_id' => $lastProcessedTweet['id'],
+		'tweet_count' =>  Tweet::getCount(TRUE),
+		'guest_count' =>  Tweet::getUserCount(TRUE),
 		'delay' => array(
 			'tweets' => $tweets,
 			'seconds' => $elapsed
 		)
 	);
 
-	$delay = $elapsed . ' s <em>(' . $tweets . ' tw)</em>';
+	$delay = '<em>' . $elapsed . ' sec / ' . $tweets . ' tweets</em>';
 
 	?>
 <!DOCTYPE html>
@@ -78,12 +80,11 @@ function main()
 		<link rel="stylesheet" href="<?=$config['UI']['css']['mosaic']?>" type="text/css" media="screen, projection" />
 		<link rel="stylesheet" href="<?=$config['UI']['css']['dashboard']?>" type="text/css" media="screen, projection" />
 
-		<link rel="shortcut icon" href="assets/img/global/favicon.ico" />
+		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="apple-touch-icon" type="image/png" href="">
 		<link rel="image_src" href="">
 
 		<!-- scripts -->
-<!--		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>-->
 		<script type="text/javascript" src="/assets/js/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="<?=$config['UI']['js']['dashboard']?>"></script>
 		<script type="text/javascript" src="<?=$jsMosaicConfig?>"></script>
@@ -100,10 +101,6 @@ function main()
 				<!-- HEADER -->
 				<header id="brand">
 					<h1><a href="#" title="Join the Firefox 4 Twitter Party">Dashboard</a></h1>
-					<a href="#" class="option">button</a>
-					<a href="#" class="option">reset</a>
-					<a href="#" class="option">foo</a>
-					<a href="#" class="option">bar</a>
 				</header>
 
 
@@ -111,16 +108,20 @@ function main()
 				<aside id="main-content" class="clearfix">
 
 					<!-- Here goes the text explaining how Firefox Twitter Party works. -->
-					<p>Now feeding on hash <span class="hashtag"><?=$config['Twitter']['terms']?></span>.</p>
+					<p>Party Tag: <span class="hashtag"><?=$config['Twitter']['terms']?></span>.</p>
 
 					<div class="counter">
+						<dl class="guests">
+							<dt><span>Guests</span></dt>
+							<dd id="guest-count"><span>0</span></dd>
+						</dl>
 						<dl class="tweets">
-							<dt><span>Last Tweet</span></dt>
-							<dd id="last-tweet"><span></span></dd>
+							<dt><span>Tweets</span></dt>
+							<dd id="tweet-count"><span>0</span></dd>
 						</dl>
 						<dl class="pages">
-							<dt><span>Cooked Pages</span></dt>
-							<dd id="last-page"><span><?=(Mosaic::getCurrentWorkingPageNo() - 1)?></span></dd>
+							<dt><span>Pages</span></dt>
+							<dd id="last-page"><span>0</span></dd>
 						</dl>
 						<dl class="delay">
 							<dt><span>Delay</span></dt>
@@ -128,36 +129,39 @@ function main()
 						</dl>
 					</div><!-- counters -->
 
-					<div class="control-box page first clearfix">
-						<h3>Go To Page</h3>
-						<label for="find-user" accesskey="p">PageNo</label>
-						<input type="text" id="page-no" value="<?=(Mosaic::getCurrentWorkingPageNo())?>" tabindex="1" />
-						<button class="submit" type="submit" id="page-load-bttn" tabindex="2" title="Go" class="button"><span>Go</span></button>
-						<button class="submit" type="submit" id="force-poll-bttn" tabindex="3" title="Force Poll" class="button"><span>Poll Now</span></button>
-					</div><!-- control-box page -->
-
-					<div class="control-box user clearfix" role="search">
-						<h3>Find User</h3>
-						<label for="find-user" accesskey="f">Twitter username</label>
-						<input type="text" id="find-user" value="Find a Twitter username" tabindex="4" />
-						<button class="decorator" type="submit" id="find-user-submit-bttn" tabindex="5" title="Find" class="button">Find</button>
+					<div class="control-box first user clearfix" role="search">
+						<h3>Search Users</h3>
+						<label for="find-user" accesskey="u">Twitter username</label>
+						<input type="text" id="find-user" value="twitter user (or part)" tabindex="1" />
+						<button class="decorator" type="submit" id="find-user-submit-bttn" tabindex="2" title="Find" class="button">Find</button>
 					</div><!-- control-box user -->
 
 					<div class="control-box terms clearfix" role="search">
 						<h3>Search Tweets</h3>
-						<label for="search-input" accesskey="s">Search terms</label>
-						<input type="text" id="search-tweets" value="Find tweets that match" tabindex="6" />
-						<button class="decorator" type="submit" id="search-tweets-submit-bttn" tabindex="7" title="Search" class="button">Search</button>
+						<label for="search-tweets" accesskey="t">Search terms</label>
+						<input type="text" id="search-tweets" value="search terms" tabindex="3" />
+						<button class="decorator" type="submit" id="search-tweets-submit-bttn" tabindex="4" title="Search" class="button">Search</button>
 					</div><!-- control-box terms -->
+
+					<div class="control-box page clearfix">
+						<h3>Page</h3>
+						<label for="page-no" accesskey="p">Page No</label>
+						<input type="text" id="page-no" value="<?=(Mosaic::getLastCompletePage() + 1)?>" tabindex="5" />
+						<button class="submit" type="submit" id="page-load-bttn" tabindex="6" title="Go" class="button"><span>Go</span></button>
+						<button class="submit" type="submit" id="force-poll-bttn" tabindex="7" title="Force Poll" class="button"><span>Poll Now</span></button>
+					</div><!-- control-box page -->
 
 
 				</aside><!-- main-content -->
 
 			</div><!-- wrapper -->
 
-		<section id="mosaic">
-			<h2>Firefox Twitter Mosaic</h2>
-		</section>
+		<ul id="mosaic">
+		</ul>
+
+		<div id="mozilla-badge">
+			<a href="http://www.mozilla.org/" class="mozilla" title="<?= _('Visit Mozilla') ?>" rel="external"><?= _('Visit Mozilla') ?></a>
+		</div><!-- mozilla-badge -->
 
 		<section id="widgets">
 		</section>

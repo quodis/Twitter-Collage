@@ -319,17 +319,20 @@ party.mosaic = ' . json_encode(self::$_pageConfig) . ';
 
 
 	/**
-	 * only takes into account tweets with image already processed
+	 * insert into the first free slot
 	 *
 	 * @return integer
 	 */
 	public static function getCurrentInsertingPageNo()
 	{
-		// force loading tweet no
-		$lastTweet = self::getLastTweet();
+		$page = Tweet::getFirstIncompletePage(self::getPageSize());
+
+		if (!$page) $page = Tweet::getLastPage() + 1;
+
+		if (!$page) $page = 1;
 
 		// page number
-		return floor($lastTweet['id'] / self::getPageSize()) + 1;
+		return $page;
 	}
 
 
@@ -338,40 +341,31 @@ party.mosaic = ' . json_encode(self::$_pageConfig) . ';
 	 *
 	 * @return integer
 	 */
-	public static function getCurrentWorkingPageNo()
+	public static function getLastCompletePage()
 	{
-		// TODO CACHE this
+		$page = Tweet::getLastCompletePage(self::getPageSize());
 
-		$pageNo = 0;
-
-		do
-		{
-			$pageNo++;
-
-			if (!self::pageExists($pageNo)) break;
-
-			$fileData = self::getPageData($pageNo);
-
-			if (!isset($fileData ['tiles']) || count($fileData ['tiles']) < self::getPageSize()) break;
-		}
-		while (TRUE);
-
-		return $pageNo;
+		return $page ? $page : 0;
 	}
 
 
 	/**
-	 * returns the page number of a certain tweet
-	 *
-	 * @return integer
+	 * @return array
 	 */
-	/*
-	public static function getTweetPageNo($id)
+	public static function getProcessedPages($ts)
 	{
+		// load
+		$result = Tweet::getProcessedPages($ts);
+
+
+		$pages = array();
+		while ($row = $result->row())
+		{
+			$pages[] = $row['page'];
+		}
 		// page number
-		return ceil($id / self::getPageSize());
+		return $pages;
 	}
-	*/
 
 
 	// ---- tweets
@@ -387,6 +381,8 @@ party.mosaic = ' . json_encode(self::$_pageConfig) . ';
 			$tweet = Tweet::insert($row);
 
 			self::setLastTweet($tweet);
+
+			return $row;
 		}
 		catch (Exception $e)
 		{

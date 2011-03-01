@@ -41,30 +41,21 @@ http://www.opensource.org/licenses/mit-license.php
 .bubble a:link,
 .bubble a:visited {
 	text-decoration: none;
-/*
-	-moz-transition:text-shadow 0.2s ease-out;
-	-webkit-transition:text-shadow 0.2s ease-out;
-*/
 }
 
 .bubble a:hover,
 .bubble a:active {
 	text-decoration: underline;
-/*
-	text-shadow:1px 1px 2px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.6);
-	-moz-transition:text-shadow 0.1s ease-out;
-	-webkit-transition:text-shadow 0.1s ease-out;
-*/
 }
 
 .bubble header {
 	position: relative;
+	padding-left: 105px;
 }
 
 .bubble h1 {
 	font-size: 18px;
 	font-style: italic;
-	padding-left: 65px;
 	margin: 0;
 }
 
@@ -74,7 +65,6 @@ http://www.opensource.org/licenses/mit-license.php
 }
 
 .bubble .twitter-avatar {
-/* 	background-color: #fff; */
 	border: 1px solid #fde9c7;
 	width: 48px;
 	height: 48px;
@@ -87,7 +77,6 @@ http://www.opensource.org/licenses/mit-license.php
 }
 
 .bubble header time {
-	padding-left: 65px;
 	font-style: italic;
 }
 
@@ -97,10 +86,10 @@ http://www.opensource.org/licenses/mit-license.php
 	text-align: center;
 	margin: 0;
 	position: relative;
-	min-height: 30px;
+	min-height:40px;
 	
 	white-space: -moz-pre-wrap;
-/* 	white-space: -pre-wrap; */
+	white-space: -pre-wrap;
 	white-space: -o-pre-wrap;
 	white-space: pre-wrap;
 	word-wrap: break-word;
@@ -108,45 +97,6 @@ http://www.opensource.org/licenses/mit-license.php
 
 /* 3.Bubbles Colors */
 
-/* Dark Orange */
-.color-3.top-left header, .color-3.top-left p,
-.color-3.bottom-left header, .color-3.bottom-left p,
-.color-3.top-right header, .color-3.top-right p,
-.color-3.bottom-right header, .color-3.bottom-right p {
-	background-image: url(../images/layout/bubble-dark-orange.png);
-	background-repeat: no-repeat;
-}
-
-.bubble.color-3, 
-.bubble.color-3 h1 span,
-.bubble.color-3 .hashtag {
-	color:#fde9c7;
-	font-weight: normal;
-}
-
-.bubble.color-3 a {
-	color:#e8d683;
-}
-
-/* Yellow */
-.color-2.top-left header, .color-2.top-left p,
-.color-2.bottom-left header, .color-2.bottom-left p,
-.color-2.top-right header, .color-2.top-right p,
-.color-2.bottom-right header, .color-2.bottom-right p {
-	background-image: url(../images/layout/bubble-yellow.png);
-	background-repeat: no-repeat;
-}
-
-.bubble.color-2, 
-.bubble.color-2 h1 span,
-.bubble.color-2 .hashtag {
-	color:#7d1c20;
-	font-weight: normal;
-}
-
-.bubble.color-2 a {
-	color:#c21924;
-}
 
 /* Light blue */
 .color-0.top-left header, .color-0.top-left p,
@@ -188,6 +138,47 @@ http://www.opensource.org/licenses/mit-license.php
 	color:#e8d683;
 }
 
+/* Yellow */
+.color-2.top-left header, .color-2.top-left p,
+.color-2.bottom-left header, .color-2.bottom-left p,
+.color-2.top-right header, .color-2.top-right p,
+.color-2.bottom-right header, .color-2.bottom-right p {
+	background-image: url(../images/layout/bubble-yellow.png);
+	background-repeat: no-repeat;
+}
+
+.bubble.color-2, 
+.bubble.color-2 h1 span,
+.bubble.color-2 .hashtag {
+	color:#7d1c20;
+	font-weight: normal;
+}
+
+.bubble.color-2 a {
+	color:#c21924;
+}
+/* Dark Orange */
+.color-3.top-left header, .color-3.top-left p,
+.color-3.bottom-left header, .color-3.bottom-left p,
+.color-3.top-right header, .color-3.top-right p,
+.color-3.bottom-right header, .color-3.bottom-right p {
+	background-image: url(../images/layout/bubble-dark-orange.png);
+	background-repeat: no-repeat;
+}
+
+.bubble.color-3, 
+.bubble.color-3 h1 span,
+.bubble.color-3 .hashtag {
+	color:#fde9c7;
+	font-weight: normal;
+}
+
+.bubble.color-3 a {
+	color:#e8d683;
+}
+
+
+
 /* 4. Bubble Positions */
 
 .bubble.top-left .twitter-avatar,
@@ -204,22 +195,23 @@ http://www.opensource.org/licenses/mit-license.php
 
 .bubble.top-left header, 
 .bubble.bottom-left header { 
-	padding: 25px 25px 10px 45px; 
+	padding: 25px 25px 10px 110px; 
+	min-height:50px;
 }
 
 .bubble.top-left p, 
 .bubble.bottom-left p { 
-	padding: 10px 25px 30px 45px; 
+	padding: 0px 25px 30px 45px; 
 }
 
 .bubble.top-right header, 
 .bubble.bottom-right header { 
-	padding: 25px 45px 10px 25px; 
+	padding: 25px 50px 10px 95px; 
 }
 
 .bubble.top-right p, 
 .bubble.bottom-right p { 
-	padding: 10px 45px 30px 25px; 
+	padding: 0 50px 30px 25px; 
 }
 
 .bubble.top-left header{ 
@@ -227,39 +219,60 @@ http://www.opensource.org/licenses/mit-license.php
 }
 
 .bubble.top-left p{ 
+	background-position: -615px bottom;
+/*
 	background-position-y: bottom; 
 	background-position-x: -615px;
+*/
 }
 
 .bubble.bottom-left header{ 
+	background-position: -616px top;
+/*
 	background-position-y: top; 
 	background-position-x: -616px;
+*/
 }
 
 .bubble.bottom-left p{ 
+	background-position: -1px bottom;
+/*
 	background-position-y: bottom;
-	background-position-x: -1px; }
+	background-position-x: -1px; 
+*/
+}
 
 .bubble.top-right header{ 
+	background-position: -320px top;
+/*
 	background-position-y: top; 
 	background-position-x: -320px;
+*/
 }
 
 .bubble.top-right p{
+	background-position: -638px bottom;
+/*
 	background-position-y: bottom; 
 	background-position-x: -638px;
+*/
 }
 
 .bubble.bottom-right header{ 
+	background-position: -638px top;
+/*
 	background-position-y: top; 
 	background-position-x: -638px;
+*/
 }
 
 .bubble.bottom-right p{ 
+	background-position: -320px bottom;
+/*
 	background-position-y: bottom; 
 	background-position-x: -320px;
+*/
 }
-
 
 #bubble-1 {
 	top:420px;
