@@ -33,7 +33,7 @@ http://www.opensource.org/licenses/mit-license.php
 	min-height: 130px;
 	width: 290px;
 	position: absolute;
-/* 	display: none; */
+ 	display: none; 
 	z-index: 20;
 }
 
@@ -108,7 +108,7 @@ http://www.opensource.org/licenses/mit-license.php
 
 /* 3.Bubbles Colors */
 
-/* Dark orange */
+/* Dark Orange */
 .color-3.top-left header, .color-3.top-left p,
 .color-3.bottom-left header, .color-3.bottom-left p,
 .color-3.top-right header, .color-3.top-right p,
@@ -148,26 +148,27 @@ http://www.opensource.org/licenses/mit-license.php
 	color:#c21924;
 }
 
-/* Light Blue */
-.color-2.top-left header, .color-2.top-left p,
-.color-2.bottom-left header, .color-2.bottom-left p,
-.color-2.top-right header, .color-2.top-right p,
-.color-2.bottom-right header, .color-2.bottom-right p {
+/* Light blue */
+.color-0.top-left header, .color-0.top-left p,
+.color-0.bottom-left header, .color-0.bottom-left p,
+.color-0.top-right header, .color-0.top-right p,
+.color-0.bottom-right header, .color-0.bottom-right p {
 	background-image: url(../images/layout/bubble-light-blue.png);
 	background-repeat: no-repeat;
 }
 
-.bubble.color-2, 
-.bubble.color-2 h1 span,
-.bubble.color-2 .hashtag {
+.bubble.color-0, 
+.bubble.color-0 h1 span,
+.bubble.color-0 .hashtag {
 	color:#1B5898;
 	font-weight: normal;
 }
 
-.bubble.color-2 a {
+.bubble.color-0 a {
 	color:#1D2D67;
 }
 
+/* Dark blue */
 .color-1.top-left header, .color-1.top-left p,
 .color-1.bottom-left header, .color-1.bottom-left p,
 .color-1.top-right header, .color-1.top-right p,
@@ -176,7 +177,6 @@ http://www.opensource.org/licenses/mit-license.php
 	background-repeat: no-repeat;
 }
 
-/* Dark blue */
 .bubble.color-1, 
 .bubble.color-1 h1 span,
 .bubble.color-1 .hashtag {
