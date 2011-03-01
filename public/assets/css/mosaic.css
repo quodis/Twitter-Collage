@@ -33,7 +33,7 @@ http://www.opensource.org/licenses/mit-license.php
 	min-height: 130px;
 	width: 290px;
 	position: absolute;
- 	display: none; 
+/* 	display: none; */
 	z-index: 20;
 }
 
@@ -130,12 +130,12 @@ http://www.opensource.org/licenses/mit-license.php
 .bubble.color-1, 
 .bubble.color-1 h1 span,
 .bubble.color-1 .hashtag {
-	color:#fde9c7;
+	color:#e1f0fa;
 	font-weight: normal;
 }
 
 .bubble.color-1 a {
-	color:#e8d683;
+	color:#9bc3e2;
 }
 
 /* Yellow */
@@ -273,6 +273,7 @@ http://www.opensource.org/licenses/mit-license.php
 	background-position-x: -320px;
 */
 }
+
 
 #bubble-1 {
 	top:420px;

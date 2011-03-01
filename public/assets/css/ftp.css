@@ -497,6 +497,8 @@ footer a:hover {
 #search-box {
 	background: url(../images/layout/aside-ornament.png) center top no-repeat;
 	padding-top: 30px;
+	min-height:110px;
+	position:relative;
 }
 
 #search-box h3 {
@@ -523,8 +525,8 @@ footer a:hover {
 	float:left;
 	height:20px;
 	line-height: 20px;
-	padding:4px 40px 4px 4px;
-	width:220px;
+	padding:5px 40px 5px 5px;
+	width:212px;
 	z-index: 100;
 }
 
@@ -539,7 +541,7 @@ footer a:hover {
 	text-indent: -9999px;
 	overflow: hidden;
 	z-index: 300;
-	margin:-22px 0 0 0px;
+	margin:-24px 10px 0 0px;
 }
 
 #search-box button.loading {
@@ -547,15 +549,28 @@ footer a:hover {
 }
 
 #search-box .error {
-	background-color: #fff;
-	border: 1px solid #c52f14;
-	color: #c52f14;
-	display: none;
-	margin: 10px;
-	padding: 5px 10px;
-	font-size: 12px;
-	-moz-border-radius: 5px 5px 5px 5px; border-radius: 5px 5px 5px 5px;
+	background: url(../images/layout/error-arrow.png) top right no-repeat;
+	color: #fff;
+	font-size: 13px;
+	margin: 0;
+	padding-top: 15px;
+	width: 260px;
+	position: absolute;
+	bottom: 10px;
+	z-index: 20;
 }
+
+#search-box .error p {
+	background-color: #4e76b7;
+	background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, #2d4891), color-stop(1, #4e76b7));
+	background-image: -moz-linear-gradient( center bottom, #2d4891 0%, #4e76b7 100%);
+		margin: 0;
+	padding: 5px 10px;
+	-moz-border-radius: 5px 5px 5px 5px; border-radius: 5px 5px 5px 5px;
+	text-align: center;
+}
+
+
 
 /* Mozilla Badge */
 
@@ -578,12 +593,13 @@ footer a:hover {
 	background-position-y: -60px;
 }
 
-/* DOWNLOAD BUTTON */
 
+
+/* DOWNLOAD BUTTON */
 
 #download {
 	width: 300px;
-	margin: 0 0 -80px -20px;
+	margin: 0 0 -95px -20px;
 }
 
 
