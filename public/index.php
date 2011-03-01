@@ -107,7 +107,7 @@ function main($language)
 				</aside><!-- main-content -->
 
 				<div id="download"> 
-					<a class="download-link download-firefox" href="http://www.mozilla.com/"><span class="download-content"><span class="download-title">Firefox 4</span>Download here</span></a> 
+					<a class="download-link download-firefox" href="http://www.mozilla.com/"><span class="download-content"><span class="download-title">Firefox 4</span><?= _('Download here') ?></span></a> 
 				</div><!-- download -->
 				
 			</div><!-- wrapper -->
@@ -115,7 +115,7 @@ function main($language)
 		<section id="mosaic">
 			<h2><?= _('Firefox Twitter Mosaic') ?></h2>
 			<p id="loading"></p>
-
+      <img src="" id="tile-hover" />
 			<article id="bubble" class="bubble">
 
 				<header>

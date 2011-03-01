@@ -319,17 +319,20 @@ party.mosaic = ' . json_encode(self::$_pageConfig) . ';
 
 
 	/**
-	 * only takes into account tweets with image already processed
+	 * insert into the first free slot
 	 *
 	 * @return integer
 	 */
 	public static function getCurrentInsertingPageNo()
 	{
-		// force loading tweet no
-		$lastTweet = self::getLastTweet();
+		$page = Tweet::getFirstIncompletePage(self::getPageSize());
+
+		if (!$page) $page = Tweet::getLastPage() + 1;
+
+		if (!$page) $page = 1;
 
 		// page number
-		return floor($lastTweet['id'] / self::getPageSize()) + 1;
+		return $page;
 	}
 
 
@@ -387,6 +390,8 @@ party.mosaic = ' . json_encode(self::$_pageConfig) . ';
 			$tweet = Tweet::insert($row);
 
 			self::setLastTweet($tweet);
+
+			return $row;
 		}
 		catch (Exception $e)
 		{

@@ -25,94 +25,23 @@
  
  */ /* 1. General */
  
-body { /* HACK prevents dragging being interrupted by FF s */
-	-moz-user-select: none;
-}
-
-/* -- typography */
-/*
-body {
-	font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
-	font-size: 11px;
-	background-color: #999;
-}
-
-p {
-	font-size: 12px;
-	margin-bottom: 10px;
-	line-height: 150%;
-}
-
-h2 {
-	color: #333333;
-	font-size: 16px;
-	margin-bottom: 10px;
-}
-
-h3 {
-	color: #333333;
-	font-size: 14px;
-	margin-bottom: 10px;
-}
-*/
-
-/* -- submit, cancel */
-/*
-input {
-	text-align: center;
-	line-height: normal;
-	white-space: nowrap;
-	text-decoration: none;
-	cursor: pointer;
-}
-
-input.disabled,input.disabled:hover {
-	cursor: default;
-}
-*/
-
 /* -- link */
 
-button.link {
-	font-size: 12px;
-	border: none;
-	cursor: pointer;
-}
-
-button.link.disabled,button.link.disabled:hover {
-	cursor: default;
-}
-
-
-/* -- close button */
-
-.hasCloseButton {
-	position: relative;
-}
-
-button.close {
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	display: block;
-	cursor: pointer;
-	border: none;
-}
-
-button.close span {
-	display: none
+button::-moz-focus-inner { 
+	border: 0;
+	padding: 0;
 }
 
 /* 2. Structure */
 #container {
-	margin: 0 auto;
+	margin:0 auto;
 }
 
 .main-content {
-	display: block;
-	padding: 9px;
-	margin-bottom: 10px;
-	border: 1px solid transparent;
+	display:block;
+	padding:9px;
+	margin-bottom:10px;
+	border:1px solid transparent;
 }
 
 
@@ -120,368 +49,436 @@ button.close span {
 
 /* overrides */
 
+#main-content {
+	padding-top:60px;
+}
+
 #brand {
-	-moz-transform: none;
-	-webkit-transform: none;
-	transform: none;
-	background-image: none;
-	background-color: #1B5898;
-	border-radius: 20px;
-	-moz-border-radius: 20px;
-	height: 140px;
+	-moz-transform:none;
+	-webkit-transform:none;
+	transform:none;
+	background-image:none;
+	background-color:#1B5898;
+	height:60px;
+	width: 260px;
 }
 
 #brand h1 {
-	margin-bottom: 0px;
-}
-
-#brand h1 a,
-#brand .option {
-	background: none;
-	text-indent: 0px;
-	color: #fff;
-	font-family: 'MetaBlack';
-	text-decoration: none;
-	-moz-transform: none;
-	-webkit-transform: none;
-	transform: none;
+	margin-bottom:0px;
 }
 
 #brand h1 a {
-	font-size: 30px;
-	height: 60px;
-	line-height: 60px;
-	padding-top: 10px;
-	width: 250px;
-	text-align: center;
-	text-transform: uppercase;
-}
-
-#brand .option {
-	display: block;
-	float: left;
-	font-size: 18px;
-	line-height: 20px;
-	width: 120px;
-	margin: 0 5px 10px 0;
-	text-align: center;
+	background:none;
+	text-indent:0px;
+	color:#fff;
+	font-family:'MetaBlack';
+	text-decoration:none;
+	-moz-transform:none;
+	-webkit-transform:none;
+	transform:none;
+	font-size:30px;
+	height:40px;
+	line-height:40px;
+	padding-top:10px;
+	width:250px;
+	text-align:center;
+	text-transform:uppercase;
 }
 
 /* SEARCH */
 
 .counter {
 	width:260px;
-	margin: 0 0 20px 0;
-	text-align: center;
+	margin:0 0 20px 0;
+	text-align:center;
 }
 
 .counter dl{
-	display: block;
-	line-height: 40px;
-	margin-bottom: 10px;
+	float:left;
+	line-height:40px;
+	margin:0 10px 10px 0;
 	height:40px;
 }
 
 .counter dt, .counter dd  {
-	float: left;
+	float:left;
 }
 
 .counter a, .counter span {
 	color:#1b5898;
 	display:block;
-	font-family: 'MetaBlack';
-	font-size:22px;
-	padding: 0 10px;
-	text-decoration: none;
-	text-shadow: 0 1px 0px #fff,  0 0 20px rgba(255, 255, 255, 0.4);
-	height:40px;
-	overflow: hidden;
+	font-family:'MetaBlack';
+	font-size:16px;
+	text-decoration:none;
+	text-shadow:0 1px 0px #fff,  0 0 20px rgba(255, 255, 255, 0.4);
+	height:30px;
+	line-height:30px;
+	overflow:hidden;
 }
-
-.counter a, .counter em {
-	font-size: 12px;
-}
-
 
 .counter dt {
+	padding:0;
 	margin-right:10px;
 }
 
 .counter dt span {
-	-moz-border-radius: 5px; border-radius: 5px;
+	font-size:16px;
+	color:#484848;
+	-moz-border-radius:5px; border-radius:5px;
 }
 
 .counter dd {
-	border: 1px solid #87b7dd;
-	-moz-border-radius: 5px; border-radius: 5px;
+	border:1px solid #87b7dd;
+	-moz-border-radius:5px; border-radius:5px;
+}
+.counter dd span {
+	padding:0 5px 0 15px;
+	margin-left:-7px;
+	background:url(../images/layout/twitter-arrow.png) left center no-repeat;
 }
 
-.counter dd span {
-	background: url(../images/layout/twitter-arrow.png) left center no-repeat;
-	padding-left:20px;
-	margin-left:-7px;
+/* specific */
+
+.counter .tweets {
+	clear:both;
+}
+
+.counter .tweets dt span {
+	background:url(../images/layout/twitter-bird-bg.png) left center no-repeat;
+	text-indent:-9999px;
+	width:30px;
+}
+
+.counter .pages {
+	margin-right:0px;
+}
+
+.counter .delay {
+	clear:both;
 }
 
 /* SEARCH */
 
 .control-box {
-	padding-bottom: 20px;
-	clear: both;
+	padding-bottom:20px;
+	clear:both;
 }
 
 .control-box.first {
-	padding-top: 30px;
-	background: url(../images/layout/aside-ornament.png) center top no-repeat;
+	padding-top:30px;
+	background:url(../images/layout/aside-ornament.png) center top no-repeat;
 }
 
 .control-box h3 {
 	color:#303030;
-	font-style: italic;
-	font-size: 18px;
-	margin-bottom: 10px;
+	font-style:italic;
+	font-size:18px;
+	margin-bottom:10px;
 }
 
 .control-box label{
-	text-indent: -9999px;
-	position: absolute;
+	text-indent:-9999px;
+	position:absolute;
 	top:0;
 }
 
 .control-box input {
-	background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, #fff), color-stop(1, #f0f7fc));
-	background-image: -moz-linear-gradient( center bottom, #fff 0%, #f0f7fc 100%);
-	border: 1px solid #87b7dd;
-	-moz-border-radius: 5px; border-radius: 5px;
+	background-image:-webkit-gradient( linear, left bottom, left top, color-stop(0, #fff), color-stop(1, #f0f7fc));
+	background-image:-moz-linear-gradient( center bottom, #fff 0%, #f0f7fc 100%);
+	border:1px solid #87b7dd;
+	-moz-border-radius:5px; border-radius:5px;
 	color:#6f7fA3;
-	display: block;
+	display:block;
 	float:left;
 	height:20px;
-	line-height: 20px;
+	line-height:20px;
 	padding:4px 40px 4px 4px;
-	width:220px;
-	z-index: 100;
+	width:214px;/**/
+	z-index:100;
 }
 
 .control-box .decorator {
-	background: url(../images/layout/search-icon-bg.png) center center no-repeat;
+	background:url(../images/layout/search-icon-bg.png) center center no-repeat;
 	width:16px;
 	height:16px;
-	display: block;
+	display:block;
 	float:right;
-	border: 0 none;
-	outline: 0 none;
-	text-indent: -9999px;
-	overflow: hidden;
-	z-index: 300;
-	margin:-22px 0 0 0px;
+	border:0 none;
+	outline:0 none;
+	text-indent:-9999px;
+	overflow:hidden;
+	z-index:300;
+	margin:-22px 8px 0 0px;/**/
 }
 
 .control-box .submit {
-	border: none;
-	padding: none;
-	background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(213,230,239)), color-stop(1, rgb(255,255,255)));
-	background-image: -moz-linear-gradient( center bottom, rgb(213,230,239) 0%, rgb(255,255,255) 100%);
+	border:none;
+	padding:0;/**/
+	background-image:-webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(213,230,239)), color-stop(1, rgb(255,255,255)));
+	background-image:-moz-linear-gradient( center bottom, rgb(213,230,239) 0%, rgb(255,255,255) 100%);
 	margin-right:10px;
-	border: 1px solid #87b7dd;
-	-moz-border-radius: 5px; border-radius: 5px;
+	border:1px solid #87b7dd;
+	-moz-border-radius:5px; border-radius:5px;
 	color:#1b5898;
 	display:block;
-	font-family: 'MetaBlack';
+	font-family:'MetaBlack';
 	font-size:22px;
-	padding: 0 5px;
-	text-decoration: none;
-	text-shadow: 0 1px 0px #fff,  0 0 20px rgba(255, 255, 255, 0.4);
+	padding:0 5px;
+	text-decoration:none;
+	text-shadow:0 1px 0px #fff,  0 0 20px rgba(255, 255, 255, 0.4);
 	height:30px;
-	float: left;
-	overflow: hidden;
+	float:left;
+	overflow:hidden;
 }
 
 .control-box .submit:active {
-	background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(255,255,255)), color-stop(1, rgb(213,230,239)));
-	background-image: -moz-linear-gradient( center bottom, rgb(255,255,255) 0%, rgb(213,230,239) 100%);
+	background-image:-webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(255,255,255)), color-stop(1, rgb(213,230,239)));
+	background-image:-moz-linear-gradient( center bottom, rgb(255,255,255) 0%, rgb(213,230,239) 100%);
 	-moz-box-shadow:inset 0 -1px 0 #fff;
 	-webkit-box-shadow:inset 0 -1px 0 #fff;
 	box-shadow:inset 0 -1px 0 #fff;
 }
 
 .control-box.page #page-no {
-	text-align: left;
-	width: 30px;
-	margin-right: 10px;
-	padding: 4px;
+	text-align:left;
+	width:30px;
+	margin-right:10px;
+	padding:4px;
+}
+.control-box #force-poll-bttn {
+	float: right;
+	margin-right: 0px;
+}
+
+.control-box.page h3 {
+	float: left;
+	margin-right:10px;
+	line-height:30px;
+}
+.control-box.page .submit {
+	float: left;
+	margin-right:10px;
 }
 
 /* 4. Mosaic */
 #mosaic {
+	list-style: none;
+}
+
+#mosaic li {
 	
 }
 
 #mosaic img {
-	width: 12px;
-	height: 12px;
+	width:12px;
+	height:12px;
 }
 
 #mosaic img.excite {
-	z-index: 1001;
-	width: 36px;
-	height: 36px;
-	margin-top: -20px;
-	margin-left: -12px;
-	border: 1px solid white;
-	box-shadow: 0px 0px 5px white; 
+	z-index:1001;
+	width:36px;
+	height:36px;
+	margin-top:-20px;
+	margin-left:-12px;
+	border:1px solid white;
+	box-shadow:0px 0px 5px white; 
 }
 
 /* 5. Widgets */
 
 #widgets {
-	position: absolute;
-	top: 20px;
-	left: 362px;
-	width: 576px;
-	border: 1px solud black;
+	position:absolute;
+	top:20px;
+	left:362px;
+	width:576px;
+	border:1px solud black;
 }
 
 body.shade #widgets {
-	min-height: 650px;
-	padding-top: 110px;
+	padding-top:110px;
 }
 
 body.shade #mosaic {
-	opacity: 0.5;
+	opacity:0.5;
 }
 
 .widget {
-	position: relative;
-	display: block;
-	background-color: white;
-	margin: 0 0 40px;
-	padding: 40px 10px 10px 10px;
-	-moz-box-shadow: 0px 0px 3px #A6BFCC;
-	-webkit-box-shadow: 0px 0px 3px #A6BFCC;
-	box-shadow: 0px 0px 3px #A6BFCC;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
-}
-.widget h3 {
-	height: 48px;
-	margin: -62px 0 10px;
-	padding: 0 10px;
-	color: white;
-	line-height: 48px;
-	background-color: #1B5898;
-	border-radius: 20px;
-	-moz-border-radius: 20px;
+	position:relative;
+	display:block;
+	background-color:#f0f7fc;
+	margin:0 0 40px;
+	padding:60px 20px 20px 20px;
+	border: 1px solid #D5E6EF;
+	-moz-box-shadow:0px 0px 3px #A6BFCC;
+	-webkit-box-shadow:0px 0px 3px #A6BFCC;
+	box-shadow:0px 0px 3px #A6BFCC;
+	-moz-border-radius:10px;
+	border-radius:10px;
 }
 
+.widget h3 {
+	height:36px;
+	margin:-70px 0 12px;
+}
+
+.widget h3 .title {
+	float:left;
+	padding:0 10px;
+	color:white;
+	font-size:16px;
+	line-height:30px;
+	font-family:MetaBlack,"Trebuchet MS",sans-serif;
+	background-color:#1B5898;
+}
+
+.widget h3 .close {
+	float:right;
+	margin-top:18px;
+	padding:0 2px;
+	font-weight:bold;
+	color:#1B5898;
+	cursor:pointer;
+}
+.widget h3 .close:hover {
+	text-decoration:underline
+}
+
+.delete {
+	float:right;
+	margin:12px 0 0 12px;
+	color:#1b5898;
+	font-family:'MetaBlack';
+	font-size:16px;
+	padding:6 12px;
+	text-decoration:none;
+	text-shadow:0 1px 0px #fff,  0 0 20px rgba(255, 255, 255, 0.4);
+	background-image:-webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(213,230,239)), color-stop(1, rgb(255,255,255)));
+	background-image:-moz-linear-gradient( center bottom, rgb(213,230,239) 0%, rgb(255,255,255) 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff',  endColorstr='#d5e6ef', GradientType=0 );
+	border:1px solid #87b7dd;
+	-moz-border-radius:5px; 
+	border-radius:5px;
+	cursor:pointer;
+}
+
+.delete:active {
+	background-image:-webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(255,255,255)), color-stop(1, rgb(213,230,239)));
+	background-image:-moz-linear-gradient( center bottom, rgb(255,255,255) 0%, rgb(213,230,239) 100%);
+	-moz-box-shadow:inset 0 -1px 0 #fff;
+	-webkit-box-shadow:inset 0 -1px 0 #fff;
+	box-shadow:inset 0 -1px 0 #fff;
+}
+
+
+/* -- highlight -- */
+
 #highlight {
-	min-height: 10px;
+	min-height:10px;
+}
+#highlight p {
+	font-size:14px;
 }
 
 #highlight.excite {
-	padding: 10px;
+	padding:10px;
 }
 #highlight.excite h3 {
-	display: none;
+	display:none;
 }
 
 #highlight.excite img {
-	width: 32px;
-	height: 32px;
+	width:32px;
+	height:32px;
 }
 #highlight.excite p {
-	font-size: 11px;
-	line-height: 16px;
+	font-size:12px;
+	line-height:18px;
+	margin-bottom:12px;
 }
 
 /* -- tweet --*/
 
 .tweet {
-	min-height: 48px;
+	min-height:48px;
 }
 
 .tweet img {
-	float: left;
-	margin-right: 10px;
+	float:left;
+	margin-right:10px;
 }
 
 .tweet .contents {
-	display: inline;
-	font-size: 11px;
-	line-height: 24px;
+	display:inline;
+	font-size:11px;
+	line-height:24px;
 }
 
 .tweet .user-name {
-	clear: both;
-	font-weight: bold;
+	clear:both;
+	font-weight:bold;
 }
 .tweet .user-name,
 .tweet .created-date {	
-	display: inline;
-	font-size: 11px;
-	line-height: 24px;
+	display:inline;
+	font-size:11px;
+	line-height:24px;
 } 
-
-/* -- tweet-list -- */
-
-#tweet-list .tweet {
-	margin-bottom: 10px;
-}
 
 /* -- user -- */
 
 .user img {
-	float: left;
-	margin-right: 10px;
+	float:left;
+	margin-right:10px;
 }
 
 .user .user-name {
-	clear: both;
-	display: inline;
-	font-size: 14px;
-	line-height: 48px;
-	font-weight: bold;
+	clear:both;
+	display:inline;
+	font-size:14px;
+	line-height:48px;
+	font-weight:bold;
+}
+
+/* -- general lists -- */
+
+.list article {
+	padding:6px;
+	cursor:pointer;
+	border: 1px solid #A6BFCC;
+	border-radius:4px;
+	background-color:#DAECF7;
+	-moz-border-radius:4px;
+}
+.list article:hover {
+	background-color:#D5E6EF;
+}
+
+.user-tweets .list .tweet {
+	cursor:default;
+}
+.user-tweets .list .tweet:hover {
+	background-color:transparent;
+}
+
+/* -- tweet-list -- */
+
+#tweet-list .tweet {
+	margin-bottom:18px;
+}
+
+.user-tweets #tweet-list .close {
+	display:none;
 }
 
 /* -- user-list -- */
 
 #user-list .user {
-	float: left;
-	width: 265px;
-	min-height: 48px;
-	margin: 0 10px 10px 0;
+	float:left;
+	width:246px;
+	margin:0 12px 12px 0;
+	min-height:48px;
 }
 
-/* 7. Dialogs */
-#overlay,.overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: #000000;
-	opacity: 0.7;
-	z-index: 1000;
-}
-
-#overlay {
-	opacity: 0.7;
-}
-
-#overlay .message {
-	position: absolute;
-	top: 150px;
-	left: 50%;
-	width: 600px;
-	height: 100px;
-	margin-left: -320px;
-	margin-top: -20px;
-	padding: 20px;
-	background: #f2f2f2;
-}
-
-.dialog {
-	position: absolute;
-	z-index: 1001;
-	left: 50%;
-	display: block;
+#user-list .user:nth-child(odd) {
+	margin-right:0px;
 }

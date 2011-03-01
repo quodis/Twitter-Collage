@@ -19,15 +19,18 @@ Array.prototype.shuffle = function (){
 		counter_current = 0,
 		counter_target = 0,
 		counter_timer,
+		counter_canvas,
 		total_positions = 0,
 		draw_tiles_timer,
 		performance = {},
+		tile_hover = null,
 		search = {
 			input: null,
 			original_caption: null
 		},
 		state = {
 			active_bubble_pos: 0,
+			keep_bubble_open: false,
 			last_id: 0,
 			last_page: 0,
 			mosaic_offset: {},
@@ -135,7 +138,7 @@ Array.prototype.shuffle = function (){
 		
 		// Next time draw one tile more towards new_tiles_per_second
 		if (state.new_tiles_per_second_incremental < party.performance.initial_tiles_per_frame) {
-			state.new_tiles_per_second_incremental += 0.5;
+			state.new_tiles_per_second_incremental += 0.02;
 		}
 		
 		j = (tile_counter + state.new_tiles_per_second_incremental);
@@ -192,7 +195,7 @@ Array.prototype.shuffle = function (){
 		
 		// Loop through the array
 		loadingMessage();
-		loading_message_timer = window.setInterval(loadingMessage, (party.performance.loading_message_seconds * 1000));
+		loading_message_timer = window.setInterval(loadingMessage, (party.loading_message_seconds * 1000));
 		
 	}
 	
@@ -205,7 +208,7 @@ Array.prototype.shuffle = function (){
 	
 	// First to be called
 	function init() {
-		var bubble = $('#bubble');
+		var bubble;
 		// Check the browser's performance
 		if ($.browser.msie) {
 			party.performance = party.available_performances.low;
@@ -218,11 +221,11 @@ Array.prototype.shuffle = function (){
 			party.performance = party.available_performances.high;
 		}
 		
-		// Cache the canvas
+		// Cache DOM elements
+		counter_canvas = $('#twitter-counter dd span');
+		tile_hover = $('#tile-hover');
 		party.canvas = $('#mosaic');
-		state.mosaic_offset = party.canvas.offset();
-		
-		// Chache the bubble elements
+		bubble = $('#bubble');
 		party.bubble = {
 			container: bubble,
 			username_a: bubble.find('h1 a'),
@@ -232,8 +235,8 @@ Array.prototype.shuffle = function (){
 			time_a: bubble.find('time > a'),
 			p: bubble.find('p')
 		}
-		// Cache the counter DOM
-		party.counter_canvas = $('#twitter-counter dd span');
+		state.mosaic_offset = party.canvas.offset();
+		
 		// Setup the search functionality
 		searchInit();
 		// Get the page of visible tiles
@@ -242,22 +245,28 @@ Array.prototype.shuffle = function (){
 		counter_timer = window.setInterval(counterDraw, 200);
 		// Bind the hover action
         party.canvas.bind('mousemove', function(ev) {
-            var x = Math.ceil((ev.clientX + f_scrollLeft() - state.mosaic_offset.left) / 12) - 1,
-				y = Math.ceil((ev.clientY + f_scrollTop() - state.mosaic_offset.top) / 12) - 1,
-				grid;
-				
+            var x,
+				y,
+				pos;
+			
+			if (state.keep_bubble_open) {
+				return;
+			}
+			
+			x = Math.ceil((ev.clientX + f_scrollLeft() - state.mosaic_offset.left) / 12) - 1;
+			y = Math.ceil((ev.clientY + f_scrollTop() - state.mosaic_offset.top) / 12) - 1;
             if (x < 0 || y < 0) {
 				return;
 			}
 			
-            grid = party.mosaic.grid[x][y];
+            pos = party.mosaic.grid[x][y];
 
             // is valid x,y
-            if (grid) {
+            if (pos) {
 				// Check if this is not the already opened bubble
-				if (state.active_bubble_pos != grid.i) {
-					state.active_bubble_pos = grid.i;
-					showBubble(grid.i, x, y);
+				if (state.active_bubble_pos != pos.i) {
+					state.active_bubble_pos = pos.i;
+					showBubble(pos.i);
 				}
             } else {
 				// Not a tile
@@ -266,8 +275,15 @@ Array.prototype.shuffle = function (){
         });
 		// Hide the bubble if the mouse leavese the mosaic
 		party.canvas.bind('mouseout', function() {
+			if (state.keep_bubble_open) {
+				return;
+			}
 			hideBubble();
 		});
+		// Keep bubble open/hover
+		tile_hover.bind('click', function(){
+			state.keep_bubble_open = !state.keep_bubble_open;
+		})
 	}
 	
 	function searchInit() {
@@ -288,17 +304,27 @@ Array.prototype.shuffle = function (){
 		});
 	}
 	
-	function showBubble(pos, x, y) {
-		var tile,
+	function showBubble(pos) {
+		var x,
+			y,
+			tile,
 			b = party.bubble,
 			position_class,
 			position_css,
+			i,
 			g;
 		
 		tile = visible_tiles[pos];
 		if (!tile || !b) {
 			return;
 		}
+		
+		i = party.mosaic.index[pos];
+		if (!i) {
+			return;
+		}
+		x = i.x;
+		y = i.y;
 		
 		g = party.mosaic.grid[x][y];
 		if (!g) {
@@ -312,7 +338,7 @@ Array.prototype.shuffle = function (){
 				position_css = {
 					top: '',
 					right: (564 - (x * 12)) + 'px',
-					bottom: (540 - (y * 12)) + 'px',
+					bottom: (532 - (y * 12)) + 'px',
 					left: ''
 				}
 			} else {
@@ -320,15 +346,15 @@ Array.prototype.shuffle = function (){
 				position_css = {
 					top: '',
 					right: '',
-					bottom: (540 - (y * 12)) + 'px',
-					left: ((x * 12) + 8) + 'px'
+					bottom: (532 - (y * 12)) + 'px',
+					left: ((x * 12) + 2) + 'px'
 				}
 			}
 		} else {
 			if (x > 24) {
 				position_class = "top-right";
 				position_css = {
-					top: ((y * 12) - 10) + 'px',
+					top: ((y * 12) - 16) + 'px',
 					right: (564 - (x * 12)) + 'px',
 					bottom: '',
 					left: ''
@@ -336,7 +362,7 @@ Array.prototype.shuffle = function (){
 			} else {
 				position_class = "top-left";
 				position_css = {
-					top: ((y * 12) - 10) + 'px',
+					top: ((y * 12) - 16) + 'px',
 					right: '',
 					left: ((x * 12) + 8) + 'px',
 					bottom: ''
@@ -344,20 +370,38 @@ Array.prototype.shuffle = function (){
 			}	
 		}
 		
+		// Hide previous
 		b.container.hide();
+		tile_hover.hide();
+		
+		// Create a fake "zoomed tile" element
+		tile_hover.attr('src', 'data:image/gif;base64,' + tile.imageData);
+		tile_hover.css({
+			'left': (x*12) + 'px',
+			'top': (y*12) + 'px',
+			'border-color': 'rgb(' + g.c.join(',') + ')'
+		})
+		
+		// Change the bubble
 		b.username_a.text(tile.userName).attr('href', 'http://twitter.com/' + tile.userName);
 		b.avatar_a.attr('title', tile.userName).attr('href', 'http://twitter.com/' + tile.userName);
 		b.avatar_img.attr('src', tile.imageUrl);
 		b.p.text(tile.contents);
 		b.time_a.attr('href', 'http://twitter.com/' + tile.userName + '/status/' + tile.twitterId).text(tile.createdDate);
 		b.time.attr('datetime', tile.createdDate);
-		b.container.css(position_css).removeClass().addClass('bubble ' + position_class + ' color-' + g.r).show();
+		b.container.css(position_css).removeClass().addClass('bubble ' + position_class + ' color-' + g.r);
+		
+		// Show
+		b.container.show();
+		tile_hover.show();
 		
 	}
 	
 	function hideBubble() {
 		state.active_bubble_pos = 0;
+		state.keep_bubble_open = false;
 		party.bubble.container.hide();
+		tile_hover.hide();
 	}
 	
 	// Get an object's length
@@ -401,7 +445,7 @@ Array.prototype.shuffle = function (){
 		}
 		
 		counter_current += inc;
-		party.counter_canvas.text(counter_current);
+		counter_canvas.text(counter_current);
 		
 	}
 	
@@ -442,6 +486,8 @@ Array.prototype.shuffle = function (){
 			// Write the data locally
 			visible_tiles = data.tiles;
 			newest_tiles = data.newest_tiles;
+			console.log(data.newest_tiles);
+			console.log(newest_tiles);
 			total_positions = objectLength(visible_tiles);
 			
 			// Draw the mosaic!

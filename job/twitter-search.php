@@ -35,7 +35,7 @@ function main()
 		$newTweets = Twitter::search($config['Twitter']['terms'], $config['Twitter']['rpp'], $lastTweet['twitterId']);
 
 		// start adding to this page
-		$pageNo   = Mosaic::getCurrentInsertingPageNo();
+		$pageNo  = Mosaic::getCurrentInsertingPageNo();
 
 		// all slots
 		$pageSize = Mosaic::getPageSize();
@@ -54,6 +54,8 @@ function main()
 		// shuffle slots
 		shuffle($freeSlots);
 
+		Debug::logMsg('OK! ... page:' . $pageNo . ' free slots:' . count($freeSlots));
+
 		// add new tweets
 		foreach ($newTweets as $tweet)
 		{
@@ -62,22 +64,19 @@ function main()
 			// no positions left in this page
 			if (!count($freeSlots))
 			{
-				// advance to next page
-				$pageNo++;
-				// all slots
-				$freeSlots = array();
-				for ($i = 0; $i < $pageSize; $i++) $freeSlots[$i] = $i;
-				// shuffle slots
-				shuffle($freeSlots);
+				Debug::logMsg('OK! ... full page! new tweets:' . $tweets . ' ... continue ...');
+				break 2;
 			}
 
 			// pop one
-			$position = array_pop($freeSlots);
+			$position = $freeSlots[count($freeSlots) - 1];
 
 			// insert tweet
 			$tweet['page'] = $pageNo;
 			$tweet['position'] = $position;
-			Mosaic::addTweet($tweet);
+
+			// add tweet and pop position (on success)
+			if (Mosaic::addTweet($tweet)) array_pop($freeSlots);
 		}
 
 		// sleep?
@@ -85,7 +84,7 @@ function main()
 		$sleep = $period - $elapsed;
 		if ($sleep < 1) $sleep = 1;
 
-		Debug::logMsg('OK! ... new tweets:' . $tweets . ' ... sleeping for ' . $sleep . ' seconds ...');
+		Debug::logMsg('OK! ... page:' . $pageNo . ' new tweets:' . $tweets . ' ... sleeping for ' . $sleep . ' seconds ...');
 		sleep($sleep);
 	}
 
