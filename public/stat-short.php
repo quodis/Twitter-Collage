@@ -25,6 +25,7 @@ function main()
 	$data = array(
 		'last_page' => Mosaic::getCurrentWorkingPageNo() - 1,
 		'last_id' => $lastProcessedTweet['id'],
+		'tweet_count' => Tweet::getCount(),
 		'delay' => array(
 			'tweets' => $tweets,
 			'seconds' => $elapsed

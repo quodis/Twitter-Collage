@@ -262,6 +262,10 @@ button::-moz-focus-inner {
 
 /* 4. Mosaic */
 #mosaic {
+	list-style: none;
+}
+
+#mosaic li {
 	
 }
 
@@ -291,7 +295,6 @@ button::-moz-focus-inner {
 }
 
 body.shade #widgets {
-	min-height:650px;
 	padding-top:110px;
 }
 
@@ -471,7 +474,7 @@ body.shade #mosaic {
 
 #user-list .user {
 	float:left;
-	width:250px;
+	width:246px;
 	margin:0 12px 12px 0;
 	min-height:48px;
 }

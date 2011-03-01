@@ -112,13 +112,20 @@ final class Tweet
 	/**
 	 * count tweets
 	 *
+	 * @param boolean $withImage (optional, defaults to FALSE)
+	 *
 	 * @return array
 	 */
-	public static function getCount()
+	public static function getCount($withImage = FALSE)
 	{
+		$withImage = !!$withImage;
+
 		// or from db
-		$sql = "SELECT count(1) FROM `tweet`";
-		$row = Db::queryRow($sql);
+		$sql = "SELECT count(1) AS cnt FROM `tweet`";
+
+		if ($withImage) $sql.= " WHERE processedTs";
+
+		$row = Db::queryValue($sql, 'cnt');
 
 		return $row;
 	}

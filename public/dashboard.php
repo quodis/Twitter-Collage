@@ -47,6 +47,7 @@ function main()
 	$dashboardState = array(
 		'last_page' => Mosaic::getCurrentWorkingPageNo() - 1,
 		'last_id' => $lastProcessedTweet['id'],
+		'tweet_count' =>  Tweet::getCount(TRUE),
 		'guest_count' =>  Tweet::getUserCount(TRUE),
 		'delay' => array(
 			'tweets' => $tweets,
@@ -117,7 +118,7 @@ function main()
 						</dl>
 						<dl class="tweets">
 							<dt><span>Tweets</span></dt>
-							<dd id="last-tweet"><span>0</span></dd>
+							<dd id="tweet-count"><span>0</span></dd>
 						</dl>
 						<dl class="pages">
 							<dt><span>Pages</span></dt>

@@ -38,6 +38,7 @@ var party = party || {};
 			'party_on' : 'wild',
 			'guest_count' : 0,
 			'last_id' : 0,
+			'tweet_count' : 0,
 			'last_page' : 0,
 			'idle_timeout' : null,
 			'highlight_timeout' : null,
@@ -81,7 +82,7 @@ var party = party || {};
 		{
 			// show last id
 			$('#guest-count span').rollNumbers(this.state.guest_count, 3000);
-			$('#last-tweet span').rollNumbers(this.state.last_id, 5000);
+			$('#tweet-count span').rollNumbers(this.state.tweet_count, 5000);
 			$('#last-page span').rollNumbers(this.state.last_page, 3000);
 			
 			// bind search user
@@ -134,7 +135,7 @@ var party = party || {};
 				this.load('/stat-short.php', null, function(data) {
 					if (!data) return;
 					$.extend(this.state, data);
-					$('#last-tweet span').rollNumbers(this.state.last_id, this.options.short_stat_interval);
+					$('#tweet-count span').rollNumbers(this.state.tweet_count, this.options.short_stat_interval);
 					$('#last-page span').text(this.state.last_page);
 					$('#job-delay span').html('<em>' + this.state.delay.seconds + ' sec / ' + this.state.delay.tweets + ' tweets</em>');
 				}.bind(this) );
@@ -148,6 +149,8 @@ var party = party || {};
 		{
 			this.reset();
 			
+			this.tiles = null;
+			this.tiles = {};
 			$('#mosaic li').remove();
 			
 			$('<li id="loading">loading page...</li>').appendTo('#mosaic');
@@ -167,6 +170,8 @@ var party = party || {};
 		{
 			this.reset();
 			
+			this.tiles = null;
+			this.tiles = {};
 			$('#mosaic li').remove();
 			
 			$('<li id="loading">loading poll...</li>').appendTo('#mosaic');
@@ -177,7 +182,6 @@ var party = party || {};
 
 			Dashboard.load( 'poll.php', params, function(data) {
 				$('#loading').remove();
-				$('#last-tweet span').text(data.last_id);
 				var count = this.addTiles(data.tiles);
 				if (count) {
 					this.state.last_id = data.last_id;
