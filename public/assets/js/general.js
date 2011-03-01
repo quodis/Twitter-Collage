@@ -379,7 +379,7 @@ Array.prototype.shuffle = function (){
 		tile_hover.css({
 			'left': (x*12) + 'px',
 			'top': (y*12) + 'px',
-			'border': '1px solid rgb(' + g.c.join(',') + ')'
+			'border-color': 'rgb(' + g.c.join(',') + ')'
 		})
 		
 		// Change the bubble
@@ -401,6 +401,7 @@ Array.prototype.shuffle = function (){
 		state.active_bubble_pos = 0;
 		state.keep_bubble_open = false;
 		party.bubble.container.hide();
+		tile_hover.hide();
 	}
 	
 	// Get an object's length
