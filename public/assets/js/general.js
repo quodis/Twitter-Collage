@@ -553,10 +553,10 @@ Array.prototype.shuffle = function (){
 				if (data.payload.last_id > state.last_id) {
 					state.last_id = data.payload.last_id;
 				}
-				
+				console.log('data.payload.tiles', data.payload.tiles.length);
 				// Append the data locally
 				new_tiles.concat(data.payload.tiles);
-				
+				console.log('new_tiles', new_tiles.length);
 			}
 		});
 	}
@@ -612,7 +612,8 @@ Array.prototype.shuffle = function (){
 		"performance": performance,
 		"available_performances": available_performances,
 		"state": state,
-		"newest_tiles": newest_tiles
+		"newest_tiles": newest_tiles,
+		"new_tiles": new_tiles
 	});
 	
 }());
