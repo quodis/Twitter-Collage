@@ -86,7 +86,7 @@ function main($language)
 				<aside id="main-content" class="clearfix">
 
 					<!-- Here goes the text explaining how Firefox Twitter Party works. -->
-					<p><?= sprintf(_('Be part of Team Firefox! Tweet about Firefox 4 with the %s hashtag and your avatar will join thousands of others from around the world as part of our logo mosaic.'), '<span class="hashtag">#fx4</span>') ?></p>
+					<p><?= sprintf(_('Be part of Team Firefox! Tweet about Firefox 4 with the %s hashtag and your avatar will join thousands of others from around the world as part of our logo mosaic.'), '<span class="hashtag">' . $config['Twitter']['terms'] . '</span>') ?></p>
 
 					<div id="twitter-counter">
 						<dl>
