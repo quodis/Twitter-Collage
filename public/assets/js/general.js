@@ -138,7 +138,7 @@ Array.prototype.shuffle = function (){
 		
 		// Next time draw one tile more towards new_tiles_per_second
 		if (state.new_tiles_per_second_incremental < party.performance.initial_tiles_per_frame) {
-			state.new_tiles_per_second_incremental += 0.1;
+			state.new_tiles_per_second_incremental += 0.02;
 		}
 		
 		j = (tile_counter + state.new_tiles_per_second_incremental);
@@ -338,7 +338,7 @@ Array.prototype.shuffle = function (){
 				position_css = {
 					top: '',
 					right: (564 - (x * 12)) + 'px',
-					bottom: (534 - (y * 12)) + 'px',
+					bottom: (532 - (y * 12)) + 'px',
 					left: ''
 				}
 			} else {
@@ -346,7 +346,7 @@ Array.prototype.shuffle = function (){
 				position_css = {
 					top: '',
 					right: '',
-					bottom: (534 - (y * 12)) + 'px',
+					bottom: (532 - (y * 12)) + 'px',
 					left: ((x * 12) + 2) + 'px'
 				}
 			}
@@ -354,7 +354,7 @@ Array.prototype.shuffle = function (){
 			if (x > 24) {
 				position_class = "top-right";
 				position_css = {
-					top: ((y * 12) - 14) + 'px',
+					top: ((y * 12) - 16) + 'px',
 					right: (564 - (x * 12)) + 'px',
 					bottom: '',
 					left: ''
@@ -362,7 +362,7 @@ Array.prototype.shuffle = function (){
 			} else {
 				position_class = "top-left";
 				position_css = {
-					top: ((y * 12) - 14) + 'px',
+					top: ((y * 12) - 16) + 'px',
 					right: '',
 					left: ((x * 12) + 8) + 'px',
 					bottom: ''
