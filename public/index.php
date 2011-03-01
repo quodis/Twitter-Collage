@@ -106,22 +106,10 @@ function main($language)
 
 				</aside><!-- main-content -->
 
-
-				<div id="download">
-
-					<ul class="home-download">
-						<li class="os_windows hide">
-							<a class="download-link download-firefox" onclick="init_download('http://download.mozilla.org/?product=firefox-3.6.13&amp;os=win&amp;lang=en-US');" href="http://www.mozilla.com/products/download.html?product=firefox-3.6.13&amp;os=win&amp;lang=en-US" ><span class="download-content"><span class="download-title">Firefox 4</span>Free Download</span></a>
-						</li>
-						<li class="os_linux hide">
-							<a class="download-link download-firefox" onclick="init_download('http://download.mozilla.org/?product=firefox-3.6.13&amp;os=linux&amp;lang=en-US');" href="http://www.mozilla.com/products/download.html?product=firefox-3.6.13&amp;os=linux&amp;lang=en-US" ><span class="download-content"><span class="download-title">Firefox 4</span>Free Download</span></a>
-						</li>
-						<li class="os_osx">
-							<a class="download-link download-firefox" onclick="init_download('http://download.mozilla.org/?product=firefox-3.6.13&amp;os=osx&amp;lang=en-US');" href="http://www.mozilla.com/products/download.html?product=firefox-3.6.13&amp;os=osx&amp;lang=en-US" ><span class="download-content"><span class="download-title">Firefox 4</span>Free Download</span></a>
-						</li>
-					</ul> <!-- home-download -->
-
+				<div id="download"> 
+					<a class="download-link download-firefox" href="http://www.mozilla.com/"><span class="download-content"><span class="download-title">Firefox 4</span>Download here</span></a> 
 				</div><!-- download -->
+				
 			</div><!-- wrapper -->
 
 		<section id="mosaic">

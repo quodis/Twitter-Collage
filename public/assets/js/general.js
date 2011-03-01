@@ -14,6 +14,7 @@ Array.prototype.shuffle = function (){
 		visible_tiles = {},
 		visible_tiles_random = [],
 		hidden_tiles = {},
+		newest_tiles = [], // Index of the most recent tiles
 		new_tiles = [], // Tiles got from the server in "real-time"
 		counter_current = 0,
 		counter_target = 0,
@@ -440,6 +441,7 @@ Array.prototype.shuffle = function (){
 			}
 			// Write the data locally
 			visible_tiles = data.tiles;
+			newest_tiles = data.newest_tiles;
 			total_positions = objectLength(visible_tiles);
 			
 			// Draw the mosaic!
@@ -598,7 +600,8 @@ Array.prototype.shuffle = function (){
 		"showBubble": showBubble,
 		"performance": performance,
 		"available_performances": available_performances,
-		"state": state
+		"state": state,
+		"newest_tiles": newest_tiles
 	});
 	
 }());
