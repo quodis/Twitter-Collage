@@ -280,6 +280,10 @@ Array.prototype.shuffle = function (){
 			}
 			hideBubble();
 		});
+		// Keep bubble open/hover
+		tile_hover.bind('click', function(){
+			state.keep_bubble_open = !state.keep_bubble_open;
+		})
 	}
 	
 	function searchInit() {
@@ -334,7 +338,7 @@ Array.prototype.shuffle = function (){
 				position_css = {
 					top: '',
 					right: (564 - (x * 12)) + 'px',
-					bottom: (540 - (y * 12)) + 'px',
+					bottom: (534 - (y * 12)) + 'px',
 					left: ''
 				}
 			} else {
@@ -342,15 +346,15 @@ Array.prototype.shuffle = function (){
 				position_css = {
 					top: '',
 					right: '',
-					bottom: (540 - (y * 12)) + 'px',
-					left: ((x * 12) + 8) + 'px'
+					bottom: (534 - (y * 12)) + 'px',
+					left: ((x * 12) + 2) + 'px'
 				}
 			}
 		} else {
 			if (x > 24) {
 				position_class = "top-right";
 				position_css = {
-					top: ((y * 12) - 10) + 'px',
+					top: ((y * 12) - 14) + 'px',
 					right: (564 - (x * 12)) + 'px',
 					bottom: '',
 					left: ''
@@ -358,7 +362,7 @@ Array.prototype.shuffle = function (){
 			} else {
 				position_class = "top-left";
 				position_css = {
-					top: ((y * 12) - 10) + 'px',
+					top: ((y * 12) - 14) + 'px',
 					right: '',
 					left: ((x * 12) + 8) + 'px',
 					bottom: ''
@@ -374,7 +378,8 @@ Array.prototype.shuffle = function (){
 		tile_hover.attr('src', 'data:image/gif;base64,' + tile.imageData);
 		tile_hover.css({
 			'left': (x*12) + 'px',
-			'top': (y*12) + 'px'
+			'top': (y*12) + 'px',
+			'border': '1px solid rgb(' + g.c.join(',') + ')'
 		})
 		
 		// Change the bubble
