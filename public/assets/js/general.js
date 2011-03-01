@@ -170,7 +170,7 @@ Array.prototype.shuffle = function (){
 			// No Tiles were built - task is complete
 			window.clearInterval(initial_draw_timer);
 			// Set counter to last id
-			counter.current = state.last_id;
+			counter.current = parseInt(state.last_id, 10);
 			setCounter();
 			// Start the recursive "tile updater"
 			draw_tiles_timer = window.setInterval(drawNewTiles, (1000/party.performance.new_tiles_per_second));
