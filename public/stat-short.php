@@ -23,7 +23,7 @@ function main()
 
 	// dashboard state
 	$data = array(
-		'last_page' => Mosaic::getCurrentWorkingPageNo() - 1,
+		'last_page' => Mosaic::getLastCompletePage(),
 		'last_id' => $lastProcessedTweet['id'],
 		'tweet_count' => Tweet::getCount(),
 		'delay' => array(

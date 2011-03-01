@@ -45,7 +45,7 @@ function main()
 
 	// dashboard state
 	$dashboardState = array(
-		'last_page' => Mosaic::getCurrentWorkingPageNo() - 1,
+		'last_page' => Mosaic::getLastCompletePage(),
 		'last_id' => $lastProcessedTweet['id'],
 		'tweet_count' =>  Tweet::getCount(TRUE),
 		'guest_count' =>  Tweet::getUserCount(TRUE),
@@ -147,7 +147,7 @@ function main()
 					<div class="control-box page clearfix">
 						<h3>Page</h3>
 						<label for="page-no" accesskey="p">Page No</label>
-						<input type="text" id="page-no" value="<?=(Mosaic::getCurrentWorkingPageNo())?>" tabindex="5" />
+						<input type="text" id="page-no" value="<?=(Mosaic::getLastCompletePage() + 1)?>" tabindex="5" />
 						<button class="submit" type="submit" id="page-load-bttn" tabindex="6" title="Go" class="button"><span>Go</span></button>
 						<button class="submit" type="submit" id="force-poll-bttn" tabindex="7" title="Force Poll" class="button"><span>Poll Now</span></button>
 					</div><!-- control-box page -->

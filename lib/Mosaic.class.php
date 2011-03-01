@@ -341,40 +341,30 @@ party.mosaic = ' . json_encode(self::$_pageConfig) . ';
 	 *
 	 * @return integer
 	 */
-	public static function getCurrentWorkingPageNo()
+	public static function getLastCompletePage()
 	{
-		// TODO CACHE this
 
-		$pageNo = 0;
-
-		do
-		{
-			$pageNo++;
-
-			if (!self::pageExists($pageNo)) break;
-
-			$fileData = self::getPageData($pageNo);
-
-			if (!isset($fileData ['tiles']) || count($fileData ['tiles']) < self::getPageSize()) break;
-		}
-		while (TRUE);
-
-		return $pageNo;
+		return 2;
 	}
 
 
 	/**
-	 * returns the page number of a certain tweet
-	 *
-	 * @return integer
+	 * @return array
 	 */
-	/*
-	public static function getTweetPageNo($id)
+	public static function getProcessedPages($ts)
 	{
+		// load
+		$result = Tweet::getProcessedPages($ts);
+
+
+		$pages = array();
+		while ($row = $result->row())
+		{
+			$pages[] = $row['page'];
+		}
 		// page number
-		return ceil($id / self::getPageSize());
+		return $pages;
 	}
-	*/
 
 
 	// ---- tweets

@@ -168,6 +168,25 @@ final class Tweet
 
 
 	/**
+	 * pages modified since
+	 *
+	 * @param integer $processedTs
+	 *
+	 * @return integer
+	 */
+	public static function getProcessedPages($processedTs)
+	{
+		$processedTs = Db::escape($processedTs);
+
+		if (empty($processedTs)) $processedTs = 0;
+
+		$sql = "SELECT page FROM tweet WHERE processedTs > $processedTs GROUP BY page ORDER BY processedTs DESC";
+
+		return Db::query($sql);
+	}
+
+
+	/**
 	 * @return integer
 	 */
 	public static function getLastPage()

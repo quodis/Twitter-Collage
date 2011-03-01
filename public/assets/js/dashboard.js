@@ -70,6 +70,8 @@ var party = party || {};
 			this.state = $.extend(this.state, state);
 			
 			this.buildInterface();
+			
+			this.loadPage(this.state.last_page + 1);
 		},
 
 

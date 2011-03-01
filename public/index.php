@@ -29,13 +29,13 @@ function main($language)
 	DEFINE('CONTEXT', __FILE__);
 	include '../bootstrap.php';
 	session_cache_limiter("nocache");
-	
+
 	// mosaic config file
 	$jsMosaicConfig = $config['Store']['url'] . $config['UI']['js-config']['grid'];
 
 	// js config
 	$uiOptions = $config['UI']['options'];
-	$uiOptions['state']['last_page'] = Mosaic::getCurrentWorkingPageNo() - 1;
+	$uiOptions['state']['last_page'] = Mosaic::getLastCompletePage();
 
 ?>
 <!DOCTYPE html>
@@ -106,10 +106,10 @@ function main($language)
 
 				</aside><!-- main-content -->
 
-				<div id="download"> 
-					<a class="download-link download-firefox" href="http://www.mozilla.com/"><span class="download-content"><span class="download-title">Firefox 4</span><?= _('Download here') ?></span></a> 
+				<div id="download">
+					<a class="download-link download-firefox" href="http://www.mozilla.com/"><span class="download-content"><span class="download-title">Firefox 4</span><?= _('Download here') ?></span></a>
 				</div><!-- download -->
-				
+
 			</div><!-- wrapper -->
 
 		<section id="mosaic">

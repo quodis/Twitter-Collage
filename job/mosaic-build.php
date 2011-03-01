@@ -24,26 +24,33 @@ function main()
 
 	$pageSize = Mosaic::getPageSize();
 
+	$lastProcessedTs = null;
+
 	while (TRUE)
 	{
 		// start time
 		$start = time();
 
-		// get page no
-		$pageNo = Mosaic::getCurrentWorkingPageNo();
+		// get all pages
+		$pages = Mosaic::getProcessedPages($lastProcessedTs);
 
-		// update page
-		$tweetCount = Mosaic::updatePage($pageNo);
+		foreach ($pages as $pageNo)
+		{
+			// update page
+			$tweetCount = Mosaic::updatePage($pageNo);
+
+			Debug::logMsg('OK! ... updated page:' . $pageNo . ' ... page has ' . $tweetCount . ' tweets');
+
+			$lastProcessedTs = time();
+		}
 
 		// sleep?
 		$elapsed = time() - $start;
 		$sleep = $period - $elapsed;
 		if ($sleep < 1) $sleep = 1;
-
-		if ($tweetCount == $pageSize) $sleep = 0;
-
-		Debug::logMsg('OK! ... updated page:' . $pageNo . ' ... page has ' . $tweetCount . ' tweets ... sleeping for ' . $sleep . ' seconds ...');
 		sleep($sleep);
+
+		Debug::logMsg('OK! ... sleeping for ' . $sleep . ' seconds ...');
 	}
 
 } // main()
