@@ -36,7 +36,7 @@ Array.prototype.shuffle = function (){
 			last_id: 0,
 			last_page: 0,
 			mosaic_offset: {},
-			initial_tiles_per_second_incremental: 1,
+			initial_tiles_per_frame_incremental: 1,
 			draw_new_tiles_every_counter: 0
 		},
 		available_performances = {

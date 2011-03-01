@@ -33,7 +33,7 @@ http://www.opensource.org/licenses/mit-license.php
 	min-height: 130px;
 	width: 290px;
 	position: absolute;
-/* 	display: none; */
+ 	display: none; 
 	z-index: 20;
 }
 
