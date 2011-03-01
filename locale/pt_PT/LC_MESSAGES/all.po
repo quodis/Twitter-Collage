@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Firefox Twitter Party\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-28 11:08+0100\n"
-"PO-Revision-Date: 2011-02-28 11:27+0100\n"
+"POT-Creation-Date: 2011-03-01 11:07+0100\n"
+"PO-Revision-Date: 2011-03-01 11:09+0100\n"
 "Last-Translator: Luis Abreu <lmjabreu@gmail.com>\n"
 "Language-Team: Quodis <hello@quodis.com>\n"
 "MIME-Version: 1.0\n"
@@ -16,68 +16,102 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: public/index.php:92
-msgid "Join the Firefox 4 Twitter Party"
-msgstr "Junta-te à Festa do Firefox 4 no Twitter"
-
-#: public/index.php:100
-msgid "Be part of Team Firefox! Tweet about Firefox 4 with the <span class=\"hashtag\">#fx4</span> hashtag and your avatar will join thousands of others from around the world as part of our logo mosaic."
-msgstr "Sê parte da Equipa Firefox! Envia um Tweet sobre o Firefox com a hashtag <span class=\"hashtag\">#fx4</span> para juntares o teu avatar a milhares de outros de todo o mundo fazendo parte do mosaico do nosso logotipo."
-
-#: public/index.php:104
-msgid "Join me at the Firefox 4 Twitter Party and celebrate the newest version http://t.co/PowZdhA via @firefox"
-msgstr "Junta-te a mim na Festa do Firefox 4 no Twitter e celebra a versão mais recente http://t.co/PowZdhA via @firefox"
-
-#: public/index.php:111
-msgid "Who's at the party?"
-msgstr "Quem está na festa?"
-
-#: public/index.php:113
-#: public/index.php:114
-msgid "Find a Twitter username"
-msgstr "Procurar por um utilizador Twitter"
-
-#: public/index.php:115
-msgid "Find"
-msgstr "Procurar"
-
-#: public/index.php:141
-msgid "Firefox Twitter Mosaic"
-msgstr "Mosaico Twitter do Firefox"
-
-#: public/index.php:147
+#: public/dashboard.php:165
+#: public/index.php:139
 msgid "Visit Mozilla"
 msgstr "Visite a Mozilla"
 
-#: public/index.php:159
+#: public/index.php:81
+msgid "Join the Firefox 4 Twitter Party"
+msgstr "Junta-te à Festa do Firefox 4 no Twitter"
+
+#: public/index.php:89
+#, php-format
+msgid "Be part of Team Firefox! Tweet about Firefox 4 with the %s hashtag and your avatar will join thousands of others from around the world as part of our logo mosaic."
+msgstr "Junta-te à Equipa Firefox! Envia um Tweet sobre o Firefox com a hashtag <span class=\"hashtag\">#fx4</span> para juntares o teu avatar a milhares de outros de todo o mundo fazendo parte do mosaico do nosso logotipo."
+
+#: public/index.php:93
+msgid "Join me at the Firefox 4 Twitter Party and celebrate the newest version"
+msgstr "Junta-te a mim na Festa do Firefox 4 no Twitter e celebra a versão mais recente"
+
+#: public/index.php:93
+msgid "Tweet"
+msgstr "Tweet"
+
+#: public/index.php:100
+msgid "Who's at the party?"
+msgstr "Quem está na festa?"
+
+#: public/index.php:101
+#: public/index.php:102
+msgid "Find a Twitter username"
+msgstr "Procurar por um utilizador Twitter"
+
+#: public/index.php:103
+msgid "Find"
+msgstr "Procurar"
+
+#: public/index.php:110
+msgid "Download here"
+msgstr "Descarregar"
+
+#: public/index.php:116
+msgid "Firefox Twitter Mosaic"
+msgstr "Mosaico Twitter do Firefox"
+
+#: public/index.php:123
+msgid "Twitter profile"
+msgstr "perfil Twitter"
+
+#: public/index.php:123
+msgid "wrote"
+msgstr "escreveu"
+
+#: public/index.php:125
+msgid "Twitter profile picture"
+msgstr "fotografia de perfil Twitter"
+
+#: public/index.php:128
+msgid "Permalink"
+msgstr "Permalink"
+
+#: public/index.php:151
 msgid "Let's be <span>Friends!</span>"
 msgstr "Vamos ser <span>Amigos!</span>"
 
-#: public/index.php:164
+#: public/index.php:154
+msgid "Twitter"
+msgstr "Twitter"
+
+#: public/index.php:155
+msgid "Facebook"
+msgstr "Facebook"
+
+#: public/index.php:156
 msgid "More Ways to Connect"
 msgstr "More Ways to Connect"
 
-#: public/index.php:168
+#: public/index.php:160
 msgid "Want us to keep in touch?"
 msgstr "Want us to keep in touch?"
 
-#: public/index.php:170
+#: public/index.php:161
 msgid "Get Monthly News"
 msgstr "Recebe Notícias Mensalmente"
 
-#: public/index.php:179
+#: public/index.php:169
 msgid "Privacy Policy"
 msgstr "Política de Privacidade"
 
-#: public/index.php:180
+#: public/index.php:170
 msgid "Legal Notices"
 msgstr "Avisos Legais"
 
-#: public/index.php:181
+#: public/index.php:171
 msgid "Report Trademark Abuse"
 msgstr "Reportar Abuso de Trademark"
 
-#: public/index.php:184
-msgid "Except where otherwise <a href=\"/en-US/about/legal.html#site\">noted</a>, content on this site is licensed under the <br /><a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">Creative Commons Attribution Share-Alike License v3.0</a> or any later version."
-msgstr "Except where otherwise <a href=\"/en-US/about/legal.html#site\">noted</a>, content on this site is licensed under the <br /><a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">Creative Commons Attribution Share-Alike License v3.0</a> or any later version."
+#: public/index.php:174
+msgid "Except where otherwise <a href=\"http://www.mozilla.com/about/legal.html#site\">noted</a>, content on this site is licensed under the <br /><a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">Creative Commons Attribution Share-Alike License v3.0</a> or any later version."
+msgstr "Except where otherwise <a href=\"http://www.mozilla.com/about/legal.html#site\">noted</a>, content on this site is licensed under the <br /><a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">Creative Commons Attribution Share-Alike License v3.0</a> or any later version."
 

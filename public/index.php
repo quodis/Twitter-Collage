@@ -86,7 +86,7 @@ function main($language)
 				<aside id="main-content" class="clearfix">
 
 					<!-- Here goes the text explaining how Firefox Twitter Party works. -->
-					<p><?= sprintf(_('Be part of Team Firefox! Tweet about Firefox 4 with the %s hashtag and your avatar will join thousands of others from around the world as part of our logo mosaic.'), '<span class="hashtag">#fx4</span>') ?></p>
+					<p><?= sprintf(_('Be part of Team Firefox! Tweet about Firefox 4 with the %s hashtag and your avatar will join thousands of others from around the world as part of our logo mosaic.'), '<span class="hashtag">' . $config['Twitter']['terms'] . '</span>') ?></p>
 
 					<div id="twitter-counter">
 						<dl>
@@ -171,7 +171,7 @@ function main($language)
 					<a href="/en-US/legal/fraud-report/index.html"><?= _('Report Trademark Abuse') ?></a>
 				</p>
 
-				<p><?= _('Except where otherwise <a href="/en-US/about/legal.html#site">noted</a>, content on this site is licensed under the <br /><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.') ?></p>
+				<p><?= _('Except where otherwise <a href="http://www.mozilla.com/about/legal.html#site">noted</a>, content on this site is licensed under the <br /><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.') ?></p>
 			</div><!-- footer-copyright -->
 
 		</footer>
