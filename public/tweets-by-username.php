@@ -34,6 +34,8 @@ function main()
 		$data['tweets'][] = $tweet;
 	}
 
+	Debug::logMsg('userName:' . $userName . ' count:' . $data['count'] . ' total:' . $data['total']);
+
 	Dispatch::now(1, 'OK', $data);
 
 } // main()

@@ -16,9 +16,9 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include '../bootstrap.php';
 
-	$userName = (isset($_REQUEST['user_name'])) ? $_REQUEST['user_name'] : null;
+	$terms = (isset($_REQUEST['terms'])) ? $_REQUEST['terms'] : null;
 
-	$result = Tweet::getUsersByTerms($userName, $config['UI']['resultsLimit']);
+	$result = Tweet::getUsersByTerms($terms, $config['UI']['resultsLimit']);
 
 	// init response
 
@@ -32,6 +32,8 @@ function main()
 	{
 		$data['users'][] = $user;
 	}
+
+	Debug::logMsg('terms:' . $terms . ' count:' . $data['count'] . ' total:' . $data['total']);
 
 	Dispatch::now(1, 'OK', $data);
 

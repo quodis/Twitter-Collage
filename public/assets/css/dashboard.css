@@ -382,7 +382,8 @@ body.shade #mosaic {
 #highlight.excite {
 	padding:10px;
 }
-#highlight.excite h3 {
+#highlight.excite h3,
+#highlight.excite .delete {
 	display:none;
 }
 

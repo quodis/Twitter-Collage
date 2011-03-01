@@ -88,13 +88,17 @@ var party = party || {};
 			$('#last-page span').rollNumbers(this.state.last_page, 3000);
 			
 			// bind search user
-			$('#find-user').inputDefault().inputState( { 'onEnter' : function() { 
-				this.findUser($('#find-user').val());
+			$('#find-user').inputDefault().inputState( { 'onEnter' : function() {
+				if ($('#find-user').val().length) {
+					this.findUser($('#find-user').val());
+				}
 			}.bind(this) } );
 			
 			// bind search tweets
-			$('#search-tweets').inputDefault().inputState( { 'onEnter' : function() { 
-				this.searchTweets($('#search-tweets').val());
+			$('#search-tweets').inputDefault().inputState( { 'onEnter' : function() {
+				if ($('#search-tweets').val().length) {
+					this.searchTweets($('#search-tweets').val());
+				}
 			}.bind(this) } );
 			
 			// bind go to page
@@ -109,6 +113,7 @@ var party = party || {};
 				this.poll();
 			}.bind(this) );
 			$('#mosaic').mousemove( function(ev) {
+				if ($('body').hasClass('shade')) return;
 				var offset = $('#mosaic').offset();
 				var x = Math.ceil((ev.clientX + f_scrollLeft() - offset.left) / 12) - 1;
 				var y = Math.ceil((ev.clientY + f_scrollTop() - offset.top) / 12) - 1;
@@ -271,11 +276,15 @@ var party = party || {};
 		
 		openTile : function(position)
 		{
+			if ($('body').hasClass('shade')) return;
+			
 			this.reset();
 			
 			$('body').addClass('shade highlight');
 			
 			this.highlightTilePos(position);
+			
+			// FIX user click
 		},
 		
 		findUser : function(user_name)
