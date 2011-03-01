@@ -343,7 +343,9 @@ party.mosaic = ' . json_encode(self::$_pageConfig) . ';
 	 */
 	public static function getLastCompletePage()
 	{
-		return Tweet::getLastCompletePage(self::getPageSize());
+		$page = Tweet::getLastCompletePage(self::getPageSize());
+
+		return $page ? $page : 0;
 	}
 
 

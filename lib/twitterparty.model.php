@@ -342,7 +342,8 @@ final class Tweet
 		$limit = (int)$limit;
 		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
 
-		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
+		//$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
+		$sql = "SELECT id, position, twitterId, userName, imageUrl, createdTs, contents, imageData FROM `tweet` ";
 		$sql.= " WHERE `imageData` IS NOT NULL";
 
 		if ($lastId)
@@ -399,7 +400,8 @@ final class Tweet
 
 		$withImage = !!$withImage;
 
-		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
+		//$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
+		$sql = "SELECT id, position, twitterId, userName, imageUrl, createdTs, contents, imageData FROM `tweet` ";
 		$sql.= " WHERE `userName` LIKE '%$terms%'";
 
 		if ($withImage) $sql.= "  AND processedTs";
@@ -441,7 +443,8 @@ final class Tweet
 
 		$withImage = !!$withImage;
 
-		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
+		//$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
+		$sql = "SELECT id, position, twitterId, userName, imageUrl, createdTs, contents, imageData FROM `tweet` ";
 		$sql.= " WHERE`userName` = '$userName'";
 
 		if ($withImage) $sql.= "  AND processedTs";
