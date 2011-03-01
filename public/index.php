@@ -205,7 +205,7 @@ function main($language)
 
 try
 {
-	main($request_uri[1][0]);
+	main($request_uri[1][0] . strtoupper($request_uri[2][0]));
 }
 catch(Exception $e) {
 	Debug::logError($e, 'EXCEPTION ' . $e->getMessage());
