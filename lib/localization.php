@@ -10,14 +10,14 @@
  * @subpackage	server
  **/
 
-// define the regex_pattern to catch langcodes
+// define the regex_pattern for langcode matching
 $regex_pattern = "/([a-z]{2}-)([a-z]{2})/is";
 
 // parse the accept language header
 preg_match_all($regex_pattern, $_SERVER['HTTP_ACCEPT_LANGUAGE'], $accept_language);
 // if there's no language code in the request_uri
-if ($_SERVER['REQUEST_URI'] == '/')
-	// redirect the user to his preferred language as define in the accept-language browser header
+if ($_SERVER['REQUEST_URI'] == '/' || ctype_lower($accept_language[2][0]))
+	// redirect the user to his preferred language as defined in the accept-language request header
 	header('Location: /' . $accept_language[1][0] . strtoupper($accept_language[2][0]));
 
 // define where the translation files are stored in disk
