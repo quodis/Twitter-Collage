@@ -267,7 +267,7 @@ http://www.opensource.org/licenses/mit-license.php
 }
 
 .bubble.bottom-right p{ 
-	background-position: 320px bottom;
+	background-position: -320px bottom;
 /*
 	background-position-y: bottom; 
 	background-position-x: -320px;
