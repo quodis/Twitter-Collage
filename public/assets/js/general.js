@@ -512,7 +512,6 @@ Array.prototype.shuffle = function (){
 			// Remove this tile from the new tiles
 			new_tiles.shift();
 			counter.current += 1;
-			console.log('new tile', counter.current);
 			counter.canvas.text(counter.current);
 		} else {
 			// Choose a random position
@@ -553,10 +552,8 @@ Array.prototype.shuffle = function (){
 				if (data.payload.last_id > state.last_id) {
 					state.last_id = data.payload.last_id;
 				}
-				console.log('data.payload.tiles', data.payload.tiles.length);
 				// Append the data locally
-				new_tiles.concat(data.payload.tiles);
-				console.log('new_tiles', new_tiles.length);
+				new_tiles = new_tiles.concat(data.payload.tiles);
 			}
 		});
 	}
