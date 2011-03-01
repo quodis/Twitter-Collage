@@ -460,6 +460,7 @@ Array.prototype.shuffle = function (){
 			}
 			// Write the data locally
 			visible_tiles = data.tiles;
+			console.log(data);
 			newest_tiles = data.newest_tiles;
 			total_positions = objectLength(visible_tiles);
 			
