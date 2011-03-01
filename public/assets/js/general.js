@@ -376,7 +376,7 @@ Array.prototype.shuffle = function (){
 	
 	// Update the counter UI
 	function counterDraw() {
-		return;
+
 		var dif = (counter_target - counter_current),
 			inc = 1;
 		
