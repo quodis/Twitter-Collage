@@ -100,7 +100,10 @@ function main($language)
 						<label for="search-input" accesskey="f"><?= _('Find a Twitter username') ?></label>
 						<input type="text" name="search-input" id="search-input" value="<?= _('Find a Twitter username') ?>" tabindex="1" />
 						<button type="submit" name="search-button" id="search-submit-bttn" value="<?= _('Find') ?>" tabindex="2" title="<?= _('Find') ?>" class="button"><?= _('Find') ?></button>
-						<p class="error"><?= _("This user hasn't joined the party yet.") ?></p>
+						<div class="error">
+							<p><?= _("This user hasn't joined the party yet.") ?></p>
+						</div>
+
 					</form><!-- search-box -->
 
 					<div id="download">
