@@ -256,7 +256,7 @@ Array.prototype.shuffle = function (){
 				// Check if this is not the already opened bubble
 				if (state.active_bubble_pos != grid.i) {
 					state.active_bubble_pos = grid.i;
-					showBubble(pos.i, x, y);
+					showBubble(grid.i, x, y);
 				}
             } else {
 				// Not a tile
@@ -376,7 +376,7 @@ Array.prototype.shuffle = function (){
 	
 	// Update the counter UI
 	function counterDraw() {
-		return;
+
 		var dif = (counter_target - counter_current),
 			inc = 1;
 		
