@@ -94,9 +94,9 @@ function main()
 
 	<body>
 
-		<div id="container">
+		<div id="container" class="clearfix">
 
-			<div class="wrapper">
+			<div class="wrapper clearfix">
 
 				<!-- HEADER -->
 				<header id="brand">
@@ -154,33 +154,35 @@ function main()
 
 				</aside><!-- main-content -->
 
+				<ul id="mosaic">
+				</ul>
+
+				<section id="widgets">
+				</section>
+
 			</div><!-- wrapper -->
 
-		<ul id="mosaic">
-		</ul>
+			<div id="mozilla-badge">
+				<a href="http://www.mozilla.org/" class="mozilla" title="<?= _('Visit Mozilla') ?>" rel="external"><?= _('Visit Mozilla') ?></a>
+			</div><!-- mozilla-badge -->
 
-		<div id="mozilla-badge">
-			<a href="http://www.mozilla.org/" class="mozilla" title="<?= _('Visit Mozilla') ?>" rel="external"><?= _('Visit Mozilla') ?></a>
-		</div><!-- mozilla-badge -->
-
-		<section id="widgets">
-		</section>
-
-
-	</div><!-- container -->
+		</div><!-- container -->
 
 		<!-- FOOTER -->
 		<footer>
 
 			<div id="footer-copyright">
 
-				<p id="footer-links">
-					<a href="/en-US/privacy-policy.html">Privacy Policy</a> &nbsp;|&nbsp;
-					<a href="/en-US/about/legal.html">Legal Notices</a> &nbsp;|&nbsp;
-					<a href="/en-US/legal/fraud-report/index.html">Report Trademark Abuse</a>
-				</p>
+				<div id="footer-left">
+					<p id="footer-links">
+						<a href="http://www.mozilla.com/privacy-policy.html"><?= _('Privacy Policy') ?></a> &nbsp;|&nbsp;
+						<a href="http://www.mozilla.com/about/legal.html"><?= _('Legal Notices') ?></a> &nbsp;|&nbsp;
+						<a href="http://www.mozilla.com/legal/fraud-report/index.html"><?= _('Report Trademark Abuse') ?></a>
+					</p>
 
-				<p>Except where otherwise <a href="/en-US/about/legal.html#site">noted</a>, content on this site is licensed under the <br /><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.</p>
+					<p><?= _('Except where otherwise <a href="http://www.mozilla.com/about/legal.html#site">noted</a>, content on this site is licensed under the <br /><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.') ?></p>
+				</div><!-- footer-left -->
+
 			</div><!-- footer-copyright -->
 
 		</footer>
