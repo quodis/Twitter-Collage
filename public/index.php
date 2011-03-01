@@ -43,13 +43,13 @@ function main($language)
 
 	<head>
 
-		<title><?= _($config['UI']['title']) ?></title>
+		<title>Firefox 4 Twitter Party</title>
 
 		<meta charset="utf-8" />
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="keywords" content="<?=$config['UI']['keywords']?>" />
-		<meta name="description" content="<?=$config['UI']['description']?>" />
+		<meta name="keywords" content="Mozilla,Firefox, Firefox 4, Collage, Twitter, Tweet" />
+		<meta name="description" content="Firefox 4 Twitter Party is a visualization of Firefox 4 activity on Twitter. It is an experiment with exclusively open web tools and technologies." />
 		<meta name="author" content="Quodis, Mozilla" />
 		<meta name="copyright" content="© 2011" />
 		<meta name="distribution" content="global" />
