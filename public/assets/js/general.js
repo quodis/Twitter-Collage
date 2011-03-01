@@ -486,8 +486,10 @@ Array.prototype.shuffle = function (){
 			// Write the data locally
 			visible_tiles = data.tiles;
 			newest_tiles = data.newest_tiles;
-			console.log(data.newest_tiles);
-			console.log(newest_tiles);
+			if ("console" in window) {
+				console.log(data.newest_tiles);
+				console.log(newest_tiles);
+			}
 			total_positions = objectLength(visible_tiles);
 			
 			// Draw the mosaic!

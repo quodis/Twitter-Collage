@@ -59,8 +59,8 @@ function main($language)
 		<link rel="stylesheet" href="<?=$config['UI']['css']['mosaic']?>" type="text/css" media="screen, projection" />
 
 		<link rel="shortcut icon" href="/favicon.ico" />
-		<link rel="apple-touch-icon" type="image/png" href="">
-		<link rel="image_src" href="">
+		<link rel="apple-touch-icon" type="image/png" href="assets/images/global/apple-touch-icon-precomposed.png">
+		<link rel="image_src" href="assets/images/global/ftp-facebook-thumb.png">
 
 		<!-- scripts -->
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
@@ -72,15 +72,14 @@ function main($language)
 
 	<body>
 
-		<div id="container">
+		<div id="container" class="clearfix">
 
-			<div class="wrapper">
+			<div class="wrapper clearfix">
 
 				<!-- HEADER -->
-				<header id="brand">
+				<header id="brand" role="banner">
 					<h1><a href="#" title="<?= _('Join the Firefox 4 Twitter Party') ?>"><?= _('Join the Firefox 4 Twitter Party') ?></a></h1>
 				</header>
-
 
 				<!-- CONTENT -->
 				<aside id="main-content" class="clearfix">
@@ -88,7 +87,7 @@ function main($language)
 					<!-- Here goes the text explaining how Firefox Twitter Party works. -->
 					<p><?= sprintf(_('Be part of Team Firefox! Tweet about Firefox 4 with the %s hashtag and your avatar will join thousands of others from around the world as part of our logo mosaic.'), '<span class="hashtag">' . $config['Twitter']['terms'] . '</span>') ?></p>
 
-					<div id="twitter-counter">
+					<div id="twitter-counter" class="clearfix">
 						<dl>
 							<dt><a href="http://twitter.com/share?related=firefox&text=<?= urlencode(_('Join me at the Firefox 4 Twitter Party and celebrate the newest version')) ?>" title="<?= _('Tweet') ?>" rel="external"><?= _('Tweet') ?></a></dt>
 							<dd><span>-</span></dd>
@@ -101,52 +100,52 @@ function main($language)
 						<label for="search-input" accesskey="f"><?= _('Find a Twitter username') ?></label>
 						<input type="text" name="search-input" id="search-input" value="<?= _('Find a Twitter username') ?>" tabindex="1" />
 						<button type="submit" name="search-button" id="search-submit-bttn" value="<?= _('Find') ?>" tabindex="2" title="<?= _('Find') ?>" class="button"><?= _('Find') ?></button>
+						<p class="error">This user haven't joined the party yet.</p>
 					</form><!-- search-box -->
 
+					<div id="download">
+						<a class="download-link download-firefox" href="http://www.mozilla.com/"><span class="download-content"><span class="download-title">Firefox 4</span><?= _('Download here') ?></span></a>
+					</div><!-- download -->
 
 				</aside><!-- main-content -->
 
-				<div id="download">
-					<a class="download-link download-firefox" href="http://www.mozilla.com/"><span class="download-content"><span class="download-title">Firefox 4</span><?= _('Download here') ?></span></a>
-				</div><!-- download -->
+				<section id="mosaic" role="img">
+					<h2><?= _('Firefox Twitter Mosaic') ?></h2>
 
+					<p id="loading"></p>
+					<img src="" id="tile-hover" />
+
+					<article id="bubble" class="bubble">
+
+						<header>
+
+							<h1><a href="#" title="<?= _('Twitter profile') ?>" rel="author external"></a><span> <?= _('wrote') ?></span></h1>
+							<a href="#" title="" rel="author external" class="twitter-avatar">
+							  <img src="" alt="<?= _('Twitter profile picture') ?>" width="48" height="48" />
+							</a>
+
+						  <time datetime="" pubdate><a href="#" rel="bookmark external" title="<?= _('Permalink') ?>"></a></time>
+
+						</header>
+
+						<p></p>
+
+					</article><!-- bubble template -->
+
+				</section>
+				
 			</div><!-- wrapper -->
 
-		<section id="mosaic">
-			<h2><?= _('Firefox Twitter Mosaic') ?></h2>
-			<p id="loading"></p>
-      <img src="" id="tile-hover" />
-			<article id="bubble" class="bubble">
+			<div id="mozilla-badge">
+				<a href="http://www.mozilla.org/" class="mozilla" title="<?= _('Visit Mozilla') ?>" rel="external"><?= _('Visit Mozilla') ?></a>
+			</div><!-- mozilla-badge -->
 
-				<header>
-
-					<h1><a href="#" title="<?= _('Twitter profile') ?>" rel="author external"></a><span> <?= _('wrote') ?></span></h1>
-					<a href="#" title="" rel="author external" class="twitter-avatar">
-					  <img src="" alt="<?= _('Twitter profile picture') ?>" width="48" height="48" />
-					</a>
-
-				  <time datetime="" pubdate><a href="#" rel="bookmark external" title="<?= _('Permalink') ?>"></a></time>
-
-				</header>
-
-				<p></p>
-
-			</article><!-- bubble -->
-
-		</section>
-
-		<div id="mozilla-badge">
-			<a href="http://www.mozilla.org/" class="mozilla" title="<?= _('Visit Mozilla') ?>" rel="external"><?= _('Visit Mozilla') ?></a>
-		</div><!-- mozilla-badge -->
-
-
-
-	</div><!-- container -->
+		</div><!-- container -->
 
 		<!-- FOOTER -->
 		<footer>
 
-			<div id="sub-footer">
+			<div id="sub-footer" role="content-info" class="clearfix">
 
 				<h3><?= _("Let's be <span>Friends!</span>") ?></h3>
 
@@ -158,31 +157,48 @@ function main($language)
 
 				<p id="sub-footer-newsletter">
 					<span class="intro"><?= _('Want us to keep in touch?') ?></span>
-					<a href="/en-US/newsletter/"><?= _('Get Monthly News') ?> <span>»</span></a>
+					<a href="http://www.mozilla.com/newsletter/"><?= _('Get Monthly News') ?> <span>»</span></a>
 				</p>
 
 			</div><!-- sub-footer -->
 
 			<div id="footer-copyright">
 
-				<p id="footer-links">
-					<a href="/en-US/privacy-policy.html"><?= _('Privacy Policy') ?></a> &nbsp;|&nbsp;
-					<a href="/en-US/about/legal.html"><?= _('Legal Notices') ?></a> &nbsp;|&nbsp;
-					<a href="/en-US/legal/fraud-report/index.html"><?= _('Report Trademark Abuse') ?></a>
-				</p>
+				<div id="footer-left">
+					<p id="footer-links">
+						<a href="http://www.mozilla.com/privacy-policy.html"><?= _('Privacy Policy') ?></a> &nbsp;|&nbsp;
+						<a href="http://www.mozilla.com/about/legal.html"><?= _('Legal Notices') ?></a> &nbsp;|&nbsp;
+						<a href="http://www.mozilla.com/legal/fraud-report/index.html"><?= _('Report Trademark Abuse') ?></a>
+					</p>
 
-				<p><?= _('Except where otherwise <a href="http://www.mozilla.com/about/legal.html#site">noted</a>, content on this site is licensed under the <br /><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.') ?></p>
+					<p><?= _('Except where otherwise <a href="http://www.mozilla.com/about/legal.html#site">noted</a>, content on this site is licensed under the <br /><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.') ?></p>
+				</div><!-- footer-left -->
+
+				<div id="footer-right"> 
+
+					<form id="lang_form" dir="ltr" method="get">
+						
+						<label for="flang">Other Languages</label> 
+			
+						<select id="flang" name="flang">    
+							<option value="af">Afrikaans</option> 
+						</select>
+					
+					</form>
+					
+				</div> <!-- footer-right -->
+
 			</div><!-- footer-copyright -->
 
 		</footer>
 
-	<script type="text/javascript">
-	//<![CDATA[
-	(function($) {
-		$.extend(party, <?=json_encode($uiOptions)?>);
-	})(jQuery);
-	//]]>
-	</script>
+		<script type="text/javascript">
+		//<![CDATA[
+		(function($) {
+			$.extend(party, <?=json_encode($uiOptions)?>);
+		})(jQuery);
+		//]]>
+		</script>
 
 	</body>
 
