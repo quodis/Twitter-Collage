@@ -281,3 +281,13 @@ http://www.opensource.org/licenses/mit-license.php
 	left:20px;
 }
 
+#tile-hover {
+	position: absolute;
+	border-width: 1px;
+	margin-left: -3px;
+	margin-top: -3px;
+	width: 16px;
+	height: 16px;
+	display: none;
+	z-index: 15;
+}
