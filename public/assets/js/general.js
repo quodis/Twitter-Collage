@@ -1,7 +1,7 @@
 var party = party || {};
 
 Array.prototype.shuffle = function (){ 
-	for(var rnd, tmp, i=this.length; i; rnd=parseInt(Math.random()*i), tmp=this[--i], this[i]=this[rnd], this[rnd]=tmp);
+	for(var rnd, tmp, i=this.length; i; rnd=parseInt(Math.random()*i, 10), tmp=this[--i], this[i]=this[rnd], this[rnd]=tmp);
 };
 
 (function () {
@@ -16,14 +16,15 @@ Array.prototype.shuffle = function (){
 		hidden_tiles = {},
 		newest_tiles = [], // Index of the most recent tiles
 		new_tiles = [], // Tiles got from the server in "real-time"
-		counter_current = 0,
-		counter_target = 0,
-		counter_timer,
-		counter_canvas,
 		total_positions = 0,
 		draw_tiles_timer,
 		performance = {},
 		tile_hover = null,
+		counter = {
+			canvas: null,
+			current: 0,
+			increment: 0
+		},
 		search = {
 			input: null,
 			original_caption: null
@@ -93,21 +94,6 @@ Array.prototype.shuffle = function (){
 	    return n_body && (!n_result || (n_result > n_body)) ? n_body : n_result;
 	}
 	
-	// Draw the Initial Mosaic
-	function initialDraw() {
-		
-		// Create an array for the random order
-		var i;
-		for (i = 0; i < total_positions; i += 1) {
-			visible_tiles_random.push(i);
-		}
-		// Randomnize!
-		visible_tiles_random.shuffle();
-		
-		// Start the recursive call for each frame
-		initial_draw_timer = window.setInterval(initialDrawFrame, (1000/party.performance.initial_frames_per_second) );
-	}
-	
 	function tileHtml(tile) {
 		var position,
 			index;
@@ -126,6 +112,22 @@ Array.prototype.shuffle = function (){
 		
 		// Add it to the HTML to draw
 		return '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + tile.imageData + '); left: ' + (index.x*12) + 'px; top: ' + (index.y*12) + 'px;"></div>';
+	}
+	
+	// Draw the Initial Mosaic
+	function initialDraw() {
+		
+		// Create an array for the random order
+		var i;
+		for (i = 0; i < total_positions; i += 1) {
+			visible_tiles_random.push(i);
+		}
+		// Randomnize!
+		visible_tiles_random.shuffle();
+		// Calculate the number of frames
+		counter.increment = parseInt(total_positions/party.performance.initial_frames_per_second, 10);
+		// Start the recursive call for each frame
+		initial_draw_timer = window.setInterval(initialDrawFrame, (1000/party.performance.initial_frames_per_second) );
 	}
 	
 	// Construct each frame for the initial draw
@@ -155,7 +157,9 @@ Array.prototype.shuffle = function (){
 
 			// Draw the tiles and proceed
 			party.canvas.append(tiles_to_draw);
-			
+			// Update counter
+			counter.current += counter.increment;
+			counter.canvas.text(counter.current);
 			// Another frame completed
 			frame_counter += 1;
 			
@@ -200,7 +204,7 @@ Array.prototype.shuffle = function (){
 	}
 	
 	// Hide the loading message
-	function loadingHide() {
+	function loadingHide(){
 		$('#loading').hide();
 		window.clearInterval(loading_message_timer);
 	}
@@ -222,7 +226,7 @@ Array.prototype.shuffle = function (){
 		}
 		
 		// Cache DOM elements
-		counter_canvas = $('#twitter-counter dd span');
+		counter.canvas = $('#twitter-counter dd span');
 		tile_hover = $('#tile-hover');
 		party.canvas = $('#mosaic');
 		bubble = $('#bubble');
@@ -234,15 +238,13 @@ Array.prototype.shuffle = function (){
 			time: bubble.find('time'),
 			time_a: bubble.find('time > a'),
 			p: bubble.find('p')
-		}
+		};
 		state.mosaic_offset = party.canvas.offset();
 		
 		// Setup the search functionality
 		searchInit();
 		// Get the page of visible tiles
 		getVisibleTiles();
-		// Start the counter
-		counter_timer = window.setInterval(counterDraw, 200);
 		// Bind the hover action
         party.canvas.bind('mousemove', function(ev) {
             var x,
@@ -283,7 +285,7 @@ Array.prototype.shuffle = function (){
 		// Keep bubble open/hover
 		tile_hover.bind('click', function(){
 			state.keep_bubble_open = !state.keep_bubble_open;
-		})
+		});
 	}
 	
 	function searchInit() {
@@ -340,7 +342,7 @@ Array.prototype.shuffle = function (){
 					right: (564 - (x * 12)) + 'px',
 					bottom: (532 - (y * 12)) + 'px',
 					left: ''
-				}
+				};
 			} else {
 				position_class = "bottom-left";
 				position_css = {
@@ -348,7 +350,7 @@ Array.prototype.shuffle = function (){
 					right: '',
 					bottom: (532 - (y * 12)) + 'px',
 					left: ((x * 12) + 2) + 'px'
-				}
+				};
 			}
 		} else {
 			if (x > 24) {
@@ -358,7 +360,7 @@ Array.prototype.shuffle = function (){
 					right: (564 - (x * 12)) + 'px',
 					bottom: '',
 					left: ''
-				}
+				};
 			} else {
 				position_class = "top-left";
 				position_css = {
@@ -366,7 +368,7 @@ Array.prototype.shuffle = function (){
 					right: '',
 					left: ((x * 12) + 8) + 'px',
 					bottom: ''
-				}
+				};
 			}	
 		}
 		
@@ -380,7 +382,7 @@ Array.prototype.shuffle = function (){
 			'left': (x*12) + 'px',
 			'top': (y*12) + 'px',
 			'border-color': 'rgb(' + g.c.join(',') + ')'
-		})
+		});
 		
 		// Change the bubble
 		b.username_a.text(tile.userName).attr('href', 'http://twitter.com/' + tile.userName);
@@ -412,41 +414,6 @@ Array.prototype.shuffle = function (){
 	        if (obj.hasOwnProperty(key)) length += 1;
 	    }
 	    return length;
-	}
-	
-	// Increment the counter's target
-	function counterIncrement(increment_by) {
-		counter_target += increment_by;
-	}
-	
-	// Update the counter UI
-	function counterDraw() {
-
-		var dif = (counter_target - counter_current),
-			inc = 1;
-		
-		// Check if we have anything to do
-		if (dif == 0) {
-			return;
-		}
-		
-		if (dif > 2048) {
-			inc = 379;
-		} else if (dif > 1024) {
-			inc = 197;
-		} else if (dif > 512) {
-			inc = 73;
-		} else if (dif > 256) {
-			inc = 39;
-		} else if (dif > 128) {
-			inc = 17;
-		} else if (dif > 64) {
-			inc = 3;
-		}
-		
-		counter_current += inc;
-		counter_canvas.text(counter_current);
-		
 	}
 	
 	// Reload the whole page
@@ -481,7 +448,6 @@ Array.prototype.shuffle = function (){
 			// Update last id
 			if (data.last_id > state.last_id) {
 				state.last_id = data.last_id;
-				counterIncrement(state.last_id);
 			}
 			// Write the data locally
 			visible_tiles = data.tiles;
@@ -514,7 +480,6 @@ Array.prototype.shuffle = function (){
 			// Update last id
 			if (data.last_id > state.last_id) {
 				state.last_id = data.last_id;
-				counterIncrement(state.last_id);
 			}
 			
 			// Write the data locally
@@ -541,14 +506,15 @@ Array.prototype.shuffle = function (){
 			pos = new_tile.position;
 			// Check if we should keep the visible or hidden tile from this position
 			// depending on which is the most recent
-			if (visible_tiles[pos].id > hidden_tiles[pos].id) {
+			if (visible_tiles[pos].id > hidden_tiles[pos].id){
 				$.extend(hidden_tiles[pos], old_visible);
 			}
 			// Write the new tile over the visible
 			$.extend(visible_tiles[pos], new_tile);
 			// Remove this tile from the new tiles
 			new_tiles.shift();
-			
+			counter.current += 1;
+			counter.canvas.text(counter.current);
 		} else {
 			// Choose a random position
 			pos = Math.floor(Math.random() * total_positions);
