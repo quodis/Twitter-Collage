@@ -195,7 +195,7 @@ Array.prototype.shuffle = function (){
 		
 		// Loop through the array
 		loadingMessage();
-		loading_message_timer = window.setInterval(loadingMessage, (party.performance.loading_message_seconds * 1000));
+		loading_message_timer = window.setInterval(loadingMessage, (party.loading_message_seconds * 1000));
 		
 	}
 	
