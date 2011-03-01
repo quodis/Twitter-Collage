@@ -452,10 +452,6 @@ Array.prototype.shuffle = function (){
 			// Write the data locally
 			visible_tiles = data.tiles;
 			newest_tiles = data.newest_tiles;
-			if ("console" in window) {
-				console.log(data.newest_tiles);
-				console.log(newest_tiles);
-			}
 			total_positions = objectLength(visible_tiles);
 			
 			// Draw the mosaic!
@@ -516,6 +512,7 @@ Array.prototype.shuffle = function (){
 			// Remove this tile from the new tiles
 			new_tiles.shift();
 			counter.current += 1;
+			console.log('new tile', counter.current);
 			counter.canvas.text(counter.current);
 		} else {
 			// Choose a random position
