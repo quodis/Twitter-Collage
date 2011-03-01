@@ -507,11 +507,11 @@ Array.prototype.shuffle = function (){
 			i;
 			
 		// Priority to new tiles
-		if (draw_new_tiles_every_counter === draw_new_tiles_every) {
+		if (state.draw_new_tiles_every_counter === draw_new_tiles_every) {
 			new_tile = new_tiles[0];
-			draw_new_tiles_every_counter = 0;
+			state.draw_new_tiles_every_counter = 0;
 		}
-		draw_new_tiles_every_counter += 1;
+		state.draw_new_tiles_every_counter += 1;
 		
 		if (new_tile) {
 			// Get the position
