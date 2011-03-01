@@ -80,12 +80,11 @@ function main()
 		<link rel="stylesheet" href="<?=$config['UI']['css']['mosaic']?>" type="text/css" media="screen, projection" />
 		<link rel="stylesheet" href="<?=$config['UI']['css']['dashboard']?>" type="text/css" media="screen, projection" />
 
-		<link rel="shortcut icon" href="assets/img/global/favicon.ico" />
+		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="apple-touch-icon" type="image/png" href="">
 		<link rel="image_src" href="">
 
 		<!-- scripts -->
-<!--		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>-->
 		<script type="text/javascript" src="/assets/js/jquery-1.4.2.min.js"></script>
 		<script type="text/javascript" src="<?=$config['UI']['js']['dashboard']?>"></script>
 		<script type="text/javascript" src="<?=$jsMosaicConfig?>"></script>
