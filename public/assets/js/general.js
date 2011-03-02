@@ -295,6 +295,7 @@ Array.prototype.shuffle = function (){
 				return;
 			}
 			hideBubble();
+			startAutoBubble();
 		});
 		// Keep bubble open/hover
 		tile_hover.bind('click', function(){
@@ -333,8 +334,11 @@ Array.prototype.shuffle = function (){
 	}
 	
 	function startAutoBubble() {
-		showAutoBubble();
-		auto_bubble_timer = setInterval(showAutoBubble, party.auto_bubble_seconds * 1000)
+		// Start it only if it's not already started
+		if (!auto_bubble_timer) {
+			showAutoBubble();
+			auto_bubble_timer = setInterval(showAutoBubble, party.auto_bubble_seconds * 1000)
+		}
 	}
 	
 	function stopAutoBubble() {
@@ -643,7 +647,7 @@ Array.prototype.shuffle = function (){
 			"Handing out name-tags"],
 		"loading_message_seconds": 2,
 		"polling_timer_seconds": 40, 
-		"auto_bubble_seconds": 10,
+		"auto_bubble_seconds": 7,
 		"grid": [],
 		"index": [],
 		"init": init,
