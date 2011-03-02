@@ -20,7 +20,7 @@ Config:
     group: quodis
 Twitter:
     urlSearch: "http://search.twitter.com/search.json"
-    terms: "#marchwish"
+    terms: "#firefox"
     rpp: 100
     pageLimit: 30
     timeout:

@@ -10,6 +10,8 @@ Array.prototype.shuffle = function (){
 		polling_timer,
 		loading_message_index,
 		tile_counter = 0,
+		auto_bubble_timer,
+		auto_bubble_index = 0,
 		frame_counter = 0,
 		visible_tiles = {},
 		visible_tiles_random = [],
@@ -20,6 +22,7 @@ Array.prototype.shuffle = function (){
 		draw_tiles_timer,
 		performance = {},
 		tile_hover = null,
+		draw_new_tiles_every = 1,
 		counter = {
 			canvas: null,
 			current: 0,
@@ -35,18 +38,19 @@ Array.prototype.shuffle = function (){
 			last_id: 0,
 			last_page: 0,
 			mosaic_offset: {},
-			new_tiles_per_second_incremental: 1
+			initial_tiles_per_frame_incremental: 1,
+			draw_new_tiles_every_counter: 0
 		},
 		available_performances = {
 			high: {
 				initial_frames_per_second: 24,
 				initial_tiles_per_frame: 10,
-				new_tiles_per_second: 12
+				new_tiles_per_second: 10
 			},
 			medium: {
 				initial_frames_per_second: 12,
 				initial_tiles_per_frame: 20,
-				new_tiles_per_second: 6
+				new_tiles_per_second: 5
 			},
 			low: {
 				initial_frames_per_second: 1,
@@ -138,12 +142,12 @@ Array.prototype.shuffle = function (){
 			j = 0,
 			p;
 		
-		// Next time draw one tile more towards new_tiles_per_second
-		if (state.new_tiles_per_second_incremental < party.performance.initial_tiles_per_frame) {
-			state.new_tiles_per_second_incremental += 0.02;
+		// Next time draw one tile more towards initial_tiles_per_frame
+		if (state.initial_tiles_per_frame_incremental < party.performance.initial_tiles_per_frame) {
+			state.initial_tiles_per_frame_incremental += 0.02;
 		}
 		
-		j = (tile_counter + state.new_tiles_per_second_incremental);
+		j = (tile_counter + state.initial_tiles_per_frame_incremental);
 		
 		// Draw tiles_per_frame tiles and draw them
 		for (i = tile_counter; i < j; i += 1) {
@@ -159,7 +163,7 @@ Array.prototype.shuffle = function (){
 			party.canvas.append(tiles_to_draw);
 			// Update counter
 			counter.current += counter.increment;
-			counter.canvas.text(counter.current);
+			setCounter();
 			// Another frame completed
 			frame_counter += 1;
 			
@@ -167,11 +171,19 @@ Array.prototype.shuffle = function (){
 			
 			// No Tiles were built - task is complete
 			window.clearInterval(initial_draw_timer);
-			
+			// Set counter to last id
+			counter.current = parseInt(state.last_id, 10);
+			setCounter();
+			startAutoBubble();
 			// Start the recursive "tile updater"
 			draw_tiles_timer = window.setInterval(drawNewTiles, (1000/party.performance.new_tiles_per_second));
 		}
 		
+	}
+	
+	// Set the counter to a new int
+	function setCounter() {
+		counter.canvas.text(counter.current);
 	}
 	
 	// Iterate through the loading messages
@@ -267,12 +279,13 @@ Array.prototype.shuffle = function (){
             if (pos) {
 				// Check if this is not the already opened bubble
 				if (state.active_bubble_pos != pos.i) {
+					stopAutoBubble();
 					state.active_bubble_pos = pos.i;
 					showBubble(pos.i);
 				}
             } else {
 				// Not a tile
-				hideBubble();
+				startAutoBubble();
 			}
         });
 		// Hide the bubble if the mouse leavese the mosaic
@@ -281,10 +294,21 @@ Array.prototype.shuffle = function (){
 				return;
 			}
 			hideBubble();
+			startAutoBubble();
 		});
 		// Keep bubble open/hover
 		tile_hover.bind('click', function(){
-			state.keep_bubble_open = !state.keep_bubble_open;
+			state.keep_bubble_open = true;
+			event.stopPropagation();
+			return false;
+		});
+		// Close the bubble
+		party.canvas.bind('click', function(){
+			hideBubble();
+			state.keep_bubble_open = false;
+		});
+		party.bubble.container.bind('click', function(event){
+			event.stopPropagation();
 		});
 	}
 	
@@ -304,6 +328,31 @@ Array.prototype.shuffle = function (){
 				$(this).val(search.original_caption);
 			}
 		});
+	}
+	
+	function showAutoBubble() {
+		var t;
+		
+		t = newest_tiles[auto_bubble_index];
+		if (!t) {
+			auto_bubble_index = 0;
+			return;
+		}
+		auto_bubble_index += 1;
+		showBubble(t.position);
+	}
+	
+	function startAutoBubble() {
+		// Start it only if it's not already started
+		if (!auto_bubble_timer) {
+			showAutoBubble();
+			auto_bubble_timer = setInterval(showAutoBubble, party.auto_bubble_seconds * 1000)
+		}
+	}
+	
+	function stopAutoBubble() {
+		clearInterval(auto_bubble_timer);
+		auto_bubble_timer = null;
 	}
 	
 	function showBubble(pos) {
@@ -498,7 +547,12 @@ Array.prototype.shuffle = function (){
 			i;
 			
 		// Priority to new tiles
-		new_tile = new_tiles[0];
+		if (state.draw_new_tiles_every_counter === draw_new_tiles_every) {
+			new_tile = new_tiles[0];
+			state.draw_new_tiles_every_counter = 0;
+		}
+		state.draw_new_tiles_every_counter += 1;
+		
 		if (new_tile) {
 			// Get the position
 			pos = new_tile.position;
@@ -509,11 +563,14 @@ Array.prototype.shuffle = function (){
 			}
 			// Write the new tile over the visible
 			$.extend(visible_tiles[pos], new_tile);
+			// Store this to the newest tiles to autoplay
+			newest_tiles.shift();
+			newest_tiles.push({id: new_tile.id, position: pos});
 			// Remove this tile from the new tiles
 			new_tiles.shift();
+			
 			counter.current += 1;
-			console.log('new tile', counter.current);
-			counter.canvas.text(counter.current);
+			setCounter();
 		} else {
 			// Choose a random position
 			pos = Math.floor(Math.random() * total_positions);
@@ -553,10 +610,8 @@ Array.prototype.shuffle = function (){
 				if (data.payload.last_id > state.last_id) {
 					state.last_id = data.payload.last_id;
 				}
-				
 				// Append the data locally
-				new_tiles.concat(data.payload.tiles);
-				
+				new_tiles = new_tiles.concat(data.payload.tiles);
 			}
 		});
 	}
@@ -601,7 +656,8 @@ Array.prototype.shuffle = function (){
 			"Cooling drinks to ideal temperature",
 			"Handing out name-tags"],
 		"loading_message_seconds": 2,
-		"polling_timer_seconds": 60, 
+		"polling_timer_seconds": 40, 
+		"auto_bubble_seconds": 7,
 		"grid": [],
 		"index": [],
 		"init": init,
@@ -612,7 +668,8 @@ Array.prototype.shuffle = function (){
 		"performance": performance,
 		"available_performances": available_performances,
 		"state": state,
-		"newest_tiles": newest_tiles
+		"new_tiles": new_tiles,
+		"draw_new_tiles_every": 4
 	});
 	
 }());
