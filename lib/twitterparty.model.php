@@ -110,6 +110,49 @@ final class Tweet
 
 
 	/**
+	 * delete tweet
+	 *
+	 * @param integer $id
+	 * @param string $imageData (by reference)
+	 *
+	 * @return DataResult
+	 */
+	public static function delete($id)
+	{
+		$id = Db::escape($id);
+
+		// update tweet
+		$sql = "DELETE FROM `tweet` WHERE id = '$id'";
+		$result = Db::execute($sql);
+
+		return $result;
+	}
+
+
+	/**
+	 * delete tweets of user
+	 *
+	 * @param integer $userId
+	 *
+	 * @return DataResult
+	 */
+	public static function deleteUser($userId)
+	{
+		$userId = Db::escape($userId);
+
+		dd($userId);
+
+		// update tweet
+		$sql = "DELETE FROM `tweet` WHERE `userid` = '$userId'";
+		$result = Db::execute($sql);
+
+		dd($sql);
+
+		return $result;
+	}
+
+
+	/**
 	 * count tweets
 	 *
 	 * @param boolean $withImage (optional, defaults to FALSE)
@@ -401,7 +444,7 @@ final class Tweet
 		$withImage = !!$withImage;
 
 		//$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
-		$sql = "SELECT id, position, twitterId, userName, imageUrl, createdTs, contents, imageData FROM `tweet` ";
+		$sql = "SELECT id, position, twitterId, userId, userName, imageUrl, createdTs, contents, imageData FROM `tweet` ";
 		$sql.= " WHERE `userName` LIKE '%$terms%'";
 
 		if ($withImage) $sql.= "  AND processedTs";
