@@ -332,6 +332,7 @@ Array.prototype.shuffle = function (){
 	}
 	
 	function showAutoBubble() {
+		console.log('showAutoBubble');
 		var t;
 		
 		t = newest_tiles[auto_bubble_index];
