@@ -285,7 +285,6 @@ Array.prototype.shuffle = function (){
 				}
             } else {
 				// Not a tile
-				hideBubble();
 				startAutoBubble();
 			}
         });
@@ -300,6 +299,7 @@ Array.prototype.shuffle = function (){
 		// Keep bubble open/hover
 		tile_hover.bind('click', function(){
 			state.keep_bubble_open = !state.keep_bubble_open;
+			event.stopPropagation();
 		});
 		// Close the bubble
 		party.canvas.bind('click', function(){
