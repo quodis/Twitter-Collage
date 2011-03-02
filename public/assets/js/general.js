@@ -344,6 +344,7 @@ Array.prototype.shuffle = function (){
 	}
 	
 	function startAutoBubble() {
+		console.log('startAutoBubble');
 		// Start it only if it's not already started
 		if (!auto_bubble_timer) {
 			showAutoBubble();
@@ -352,6 +353,7 @@ Array.prototype.shuffle = function (){
 	}
 	
 	function stopAutoBubble() {
+		console.log('stopAutoBubble');
 		clearInterval(auto_bubble_timer);
 		auto_bubble_timer = null;
 	}
