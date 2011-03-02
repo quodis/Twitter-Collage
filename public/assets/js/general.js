@@ -298,15 +298,16 @@ Array.prototype.shuffle = function (){
 		});
 		// Keep bubble open/hover
 		tile_hover.bind('click', function(){
-			state.keep_bubble_open = !state.keep_bubble_open;
+			state.keep_bubble_open = true;
 			event.stopPropagation();
+			return false;
 		});
 		// Close the bubble
 		party.canvas.bind('click', function(){
 			hideBubble();
 			state.keep_bubble_open = false;
 		});
-		party.bubble.bind('click', function(event){
+		party.bubble.container.bind('click', function(event){
 			event.stopPropagation();
 		});
 	}
