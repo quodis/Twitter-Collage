@@ -10,6 +10,8 @@ Array.prototype.shuffle = function (){
 		polling_timer,
 		loading_message_index,
 		tile_counter = 0,
+		auto_bubble_timer,
+		auto_bubble_index = 0,
 		frame_counter = 0,
 		visible_tiles = {},
 		visible_tiles_random = [],
@@ -172,6 +174,7 @@ Array.prototype.shuffle = function (){
 			// Set counter to last id
 			counter.current = parseInt(state.last_id, 10);
 			setCounter();
+			startAutoBubble();
 			// Start the recursive "tile updater"
 			draw_tiles_timer = window.setInterval(drawNewTiles, (1000/party.performance.new_tiles_per_second));
 		}
@@ -276,12 +279,14 @@ Array.prototype.shuffle = function (){
             if (pos) {
 				// Check if this is not the already opened bubble
 				if (state.active_bubble_pos != pos.i) {
+					stopAutoBubble();
 					state.active_bubble_pos = pos.i;
 					showBubble(pos.i);
 				}
             } else {
 				// Not a tile
 				hideBubble();
+				startAutoBubble();
 			}
         });
 		// Hide the bubble if the mouse leavese the mosaic
@@ -313,6 +318,27 @@ Array.prototype.shuffle = function (){
 				$(this).val(search.original_caption);
 			}
 		});
+	}
+	
+	function showAutoBubble() {
+		var t;
+		
+		t = newest_tiles[auto_bubble_index];
+		if (!t) {
+			auto_bubble_index = 0;
+			return;
+		}
+		auto_bubble_index += 1;
+		showBubble(t.position);
+	}
+	
+	function startAutoBubble() {
+		showAutoBubble();
+		auto_bubble_timer = setInterval(showAutoBubble, party.auto_bubble_seconds * 1000)
+	}
+	
+	function stopAutoBubble() {
+		clearInterval(auto_bubble_timer);
 	}
 	
 	function showBubble(pos) {
@@ -461,7 +487,6 @@ Array.prototype.shuffle = function (){
 			// Write the data locally
 			visible_tiles = data.tiles;
 			newest_tiles = data.newest_tiles;
-			console.log(newest_tiles);
 			total_positions = objectLength(visible_tiles);
 			
 			// Draw the mosaic!
@@ -524,8 +549,12 @@ Array.prototype.shuffle = function (){
 			}
 			// Write the new tile over the visible
 			$.extend(visible_tiles[pos], new_tile);
+			// Store this to the newest tiles to autoplay
+			newest_tiles.shift();
+			newest_tiles.push({id: new_tile.id, position: pos});
 			// Remove this tile from the new tiles
 			new_tiles.shift();
+			
 			counter.current += 1;
 			setCounter();
 		} else {
@@ -614,6 +643,7 @@ Array.prototype.shuffle = function (){
 			"Handing out name-tags"],
 		"loading_message_seconds": 2,
 		"polling_timer_seconds": 40, 
+		"auto_bubble_seconds": 10,
 		"grid": [],
 		"index": [],
 		"init": init,
