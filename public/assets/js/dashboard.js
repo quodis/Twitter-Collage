@@ -262,13 +262,12 @@ var party = party || {};
 		
 		getTweetHtml : function(tweet)
 		{
-			var date = new Date(tweet.createdDate * 1000);
-			console.log(tweet.createdDate, date);
+			var date = new Date(tweet.createdTs * 1000);
 			// page, position, twitterId, userId, isoLanguage
 			var contents = '<img src="' + tweet.imageUrl + '">\
 				<p class="contents">' + tweet.contents + '</p>\
 				<p class="user-name">' + tweet.userName + '</p>\
-				<p class="created-date">' + date.format("Y-m-d H:i:s") + '</p>';
+				<p class="created-date">' + date + '</p>';
 			return contents;
 		},
 		
