@@ -71,7 +71,7 @@ var party = party || {};
 			
 			this.buildInterface();
 			
-			this.loadPage(this.state.last_page + 1);
+			this.loadPage(parseInt(this.state.last_page) + 1);
 		},
 
 
@@ -262,11 +262,13 @@ var party = party || {};
 		
 		getTweetHtml : function(tweet)
 		{
+			var date = new Date(tweet.createdDate * 1000);
+			console.log(tweet.createdDate, date);
 			// page, position, twitterId, userId, isoLanguage
 			var contents = '<img src="' + tweet.imageUrl + '">\
 				<p class="contents">' + tweet.contents + '</p>\
 				<p class="user-name">' + tweet.userName + '</p>\
-				<p class="created-date">' + tweet.createdDate + '</p>';
+				<p class="created-date">' + date.format("Y-m-d H:i:s") + '</p>';
 			return contents;
 		},
 		
