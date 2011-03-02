@@ -301,6 +301,14 @@ Array.prototype.shuffle = function (){
 		tile_hover.bind('click', function(){
 			state.keep_bubble_open = !state.keep_bubble_open;
 		});
+		// Close the bubble
+		party.canvas.bind('click', function(){
+			hideBubble();
+			state.keep_bubble_open = false;
+		});
+		party.bubble.bind('click', function(event){
+			event.stopPropagation();
+		});
 	}
 	
 	function searchInit() {
@@ -343,6 +351,7 @@ Array.prototype.shuffle = function (){
 	
 	function stopAutoBubble() {
 		clearInterval(auto_bubble_timer);
+		auto_bubble_timer = null;
 	}
 	
 	function showBubble(pos) {
