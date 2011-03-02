@@ -297,18 +297,19 @@ Array.prototype.shuffle = function (){
 			startAutoBubble();
 		});
 		// Keep bubble open/hover
-		tile_hover.bind('click', function(){
-			state.keep_bubble_open = true;
+		// tile_hover.bind('click', function(){
+		// 	state.keep_bubble_open = true;
+		// 	event.stopPropagation();
+		// 	return false;
+		// });
+		// Close the bubble
+		party.canvas.bind('click', hideBubble);
+		party.bubble.container.bind('click', function(event){
+			if (!state.keep_bubble_open) {
+				state.keep_bubble_open = true;
+			}
 			event.stopPropagation();
 			return false;
-		});
-		// Close the bubble
-		party.canvas.bind('click', function(){
-			hideBubble();
-			state.keep_bubble_open = false;
-		});
-		party.bubble.container.bind('click', function(event){
-			event.stopPropagation();
 		});
 	}
 	
