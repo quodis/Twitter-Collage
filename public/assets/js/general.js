@@ -290,6 +290,7 @@ Array.prototype.shuffle = function (){
         });
 		// Hide the bubble if the mouse leavese the mosaic
 		party.canvas.bind('mouseout', function() {
+			console.log('mosaic.mouseot');
 			if (state.keep_bubble_open) {
 				return;
 			}
