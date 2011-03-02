@@ -558,6 +558,7 @@ footer a:hover {
 	position: absolute;
 	bottom: 10px;
 	z-index: 20;
+	display: none;
 }
 
 #search-box .error p {

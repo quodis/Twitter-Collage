@@ -324,10 +324,51 @@ Array.prototype.shuffle = function (){
 				$(this).val('');
 			}
 		});
+		
 		search.input_dom.blur(function(){
 			if ($(this).val() == '') {
 				$(this).val(search.original_caption);
 			}
+		});
+		
+		$('#search-box').submit(function() {
+		  	// Show loading
+			$('#search-box button').addClass('loading');
+			// Request server
+			var url = '/tweets-by-username.php?user_name=' + search.input_dom.val();
+			$.getJSON(url, function(data) {
+				var new_tile,
+					pos;
+				// Hide Loading
+				$('#search-box button').removeClass('loading');
+				
+				if (data.payload.total == 0) {
+					// No results!
+					$('#search-box .error').fadeIn('fast');
+					window.setTimeout(function(){
+						$('#search-box .error').fadeOut('fast');
+					}, 3 * 1000);
+					return;
+				}
+				
+				// Found a result
+				new_tile = data.payload.tweets[0];
+				pos = new_tile.position;
+				// Check if we should keep the visible or hidden tile from this position
+				// depending on which is the most recent
+				if (visible_tiles[pos].id > hidden_tiles[pos].id){
+					$.extend(hidden_tiles[pos], visible_tiles[pos]);
+				}
+				// Write the new tile over the visible
+				$.extend(visible_tiles[pos], new_tile);
+				// Show and persist it!
+				stopAutoBubble();
+				state.keep_bubble_open = true;
+				showBubble(pos);
+
+			});
+			
+			return false;
 		});
 	}
 	
@@ -347,7 +388,7 @@ Array.prototype.shuffle = function (){
 		// Start it only if it's not already started
 		if (!auto_bubble_timer) {
 			showAutoBubble();
-			auto_bubble_timer = setInterval(showAutoBubble, party.auto_bubble_seconds * 1000)
+			auto_bubble_timer = setInterval(showAutoBubble, party.auto_bubble_seconds * 1000);
 		}
 	}
 	
