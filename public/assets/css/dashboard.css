@@ -434,6 +434,7 @@ body.shade #mosaic {
 .tweet img {
 	float:left;
 	margin-right:10px;
+	margin-bottom:20px;
 }
 
 .tweet .contents {
@@ -452,12 +453,7 @@ body.shade #mosaic {
 	font-size:11px;
 	line-height:24px;
 }
-
-#highlight .tweet img {
-	margin-bottom: 40px;
-}
-
-#highlight .tweet .user-link {
+.tweet .user-link {
 	float:left;
 	clear: both;
 	margin: 10px 10px 0 0;
@@ -467,9 +463,14 @@ body.shade #mosaic {
 	color: #1B5898;
 	cursor: pointer;
 }
-#highlight .tweet .user-link:hover {
+.tweet .user-link:hover {
 	text-decoration: underline
 }
+
+#highlight .tweet img {
+	margin-bottom: 40px;
+}
+
 #highlight .tweet .delete {
 	float: right;
 }
@@ -493,21 +494,10 @@ body.shade #mosaic {
 
 .list article {
 	padding:6px;
-	cursor:pointer;
 	border: 1px solid #A6BFCC;
 	border-radius:4px;
 	background-color:#ffffff;
 	-moz-border-radius:4px;
-}
-.list article:hover {
-	background-color:#DAECF7;
-}
-
-.user-tweets .list .tweet {
-	cursor:default;
-}
-.user-tweets .list .tweet:hover {
-	background-color:#ffffff;
 }
 
 /* -- tweet-list -- */
@@ -527,6 +517,10 @@ body.shade #mosaic {
 	width:250px;
 	margin:0 24px 12px 0;
 	min-height:48px;
+	cursor:pointer;
+}
+#user-list .user:hover {
+	background-color:#DAECF7;
 }
 
 #user-list .user:nth-child(odd) {

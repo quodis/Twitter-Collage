@@ -251,8 +251,13 @@ var party = party || {};
 			var deleteBtn ='<button class="delete">delete tweet</button>';
 			var userBtn = '<span class="user-link">all tweets by ' + tile.userName + '</span>';
 			$(this.getTitleHtml('Tweet') + '<article class="tweet clearfix">' + this.getTweetHtml(tile) + userBtn + deleteBtn + '</article>').appendTo('#widgets #highlight');
+			$('#highlight .delete').click( function() {
+				this.deleteTweet(tile.id, function() {
+					this.reset();
+				}.bind(this) );
+			}.bind(this) );
 			$('#highlight .user-link').click( function() {
-				this.showUser(tile.userName, tile.imageUrl);
+				this.showUser(tile.userId, tile.userName, tile.imageUrl);
 			}.bind(this)  );
 		},
 		
@@ -307,7 +312,7 @@ var party = party || {};
 				$('#loading').remove();
 				
 				if (data.total == 1) {
-					this.showUser(data.users[0].userName, data.users[0].imageUrl);
+					this.showUser(data.users[0].userId, data.users[0].userName, data.users[0].imageUrl);
 					return;
 				}
 				
@@ -324,20 +329,20 @@ var party = party || {};
 				
 				for (i = 0; i < data.users.length; i++) {
 					for (i = 0; i < data.users.length; i++) {
-						$('<article class="user clearfix">' + this.getUserHtml(data.users[i]) + '</article>').appendTo('#widgets #user-list');
+						$('<article class="user clearfix" data-id="' + data.users[i].userId + '">' + this.getUserHtml(data.users[i]) + '</article>').appendTo('#widgets #user-list');
 					}
 					// user-name click
 					$('#user-list .user').click( function(ev) {
 						ev.stopPropagation();
 						var el = $(ev.target).hasClass('user') ? $(ev.target) : $(ev.target).parents('.user');
-						this.showUser(el.find('.user-name').text(), el.find('img').attr('src'));
+						this.showUser(el.attr('data-id'), el.find('.user-name').text(), el.find('img').attr('src'));
 					}.bind(this) );
 				}
 			}.bind(this), 'users-by-terms' );
 		},
 		
 		
-		showUser : function(name, picture_url)
+		showUser : function(userId, name, picture_url)
 		{
 			this.reset();
 			
@@ -352,7 +357,12 @@ var party = party || {};
 				<img src="' + picture_url + '" />\
 				<p class="user-name">' + name + '</p>\
 				<button class="delete">delete user</button>';
-			$('<article class="user clearfix">' + html + '</article>').appendTo('#widgets #highlight');
+			$('<article class="user clearfix" data-id="' + userId + '">' + html + '</article>').appendTo('#widgets #highlight');
+			$('.user .delete').click( function() {
+				this.deleteUser(userId, function() {
+					this.reset();
+				}.bind(this) );
+			}.bind(this) );
 			
 			// load
 			this.load('/tweets-by-username.php', {'user_name' : name}, function(data) {
@@ -371,8 +381,14 @@ var party = party || {};
 				}
 				
 				for (i = 0; i < data.tweets.length; i++) {
-					$('<article class="tweet clearfix">' + this.getTweetHtml(data.tweets[i]) + '<button class="delete">delete tweet</button></article>').appendTo('#widgets #tweet-list');
+					$('<article class="tweet clearfix">' + this.getTweetHtml(data.tweets[i]) + '<button class="delete" data-id="' + data.tweets[i].id + '">delete tweet</button></article>').appendTo('#widgets #tweet-list');
 				}
+				$('.tweet .delete').click( function(ev) {
+					ev.stopPropagation();
+					this.deleteTweet($(ev.target).attr('data-id'), function() {
+						$(ev.target).parents('.tweet').remove();
+					} );
+				}.bind(this) );
 			}.bind(this), 'users-by-terms' );
 		},
 		
@@ -400,15 +416,33 @@ var party = party || {};
 				}
 				
 				for (i = 0; i < data.tweets.length; i++) {
-					$('<article class="tweet clearfix">' + this.getTweetHtml(data.tweets[i]) + '<button class="delete">delete tweet</button></article>').appendTo('#widgets #tweet-list');
+					var deleteBtn ='<button class="delete">delete tweet</button>';
+					var userBtn = '<span class="user-link">all tweets by ' + data.tweets[i].userName + '</span>';
+					$('<article class="tweet clearfix" data-id="' + data.tweets[i].id + '">' + this.getTweetHtml(data.tweets[i]) + userBtn + deleteBtn + '</article>').appendTo('#widgets #tweet-list');
 				}
 				// user-name click
-				$('#tweet-list .tweet').click( function(ev) {
+				$('#tweet-list .user-link').click( function(ev) {
 					ev.stopPropagation();
 					var el = $(ev.target).hasClass('tweet') ? $(ev.target) : $(ev.target).parents('.tweet');
-					this.showUser(el.find('.user-name').text(), el.find('img').attr('src'));
+					this.showUser(el.attr('data-id'), el.find('.user-name').text(), el.find('img').attr('src'));
+				}.bind(this) );
+				// delete
+				$('.tweet .delete').click( function(ev) {
+					ev.stopPropagation();
+					var el = $(ev.target).hasClass('tweet') ? $(ev.target) : $(ev.target).parents('.tweet');
+					this.deleteTweet(el.attr('data-id'), function() {
+						el.remove();
+					} );
 				}.bind(this) );
 			}.bind(this), 'tweets-by-terms' );
+		},
+		
+		deleteTweet : function(id, callback) {
+			this.post('tweet-delete.php', { 'id' : id }, callback )
+		},
+		
+		deleteUser : function(id, callback) {
+			this.post('user-delete.php', { 'user_id' : id}, callback )
 		},
 
 		// ---- ajax helpers
@@ -469,12 +503,14 @@ var party = party || {};
 		
 		post : function(url, params, callback, noFeedback) 
 		{
+			console.log(url, params);
+			
 			$.ajax( {
-				type: 'POST',
-				url: 'json/' + url,
-				dataType: 'json',
-				data: params,
-				success: function(data) {
+				'type': 'POST',
+				'url': url,
+				'dataType': 'json',
+				'data': params,
+				'success': function(data) {
 					var noFeedback = ("undefined" == typeof noFeedback) ? noFeedback : false; 
 					if (!data) {
 						this.postError('NO_DATA', data);
