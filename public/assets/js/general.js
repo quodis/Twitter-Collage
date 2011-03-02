@@ -290,8 +290,7 @@ Array.prototype.shuffle = function (){
         });
 		// Hide the bubble if the mouse leavese the mosaic
 		party.canvas.bind('mouseout', function() {
-			console.log('mosaic.mouseot');
-			if (state.keep_bubble_open) {
+			if (state.keep_bubble_open || auto_bubble_timer) {
 				return;
 			}
 			hideBubble();
@@ -333,7 +332,6 @@ Array.prototype.shuffle = function (){
 	}
 	
 	function showAutoBubble() {
-		console.log('showAutoBubble');
 		var t;
 		
 		t = newest_tiles[auto_bubble_index];
@@ -346,7 +344,6 @@ Array.prototype.shuffle = function (){
 	}
 	
 	function startAutoBubble() {
-		console.log('startAutoBubble');
 		// Start it only if it's not already started
 		if (!auto_bubble_timer) {
 			showAutoBubble();
@@ -355,7 +352,6 @@ Array.prototype.shuffle = function (){
 	}
 	
 	function stopAutoBubble() {
-		console.log('stopAutoBubble');
 		clearInterval(auto_bubble_timer);
 		auto_bubble_timer = null;
 	}
