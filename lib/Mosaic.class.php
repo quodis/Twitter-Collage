@@ -173,6 +173,10 @@ class Mosaic
 		}
 	}
 
+
+	/**
+	 * saves php configuration
+	 */
 	public static function saveConfig()
 	{
 		$fileName = self::_getPageConfigFileName();
@@ -184,9 +188,37 @@ class Mosaic
 		return $fileName;
 	}
 
+	/**
+	 * saves js configuration
+	 *
+	 * stripped down
+	 */
 	public static function saveJsConfig()
 	{
 		$fileName = self::$_config['Store']['path'] . '/config/grid.js';
+
+		$js = array(
+			'grid' => array(),
+			'index' => array()
+		);
+
+		// make config (grid + index)
+		foreach ($_config['grid'] as $rowIx => $rowPixels)
+		{
+			foreach ($rowPixels as $columnIx => $pos)
+			{
+				// store grid
+				$js[$rowIx][$rowPixels] = array(
+					'r' => $pos['r'],
+					'i' => $index,
+				);
+
+				// and index
+				self::$_pageConfig['index'][$index] = array($columnIx, $rowIx);
+
+				$index++;
+			}
+		}
 
 		$contents = '/**
  * Firefox 4 Twitter Party
@@ -208,7 +240,7 @@ class Mosaic
  * party.mosaic.index = array of pos
  *   pos - {x: 34, y: 23}
  */
-party.mosaic = ' . json_encode(self::$_pageConfig) . ';
+party.mosaic = ' . json_encode($config) . ';
 ';
 
 		file_put_contents($fileName, $contents);
