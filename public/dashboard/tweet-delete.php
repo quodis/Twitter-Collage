@@ -16,6 +16,9 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include '../../bootstrap.php';
 
+	Debug::setLogMsgFile($config['App']['pathLog'] .'/dashboard.msg.log');
+	Debug::setLogErrorFile($config['App']['pathLog'] .'/dashboard.error.log');
+
 	$id = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
 
 	$result = Tweet::delete($id);

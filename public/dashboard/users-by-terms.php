@@ -16,6 +16,9 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include '../../bootstrap.php';
 
+	Debug::setLogMsgFile($config['App']['pathLog'] .'/dashboard.msg.log');
+	Debug::setLogErrorFile($config['App']['pathLog'] .'/dashboard.error.log');
+
 	$terms = (isset($_REQUEST['terms'])) ? $_REQUEST['terms'] : null;
 
 	$result = Tweet::getUsersByTerms($terms, $config['UI']['resultsLimit']);

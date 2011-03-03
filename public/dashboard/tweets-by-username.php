@@ -16,6 +16,9 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include '../../bootstrap.php';
 
+	Debug::setLogMsgFile($config['App']['pathLog'] .'/dashboard.msg.log');
+	Debug::setLogErrorFile($config['App']['pathLog'] .'/dashboard.error.log');
+
 	$userName = (isset($_REQUEST['user_name'])) ? $_REQUEST['user_name'] : null;
 
 	$result = Tweet::getByUserName($userName, $config['UI']['resultsLimit'], TRUE);
