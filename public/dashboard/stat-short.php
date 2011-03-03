@@ -35,6 +35,8 @@ function main()
 		)
 	);
 
+	Debug::logMsg('delete:' . $userId . ' msg:' . $msg);
+
 	Dispatch::now(1, 'OK', $data);
 
 } // main()

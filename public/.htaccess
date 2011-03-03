@@ -1,12 +1,21 @@
+Options -Indexes
+
 <IfModule mod_rewrite.c>
 	RewriteEngine on
 
 	# Block access to "hidden" directories whose names begin with a period.
 	RewriteRule "(^|/)\." - [F]
-	# Pass all requests not referring directly to files in the filesystem to
-	# index.php.
-	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteCond %{REQUEST_URI} !=/favicon.ico
-	RewriteRule ^ index.php [L]
+
+	# Pass language code onto index.php
+	RewriteRule ^([a-z]{2}-[a-zA-Z]{2})$ index.php [L]
+
+	# Alias for /dashboard
+	RewriteRule ^dashboard$ dashboard.php
+
+	# Add mimetypes
+	AddType application/vnd.ms-fontobject                   eot
+	AddType font/ttf                                        ttf
+	AddType font/otf                                        otf
+	AddType font/woff                                       woff
+	AddType application/text-json                           json
 </IfModule>

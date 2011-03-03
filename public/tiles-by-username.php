@@ -23,14 +23,14 @@ function main()
 	// init response
 
 	$data = array(
-		'tweets' => array(),
+		'tiles' => array(),
 		'total' => $result->total(),
 		'count' => $result->count()
 	);
 
 	while ($tweet = $result->row())
 	{
-		$data['tweets'][] = $tweet;
+		$data['tiles'][] = $tweet;
 	}
 
 	Debug::logMsg('userName:' . $userName . ' count:' . $data['count'] . ' total:' . $data['total']);

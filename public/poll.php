@@ -16,9 +16,14 @@ function main()
 	DEFINE('CONTEXT', __FILE__);
 	include '../bootstrap.php';
 
+	Debug::setLogMsgFile($config['App']['pathLog'] .'/www.msg.log');
+	Debug::setLogErrorFile($config['App']['pathLog'] .'/www.error.log');
+
 	$lastId = (isset($_REQUEST['last_id'])) ? (int)$_REQUEST['last_id'] : null;
 
-	$result = Tweet::getSinceLastId($lastId, $config['UI']['pollLimit'], TRUE);
+	$limit = $config['UI']['pollLimit'] - 5 + rand(0, 10);
+
+	$result = Tweet::getSinceLastId($lastId, $limit, TRUE);
 
 	// init response
 

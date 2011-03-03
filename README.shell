@@ -11,12 +11,17 @@
 #### INSTALLATION ####
 
 # This document assumes:
-# - a single server deployment (ubuntu) DO NOT USE IN MULTI-SERVER ENVIRONMENT
+# - a single server deployment (ubuntu) 
 # - code is at /servers/prod/twitterparty
 # - data is at /servers/data/twitterparty
 # - user is root, current working dir is /servers/prod/twitterparty
 # - configuration file is "config/config.prod.yaml"
-# - daemontools is used to supervise jobs (DO NOT RUN JOBS AS CRON JOBS)
+# - daemontools is used to supervise jobs 
+
+# IMPORTANT: 
+#
+# DO NOT INSTALL JOBS AS CRON JOBS
+# DO NOT USE IN MULTI-SERVER ENVIRONMENT
 
 
 
@@ -102,11 +107,9 @@ mysql -u root -p
 ## -- web (apache)
 
 
-
 # HOST twitterparty.mozilla.org 
 # doc root /servers/develop/twitterparty/public
-# rewrite "^/([a-z]{2}-[a-zA-Z]{2})$" => "index.php?locale=$1"
-# rewrite "^/dashboard$" => "dashboard.php"
+# public/.htaccess does the rest
 
 # web should now be available at http://twitterparty.mozilla.org and http://twitterparty.mozilla.org/dashboard
 
@@ -117,7 +120,7 @@ mysql -u root -p
 #  font/woff                                       woff
 #  application/text-json                           json
 
-# enable compression (png,css,js,json files)
+# enable compression (png, gif, css, js, json, eot, svg, ttf, woff)
 
 # disable directory listing
 
@@ -171,20 +174,20 @@ svc -t /etc/service/twitterparty-*
 
 #### LOGS ####
 
-# assuming logs are /var/log/twitterparty
+# assuming logs are at /var/log/twitterparty
 
 ## -- web --
 
 # lighttpd access > /var/log/lighttpd/access.log 
 # lighttpd errors > /var/log/lighttpd/error.log
 
-# twitterparty web /var/log/twitterparty/www.msg.log
-# twitterparty web errors > /var/log/twitterparty/www.error.log
+# twitterparty web (messages) > www.msg.log
+# twitterparty web (errors) > www.error.log
 
-# twitterparty dashboard messages > /var/log/twitterparty/dashboard.msg.log
-# twitterparty dashboard errors > /var/log/twitterparty/dashboard.error.log
+# twitterparty dashboard (messages) > dashboard.msg.log
+# twitterparty dashboard (errors) > dashboard.error.log
 
 ## -- jobs -- 
 
-# jobs log their messages in LOGPATH/JOBNAME-msg.log
-#   and log their errors in LOGPATH/JOBNAME-error.log
+# messages are logged in JOBNAME-msg.log
+# errors are logged in JOBNAME-error.log
