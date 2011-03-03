@@ -35,7 +35,7 @@ function main()
 		)
 	);
 
-	Debug::logMsg('delete:' . $userId . ' msg:' . $msg);
+	Debug::logMsg('stat-short, last_page:' . $data['last_page'] . ' tweet_count:' . $data['tweet_count']);
 
 	Dispatch::now(1, 'OK', $data);
 

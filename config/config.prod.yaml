@@ -1,3 +1,12 @@
+#
+# Firefox 4 Twitter Party
+#
+# For deployment in a single server, assuming: 
+# - mysql and memcache are local
+# - url is http://twitterparty.mozilla.org 
+# - deployment path is /servers/prod/twitterparty
+# - data path is /servers/data/twitterparty
+#
 App:
     # path    
     path: /servers/prod/twitterparty
@@ -35,7 +44,7 @@ Mosaic:
     rows: 47
     tileSize: 12
     colorDepth: 12
-    internalComposite: 1
+    internalComposite: 0
 Jobs:
     twitter-search:
         period: 10
@@ -71,12 +80,6 @@ Db:
               write:
                   <<: *connectionDefaults
                   mode: _modeWrite
-          installConnection:
-              <<: *connectionDefaults
-              name: 
-              mode: _modeWrite
-              user: install
-              pass: install
 UI:
     gaEnabled: "0"
     gaId: ""
