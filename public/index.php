@@ -197,7 +197,7 @@ function main($language)
 						<label for="flang">Other Languages</label>
 
 						<select id="flang" name="flang">
-							<option value="af">Afrikaans</option>
+							<option value="pt-PT">Português (Europeu)</option>
 						</select>
 
 					</form>

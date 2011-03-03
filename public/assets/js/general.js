@@ -104,7 +104,7 @@ var party = party || {};
 		// Calculate the number of frames
 		f = parseInt(total_positions/party.performance.initial_frames_per_second, 10);
 		// Calculate the counter increment on each frame
-		counter.increment = parseInt(state.total_tiles/f);
+		counter.increment = parseInt(state.total_tiles/f, 10);
 		// Start the recursive call for each frame
 		initial_draw_timer = window.setInterval(initialDrawFrame, (1000/party.performance.initial_frames_per_second) );
 	}
@@ -269,7 +269,7 @@ var party = party || {};
 			startAutoBubble();
 		});
 		// Keep bubble open/hover
-		tile_hover.bind('click', function(){
+		tile_hover.bind('click', function(event){
 			state.keep_bubble_open = true;
 			event.stopPropagation();
 			return false;
@@ -281,7 +281,7 @@ var party = party || {};
 				state.keep_bubble_open = true;
 			}
 			event.stopPropagation();
-			return false;
+			return (event.target.nodeName.toLowerCase() == 'a');
 		});
 	}
 	
@@ -450,8 +450,7 @@ var party = party || {};
 		tile_hover.attr('src', 'data:image/gif;base64,' + tile.imageData);
 		tile_hover.css({
 			'left': (x*12) + 'px',
-			'top': (y*12) + 'px',
-			'border-color': 'rgb(' + g.c.join(',') + ')'
+			'top': (y*12) + 'px'
 		});
 		
 		// Change the bubble
@@ -603,7 +602,7 @@ var party = party || {};
 	
 	// Start the Real-time polling
 	function startPolling() {
-
+return;
 		// Start the recursive poller
 		poll();
 		polling_timer = window.setInterval(poll, (party.polling_timer_seconds * 1000));
@@ -684,11 +683,9 @@ $(document).ready(function() {
 	
 	// Let's get it started!
 	party.init();
-
-	// Resize listener
-	// $(window).resize(function() {
-	// 	console.log('resizing');
-	// 	party.state.mosaic_offset = party.canvas.offset();
-	// });
+	
+	$('#flang').change(function(){
+		window.location = '/' + $(this).val();
+	});
 	
 });
