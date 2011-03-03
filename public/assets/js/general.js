@@ -570,7 +570,7 @@ var party = party || {};
 			total_positions = autoplay_pool.length;
 			autoplay_pool.sort();
 			autoplay_pool = autoplay_pool.slice(0, 199);
-			console.log(autoplay_pool[4]);
+			console.log(autoplay_pool);
 			
 			state.total_tiles = parseInt(party.state.last_page * total_positions, 10);
 			
