@@ -227,6 +227,7 @@ Array.prototype.shuffle = function (){
 	
 	// Hide the loading message
 	function loadingHide(){
+		return;
 		window.clearInterval(loading_message_timer);
 		$('#loading').remove();
 	}

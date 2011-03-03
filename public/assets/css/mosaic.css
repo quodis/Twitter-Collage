@@ -20,6 +20,7 @@ Licensed under a Creative Commons Attribution Share-Alike License v3.0 http://cr
 #loading {
 	text-align: center;
 	margin: 230px auto 0 auto;
+	z-index:200;
 }
 #loading li {
 	display:none;
