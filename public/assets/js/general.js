@@ -9,6 +9,17 @@
 var party = party || {};
 
 (function () {
+	/**
+	tile object structure:
+		id AS i
+		position AS p
+		twitterId AS w
+		userName AS u
+		imageUrl AS m
+		createdTs AS c
+		contents AS n
+		imageData AS d
+	*/
 	var initial_draw_timer,
 		loading_message_timer,
 		polling_timer,
@@ -17,14 +28,12 @@ var party = party || {};
 		auto_bubble_index = 0,
 		visible_tiles = {},
 		visible_tiles_random = [],
-		hidden_tiles = {},
-		newest_tiles = [], // Index of the most recent tiles
+		autoplay_pool = [], // Index of the most recent tiles
 		new_tiles = [], // Tiles got from the server in "real-time"
 		total_positions = 0,
 		draw_tiles_timer,
 		performance = {},
 		tile_hover = null,
-		draw_new_tiles_every = 1,
 		counter = {
 			canvas: null,
 			current: 0,
@@ -41,10 +50,11 @@ var party = party || {};
 			last_page: 0,
 			mosaic_offset: {},
 			initial_tiles_per_frame_incremental: 1,
+			draw_new_tiles_every: 0,
 			draw_new_tiles_every_counter: 0,
 			total_tiles: 0
 		},
-		available_performances = {
+		performance_settings = {
 			high: {
 				initial_frames_per_second: 24,
 				initial_tiles_per_frame: 10,
@@ -110,14 +120,16 @@ var party = party || {};
 		}
 		
 		// Cache the tile's position
-		position = tile.position;
+		position = tile.p;
 		index = party.mosaic.index[position];
 		if (!index) {
 		  return '';
 		}
 		
 		// Add it to the HTML to draw
-		return '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + tile.imageData + '); left: ' + (index[0]*12) + 'px; top: ' + (index[1]*12) + 'px;"></div>';
+		// return '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + tile.d + '); left: ' + (index[0]*12) + 'px; top: ' + (index[1]*12) + 'px;"></div>';
+		return '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + tile.d + '); left: ' + (index[0]*12) + 'px; top: ' + (index[1]*12) + 'px;"></div>';
+		
 	}
 	
 	// Draw the Initial Mosaic
@@ -233,9 +245,9 @@ var party = party || {};
 		var bubble;
 		
 		// Check the browser's performance
-		party.performance = party.available_performances.high;
+		party.performance = party.performance_settings.high;
 		if ($.browser.msie) {
-			party.performance = party.available_performances.medium;
+			party.performance = party.performance_settings.medium;
 		} else if ($.browser.mozilla) {
 			// Remove the download button if this is already firefox >= 4
 			if (window.navigator.userAgent.search('Firefox/4') != -1) {
@@ -272,6 +284,7 @@ var party = party || {};
 		});
         party.canvas.bind('mousemove', function(ev) {
 			console.log('triggering mousemove');
+			
 			resizeObject.eventHandler(function(){
 				console.log('triggering throttled mousemove');
 				
@@ -383,30 +396,27 @@ var party = party || {};
 
 		// Found a result
 		new_tile = data.payload.tiles[0];
-		pos = new_tile.position;
-		// Check if we should keep the visible or hidden tile from this position
-		// depending on which is the most recent
-		if (visible_tiles[pos].id > hidden_tiles[pos].id){
-			$.extend(hidden_tiles[pos], visible_tiles[pos]);
-		}
+		pos = new_tile.p;
 		// Write the new tile over the visible
 		$.extend(visible_tiles[pos], new_tile);
 		// Show and persist it!
 		stopAutoBubble();
 		state.keep_bubble_open = true;
 		showBubble(pos);
+		// Clean memory
+		data = null;
 	}
 	
 	function showAutoBubble() {
 		var t;
 		
-		t = newest_tiles[auto_bubble_index];
+		t = autoplay_pool[auto_bubble_index];
 		if (!t) {
 			auto_bubble_index = 0;
 			return;
 		}
 		auto_bubble_index += 1;
-		showBubble(t.position);
+		showBubble(t.p);
 	}
 	
 	function startAutoBubble() {
@@ -493,18 +503,18 @@ var party = party || {};
 		tile_hover.hide();
 		
 		// Create a fake "zoomed tile" element
-		tile_hover.attr('src', 'data:image/gif;base64,' + tile.imageData);
+		tile_hover.attr('src', 'data:image/gif;base64,' + tile.d);
 		tile_hover.css({
 			'left': (x*12) + 'px',
 			'top': (y*12) + 'px'
 		});
 		
 		// Change the bubble
-		b.username_a.text(tile.userName).attr('href', 'http://twitter.com/' + tile.userName);
-		b.avatar_a.attr('title', tile.userName).attr('href', 'http://twitter.com/' + tile.userName);
-		b.avatar_img.attr('src', tile.imageUrl);
-		b.p.html(create_urls(tile.contents));
-		b.time_a.attr('href', 'http://twitter.com/' + tile.userName + '/status/' + tile.twitterId).text(tile.createdDate);
+		b.username_a.text(tile.u).attr('href', 'http://twitter.com/' + tile.u);
+		b.avatar_a.attr('title', tile.u).attr('href', 'http://twitter.com/' + tile[u);
+		b.avatar_img.attr('src', tile.m);
+		b.p.html(create_urls(tile.n));
+		b.time_a.attr('href', 'http://twitter.com/' + tile.u + '/status/' + tile.w).text(tile.createdDate);
 		b.time.attr('datetime', tile.createdDate);
 		b.container.css(position_css).removeClass().addClass('bubble ' + position_class + ' color-' + g.r);
 		
@@ -547,51 +557,25 @@ var party = party || {};
 			// Hide the Loading
 			loadingHide();
 			
-			// Get the invisible tiles page from the server
-			getHiddenTiles();
-			
 			// Update last id
 			if (data.last_id > state.last_id) {
 				state.last_id = data.last_id;
 			}
 			// Write the data locally
 			visible_tiles = data.tiles;
-			newest_tiles = data.newest_tiles;
+			autoplay_pool = data.autoplay_pool;
 			total_positions = objectLength(visible_tiles);
 			state.total_tiles = parseInt(party.state.last_page * total_positions, 10);
 			
 			// Draw the mosaic!
 			initialDraw();
 			
-		});
-	}
-	
-	// Get the previous
-	function getHiddenTiles() {
-
-		// Check if we have a second complete page. If not, try again later
-		if ((party.state.last_page-1) == 0) {
-			setTimeout(reloadPage, 60 * 1000);
-			return;
-		}
-		
-		// Request URL
-		var url = party.store_url + '/pages/page_' + (party.state.last_page-1) + '.json';
-		
-		// Get the previous completed page
-		$.getJSON(url, function(data) {
-
-			// Update last id
-			if (data.last_id > state.last_id) {
-				state.last_id = data.last_id;
-			}
-			
-			// Write the data locally
-			hidden_tiles = data.tiles;
-
-			// Start the Real-time polling
+			// Start real-time polling
 			startPolling();
 			
+			// Clean memory
+			data = null;
+
 		});
 	}
 	
@@ -601,33 +585,33 @@ var party = party || {};
 		var pos,
 			old_visible,
 			new_tile,
-			i;
+			i,
+			css_changes;
 			
 		// Priority to new tiles
-		if (state.draw_new_tiles_every_counter === draw_new_tiles_every) {
+		if (state.draw_new_tiles_every_counter >= state.draw_new_tiles_every) {
 			new_tile = new_tiles[0];
 			state.draw_new_tiles_every_counter = 0;
 		}
+		
 		state.draw_new_tiles_every_counter += 1;
 		
 		if (new_tile) {
 			// Get the position
-			pos = new_tile.position;
-			// Check if we should keep the visible or hidden tile from this position
-			// depending on which is the most recent
-			if (!visible_tiles[pos] || !hidden_tiles[pos]) {
+			pos = new_tile.p;
+			if (!visible_tiles[pos]) {
 				new_tiles.shift();
 				return;
 			}
-			
-			if (visible_tiles[pos].id > hidden_tiles[pos].id){
-				$.extend(hidden_tiles[pos], old_visible);
-			}
+			// Update the CSS
+			css_changes = {
+				'background-image': 'url(data:image/gif;base64,' + new_tile.d + ')'
+			};
 			// Write the new tile over the visible
 			$.extend(visible_tiles[pos], new_tile);
 			// Store this to the newest tiles to autoplay
-			newest_tiles.shift();
-			newest_tiles.push({id: new_tile.id, position: pos});
+			autoplay_pool.shift();
+			autoplay_pool.push({id: new_tile.i, position: pos});
 			// Remove this tile from the new tiles
 			new_tiles.shift();
 			
@@ -636,18 +620,14 @@ var party = party || {};
 		} else {
 			// Choose a random position
 			pos = Math.floor(Math.random() * total_positions);
-			// Copy the visible
-			old_visible = $.extend({}, visible_tiles[pos]);
-			// Replace the visible with the hidden
-			$.extend(visible_tiles[pos], hidden_tiles[pos]);
-			// Replace the hidden with the visible
-			$.extend(hidden_tiles[pos], old_visible);
+			// Update the CSS
+			css_changes = {
+				'background-image': 'none'
+			};
 		}
 		
 		// Update the new tile
-		$('#' + pos).css({
-			'background-image': 'url(data:image/gif;base64,' + visible_tiles[pos].imageData + ')'
-		});
+		$('#' + pos).css(css_changes);
 		
 	}
 	
@@ -672,8 +652,14 @@ var party = party || {};
 				if (data.payload.last_id > state.last_id) {
 					state.last_id = data.payload.last_id;
 				}
-				// Append the data locally
-				new_tiles = new_tiles.concat(data.payload.tiles);
+				
+				// Reverse the tiles to get the newest first and append the data to the buffer
+				new_tiles = new_tiles.concat(data.payload.tiles.reverse());
+				// Calculate at which speed new tiles should be drawn
+				state.draw_new_tiles_every = Math.round((party.performance.new_tiles_per_second * party.polling_timer_seconds) / new_tiles.length);
+
+				// Clean memory
+				data = null;
 			}
 		});
 	}
@@ -711,7 +697,7 @@ var party = party || {};
 	
 	$.extend(party, {
 		"loading_message_seconds": 2,
-		"polling_timer_seconds": 40, 
+		"polling_timer_seconds": 180, 
 		"auto_bubble_seconds": 7,
 		"grid": [],
 		"index": [],
@@ -721,10 +707,9 @@ var party = party || {};
 		"resume": resume,
 		"showBubble": showBubble,
 		"performance": performance,
-		"available_performances": available_performances,
+		"performance_settings": performance_settings,
 		"state": state,
-		"new_tiles": new_tiles,
-		"draw_new_tiles_every": 4
+		"new_tiles": new_tiles
 	});
 	
 }());
