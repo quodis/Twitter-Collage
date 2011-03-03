@@ -275,27 +275,17 @@ party.mosaic = ' . json_encode($js) . ';
 		if (!$result->count()) return;
 
 		$tiles = array();
-		$tileIndex = array();
 		while ($tweet = $result->row())
 		{
-			if (isset($tiles[$tweet['position']])) continue;
-			$tileIndex[$tweet['id']] = array(
-				'id'       => $tweet['id'],
-				'position' => $tweet['position'],
-			);
-			$tiles[$tweet['position']] = $tweet;
-			if ($tweet['id'] > $lastId) $lastId = $tweet['id'];
+			if (isset($tiles[$tweet['p']])) continue;
+			$tiles[$tweet['p']] = $tweet;
+			if ($tweet['i'] > $lastId) $lastId = $tweet['i'];
 		}
-
-		// keep only the last 200 newest tiles in the index
-		// TODO configure MAGIC NUMBER 200
-		$tileIndex = array_slice($tileIndex, -200);
 
 		if (count($tiles))
 		{
 			$fileData['tiles'] = $tiles;
 			$fileData['last_id'] = $lastId;
-			$fileData['newest_tiles'] = $tileIndex;
 		}
 
 		$fileName = self::getPageDataFileName($pageNo);
