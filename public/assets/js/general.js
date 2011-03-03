@@ -271,8 +271,9 @@ var party = party || {};
 		   //Code to run
 		});
         party.canvas.bind('mousemove', function(ev) {
+			console.log('triggering mousemove');
 			resizeObject.eventHandler(function(){
-				console.log('triggering mousemove');
+				console.log('triggering throttled mousemove');
 				
 	            var x,
 					y,
