@@ -352,7 +352,7 @@ final class Tweet
 		$lastId = (int)$lastId;
 		$withImage = !!$withImage;
 
-		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
+		$sql = "SELECT id AS i, position AS p, twitterId AS w, userName AS u, imageUrl AS m , createdTs AS c, contents AS n, imageData AS d FROM `tweet` ";
 		$sql.= " WHERE page = $pageNo ";
 
 		if ($withImage) $sql.= "  AND processedTs";
@@ -381,8 +381,7 @@ final class Tweet
 		$limit = (int)$limit;
 		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
 
-		//$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
-		$sql = "SELECT id, position, twitterId, userName, imageUrl, createdTs, contents, imageData FROM `tweet` ";
+		$sql = "SELECT id AS i, position AS p, twitterId AS w, userName AS u, imageUrl AS m , createdTs AS c, contents AS n, imageData AS d FROM `tweet` ";
 		$sql.= " WHERE `imageData` IS NOT NULL";
 
 		if ($lastId)
@@ -482,8 +481,48 @@ final class Tweet
 
 		$withImage = !!$withImage;
 
-		//$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
 		$sql = "SELECT id, position, twitterId, userName, imageUrl, createdTs, contents, imageData FROM `tweet` ";
+		$sql.= " WHERE`userName` = '$userName'";
+
+		if ($withImage) $sql.= "  AND processedTs";
+
+		$sql.= " ORDER BY `id` DESC";
+		$sql.= " LIMIT $limit";
+
+		$result = Db::query($sql);
+
+		if ($result->count() == $limit)
+		{
+			$sql = "SELECT count(1) AS cnt FROM `tweet` ";
+			$sql.= " WHERE `userName` = '$userName'";
+			if ($withImage) $sql.= "  AND processedTs";
+			$total = Db::queryValue($sql, 'cnt');
+			if ($total) $result->setTotal($total);
+		}
+
+		return $result;
+	}
+
+
+	/**
+	 * tweets by user (compacted version)
+	 *
+	 * @param string $userName
+	 * @param integer $limit (optional)
+	 * @param boolean $withImage (optional, defaults to FALSE)
+	 *
+	 * @return array
+	 */
+	public static function getByUserNameCompact($userName, $limit = null, $withImage = null)
+	{
+		$userName = Db::escape($userName);
+
+		$limit = (int)$limit;
+		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
+
+		$withImage = !!$withImage;
+
+		$sql = "SELECT id AS i, position AS p, twitterId AS w, userName AS u, imageUrl AS m , createdTs AS c, contents AS n, imageData AS d FROM `tweet` ";
 		$sql.= " WHERE`userName` = '$userName'";
 
 		if ($withImage) $sql.= "  AND processedTs";

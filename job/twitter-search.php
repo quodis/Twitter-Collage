@@ -46,9 +46,9 @@ function main()
 		while ($row = $result->row())
 		{
 			// should not happen, but is sane
-			if (!isset($freeSlots[$row['position']])) continue;
+			if (!isset($freeSlots[$row['p']])) continue;
 			// remove slot
-			unset($freeSlots[$row['position']]);
+			unset($freeSlots[$row['p']]);
 		}
 
 		// shuffle slots
@@ -65,7 +65,7 @@ function main()
 			if (!count($freeSlots))
 			{
 				Debug::logMsg('OK! ... full page! new tweets:' . $tweets . ' ... continue ...');
-				break 2;
+				break;
 			}
 
 			// pop one
