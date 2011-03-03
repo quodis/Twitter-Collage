@@ -512,7 +512,7 @@ var party = party || {};
 			visible_tiles = data.tiles;
 			newest_tiles = data.newest_tiles;
 			total_positions = objectLength(visible_tiles);
-			state.total_tiles = (party.state.last_page * total_positions);
+			state.total_tiles = parseInt(party.state.last_page * total_positions, 10);
 			
 			// Draw the mosaic!
 			initialDraw();
