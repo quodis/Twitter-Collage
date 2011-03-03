@@ -203,20 +203,18 @@ class Mosaic
 		);
 
 		// make config (grid + index)
-		foreach ($_config['grid'] as $rowIx => $rowPixels)
+		foreach (self::$_pageConfig['grid'] as $rowIx => $rowPixels)
 		{
 			foreach ($rowPixels as $columnIx => $pos)
 			{
 				// store grid
-				$js[$rowIx][$rowPixels] = array(
+				$js['grid'][$rowIx][$columnIx] = array(
 					'r' => $pos['r'],
-					'i' => $index,
+					'i' => $pos['i'],
 				);
 
 				// and index
-				self::$_pageConfig['index'][$index] = array($columnIx, $rowIx);
-
-				$index++;
+				$js['index'][$pos['i']] = array($columnIx, $rowIx);
 			}
 		}
 
@@ -240,7 +238,7 @@ class Mosaic
  * party.mosaic.index = array of pos
  *   pos - {x: 34, y: 23}
  */
-party.mosaic = ' . json_encode($config) . ';
+party.mosaic = ' . json_encode($js) . ';
 ';
 
 		file_put_contents($fileName, $contents);
