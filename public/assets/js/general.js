@@ -202,7 +202,7 @@ Array.prototype.shuffle = function (){
 	
 	// Randomize and show the loading message
 	function loadingShow() {
-		var loading_messages = $('#loading li'),
+		var loading_messages = $.makeArray($('#loading li')),
 			loading_message_index = 0,
 			loadingMessage;
 			
