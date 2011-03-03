@@ -497,7 +497,7 @@ Array.prototype.shuffle = function (){
 		b.username_a.text(tile.userName).attr('href', 'http://twitter.com/' + tile.userName);
 		b.avatar_a.attr('title', tile.userName).attr('href', 'http://twitter.com/' + tile.userName);
 		b.avatar_img.attr('src', tile.imageUrl);
-		b.p.text(create_urls(tile.contents));
+		b.p.html(create_urls(tile.contents));
 		b.time_a.attr('href', 'http://twitter.com/' + tile.userName + '/status/' + tile.twitterId).text(tile.createdDate);
 		b.time.attr('datetime', tile.createdDate);
 		b.container.css(position_css).removeClass().addClass('bubble ' + position_class + ' color-' + g.r);
