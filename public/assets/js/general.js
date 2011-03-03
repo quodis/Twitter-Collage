@@ -567,7 +567,7 @@ var party = party || {};
 					autoplay_pool.push(visible_tiles[key].p);
 				}
 			}
-			total_positions = autoplay_pool.length();
+			total_positions = autoplay_pool.length;
 			autoplay_pool.sort();
 			autoplay_pool = autoplay_pool.slice(0, 199);
 			console.log(autoplay_pool);
