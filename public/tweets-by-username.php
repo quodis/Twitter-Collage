@@ -23,8 +23,7 @@ function main()
 	// init response
 
 	$data = array(
-		'tweets' => array()
-	,
+		'tweets' => array(),
 		'total' => $result->total(),
 		'count' => $result->count()
 	);
