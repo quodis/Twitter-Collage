@@ -74,8 +74,7 @@ Array.prototype.shuffle = function (){
 	 * 
 	 * @return integer
 	 */
-	function f_scrollLeft() 
-	{
+	function f_scrollLeft() {
 	    return f_filterResults (	
 	        window.pageXOffset ? window.pageXOffset : 0,
 	        document.documentElement ? document.documentElement.scrollLeft : 0,
@@ -89,8 +88,7 @@ Array.prototype.shuffle = function (){
 	 * 
 	 * @return integer
 	 */
-	function f_scrollTop() 
-	{
+	function f_scrollTop() {
 	    return f_filterResults (
 	        window.pageYOffset ? window.pageYOffset : 0,
 	        document.documentElement ? document.documentElement.scrollTop : 0,
@@ -98,12 +96,19 @@ Array.prototype.shuffle = function (){
 	    );
 	}
 	
-	function f_filterResults(n_win, n_docel, n_body) 
-	{
+	function f_filterResults(n_win, n_docel, n_body) {
 	    var n_result = n_win ? n_win : 0;
 	    if (n_docel && (!n_result || (n_result > n_docel)))
 	        n_result = n_docel;
 	    return n_body && (!n_result || (n_result > n_body)) ? n_body : n_result;
+	}
+	
+	function create_urls(input) {
+		return input
+		.replace(/(ftp|http|https|file):\/\/([\S]+(\b|$))/gim, '<a href="$&" class="my_link" target="_blank">$2</a>')
+		.replace(/([^\/])(www[\S]+(\b|$))/gim, '$1<a href="http://$2" class="my_link" target="_blank">$2</a>')
+		.replace(/(^|\s)@(\w+)/g, '$1<a href="http://twitter.com/$2" class="my_link" target="_blank">@$2</a>')
+		.replace(/(^|\s)#(\S+)/g, '$1<a href="http://search.twitter.com/search?q=%23$2" class="my_link" target="_blank">#$2</a>');
 	}
 	
 	function tileHtml(tile) {
@@ -134,7 +139,7 @@ Array.prototype.shuffle = function (){
 		for (i = 0; i < total_positions; i += 1) {
 			visible_tiles_random.push(i);
 		}
-		// Randomnize!
+		// Randomize!
 		visible_tiles_random.shuffle();
 		// Calculate the number of frames
 		counter.increment = parseInt(total_positions/party.performance.initial_frames_per_second, 10);
@@ -208,11 +213,10 @@ Array.prototype.shuffle = function (){
 		
 	}
 	
-	// Randomnize and show the loading message
+	// Randomize and show the loading message
 	function loadingShow() {
-		
-		// Show the loading DOM element
-		$('#loading').show();
+		return;
+		party.loading_messages = $('#loading li');
 		
 		// Set a random first loading message
 		loading_message_index = Math.floor(Math.random() * party.loading_messages.length);
@@ -343,41 +347,48 @@ Array.prototype.shuffle = function (){
 		  	// Show loading
 			$('#search-box button').addClass('loading');
 			// Request server
-			var url = '/tweets-by-username.php?user_name=' + search.input_dom.val();
-			$.getJSON(url, function(data) {
-				var new_tile,
-					pos;
-				// Hide Loading
-				$('#search-box button').removeClass('loading');
-				
-				if (data.payload.total == 0) {
-					// No results!
-					$('#search-box .error').fadeIn('fast');
-					window.setTimeout(function(){
-						$('#search-box .error').fadeOut('fast');
-					}, 3 * 1000);
-					return;
-				}
-				
-				// Found a result
-				new_tile = data.payload.tweets[0];
-				pos = new_tile.position;
-				// Check if we should keep the visible or hidden tile from this position
-				// depending on which is the most recent
-				if (visible_tiles[pos].id > hidden_tiles[pos].id){
-					$.extend(hidden_tiles[pos], visible_tiles[pos]);
-				}
-				// Write the new tile over the visible
-				$.extend(visible_tiles[pos], new_tile);
-				// Show and persist it!
-				stopAutoBubble();
-				state.keep_bubble_open = true;
-				showBubble(pos);
-
+			$.ajax({
+				url: '/tweets-by-username.php',
+				type: 'GET',
+				dataType: 'json',
+				data: {user_name: search.input_dom.val()},
+				success: processSearchResult
 			});
 			
 			return false;
 		});
+	}
+	
+	
+	function processSearchResult(data){
+		var new_tile,
+			pos;
+		// Hide Loading
+		$('#search-box button').removeClass('loading');
+
+		if (data.payload.total == 0) {
+			// No results!
+			$('#search-box .error').fadeIn('fast');
+			window.setTimeout(function(){
+				$('#search-box .error').fadeOut('fast');
+			}, 3 * 1000);
+			return;
+		}
+
+		// Found a result
+		new_tile = data.payload.tweets[0];
+		pos = new_tile.position;
+		// Check if we should keep the visible or hidden tile from this position
+		// depending on which is the most recent
+		if (visible_tiles[pos].id > hidden_tiles[pos].id){
+			$.extend(hidden_tiles[pos], visible_tiles[pos]);
+		}
+		// Write the new tile over the visible
+		$.extend(visible_tiles[pos], new_tile);
+		// Show and persist it!
+		stopAutoBubble();
+		state.keep_bubble_open = true;
+		showBubble(pos);
 	}
 	
 	function showAutoBubble() {
@@ -487,7 +498,7 @@ Array.prototype.shuffle = function (){
 		b.username_a.text(tile.userName).attr('href', 'http://twitter.com/' + tile.userName);
 		b.avatar_a.attr('title', tile.userName).attr('href', 'http://twitter.com/' + tile.userName);
 		b.avatar_img.attr('src', tile.imageUrl);
-		b.p.text(tile.contents);
+		b.p.text(create_urls(tile.contents));
 		b.time_a.attr('href', 'http://twitter.com/' + tile.userName + '/status/' + tile.twitterId).text(tile.createdDate);
 		b.time.attr('datetime', tile.createdDate);
 		b.container.css(position_css).removeClass().addClass('bubble ' + position_class + ' color-' + g.r);
@@ -698,13 +709,6 @@ Array.prototype.shuffle = function (){
 	
 	
 	$.extend(party, {
-		"loading_messages": [
-			"Sorting guest list alphabetically",
-			"Waiting for eye-contact with club bouncer",
-			"Randomnizing seating-order",
-			"Syncing disco-lights to the beat",
-			"Cooling drinks to ideal temperature",
-			"Handing out name-tags"],
 		"loading_message_seconds": 2,
 		"polling_timer_seconds": 40, 
 		"auto_bubble_seconds": 7,

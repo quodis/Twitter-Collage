@@ -112,10 +112,19 @@ function main($language)
 
 				</aside><!-- main-content -->
 
+    			
 				<section id="mosaic" role="img">
 					<h2><?= _('Firefox Twitter Mosaic') ?></h2>
+					
+          <ul id="loading">
+            <li><?= _('Sorting guest list alphabetically') ?></li>
+            <li><?= _('Randomizing seating order') ?></li>
+            <li><?= _('Cooling drinks to optimal temperature') ?></li>
+            <li><?= _('Handing out name tags') ?></li>
+            <li><?= _('Waxing the dance floor') ?></li>
+            <li><?= _('Setting up Firefox deco') ?></li>
+          </ul>
 
-					<p id="loading"></p>
 					<img src="" id="tile-hover" />
 
 					<article id="bubble" class="bubble">

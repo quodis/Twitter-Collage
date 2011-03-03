@@ -18,9 +18,11 @@ Licensed under a Creative Commons Attribution Share-Alike License v3.0 http://cr
 }
 
 #loading {
-	display: block;
 	text-align: center;
 	margin: 230px auto 0 auto;
+}
+#loading li {
+	display:none;
 }
 
 /* 2.Bubbles */
