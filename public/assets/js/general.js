@@ -8,10 +8,6 @@
  */
 var party = party || {};
 
-Array.prototype.shuffle = function (){ 
-	for(var rnd, tmp, i=this.length; i; rnd=parseInt(Math.random()*i, 10), tmp=this[--i], this[i]=this[rnd], this[rnd]=tmp);
-};
-
 (function () {
 	var initial_draw_timer,
 		loading_message_timer,
@@ -19,7 +15,6 @@ Array.prototype.shuffle = function (){
 		tile_counter = 0,
 		auto_bubble_timer,
 		auto_bubble_index = 0,
-		frame_counter = 0,
 		visible_tiles = {},
 		visible_tiles_random = [],
 		hidden_tiles = {},
@@ -46,7 +41,8 @@ Array.prototype.shuffle = function (){
 			last_page: 0,
 			mosaic_offset: {},
 			initial_tiles_per_frame_incremental: 1,
-			draw_new_tiles_every_counter: 0
+			draw_new_tiles_every_counter: 0,
+			total_tiles: 0
 		},
 		available_performances = {
 			high: {
@@ -65,42 +61,6 @@ Array.prototype.shuffle = function (){
 				new_tiles_per_second: 3
 			}
 		};
-	
-	/**
-	 * NOTE: jQuery handling of scroll position has poor bruwser-compatibility
-	 * borrowed from
-	 * http://www.softcomplex.com/docs/get_window_size_and_scrollbar_position.html
-	 * 
-	 * @return integer
-	 */
-	function f_scrollLeft() {
-	    return f_filterResults (	
-	        window.pageXOffset ? window.pageXOffset : 0,
-	        document.documentElement ? document.documentElement.scrollLeft : 0,
-	        document.body ? document.body.scrollLeft : 0
-	    );
-	}
-	/**
-	 * NOTE: jQuery handling of scroll position has poor bruwser-compatibility
-	 * borrowed from
-	 * http://www.softcomplex.com/docs/get_window_size_and_scrollbar_position.html
-	 * 
-	 * @return integer
-	 */
-	function f_scrollTop() {
-	    return f_filterResults (
-	        window.pageYOffset ? window.pageYOffset : 0,
-	        document.documentElement ? document.documentElement.scrollTop : 0,
-	        document.body ? document.body.scrollTop : 0
-	    );
-	}
-	
-	function f_filterResults(n_win, n_docel, n_body) {
-	    var n_result = n_win ? n_win : 0;
-	    if (n_docel && (!n_result || (n_result > n_docel)))
-	        n_result = n_docel;
-	    return n_body && (!n_result || (n_result > n_body)) ? n_body : n_result;
-	}
 	
 	function create_urls(input) {
 		return input
@@ -134,14 +94,17 @@ Array.prototype.shuffle = function (){
 	function initialDraw() {
 		
 		// Create an array for the random order
-		var i;
+		var i,
+			f;
 		for (i = 0; i < total_positions; i += 1) {
 			visible_tiles_random.push(i);
 		}
 		// Randomize!
 		visible_tiles_random.shuffle();
 		// Calculate the number of frames
-		counter.increment = parseInt(total_positions/party.performance.initial_frames_per_second, 10);
+		f = parseInt(total_positions/party.performance.initial_frames_per_second, 10);
+		// Calculate the counter increment on each frame
+		counter.increment = parseInt(state.total_tiles/f);
 		// Start the recursive call for each frame
 		initial_draw_timer = window.setInterval(initialDrawFrame, (1000/party.performance.initial_frames_per_second) );
 	}
@@ -176,15 +139,13 @@ Array.prototype.shuffle = function (){
 			// Update counter
 			counter.current += counter.increment;
 			setCounter();
-			// Another frame completed
-			frame_counter += 1;
 			
 		} else {
 			
 			// No Tiles were built - task is complete
 			window.clearInterval(initial_draw_timer);
 			// Set counter to last id
-			counter.current = parseInt(state.last_id, 10);
+			counter.current = parseInt(state.total_tiles, 10);
 			setCounter();
 			startAutoBubble();
 			// Start the recursive "tile updater"
@@ -347,7 +308,7 @@ Array.prototype.shuffle = function (){
 			$('#search-box button').addClass('loading');
 			// Request server
 			$.ajax({
-				url: '/tweets-by-username.php',
+				url: '/tiles-by-username.php',
 				type: 'GET',
 				dataType: 'json',
 				data: {user_name: search.input_dom.val()},
@@ -375,7 +336,7 @@ Array.prototype.shuffle = function (){
 		}
 
 		// Found a result
-		new_tile = data.payload.tweets[0];
+		new_tile = data.payload.tiles[0];
 		pos = new_tile.position;
 		// Check if we should keep the visible or hidden tile from this position
 		// depending on which is the most recent
@@ -515,16 +476,6 @@ Array.prototype.shuffle = function (){
 		tile_hover.hide();
 	}
 	
-	// Get an object's length
-	function objectLength(obj) {
-		var length = 0,
-			key;
-	    for (key in obj) {
-	        if (obj.hasOwnProperty(key)) length += 1;
-	    }
-	    return length;
-	}
-	
 	// Reload the whole page
 	function reloadPage() {
 		window.location = window.location;
@@ -562,6 +513,7 @@ Array.prototype.shuffle = function (){
 			visible_tiles = data.tiles;
 			newest_tiles = data.newest_tiles;
 			total_positions = objectLength(visible_tiles);
+			state.total_tiles = (party.state.last_page * total_positions);
 			
 			// Draw the mosaic!
 			initialDraw();
