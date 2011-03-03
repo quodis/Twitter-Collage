@@ -197,6 +197,7 @@ body {
 	position: absolute;
 	top:25px;
 	left:20px;
+	z-index:40;
 	
 /*
 	-moz-transform: rotate(-2deg);
