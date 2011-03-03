@@ -686,6 +686,7 @@ $(document).ready(function() {
 
 	// Resize listener
 	$(window).resize(function() {
+		console.log('resizing');
 		party.state.mosaic_offset = party.canvas.offset();
 	});
 	
