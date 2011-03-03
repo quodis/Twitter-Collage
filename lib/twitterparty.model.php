@@ -140,13 +140,9 @@ final class Tweet
 	{
 		$userId = Db::escape($userId);
 
-		dd($userId);
-
 		// update tweet
 		$sql = "DELETE FROM `tweet` WHERE `userid` = '$userId'";
 		$result = Db::execute($sql);
-
-		dd($sql);
 
 		return $result;
 	}

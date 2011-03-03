@@ -30,6 +30,9 @@ function main($language)
 	include '../bootstrap.php';
 	session_cache_limiter("nocache");
 
+	Debug::setLogMsgFile($config['App']['pathLog'] .'/dashboard.msg.log');
+	Debug::setLogErrorFile($config['App']['pathLog'] .'/dashboard.error.log');
+
 	// mosaic config file
 	$jsMosaicConfig = $config['Store']['url'] . $config['UI']['js-config']['grid'];
 
@@ -112,10 +115,10 @@ function main($language)
 
 				</aside><!-- main-content -->
 
-    			
+
 				<section id="mosaic" role="img">
 					<h2><?= _('Firefox Twitter Mosaic') ?></h2>
-					
+
           <ul id="loading">
             <li><?= _('Sorting guest list alphabetically') ?></li>
             <li><?= _('Randomizing seating order') ?></li>
@@ -145,7 +148,7 @@ function main($language)
 					</article><!-- bubble template -->
 
 				</section>
-				
+
 			</div><!-- wrapper -->
 
 			<div id="mozilla-badge">
@@ -186,18 +189,18 @@ function main($language)
 					<p><?= _('Except where otherwise <a href="http://www.mozilla.com/about/legal.html#site">noted</a>, content on this site is licensed under the <br /><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.') ?></p>
 				</div><!-- footer-left -->
 
-				<div id="footer-right"> 
+				<div id="footer-right">
 
 					<form id="lang_form" dir="ltr" method="get">
-						
-						<label for="flang">Other Languages</label> 
-			
-						<select id="flang" name="flang">    
-							<option value="af">Afrikaans</option> 
+
+						<label for="flang">Other Languages</label>
+
+						<select id="flang" name="flang">
+							<option value="af">Afrikaans</option>
 						</select>
-					
+
 					</form>
-					
+
 				</div> <!-- footer-right -->
 
 			</div><!-- footer-copyright -->

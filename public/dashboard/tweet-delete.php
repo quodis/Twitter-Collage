@@ -26,6 +26,8 @@ function main()
 	$ok = $result->success();
 	$msg = $ok ? 'OK' : 'FAIL';
 
+	Debug::logMsg('delete tweet:' . $id . ' msg:' . $msg);
+
 	Dispatch::now($ok, $msg);
 
 } // main()

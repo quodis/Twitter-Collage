@@ -107,10 +107,6 @@ var party = party || {};
 			}.bind(this) );
 			
 			// bind poll
-			$('#force-poll-bttn').click( function(ev) {
-				ev.stopPropagation();
-				this.poll();
-			}.bind(this) );
 			$('#mosaic').mousemove( function(ev) {
 				if ($('body').hasClass('shade')) return;
 				var offset = $('#mosaic').offset();
@@ -169,7 +165,10 @@ var party = party || {};
 				if (!count) {
 					$('<li id="loading" class="empty">empty page...</li>').appendTo('#mosaic');
 				}
-			}.bind(this), 'page:' . page);
+			}.bind(this), 'page', function() { 
+				$('#loading').remove();
+				$('<li id="loading">not found</li>').appendTo('#mosaic');
+			} ) ;
 		},
 
 		poll : function()
@@ -186,7 +185,7 @@ var party = party || {};
 				'last_id' : this.state.last_id
 			}
 
-			Dashboard.load( '/poll.php', params, function(data) {
+			Dashboard.load('/poll.php', params, function(data) {
 				$('#loading').remove();
 				var count = this.addTiles(data.tiles);
 				if (count) {
@@ -457,7 +456,7 @@ var party = party || {};
 		 * @param function callback
 		 * @param string id
 		 */
-		load : function(url, params, callback, id) 
+		load : function(url, params, callback, id, errorCallback) 
 		{
 			// generate a new key for this request?
 			var request_key = null;
@@ -488,7 +487,10 @@ var party = party || {};
 					}
 				}.bind(this),
 				error: function() {
-					this.loadError(arguments);
+					if ("function" == typeof errorCallback) {
+						errorCallback(arguments);
+					}
+					else this.loadError(arguments);
 				}.bind(this)
 			});
 		},
@@ -497,7 +499,7 @@ var party = party || {};
 		{
 			console.log('load fail, error:', arguments);
 			$('#loading').remove();
-			$('<li id="loading">...error...</li>').appendTo('#mosaic');
+			$('<li id="loading">not found</li>').appendTo('#mosaic');
 		},
 		
 		post : function(url, params, callback, noFeedback) 
