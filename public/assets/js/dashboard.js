@@ -1,6 +1,6 @@
 /**
  * Firefox 4 Twitter Party
- * by Mozilla, Quodis © 2011
+ * Design and development by Mozilla, Quodis
  * http://www.mozilla.com
  * http://www.quodis.com
  * 
@@ -46,8 +46,7 @@ var party = party || {};
 		},
 		
 		
-		// stores ongoing requests (indexed by id) to prevent obsoletes ... see
-		// load()
+		// stores ongoing requests (indexed by id) to prevent obsoletes ... see load
 		load_requests : { },
 		
 		// borrow from party (hey, who let this guy in?)
@@ -139,7 +138,7 @@ var party = party || {};
 			
 			// stat timer
 			this.state.short_stat_interval = window.setInterval( function() {
-				this.load('/stat-short.php', null, function(data) {
+				this.load('/dashboard/stat-short.php', null, function(data) {
 					if (!data) return;
 					$.extend(this.state, data);
 					$('#tweet-count span').rollNumbers(this.state.tweet_count, this.options.short_stat_interval);
@@ -187,7 +186,7 @@ var party = party || {};
 				'last_id' : this.state.last_id
 			}
 
-			Dashboard.load( 'poll.php', params, function(data) {
+			Dashboard.load( '/poll.php', params, function(data) {
 				$('#loading').remove();
 				var count = this.addTiles(data.tiles);
 				if (count) {
@@ -307,7 +306,7 @@ var party = party || {};
 			
 			$('<li id="loading">searching users...</li>').appendTo('#mosaic');
 			
-			this.load('/users-by-terms.php', {'terms' : user_name}, function(data) {
+			this.load('/dashboard/users-by-terms.php', {'terms' : user_name}, function(data) {
 				
 				$('#loading').remove();
 				
@@ -365,7 +364,7 @@ var party = party || {};
 			}.bind(this) );
 			
 			// load
-			this.load('/tweets-by-username.php', {'user_name' : name}, function(data) {
+			this.load('/dashboard/tweets-by-username.php', {'user_name' : name}, function(data) {
 				
 				$('#loading').remove();
 				
@@ -400,7 +399,7 @@ var party = party || {};
 			
 			$('<li id="loading">searching tweets...</li>').appendTo('#mosaic');
 			
-			this.load('/tweets-by-terms.php', {'terms' : terms}, function(data) {
+			this.load('/dashboard/tweets-by-terms.php', {'terms' : terms}, function(data) {
 				
 				$('#loading').remove();
 				
@@ -438,11 +437,11 @@ var party = party || {};
 		},
 		
 		deleteTweet : function(id, callback) {
-			this.post('tweet-delete.php', { 'id' : id }, callback )
+			this.post('/dashboard/tweet-delete.php', { 'id' : id }, callback )
 		},
 		
 		deleteUser : function(id, callback) {
-			this.post('user-delete.php', { 'user_id' : id}, callback )
+			this.post('/dashboard/user-delete.php', { 'user_id' : id}, callback )
 		},
 
 		// ---- ajax helpers

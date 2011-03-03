@@ -14,7 +14,7 @@ function main()
 {
 	DEFINE('CLIENT', 'ajax');
 	DEFINE('CONTEXT', __FILE__);
-	include '../bootstrap.php';
+	include '../../bootstrap.php';
 
 	$terms = (isset($_REQUEST['terms'])) ? $_REQUEST['terms'] : null;
 

@@ -6,6 +6,7 @@
  * @author     Andre Torgal <andre@quodis.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php BSD License
  */
+USE twitterparty;
 DROP TABLE IF EXISTS `tweet`;
 CREATE TABLE `tweet` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,

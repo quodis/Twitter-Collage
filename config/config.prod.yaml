@@ -3,9 +3,9 @@ App:
     path: /servers/prod/twitterparty
     pathLog: /var/log/twitterparty
     # url
-    url: http://dev.twitterparty.quodis.com
+    url: http://twitterparty.mozilla.org
 Store:
-    url: http://dev.twitterparty.quodis.com/store
+    url: http://twitterparty.mozilla.org/store
     path: /servers/develop/twitterparty/public/store
     filePermissions: 644
     dirPermissions: 755
@@ -96,4 +96,4 @@ UI:
     pollLimit: 100
     resultsLimit: 100
     options:
-        store_url: http://dev.twitterparty.quodis.com/store
+        store_url: http://twitterparty.mozilla.org/store

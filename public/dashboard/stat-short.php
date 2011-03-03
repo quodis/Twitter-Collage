@@ -14,26 +14,23 @@ function main()
 {
 	DEFINE('CLIENT', 'ajax');
 	DEFINE('CONTEXT', __FILE__);
-	include '../bootstrap.php';
+	include '../../bootstrap.php';
 
-	$terms = (isset($_REQUEST['terms'])) ? $_REQUEST['terms'] : null;
+	$lastTweet = Mosaic::getLastTweet();
+	$lastProcessedTweet = Mosaic::getLastTweetWithImage();
+	$elapsed = Tweet::getAverageDelay(100);
+	$tweets = ($lastTweet['id'] - $lastProcessedTweet['id']);
 
-	$result = Tweet::getUsersByTerms($terms, $config['UI']['resultsLimit']);
-
-	// init response
-
+	// dashboard state
 	$data = array(
-		'users' => array(),
-		'total' => $result->total(),
-		'count' => $result->count()
+		'last_page' => Mosaic::getLastCompletePage(),
+		'last_id' => $lastProcessedTweet['id'],
+		'tweet_count' => Tweet::getCount(),
+		'delay' => array(
+			'tweets' => $tweets,
+			'seconds' => $elapsed
+		)
 	);
-
-	while ($user = $result->row())
-	{
-		$data['users'][] = $user;
-	}
-
-	Debug::logMsg('terms:' . $terms . ' count:' . $data['count'] . ' total:' . $data['total']);
 
 	Dispatch::now(1, 'OK', $data);
 
