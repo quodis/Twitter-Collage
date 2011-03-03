@@ -574,9 +574,9 @@ var party = party || {};
 			pos = new_tile.position;
 			// Check if we should keep the visible or hidden tile from this position
 			// depending on which is the most recent
-			console.log('pos', pos);
-			console.log('visible_tiles', visible_tiles);
-			console.log('visible_tiles[pos]', visible_tiles[pos]);
+			if (!visible_tiles[pos] || !hidden_tiles[pos]) {
+				return;
+			}
 			
 			if (visible_tiles[pos].id > hidden_tiles[pos].id){
 				$.extend(hidden_tiles[pos], old_visible);
