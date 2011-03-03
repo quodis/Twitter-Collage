@@ -30,8 +30,8 @@ require LIB_PATH . '/Mosaic.class.php';
 require LIB_PATH . '/Twitter.class.php';
 
 Debug::setCtx(basename(CONTEXT));
-Debug::setLogMsgFile('/var/log/twitterparty/www.msg.log');
-Debug::setLogErrorFile('/var/log/twitterparty/www.error.log');
+Debug::setLogMsgFile('/var/log/twitterparty/msg.log');
+Debug::setLogErrorFile('/var/log/twitterparty/error.log');
 
 
 // TODO SESSION

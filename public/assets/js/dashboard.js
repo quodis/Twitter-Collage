@@ -70,7 +70,7 @@ var party = party || {};
 			
 			this.buildInterface();
 			
-			this.loadPage(parseInt(this.state.last_page) + 1);
+			this.loadPage(parseInt(this.state.last_page, 10) + 1);
 		},
 
 
@@ -120,6 +120,7 @@ var party = party || {};
 					// is loaded tile
 					if ('undefined' !== typeof this.tiles[tile.i]) {
 						$('#' + tile.i).addClass('excite');
+						console.log($('#' + tile.i));
 						this.highlightTilePos(tile.i);
 						$('#highlight').addClass('excite');
 					}
@@ -228,7 +229,7 @@ var party = party || {};
 			var y = this.mosaic.index[tile.position].y;
 			var offsetX = this.options.tile_size * x;
 			var offsetY = this.options.tile_size * y;
-			var html = '<li id="' + tile.position + '"><img src="data:image/gif;base64,' + tile.imageData + '" style="position: absolute; top: ' + offsetY +'px; left: ' + offsetX + 'px" /></li>';
+			var html = '<li id="' + tile.position + '" style="position: absolute; top: ' + offsetY +'px; left: ' + offsetX + 'px"><img src="data:image/gif;base64,' + tile.imageData + '" /></li>';
 			$(html).appendTo('#mosaic');
 			$('#' + tile.position).click( function(ev) {
 				ev.stopPropagation();
@@ -898,7 +899,7 @@ var party = party || {};
 				iteration = Math.ceil(milisecs / frameMsecs);
 				if (!to) to = 0;
 				this.to = to;
-				this.num = parseInt(this.text());
+				this.num = parseInt(this.text(), 10);
 				if (!this.num) this.num = 0;
 			}
 			// drop obsoletes
