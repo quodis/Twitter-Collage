@@ -87,12 +87,12 @@ var party = party || {};
 		}
 		
 		// Add it to the HTML to draw
-		return '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + tile.imageData + '); left: ' + (index.x*12) + 'px; top: ' + (index.y*12) + 'px;"></div>';
+		return '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + tile.imageData + '); left: ' + (index[0]*12) + 'px; top: ' + (index[1]*12) + 'px;"></div>';
 	}
 	
 	// Draw the Initial Mosaic
 	function initialDraw() {
-		
+
 		// Create an array for the random order
 		var i,
 			f;
@@ -201,7 +201,7 @@ var party = party || {};
 			party.performance = party.available_performances.medium;
 		} else if ($.browser.mozilla) {
 			// Remove the download button if this is already firefox >= 4
-			if ($.browser.version >= 4) {
+			if ($.browser.mozilla && window.navigator.userAgent.search('Firefox/4') != -1) {
 				$('#download').remove();
 			}
 		} else {
@@ -395,8 +395,8 @@ var party = party || {};
 		if (!i) {
 			return;
 		}
-		x = i.x;
-		y = i.y;
+		x = i[0];
+		y = i[1];
 		
 		g = party.mosaic.grid[x][y];
 		if (!g) {
@@ -602,7 +602,7 @@ var party = party || {};
 	
 	// Start the Real-time polling
 	function startPolling() {
-return;
+
 		// Start the recursive poller
 		poll();
 		polling_timer = window.setInterval(poll, (party.polling_timer_seconds * 1000));
