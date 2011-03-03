@@ -16,7 +16,6 @@ Array.prototype.shuffle = function (){
 	var initial_draw_timer,
 		loading_message_timer,
 		polling_timer,
-		loading_message_index,
 		tile_counter = 0,
 		auto_bubble_timer,
 		auto_bubble_index = 0,
@@ -199,27 +198,26 @@ Array.prototype.shuffle = function (){
 		counter.canvas.text(counter.current);
 	}
 	
-	// Iterate through the loading messages
-	function loadingMessage() {
-		
-		// Set the loading text
-		$('#loading').text(party.loading_messages[loading_message_index]);
-		
-		// Advance in the array - if at the end, restart
-		loading_message_index += 1;
-		if (loading_message_index >= party.loading_messages.length) {
-			loading_message_index = 0;
-		}
-		
-	}
+	
 	
 	// Randomize and show the loading message
 	function loadingShow() {
-		return;
-		party.loading_messages = $('#loading li');
+		var loading_messages = $('#loading li'),
+			loading_message_index = 0,
+			loadingMessage;
+			
+		loading_messages.shuffle();
 		
-		// Set a random first loading message
-		loading_message_index = Math.floor(Math.random() * party.loading_messages.length);
+		// Iterate through the loading messages
+		loadingMessage = function() {
+			// Advance in the array - if at the end, restart
+			loading_messages[loading_message_index].hide();
+			loading_message_index += 1;
+			if (loading_message_index >= loading_messages.length) {
+				loading_message_index = 0;
+			}
+			loading_messages[loading_message_index].show();
+		}
 		
 		// Loop through the array
 		loadingMessage();
@@ -229,8 +227,8 @@ Array.prototype.shuffle = function (){
 	
 	// Hide the loading message
 	function loadingHide(){
-		$('#loading').hide();
 		window.clearInterval(loading_message_timer);
+		$('#loading').remove();
 	}
 	
 	
