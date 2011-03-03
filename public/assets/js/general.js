@@ -564,13 +564,13 @@ var party = party || {};
 			var key;
 			for (key in visible_tiles) {
 				if (visible_tiles[key].p) {
-					autoplay_pool.push(parseInt(visible_tiles[key].p,10));
+					autoplay_pool.push(parseInt(visible_tiles[key].i,10));
 				}
 			}
 			total_positions = autoplay_pool.length;
 			autoplay_pool.sort();
 			autoplay_pool = autoplay_pool.slice(0, 199);
-			console.log(autoplay_pool);
+			console.log(autoplay_pool[4]);
 			
 			state.total_tiles = parseInt(party.state.last_page * total_positions, 10);
 			
