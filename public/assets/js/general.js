@@ -693,6 +693,7 @@ $(document).ready(function() {
 			l = (window.screen.width - w)/2,
 			t = (window.screen.height - h)/2;
 		window.open($(this).attr('href'), 'tweet', 'left=' + l + ',top=' + t + ',width=' + w + ',height=' + h + ',toolbar=0,resizable=1');
+		return false;
 	});
 
 	// Let's get it started!
