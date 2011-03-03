@@ -569,6 +569,7 @@ var party = party || {};
 			}
 			total_positions = autoplay_pool.length;
 			autoplay_pool.sort();
+			autoplay_pool.reverse();
 			//autoplay_pool = autoplay_pool.slice(0, 199);
 			console.log(autoplay_pool);
 			
