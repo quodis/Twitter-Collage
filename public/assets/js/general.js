@@ -201,16 +201,16 @@ var party = party || {};
 	// First to be called
 	function init() {
 		var bubble;
+		
 		// Check the browser's performance
+		party.performance = party.available_performances.high;
 		if ($.browser.msie) {
 			party.performance = party.available_performances.medium;
 		} else if ($.browser.mozilla) {
 			// Remove the download button if this is already firefox >= 4
-			if ($.browser.mozilla && window.navigator.userAgent.search('Firefox/4') != -1) {
+			if (window.navigator.userAgent.search('Firefox/4') != -1) {
 				$('#download').remove();
 			}
-		} else {
-			party.performance = party.available_performances.high;
 		}
 		
 		// Cache DOM elements
