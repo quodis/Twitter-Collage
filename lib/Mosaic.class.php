@@ -203,9 +203,9 @@ class Mosaic
 		);
 
 		// make config (grid + index)
-		foreach (self::$_pageConfig['grid'] as $rowIx => $rowPixels)
+		foreach (self::$_pageConfig['grid'] as $columnIx => $columns)
 		{
-			foreach ($rowPixels as $columnIx => $pos)
+			foreach ($columns as $rowIx => $row)
 			{
 				// store grid
 				$js['grid'][$columnIx][$rowIx] = array(
