@@ -218,7 +218,7 @@ final class Tweet
 		$pageSize = Db::escape($pageSize);
 
 		$sql = "SELECT page, cnt FROM ";
-		$sql.="  (SELECT page, COUNT(1) AS cnt FROM tweet GROUP BY page) AS pages";
+		$sql.="  (SELECT page, COUNT(1) AS cnt FROM tweet WHERE processedTs GROUP BY page) AS pages";
 		$sql.=" WHERE cnt = $pageSize ORDER BY page DESC LIMIT 1";
 
 		return Db::queryValue($sql, 'page');
