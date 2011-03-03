@@ -197,6 +197,7 @@ body {
 	position: absolute;
 	top:25px;
 	left:20px;
+	z-index:40;
 	
 /*
 	-moz-transform: rotate(-2deg);
@@ -414,7 +415,6 @@ footer a:hover {
 
 #footer-right #lang_form select {
 	width:140px;
-	font-family:sans-serif;
 }
 
 #footer-right #lang_form div {

@@ -35,7 +35,7 @@ Licensed under a Creative Commons Attribution Share-Alike License v3.0 http://cr
 	width: 290px;
 	position: absolute;
  	display: none; 
-	z-index: 20;
+	z-index: 50;
 }
 
 .bubble a,
@@ -304,6 +304,6 @@ Licensed under a Creative Commons Attribution Share-Alike License v3.0 http://cr
 	width: 20px;
 	height: 20px;
 	display: none;
-	z-index: 15;
+	z-index: 60;
 	cursor: pointer;
 }
