@@ -16,7 +16,7 @@
 # - data is at /servers/data/twitterparty
 # - user is root, current working dir is /servers/prod/twitterparty
 # - configuration file is "config/config.prod.yaml"
-# - daemontools is used to supervise jobs
+# - daemontools is used to supervise jobs (DO NOT RUN JOBS AS CRON JOBS)
 
 
 
@@ -32,7 +32,7 @@ apt-get install daemontools
 # dameontools specific:
 # http://www.bytereef.org/howto/djb/daemontools-install.html
 
-# daemons tools startup (copy svscan.conf > /etc/init/svscan.conf)
+cp assets/install/svscan.conf  /etc/init/svscan.conf
 
 # init service directory
 
