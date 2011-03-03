@@ -103,8 +103,13 @@ var party = party || {};
 		visible_tiles_random.shuffle();
 		// Calculate the number of frames
 		f = parseInt(total_positions/party.performance.initial_frames_per_second, 10);
+		console.log('total_positions', total_positions);
+		console.log('party.performance.initial_frames_per_second', party.performance.initial_frames_per_second);
+		console.log('f', f);
 		// Calculate the counter increment on each frame
 		counter.increment = parseInt(state.total_tiles/f, 10);
+		console.log('(state.total_tiles', state.total_tiles);
+		console.log('counter.increment', counter.increment);
 		// Start the recursive call for each frame
 		initial_draw_timer = window.setInterval(initialDrawFrame, (1000/party.performance.initial_frames_per_second) );
 	}
