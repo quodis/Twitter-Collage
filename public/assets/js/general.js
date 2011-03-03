@@ -198,7 +198,7 @@ var party = party || {};
 		var bubble;
 		// Check the browser's performance
 		if ($.browser.msie) {
-			party.performance = party.available_performances.low;
+			party.performance = party.available_performances.high;
 		} else if ($.browser.mozilla) {
 			// Remove the download button if this is already firefox >= 4
 			if ($.browser.version >= 4) {
