@@ -208,7 +208,7 @@ class Mosaic
 			foreach ($rowPixels as $columnIx => $pos)
 			{
 				// store grid
-				$js['grid'][$rowIx][$columnIx] = array(
+				$js['grid'][$columnIx][$rowIx] = array(
 					'r' => $pos['r'],
 					'i' => $pos['i'],
 				);
