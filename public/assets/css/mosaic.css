@@ -20,9 +20,11 @@ http://www.opensource.org/licenses/mit-license.php
 }
 
 #loading {
-	display: block;
 	text-align: center;
 	margin: 230px auto 0 auto;
+}
+#loading li {
+	display:none;
 }
 
 /* 2.Bubbles */
