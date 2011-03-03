@@ -625,10 +625,10 @@ var party = party || {};
 			counter.current += 1;
 			setCounter();
 		} else {
-			idx = party.mosaic.index[pos];
-			grid = party.mosaic.grid[idx[0]][idx[1]];
 			// Choose a random position
 			pos = Math.floor(Math.random() * total_positions);
+			idx = party.mosaic.index[pos];
+			grid = party.mosaic.grid[idx[0]][idx[1]];
 			// Update the CSS
 			css_changes = {
 				'background-image': 'none',
@@ -683,6 +683,9 @@ var party = party || {};
 		return state.last_id;
 	}
 	
+	function getVisibleTiles() {
+		return visible_tiles;
+	}
 	
 	/**
 	 * public, enable dashboard ui
@@ -719,8 +722,7 @@ var party = party || {};
 		"performance": performance,
 		"performance_settings": performance_settings,
 		"state": state,
-		"new_tiles": new_tiles,
-		"visible_tiles": visible_tiles
+		"getVisibleTiles": getVisibleTiles
 	});
 	
 }());
