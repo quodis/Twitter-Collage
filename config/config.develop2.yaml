@@ -1,28 +1,28 @@
 App:
     # path    
-    path: /servers/sites/quodis/twitterparty
-    pathLog: /var/log/twitterparty
+    path: /servers/develop/twitterparty2
+    pathLog: /var/log/twitterparty2
     # url
-    url: http://twitterparty.quodis.worker
+    url: http://dev2.twitterparty.quodis.com
 Store:
-    url: http://twitterparty.quodis.worker/store
-    path: /servers/sites/quodis/twitterparty/public/store
+    url: http://dev2.twitterparty.quodis.com/store
+    path: /servers/develop/twitterparty2/public/store
     filePermissions: 664
     dirPermissions: 775
-    group: www-data
+    group: quodis
 Data:
-    path: /servers/data/twitterparty
+    path: /servers/data/twitterparty2
     filePermissions: 664
     dirPermissions: 775
-    group: www-data
+    group: quodis
 Config:
     filePermissions: 664
-    group: www-data
+    group: quodis
 Twitter:
     urlSearch: "http://search.twitter.com/search.json"
-    terms: "#benfica OR #porto"
+    terms: "#firefox"
     rpp: 100
-    pageLimit: 15
+    pageLimit: 30
     timeout:
         apiCall: 5
         imgFile: 1
@@ -35,14 +35,14 @@ Mosaic:
     rows: 47
     tileSize: 12
     colorDepth: 16
-    internalComposite: 1
+    internalComposite: 0
 Jobs:
     twitter-search:
         period: 10
     image-process:
         period: 1
         dbLimit: 100
-        imgLimit: 2500
+        imgLimit: 1000
     mosaic-build:
         period: 5
 Cache:
@@ -56,7 +56,7 @@ Cache:
 Db:
     schemaDir: schema
     databases:
-        - name: twitterparty
+        - name: twitterparty2
           schemaFile: db.sql
           defaults: &connectionDefaults
               host: localhost
@@ -96,4 +96,4 @@ UI:
     pollLimit: 100
     resultsLimit: 100
     options:
-        store_url: http://twitterparty.quodis.worker/store
+        store_url: http://dev2.twitterparty.quodis.com/store
