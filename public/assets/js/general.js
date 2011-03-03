@@ -1,3 +1,11 @@
+/**
+ * Firefox 4 Twitter Party
+ * Design and development by Mozilla, Quodis
+ * http://www.mozilla.com
+ * http://www.quodis.com
+ * 
+ * Licensed under a Creative Commons Attribution Share-Alike License v3.0 http://creativecommons.org/licenses/by-sa/3.0/ 
+ */
 var party = party || {};
 
 Array.prototype.shuffle = function (){ 

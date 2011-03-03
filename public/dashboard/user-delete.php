@@ -14,11 +14,13 @@ function main()
 {
 	DEFINE('CLIENT', 'ajax');
 	DEFINE('CONTEXT', __FILE__);
-	include '../bootstrap.php';
+	include '../../bootstrap.php';
 
-	$id = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
+	dd($_REQUEST);
 
-	$result = Tweet::delete($id);
+	$userId = (isset($_REQUEST['user_id'])) ? $_REQUEST['user_id'] : null;
+
+	$result = Tweet::deleteUser($userId);
 
 	$ok = $result->success();
 	$msg = $ok ? 'OK' : 'FAIL';
