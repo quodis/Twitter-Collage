@@ -3,7 +3,7 @@
  * @package    Firefox 4 Twitter Party
  * @subpackage front-end
  * @version    v.0.1
- * @author     Andre Torgal <andre@quodis.com>, Leo Xavier <leo@quodis.com>, Leihla Pinho <leihla@quodis.com>, Luis Abreu <luis@quodis.com>
+ * @author     Andre Torgal <andre@quodis.com>, Leo Xavier <leo@quodis.com>, Leihla Pinho <leihla@quodis.com>, Luis Abreu <luis@quodis.com>, Bruno Abrantes <bruno@quodis.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -212,7 +212,7 @@ function main($language)
 		<script type="text/javascript">
 		//<![CDATA[
 		(function($) {
-			$.extend(party, <?=json_encode($uiOptions)?>);
+		  $.extend(party, <?=json_encode($uiOptions)?>);
 		})(jQuery);
 		//]]>
 		</script>
