@@ -211,12 +211,12 @@ Array.prototype.shuffle = function (){
 		// Iterate through the loading messages
 		loadingMessage = function() {
 			// Advance in the array - if at the end, restart
-			loading_messages[loading_message_index].hide();
+			$(loading_messages[loading_message_index]).hide();
 			loading_message_index += 1;
 			if (loading_message_index >= loading_messages.length) {
 				loading_message_index = 0;
 			}
-			loading_messages[loading_message_index].show();
+			$(loading_messages[loading_message_index]).show();
 		}
 		
 		// Loop through the array
