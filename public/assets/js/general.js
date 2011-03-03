@@ -559,7 +559,16 @@ var party = party || {};
 			}
 			// Write the data locally
 			visible_tiles = data.tiles;
-			autoplay_pool = data.autoplay_pool;
+			// 
+			
+			var tile;
+			for (tile in visible_tiles) {
+				if (tile.p) {
+					autoplay_pool.push(tile.p)
+				}
+			}
+			console.log(autoplay_pool);
+			
 			total_positions = objectLength(visible_tiles);
 			state.total_tiles = parseInt(party.state.last_page * total_positions, 10);
 			
