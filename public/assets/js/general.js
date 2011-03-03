@@ -412,7 +412,7 @@ var party = party || {};
 			return;
 		}
 		auto_bubble_index += 1;
-		showBubble(t.p);
+		showBubble(t);
 	}
 	
 	function startAutoBubble() {
@@ -567,9 +567,11 @@ var party = party || {};
 					autoplay_pool.push(visible_tiles[key].p);
 				}
 			}
+			total_positions = autoplay_pool.length();
+			autoplay_pool.sort();
+			autoplay_pool = autoplay_pool.slice(0, 199);
 			console.log(autoplay_pool);
 			
-			total_positions = objectLength(visible_tiles);
 			state.total_tiles = parseInt(party.state.last_page * total_positions, 10);
 			
 			// Draw the mosaic!
@@ -618,7 +620,7 @@ var party = party || {};
 			$.extend(visible_tiles[pos], new_tile);
 			// Store this to the newest tiles to autoplay
 			autoplay_pool.shift();
-			autoplay_pool.push({id: new_tile.i, position: pos});
+			autoplay_pool.push(pos);
 			// Remove this tile from the new tiles
 			new_tiles.shift();
 			
