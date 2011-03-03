@@ -561,10 +561,10 @@ var party = party || {};
 			visible_tiles = data.tiles;
 			// 
 			
-			var tile;
-			for (tile in visible_tiles) {
-				if (tile.p) {
-					autoplay_pool.push(tile.p)
+			var key;
+			for (key in visible_tiles) {
+				if (visible_tiles[key].p) {
+					autoplay_pool.push(visible_tiles[key].p);
 				}
 			}
 			console.log(autoplay_pool);
@@ -683,9 +683,6 @@ var party = party || {};
 		return state.last_id;
 	}
 	
-	function getVisibleTiles() {
-		return visible_tiles;
-	}
 	
 	/**
 	 * public, enable dashboard ui
@@ -722,7 +719,7 @@ var party = party || {};
 		"performance": performance,
 		"performance_settings": performance_settings,
 		"state": state,
-		"getVisibleTiles": getVisibleTiles
+		"new_tiles": new_tiles
 	});
 	
 }());
