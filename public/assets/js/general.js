@@ -681,11 +681,21 @@ var party = party || {};
 
 $(document).ready(function() {
 	
-	// Let's get it started!
-	party.init();
-	
+	// Language chooser
 	$('#flang').change(function(){
 		window.location = '/' + $(this).val();
 	});
+	
+	// Tweet popup window
+	$('#twitter-counter > dl > dt > a').click(function(){
+		var w = 500,
+			h = 550,
+			l = (window.screen.width - w)/2,
+			t = (window.screen.height - h)/2;
+		window.open($(this).attr('href'), 'tweet', 'left=' + l + ',top=' + t + ',width=' + w + ',height=' + h + ',toolbar=0,resizable=1');
+	});
+
+	// Let's get it started!
+	party.init();
 	
 });
