@@ -575,6 +575,7 @@ var party = party || {};
 			// Check if we should keep the visible or hidden tile from this position
 			// depending on which is the most recent
 			if (!visible_tiles[pos] || !hidden_tiles[pos]) {
+				new_tiles.shift();
 				return;
 			}
 			
