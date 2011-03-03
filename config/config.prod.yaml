@@ -15,7 +15,7 @@ App:
     url: http://twitterparty.mozilla.org
 Store:
     url: http://twitterparty.mozilla.org/store
-    path: /servers/develop/twitterparty/public/store
+    path: /servers/prod/twitterparty/public/store
     filePermissions: 644
     dirPermissions: 755
     group: root
