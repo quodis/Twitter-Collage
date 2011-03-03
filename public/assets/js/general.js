@@ -232,14 +232,15 @@ var party = party || {};
         party.canvas.bind('mousemove', function(ev) {
             var x,
 				y,
-				pos;
+				pos,
+				offset = party.canvas.offset();
 			
 			if (state.keep_bubble_open) {
 				return;
 			}
 			
-			x = Math.ceil((ev.clientX + f_scrollLeft() - state.mosaic_offset.left) / 12) - 1;
-			y = Math.ceil((ev.clientY + f_scrollTop() - state.mosaic_offset.top) / 12) - 1;
+			x = Math.ceil((ev.clientX + f_scrollLeft() - offset.left) / 12) - 1;
+			y = Math.ceil((ev.clientY + f_scrollTop() - offset.top) / 12) - 1;
             if (x < 0 || y < 0) {
 				return;
 			}
@@ -685,9 +686,9 @@ $(document).ready(function() {
 	party.init();
 
 	// Resize listener
-	$(window).resize(function() {
-		console.log('resizing');
-		party.state.mosaic_offset = party.canvas.offset();
-	});
+	// $(window).resize(function() {
+	// 	console.log('resizing');
+	// 	party.state.mosaic_offset = party.canvas.offset();
+	// });
 	
 });
