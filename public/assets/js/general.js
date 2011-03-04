@@ -264,12 +264,14 @@ var party = party || {};
 
             pos = party.mosaic.grid[x][y];
             
+            stopAutoBubble();
+            
             party.mousemoveTimer = setTimeout(function(){
                 // is valid x,y
                 if (pos) {
     				// Check if this is not the already opened bubble
     				if (state.active_bubble_pos != pos.i) {
-    					stopAutoBubble();
+    					//stopAutoBubble();
     					state.active_bubble_pos = pos.i;
     					showBubble(pos.i);
     				}
