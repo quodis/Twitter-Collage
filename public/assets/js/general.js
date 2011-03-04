@@ -132,7 +132,7 @@ var party = party || {};
 		
 		// Next time draw one tile more towards initial_tiles_per_frame
 		if (state.initial_tiles_per_frame_incremental < party.performance.initial_tiles_per_frame) {
-			state.initial_tiles_per_frame_incremental = party.performance.initial_tiles_per_frame;
+			state.initial_tiles_per_frame_incremental  += 0.02;
 		}
 		
 		j = (tile_counter + state.initial_tiles_per_frame_incremental);
@@ -150,8 +150,10 @@ var party = party || {};
 			// Draw the tiles and proceed
 			party.canvas.append(tiles_to_draw);
 			// Update counter
-			counter.current += counter.increment;
-			setCounter();
+			if (counter.current < state.total_tiles) {
+				counter.current += counter.increment;
+				setCounter();
+			}
 			
 		} else {
 			
@@ -778,8 +780,8 @@ $(document).ready(function() {
 	// Draw the lines on the logo
 	brand_center = parseInt($('#brand em').width(), 10);
 	brand_total = parseInt($('#brand p').width(), 10);
-	$('#brand em').before('<span style="left:0; width:' + (brand_total-brand_center)/2 + 'px" />').fadeIn();
-	$('#brand em').after('<span style="right:0; width:' + (brand_total-brand_center)/2 + 'px" />').fadeIn();
+	$('#brand em').before('<span style="left:0; width:' + ((brand_total-brand_center)/2)-9 + 'px" />').fadeIn('slow');
+	$('#brand em').after('<span style="right:0; width:' + ((brand_total-brand_center)/2)-9 + 'px" />').fadeIn('slow');
 	
 	// Let's get it started!
 	party.init();
