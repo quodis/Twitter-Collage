@@ -244,14 +244,6 @@ var party = party || {};
 		getVisibleTiles();
 		// Bind the hover action
 		
-		$(document).bind('mousemove', function(evt) {
-		    //console.log(evt);
-		    party.startAutoBubbleTimer = setTimeout(startAutoBubble, 250);
-		    if (!$(evt.originalEvent.target).is('#tile-hover') && !$(evt.originalEvent.target).is('.tile') && !$(evt.originalEvent.target).is('#mosaic')) {
-		        clearTimeout(party.startAutoBubbleTimer);
-		    }
-		});
-		
         party.canvas.bind('mousemove', function(ev) {
 			var x,
 				y,
