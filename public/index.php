@@ -23,8 +23,8 @@ function main($language)
 	DEFINE('CONTEXT', __FILE__);
 	include '../bootstrap.php';
 
-	Debug::setLogMsgFile($config['App']['pathLog'] .'/dashboard.msg.log');
-	Debug::setLogErrorFile($config['App']['pathLog'] .'/dashboard.error.log');
+	Debug::setLogMsgFile($config['App']['pathLog'] .'/www.msg.log');
+	Debug::setLogErrorFile($config['App']['pathLog'] .'/www.error.log');
 
 	// check cache
 	if ($output = Cache::get('TWITTER-PARTY::index::lang=' . $language))
@@ -59,8 +59,12 @@ function main($language)
 		<meta name="distribution" content="global" />
 
 		<!-- stylesheets -->
+<?php if ($config['UI']['minified']) { ?>
+		<link rel="stylesheet" href="<?=$config['UI']['css']['minified']?>" type="text/css" media="screen, projection" />
+<?php } else { ?>
 		<link rel="stylesheet" href="<?=$config['UI']['css']['main']?>" type="text/css" media="screen, projection" />
 		<link rel="stylesheet" href="<?=$config['UI']['css']['mosaic']?>" type="text/css" media="screen, projection" />
+<?php } ?>
 
 		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="apple-touch-icon" type="image/png" href="assets/images/global/apple-touch-icon-precomposed.png">
@@ -68,8 +72,12 @@ function main($language)
 
 		<!-- scripts -->
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<?php if ($config['UI']['minified']) { ?>
+		<script type="text/javascript" src="<?=$config['UI']['js']['minified']?>"></script>
+<?php } else { ?>
 		<script type="text/javascript" src="/assets/js/global.js?>"></script>
 		<script type="text/javascript" src="<?=$config['UI']['js']['general']?>"></script>
+<?php } ?>
 		<script type="text/javascript" src="<?=$jsMosaicConfig?>"></script>
 		<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
@@ -122,7 +130,7 @@ function main($language)
 
 				<section id="mosaic" role="img">
 					<h2><?= _('Mosaic') ?></h2>
-					
+
           <ul id="loading">
             <li><?= /* Funny loading message */ _('Sorting guest list alphabetically') ?></li>
             <li><?= /* Funny loading message */ _('Randomizing seating order') ?></li>
@@ -191,7 +199,7 @@ function main($language)
 
 					<p><?= /* Leave all html code unchanged */ _('Except where otherwise <a href="http://www.mozilla.com/about/legal.html#site">noted</a>, content on this site is licensed under the <br /><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.') ?></p>
 				</div><!-- footer-left -->
-        
+
 				<div id="footer-right">
 
 					<form id="lang_form" dir="ltr" method="get">

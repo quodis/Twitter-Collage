@@ -65,16 +65,19 @@ UI:
     title: "Firefox 4 Twitter Party"
     keywords: "Mozilla,Firefox, Firefox 4, Collage, Twitter, Tweet"
     description: "Firefox 4 Twitter Party is a visualization of Firefox 4 activity on Twitter. It is an experiment with exclusively open web tools and technologies."
+    minified: 1
     js: 
         general: "/assets/js/general.js?v=1"
         config: "/assets/js/config.js?v=1"
         dashboard: "/assets/js/dashboard.js?v=1"
+        minified: "/assets/js/party-min.js?v=1"
     js-config:
         grid: "/config/grid.js?v=1"
     css:
         main: "/assets/css/ftp.css?v=1"
         mosaic: "/assets/css/mosaic.css?v=1"
         dashboard: "/assets/css/dashboard.css?v=1"
+        minified: "/assets/css/party-min.css?v=1"
     pollLimit: 100
     resultsLimit: 100
     options:

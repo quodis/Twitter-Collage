@@ -8,6 +8,7 @@
  */
 
 
+DEFINE('APP_PATH', dirname(__FILE__));
 DEFINE('LIB_PATH', dirname(__FILE__) . '/lib');
 DEFINE('REQ_ID', isset($_REQUEST['reqId']) ? $_REQUEST['reqId'] : 'NOID');
 
