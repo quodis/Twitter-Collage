@@ -246,8 +246,7 @@ var party = party || {};
 		
 		$(document).bind('mousemove', function(evt) {
 		    //console.log(evt);
-		    console.log('target', $(evt.originalEvent.target));
-		    if (!$(evt.originalEvent.target).is('#mosaic')) {
+		    if (!$(evt.originalEvent.target).is('#mosaic') && !$(evt.originalEvent.target).parent().is('#mosaic')) {
 		        startAutoBubble();
 		    }
 		});
