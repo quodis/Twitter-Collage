@@ -318,6 +318,9 @@ var party = party || {};
 			if (!state.keep_bubble_open) {
 				state.keep_bubble_open = true;
 			}
+			
+			stopAutoBubble();
+						
 			event.stopPropagation();
 			return (event.target.nodeName.toLowerCase() == 'a');
 		});
