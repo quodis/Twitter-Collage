@@ -309,9 +309,14 @@ var party = party || {};
 			return (event.target.nodeName.toLowerCase() == 'a');
 		});
 		
+		//Proxying bubble mouseenter and mouseleave to above click events
 		party.bubble.container.bind('mouseenter', function() {
 		    tile_hover.trigger('click');
-		})
+		});
+		
+		party.bubble.container.bind('mouseleave', function() {
+		    party.canvas.trigger('click');
+		});
 	}
 	
 	function searchInit() {
