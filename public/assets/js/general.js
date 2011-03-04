@@ -244,8 +244,8 @@ var party = party || {};
 		getVisibleTiles();
 		// Bind the hover action
 		
-		party.canvas.bind('mouseout', function(){
-		   party.autoBubbleStartTimer = setTimeout(startAutoBubble, 250);
+		party.canvas.bind('mouseleave', function(){
+		   party.autoBubbleStartTimer = setTimeout(startAutoBubble, 150);
 		});
 		
         party.canvas.bind('mousemove', function(ev) {
