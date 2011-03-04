@@ -99,7 +99,6 @@ var party = party || {};
 		}
 		
 		// Add it to the HTML to draw
-		// return '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + tile.d + '); left: ' + (index[0]*12) + 'px; top: ' + (index[1]*12) + 'px;"></div>';
 		return '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + tile.d + '); left: ' + (index[0]*12) + 'px; top: ' + (index[1]*12) + 'px;"></div>';
 		
 	}
@@ -136,7 +135,7 @@ var party = party || {};
 			state.initial_tiles_per_frame_incremental += 0.02;
 		}
 		
-		j = (tile_counter + state.initial_tiles_per_frame_incremental);
+		j = (tile_counter + state.initial_tiles_per_frame);
 		
 		// Draw tiles_per_frame tiles and draw them
 		for (i = tile_counter; i < j; i += 1) {
@@ -755,6 +754,8 @@ var party = party || {};
 
 
 $(document).ready(function() {
+	var brand_center = 0,
+		brand_total = 0;
 	
 	// Language chooser
 	$('#flang').change(function(){
@@ -770,7 +771,13 @@ $(document).ready(function() {
 		window.open($(this).attr('href'), 'tweet', 'left=' + l + ',top=' + t + ',width=' + w + ',height=' + h + ',toolbar=0,resizable=1');
 		return false;
 	});
-
+	
+	// Draw the lines on the logo
+	brand_center = parseInt($('#brand em').width(), 10);
+	brand_total = parseInt($('#brand p').width(), 10);
+	$('#brand em').before('<span style="left:0; width:' + (brand_total-brand_center)/2 + 'px" />').fadeIn();
+	$('#brand em').after('<span style="right:0; width:' + (brand_total-brand_center)/2 + 'px" />').fadeIn();
+	
 	// Let's get it started!
 	party.init();
 	

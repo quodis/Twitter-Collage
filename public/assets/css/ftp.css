@@ -190,6 +190,8 @@ body {
 
 
 /* 4.HEADER */
+
+/* 4.HEADER */
 #brand {
 	width: 250px;
 	height: 155px;
@@ -226,20 +228,30 @@ body {
 }
 
 #brand p {
-	background: url(../images/layout/join-bg.png) center center repeat-x;
 	width:210px;
 	margin:0 10px;
-	float:center;
+	position:relative;
+	height:30px;
+	z-index:30;
 }
 
 #brand p em{
-	background: url(../images/layout/join-em-bg.png) top left repeat-x ;
 	font-size:22px;
 	font-family: Georgia, serif;
 	font-style: italic;
-	line-height:26px;
+	line-height:30px;
 	text-shadow: 0 1px 0px rgba(0,0,0,0.3);
 	padding: 0 5px;
+	height:30px;
+	display:block;
+	margin: 0 auto;
+}
+
+#brand p span{
+	height:30px;
+	position:absolute;	
+	top:0;
+	background: url(../images/layout/join-bg.png) center center repeat-x;
 }
 
 #brand h1, #brand h2{
