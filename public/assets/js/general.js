@@ -53,23 +53,24 @@ var party = party || {};
 			initial_tiles_per_frame_incremental: 1,
 			draw_new_tiles_every: 0,
 			draw_new_tiles_every_counter: 0,
-			total_tiles: 0
+			total_tiles: 0,
+			last_tile_drawn_pos: -1
 		},
 		performance_settings = {
 			high: {
 				initial_frames_per_second: 24,
 				initial_tiles_per_frame: 10,
-				new_tiles_per_second: 10
+				new_tiles_per_second: 8
 			},
 			medium: {
 				initial_frames_per_second: 12,
 				initial_tiles_per_frame: 20,
-				new_tiles_per_second: 5
+				new_tiles_per_second: 4
 			},
 			low: {
 				initial_frames_per_second: 1,
 				initial_tiles_per_frame: 200,
-				new_tiles_per_second: 3
+				new_tiles_per_second: 1
 			}
 		},
 		resizeObject = new HungryThrottler(200);
@@ -279,10 +280,8 @@ var party = party || {};
 		   //Code to run
 		});
         party.canvas.bind('mousemove', function(ev) {
-			console.log('triggering mousemove');
 			
 			resizeObject.eventHandler(function(){
-				console.log('triggering throttled mousemove');
 				
 	            var x,
 					y,
@@ -316,13 +315,13 @@ var party = party || {};
 			});
         });
 		// Hide the bubble if the mouse leavese the mosaic
-		party.canvas.bind('mouseout', function() {
-			if (state.keep_bubble_open || auto_bubble_timer) {
-				return;
-			}
-			hideBubble();
-			startAutoBubble();
-		});
+		// party.canvas.bind('mouseout', function() {
+		// 	if (state.keep_bubble_open || auto_bubble_timer) {
+		// 		return;
+		// 	}
+		// 	hideBubble();
+		// 	startAutoBubble();
+		// });
 		// Keep bubble open/hover
 		tile_hover.bind('click', function(event){
 			state.keep_bubble_open = true;
@@ -412,7 +411,7 @@ var party = party || {};
 			return;
 		}
 		auto_bubble_index += 1;
-		showBubble(t.p);
+		showBubble(t.position);
 	}
 	
 	function startAutoBubble() {
@@ -510,8 +509,8 @@ var party = party || {};
 		b.avatar_a.attr('title', tile.u).attr('href', 'http://twitter.com/' + tile.u);
 		b.avatar_img.attr('src', tile.m);
 		b.p.html(create_urls(tile.n));
-		b.time_a.attr('href', 'http://twitter.com/' + tile.u + '/status/' + tile.w).text(tile.createdDate);
-		b.time.attr('datetime', tile.createdDate);
+		b.time_a.attr('href', 'http://twitter.com/' + tile.u + '/status/' + tile.w).text(tile.c);
+		b.time.attr('datetime', tile.c);
 		b.container.css(position_css).removeClass().addClass('bubble ' + position_class + ' color-' + g.r);
 		
 		// Show
@@ -561,15 +560,19 @@ var party = party || {};
 			visible_tiles = data.tiles;
 			// 
 			
-			var tile;
-			for (tile in visible_tiles) {
-				if (tile.p) {
-					autoplay_pool.push(tile.p)
+			var key;
+			for (key in visible_tiles) {
+				if (visible_tiles[key].p) {
+					autoplay_pool.push({id: parseInt(visible_tiles[key].i,10), position: parseInt(visible_tiles[key].p,10)});
 				}
 			}
-			console.log(autoplay_pool);
-			
-			total_positions = objectLength(visible_tiles);
+			total_positions = autoplay_pool.length;
+			// Put the newest on top
+			autoplay_pool.sort(function(a, b) {
+				return b.id - a.id;
+			});
+			// Keep the newest 200
+			autoplay_pool = autoplay_pool.slice(0, 199);
 			state.total_tiles = parseInt(party.state.last_page * total_positions, 10);
 			
 			// Draw the mosaic!
@@ -588,11 +591,11 @@ var party = party || {};
 		
 		// Get a random position
 		var pos,
-			old_visible,
 			new_tile,
 			idx,
 			grid,
-			css_changes;
+			css_changes,
+			last_tile;
 
 		// Priority to new tiles
 		if (state.draw_new_tiles_every_counter >= state.draw_new_tiles_every) {
@@ -604,7 +607,7 @@ var party = party || {};
 		
 		if (new_tile) {
 			// Get the position
-			pos = new_tile.p;
+			pos = parseInt(new_tile.p);
 			if (!visible_tiles[pos]) {
 				new_tiles.shift();
 				return;
@@ -618,7 +621,7 @@ var party = party || {};
 			$.extend(visible_tiles[pos], new_tile);
 			// Store this to the newest tiles to autoplay
 			autoplay_pool.shift();
-			autoplay_pool.push({id: new_tile.i, position: pos});
+			autoplay_pool.push({id: parseInt(new_tile.i, 10), position: pos});
 			// Remove this tile from the new tiles
 			new_tiles.shift();
 			
@@ -635,6 +638,16 @@ var party = party || {};
 				'background-color': colors[grid.r]
 			};
 		}
+
+		// Update the previous tile
+		if (state.last_tile_drawn_pos > -1) {
+			$('#' + state.last_tile_drawn_pos).css({
+				'background-image': 'url(data:image/gif;base64,' + visible_tiles[state.last_tile_drawn_pos].d + ')'
+			});
+		}
+		
+		// Save the previous tile
+		state.last_tile_drawn_pos = pos;
 		
 		// Update the new tile
 		$('#' + pos).css(css_changes);
@@ -683,9 +696,6 @@ var party = party || {};
 		return state.last_id;
 	}
 	
-	function getVisibleTiles() {
-		return visible_tiles;
-	}
 	
 	/**
 	 * public, enable dashboard ui
@@ -722,7 +732,7 @@ var party = party || {};
 		"performance": performance,
 		"performance_settings": performance_settings,
 		"state": state,
-		"getVisibleTiles": getVisibleTiles
+		"new_tiles": new_tiles
 	});
 	
 }());
