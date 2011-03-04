@@ -477,11 +477,19 @@ var party = party || {};
 		// Change the bubble
 		b.username_a.text(tile.u).attr('href', 'http://twitter.com/' + tile.u);
 		b.avatar_a.attr('title', tile.u).attr('href', 'http://twitter.com/' + tile.u);
-		b.avatar_img.attr('src', tile.m);
 		b.p.html(create_urls(tile.n));
 		b.time_a.attr('href', 'http://twitter.com/' + tile.u + '/status/' + tile.w).text(tile.c);
 		b.time.attr('datetime', tile.c);
 		b.container.css(position_css).removeClass().addClass('bubble ' + position_class + ' color-' + g.r);
+		
+		//Show the image on a small timeout window
+		party.showBubbleImageTimer = setTimeout(function(){
+		    b.avatar_img.hide().attr('src', tile.m);
+		    b.avatar_img.load(function(){
+		        $(this).fadeIn('fast');
+		    })
+		    party.showBubbleImageTimer = null;
+		}, 500);
 		
 		// Show
 		b.container.show();
@@ -494,6 +502,12 @@ var party = party || {};
 		state.keep_bubble_open = false;
 		party.bubble.container.hide();
 		tile_hover.hide();
+		
+		//Clean the image showing timer if bubble is closed in the meanwhile
+		if (party.showBubbleImageTimer) {
+		    clearTimeout(party.showBubbleImageTimer);
+		    party.showBubbleImageTimer = null;
+		}
 	}
 	
 	// Reload the whole page
