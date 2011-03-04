@@ -412,7 +412,7 @@ var party = party || {};
 			return;
 		}
 		auto_bubble_index += 1;
-		showBubble(t);
+		showBubble(t.position);
 	}
 	
 	function startAutoBubble() {
@@ -510,8 +510,8 @@ var party = party || {};
 		b.avatar_a.attr('title', tile.u).attr('href', 'http://twitter.com/' + tile.u);
 		b.avatar_img.attr('src', tile.m);
 		b.p.html(create_urls(tile.n));
-		b.time_a.attr('href', 'http://twitter.com/' + tile.u + '/status/' + tile.w).text(tile.createdDate);
-		b.time.attr('datetime', tile.createdDate);
+		b.time_a.attr('href', 'http://twitter.com/' + tile.u + '/status/' + tile.w).text(tile.c);
+		b.time.attr('datetime', tile.c);
 		b.container.css(position_css).removeClass().addClass('bubble ' + position_class + ' color-' + g.r);
 		
 		// Show
@@ -564,18 +564,17 @@ var party = party || {};
 			var key;
 			for (key in visible_tiles) {
 				if (visible_tiles[key].p) {
-					autoplay_pool.push(parseInt(visible_tiles[key].i,10));
+					autoplay_pool.push({id: parseInt(visible_tiles[key].i,10), position: parseInt(visible_tiles[key].p,10));
 				}
 			}
 			total_positions = autoplay_pool.length;
-			
+			console.log(autoplay_pool);
 			autoplay_pool.sort(function(a, b) {
-				return b - a;
+				return b.id - a.id;
 			});
 			
 			//autoplay_pool.reverse();
 			autoplay_pool = autoplay_pool.slice(0, 199);
-			console.log(autoplay_pool);
 			
 			state.total_tiles = parseInt(party.state.last_page * total_positions, 10);
 			
@@ -611,7 +610,7 @@ var party = party || {};
 		
 		if (new_tile) {
 			// Get the position
-			pos = new_tile.p;
+			pos = parseInt(new_tile.p);
 			if (!visible_tiles[pos]) {
 				new_tiles.shift();
 				return;
@@ -625,7 +624,7 @@ var party = party || {};
 			$.extend(visible_tiles[pos], new_tile);
 			// Store this to the newest tiles to autoplay
 			autoplay_pool.shift();
-			autoplay_pool.push(pos);
+			autoplay_pool.push({id: parseInt(new_tile.i, 10), position: pos});
 			// Remove this tile from the new tiles
 			new_tiles.shift();
 			
