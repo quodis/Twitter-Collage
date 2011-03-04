@@ -89,7 +89,7 @@ class Mosaic
 		if (!isset(self::$_pageConfig))
 		{
 			// declares $config
-			$json = file_get_contents(self::_getPageConfigFileName());
+			$json = file_get_contents(self::_getConfigFileName());
 
 			if (!$json) throw new Exception('could not load page config');
 
@@ -179,7 +179,7 @@ class Mosaic
 	 */
 	public static function saveConfig()
 	{
-		$fileName = self::_getPageConfigFileName();
+		$fileName = self::_getConfigFileName();
 
 		file_put_contents($fileName, json_encode(self::$_pageConfig));
 		chmod($fileName, octdec(self::$_config['Config']['filePermissions']));
@@ -287,7 +287,7 @@ party.mosaic = ' . json_encode($js) . ';
 			$fileData['last_id'] = $lastId;
 		}
 
-		$fileName = self::getPageDataFileName();
+		$fileName = self::getDataFileName();
 
 		file_put_contents($fileName, json_encode($fileData));
 		chmod($fileName, octdec(self::$_config['Store']['filePermissions']));
@@ -451,7 +451,7 @@ party.mosaic = ' . json_encode($js) . ';
 	/**
 	 * @return string
 	 */
-	private static function _getPageConfigFileName()
+	private static function _getConfigFileName()
 	{
 		return self::$_config['App']['path'] . '/' . self::$_config['Mosaic']['configFile'];
 	}
@@ -460,9 +460,9 @@ party.mosaic = ' . json_encode($js) . ';
 	/**
 	 * @return string
 	 */
-	public static function getPageDataFileName()
+	public static function getDataFileName()
 	{
-		$filename = self::$_config['Store']['path'] . '/page.json';
+		$filename = self::$_config['Store']['path'] . '/mosaic.json';
 
 		if (!is_dir(dirname($filename)))
 		{
