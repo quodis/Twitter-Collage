@@ -246,7 +246,7 @@ var party = party || {};
 		
 		$(document).bind('mousemove', function(evt) {
 		    //console.log(evt);
-		    if (!$(evt.originalEvent.target).is('#tile-hover') && !$(evt.originalEvent.target).is('.tile')) {
+		    if (!$(evt.originalEvent.target).is('#tile-hover') && !$(evt.originalEvent.target).is('.tile') && !$(evt.originalEvent.target).is('#mosaic')) {
 		        startAutoBubble();
 		    }
 		});
