@@ -88,3 +88,4 @@ UI:
     resultsLimit: 100
     options:
         store_url: http://twitterparty.mozilla.org/store
+        short_stat_interval: 3000

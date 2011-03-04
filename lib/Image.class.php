@@ -63,8 +63,6 @@ class Image
 			)
 		);
 		$fileData = Curl::get($url, $options);
-		// TODO: configure the CURL timeout for a shorter period
-
 		// use a default image if we're unable to fetch/save the url
 		if (!$fileData)
 		{
