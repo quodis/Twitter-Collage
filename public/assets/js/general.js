@@ -282,7 +282,7 @@ var party = party || {};
         party.canvas.bind('mousemove', function(ev) {
 			
 			resizeObject.eventHandler(function(){
-				
+				console.log('throttled mouse move', ev);
 	            var x,
 					y,
 					pos,
