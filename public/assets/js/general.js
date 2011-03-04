@@ -244,6 +244,12 @@ var party = party || {};
 		getVisibleTiles();
 		// Bind the hover action
 		
+		$(document).bind('mousemove', function(evt) {
+		    if (!evt.target.is('#mosaic')) {
+		        startAutoBubble();
+		    }
+		});
+		
         party.canvas.bind('mousemove', function(ev) {
 			var x,
 				y,
@@ -382,7 +388,6 @@ var party = party || {};
 	function startAutoBubble() {
 		// Start it only if it's not already started
 		if (!auto_bubble_timer) {
-		    console.log('starting auto bubble...');
 			showAutoBubble();
 			auto_bubble_timer = setInterval(showAutoBubble, party.auto_bubble_seconds * 1000);
 		}
