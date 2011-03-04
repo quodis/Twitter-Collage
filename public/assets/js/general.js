@@ -351,6 +351,10 @@ var party = party || {};
 		});
 		
 		$('#search-box').submit(function() {
+			var user_name = search.input_dom.val();
+			if (user_name == "") {
+				return false;
+			}
 		  	// Show loading
 			$('#search-box button').addClass('loading');
 			// Request server
@@ -358,7 +362,7 @@ var party = party || {};
 				url: '/tiles-by-username.php',
 				type: 'GET',
 				dataType: 'json',
-				data: {user_name: search.input_dom.val()},
+				data: {user_name: user_name},
 				success: processSearchResult
 			});
 			
