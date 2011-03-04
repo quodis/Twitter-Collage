@@ -244,6 +244,10 @@ var party = party || {};
 		getVisibleTiles();
 		// Bind the hover action
 		
+		party.canvas.bind('mouseout', function(){
+		   party.autoBubbleStartTimer = setTimeout(startAutoBubble, 250);
+		});
+		
         party.canvas.bind('mousemove', function(ev) {
 			var x,
 				y,
@@ -251,6 +255,7 @@ var party = party || {};
 				offset = party.canvas.offset();
 				
 			clearTimeout(party.mousemoveTimer);
+			clearTimeout(party.autoBubbleStartTimer);
 
 			if (state.keep_bubble_open) {
 				return;
