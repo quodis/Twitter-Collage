@@ -315,13 +315,13 @@ var party = party || {};
 			});
         });
 		// Hide the bubble if the mouse leavese the mosaic
-		party.canvas.bind('mouseout', function() {
-			if (state.keep_bubble_open || auto_bubble_timer) {
-				return;
-			}
-			hideBubble();
-			startAutoBubble();
-		});
+		// party.canvas.bind('mouseout', function() {
+		// 	if (state.keep_bubble_open || auto_bubble_timer) {
+		// 		return;
+		// 	}
+		// 	hideBubble();
+		// 	startAutoBubble();
+		// });
 		// Keep bubble open/hover
 		tile_hover.bind('click', function(event){
 			state.keep_bubble_open = true;
