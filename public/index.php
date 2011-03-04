@@ -203,9 +203,9 @@ function main($language)
 					</p>
 
 					<p><?= sprintf(/* L10n: Leave all html code unchanged */ _('Except where otherwise <a href="%s">noted</a>, content on this site is licensed under the <br /><a href="%s" rel="external">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.'), 'http://www.mozilla.com/about/legal.html#site', 'http://creativecommons.org/licenses/by-sa/3.0/') ?></p>
-					<!--
+
 					<p><?= sprintf( /* L10n: The variable will hold a linked name to the web agency */ _('Visualization by %s'), '<a href="http://quodis.com" title="Quodis" rel="external">Quodis</a>') ?></p>
-					-->
+
 				</div><!-- footer-left -->
 
 				<div id="footer-right">
