@@ -451,7 +451,7 @@ party.mosaic = ' . json_encode($js) . ';
 	/**
 	 * @return string
 	 */
-	private static function _getPageConfigFileName()
+	private static function _getConfigFileName()
 	{
 		return self::$_config['App']['path'] . '/' . self::$_config['Mosaic']['configFile'];
 	}
