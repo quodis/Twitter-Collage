@@ -246,11 +246,9 @@ var party = party || {};
 		
 		$(document).bind('mousemove', function(evt) {
 		    //console.log(evt);
-		    //console.log('is mosaic: ', $(evt.currentTarget).is('#mosaic'));
+		    console.log('is mosaic: ', $(evt.originalEvent.target).is('#mosaic'));
 		    if (!$(evt.originalEvent.target).is('#mosaic')) {
 		        startAutoBubble();
-		    } else {
-		        stopAutoBubble();
 		    }
 		});
 		
