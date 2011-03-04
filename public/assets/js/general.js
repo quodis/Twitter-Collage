@@ -135,7 +135,7 @@ var party = party || {};
 			state.initial_tiles_per_frame_incremental += 0.02;
 		}
 		
-		j = (tile_counter + state.initial_tiles_per_frame);
+		j = (tile_counter + state.initial_tiles_per_frame_incremental);
 		
 		// Draw tiles_per_frame tiles and draw them
 		for (i = tile_counter; i < j; i += 1) {
