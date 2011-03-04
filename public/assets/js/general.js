@@ -128,11 +128,15 @@ var party = party || {};
 		var tiles_to_draw = "",
 			i = 0,
 			j = 0,
-			p;
+			p,
+			inc = 0;
 		
 		// Next time draw one tile more towards initial_tiles_per_frame
 		if (state.initial_tiles_per_frame_incremental < party.performance.initial_tiles_per_frame) {
-			state.initial_tiles_per_frame_incremental  += 0.02;
+			state.initial_tiles_per_frame_incremental += 0.02;
+			inc = (counter.increment/(party.performance.initial_tiles_per_frame/state.initial_tiles_per_frame_incremental));
+		} else {
+			inc = counter.increment;
 		}
 		
 		j = (tile_counter + state.initial_tiles_per_frame_incremental);
@@ -151,7 +155,7 @@ var party = party || {};
 			party.canvas.append(tiles_to_draw);
 			// Update counter
 			if (counter.current < state.total_tiles) {
-				counter.current += counter.increment;
+				counter.current += inc;
 				setCounter();
 			}
 			
@@ -212,10 +216,7 @@ var party = party || {};
 	function init() {
 		var bubble,
 		    imgsToPreload = [
-		        'assets/images/layout/bubble-light-blue.png',
-		        'assets/images/layout/bubble-dark-blue.png',
-		        'assets/images/layout/bubble-yellow.png',
-		        'assets/images/layout/bubble-dark-orange.png'
+		        'assets/images/layout/bubbles.png'
 		    ];
 		
 		//Bubble image preloading
@@ -515,7 +516,7 @@ var party = party || {};
 		b.p.html(create_urls(tile.n));
 		b.time_a.attr('href', 'http://twitter.com/' + tile.u + '/status/' + tile.w).text(formatted_date);
 		b.time.attr('datetime', formatted_date);
-		b.avatar_img.hide();
+		b.avatar_img.hide().attr('src', '');
 		b.container.css(position_css).removeClass().addClass('bubble ' + position_class + ' color-' + g.r);
 		
 		//Show the image on a small timeout window
@@ -564,7 +565,7 @@ var party = party || {};
 		loadingShow();
 		
 		// Request URL
-		var url = party.store_url + '/pages/page_' + party.state.last_page + '.json';
+		var url = party.store_url + '/mosaic.json';
 		
 		// Get the first visible page from server
 		$.getJSON(url, function(data) {
