@@ -280,7 +280,7 @@ var party = party || {};
 		   //Code to run
 		});
         party.canvas.bind('mousemove', function(ev) {
-			resizeObject.eventHandler(function(ev){
+			resizeObject.eventHandler(function(){
 				console.log(ev.clientX, ev.clientY);
 	            var x,
 					y,
