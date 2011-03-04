@@ -278,7 +278,7 @@ var party = party || {};
     				party.mousemoveTimer = setTimeout(function(){
     				    startAutoBubble();
     				    party.mousemoveTimer = null;
-    				}, 250);
+    				}, 150);
     			}
             }, 50);			
         });
