@@ -432,7 +432,8 @@ var party = party || {};
 			position_class,
 			position_css,
 			i,
-			g;
+			g,
+			formatted_date;
 		
 		tile = visible_tiles[pos];
 		if (!tile || !b) {
@@ -501,12 +502,15 @@ var party = party || {};
 			'top': (y*12) + 'px'
 		});
 		
+		// Localize stuff
+		formatted_date = date(party.l10n.date_format, tile.c);
+		
 		// Change the bubble
 		b.username_a.text(tile.u).attr('href', 'http://twitter.com/' + tile.u);
 		b.avatar_a.attr('title', tile.u).attr('href', 'http://twitter.com/' + tile.u);
 		b.p.html(create_urls(tile.n));
-		b.time_a.attr('href', 'http://twitter.com/' + tile.u + '/status/' + tile.w).text(tile.c);
-		b.time.attr('datetime', tile.c);
+		b.time_a.attr('href', 'http://twitter.com/' + tile.u + '/status/' + tile.w).text(formatted_date);
+		b.time.attr('datetime', formatted_date);
 		b.avatar_img.hide();
 		b.container.css(position_css).removeClass().addClass('bubble ' + position_class + ' color-' + g.r);
 		
