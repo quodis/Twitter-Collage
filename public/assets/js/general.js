@@ -282,13 +282,14 @@ var party = party || {};
         party.canvas.bind('mousemove', function(ev) {
 			
 			resizeObject.eventHandler(function(){
-				console.log('throttled mouse move', ev);
+				console.log(ev.clientX, ev.clientY);
 	            var x,
 					y,
 					pos,
 					offset = party.canvas.offset();
 
 				if (state.keep_bubble_open) {
+				    console.log('keeping bubble open...');
 					return;
 				}
 
