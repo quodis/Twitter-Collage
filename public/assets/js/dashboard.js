@@ -27,9 +27,7 @@ var party = party || {};
 		defaults : {
 			'store_url' : '',
 			'tile_size' : 0,
-			'idle_timeout' : 120 * 1000,
-			'highlight_timeout' : 500,
-			'short_stat_interval' : 300000
+			'short_stat_interval' : 10 * 1000
 		},
 		options : { },
 
@@ -40,8 +38,6 @@ var party = party || {};
 			'last_id' : 0,
 			'tweet_count' : 0,
 			'last_page' : 0,
-			'idle_timeout' : null,
-			'highlight_timeout' : null,
 			'short_stat_interval' : null
 		},
 		
@@ -82,9 +78,9 @@ var party = party || {};
 		buildInterface : function() 
 		{
 			// show last id
-			$('#guest-count span').rollNumbers(this.state.guest_count, 3000);
-			$('#tweet-count span').rollNumbers(this.state.tweet_count, 5000);
-			$('#last-page span').rollNumbers(this.state.last_page, 3000);
+			$('#guest-count span').rollNumbers(this.state.guest_count, 2000);
+			$('#tweet-count span').rollNumbers(this.state.tweet_count, 2000);
+			$('#last-page span').rollNumbers(this.state.last_page, 2000);
 			
 			// bind search user
 			$('#find-user').inputDefault().inputState( { 'onEnter' : function() {
@@ -137,7 +133,7 @@ var party = party || {};
 				this.load('/dashboard/stat-short.php', null, function(data) {
 					if (!data) return;
 					$.extend(this.state, data);
-					$('#tweet-count span').rollNumbers(this.state.tweet_count, this.options.short_stat_interval);
+					$('#tweet-count span').rollNumbers(this.state.tweet_count, parseInt(this.options.short_stat_interval / 2, 10));
 					$('#last-page span').text(this.state.last_page);
 					$('#job-delay span').html('<em>' + this.state.delay.seconds + ' sec / ' + this.state.delay.tweets + ' tweets</em>');
 				}.bind(this) );
