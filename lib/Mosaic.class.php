@@ -253,14 +253,13 @@ party.mosaic = ' . json_encode($js) . ';
 
 
 	/**
-	 * updates this page file, returns number of tweets
+	 * updates the most recent and complete page to a json file
 	 *
-	 * @param $pageNo
-	 *
-	 * @return $tweets;
+	 * @return integer page number
 	 */
-	public static function updatePage($pageNo)
+	public static function updatePage()
 	{
+		$pageNo = Tweet::getLastCompletePage(self::getPageSize());
 		$result = Tweet::getByPage($pageNo, 0, TRUE);
 
 		$fileData = array(
@@ -288,53 +287,13 @@ party.mosaic = ' . json_encode($js) . ';
 			$fileData['last_id'] = $lastId;
 		}
 
-		$fileName = self::getPageDataFileName($pageNo);
+		$fileName = self::getPageDataFileName();
 
 		file_put_contents($fileName, json_encode($fileData));
 		chmod($fileName, octdec(self::$_config['Store']['filePermissions']));
 		chgrp($fileName, self::$_config['Store']['group']);
 
 		return count($fileData['tiles']);
-	}
-
-
-	/**
-	 * updates this page file, returns number of tweets
-	 *
-	 * @param $pageNo
-	 *
-	 * @return $tweets;
-	 */
-	public static function purgePage($pageNo)
-	{
-		// delete from filesys
-		$command = 'rm ' . self::getPageDataFileName($pageNo);
-		shell_exec($command);
-	}
-
-
-	/**
-	 *
-	 * @param $pageNo
-	 */
-	public static function pageExists($pageNo)
-	{
-		return file_exists(self::getPageDataFileName($pageNo));
-	}
-
-	/**
-	 *
-	 * @param $pageNo
-	 *
-	 * @return array;
-	 */
-	public static function getPageData($pageNo)
-	{
-		if (!self::pageExists($pageNo)) return array();
-
-		$filename = self::getPageDataFileName($pageNo);
-
-		return json_decode(file_get_contents($filename), TRUE);
 	}
 
 
@@ -499,13 +458,11 @@ party.mosaic = ' . json_encode($js) . ';
 
 
 	/**
-	 * @param integer $pageNo
-	 *
 	 * @return string
 	 */
-	public static function getPageDataFileName($pageNo)
+	public static function getPageDataFileName()
 	{
-		$filename = self::$_config['Store']['path'] . '/pages/page_' . $pageNo . '.json';
+		$filename = self::$_config['Store']['path'] . '/page.json';
 
 		if (!is_dir(dirname($filename)))
 		{
