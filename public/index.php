@@ -164,7 +164,7 @@ function main($language)
 
 					</article><!-- bubble template -->
 
-				</section>
+				</section><!-- mosaic -->
 
 			</div><!-- wrapper -->
 
@@ -202,8 +202,10 @@ function main($language)
 						<a href="http://www.mozilla.com/legal/fraud-report/index.html"><?= _('Report Trademark Abuse') ?></a>
 					</p>
 
-					<p><?= /* Leave all html code unchanged */ _('Except where otherwise <a href="http://www.mozilla.com/about/legal.html#site">noted</a>, content on this site is licensed under the <br /><a href="http://creativecommons.org/licenses/by-sa/3.0/" rel="external">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.') ?></p>
-					<p><?= sprintf( /* The variable will hold a linked name to the web agency */ _('Visualization by $'), '<a href="http://quodis.com" title="Quodis" rel="external">Quodis</a>') ?></p>
+					<p><?= sprintf(/* Leave all html code unchanged */ _('Except where otherwise <a href="%s">noted</a>, content on this site is licensed under the <br /><a href="%s" rel="external">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.'), 'http://www.mozilla.com/about/legal.html#site', 'http://creativecommons.org/licenses/by-sa/3.0/') ?></p>
+					<!--
+					<p><?= sprintf( /* The variable will hold a linked name to the web agency */ _('Visualization by %s'), '<a href="http://quodis.com" title="Quodis" rel="external">Quodis</a>') ?></p>
+					-->
 				</div><!-- footer-left -->
 
 				<div id="footer-right">
@@ -219,7 +221,7 @@ function main($language)
 
 					</form>
 
-				</div> <!-- footer-right -->
+				</div><!-- footer-right -->
 
 			</div><!-- footer-copyright -->
 

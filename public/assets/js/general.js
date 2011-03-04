@@ -516,7 +516,7 @@ var party = party || {};
 		b.p.html(create_urls(tile.n));
 		b.time_a.attr('href', 'http://twitter.com/' + tile.u + '/status/' + tile.w).text(formatted_date);
 		b.time.attr('datetime', formatted_date);
-		b.avatar_img.hide();
+		b.avatar_img.hide().attr('src', '');
 		b.container.css(position_css).removeClass().addClass('bubble ' + position_class + ' color-' + g.r);
 		
 		//Show the image on a small timeout window
@@ -565,7 +565,7 @@ var party = party || {};
 		loadingShow();
 		
 		// Request URL
-		var url = party.store_url + '/pages/page_' + party.state.last_page + '.json';
+		var url = party.store_url + '/mosaic.json';
 		
 		// Get the first visible page from server
 		$.getJSON(url, function(data) {
