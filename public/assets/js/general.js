@@ -245,7 +245,7 @@ var party = party || {};
 		// Bind the hover action
 		
 		$(document).bind('mousemove', function(evt) {
-		    console.log(evt.originalTarget);
+		    console.log(evt);
 		    //console.log('is mosaic: ', $(evt.currentTarget).is('#mosaic'));
 		    if (!$(evt.currentTarget).is('#mosaic')) {
 		        startAutoBubble();
