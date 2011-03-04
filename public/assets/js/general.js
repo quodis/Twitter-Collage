@@ -275,7 +275,10 @@ var party = party || {};
     				}
                 } else {
     				// Not a tile
-    				startAutoBubble();
+    				party.mousemoveTimer = setTimeout(function(){
+    				    startAutoBubble();
+    				    party.mousemoveTimer = null;
+    				}, 250);
     			}
             }, 50);			
         });
