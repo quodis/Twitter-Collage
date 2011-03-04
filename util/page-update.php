@@ -14,7 +14,7 @@ function main()
 {
 	global $argv;
 
-	$usage = 'USAGE: page-update 1 OR page-update 1-5 OR page-update 2,3,7,8';
+	// FIX update the most recent set of tiles only (no page)
 
 	DEFINE('CLIENT', 'script');
 	DEFINE('CONTEXT', __FILE__);
@@ -28,8 +28,13 @@ function main()
 	// update pages
 	foreach ($pageList as $pageNo)
 	{
-		Debug::logMsg('update page:' . $pageNo . ' to file:' . Mosaic::getPageDataFileName($pageNo));
-		Mosaic::updatePage($pageNo);
+		$count = Mosaic::updatePage($pageNo);
+		if ($count)
+		{
+			Debug::logMsg('update page:' . $pageNo . ' to file:' . Mosaic::getPageDataFileName($pageNo));
+		}
+		else Debug::logMsg('skip empty page:' . $pageNo);
+
 	}
 
 	Dispatch::now(1, 'OK');
