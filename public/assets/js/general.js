@@ -73,7 +73,7 @@ var party = party || {};
 				new_tiles_per_second: 1
 			}
 		},
-		resizeObject = new HungryThrottler(200);
+		resizeObject = new HungryThrottler(100);
 	
 	function HungryThrottler(delay) {
 	       var delay = (!delay) ? 1000 : delay,
@@ -280,8 +280,7 @@ var party = party || {};
 		   //Code to run
 		});
         party.canvas.bind('mousemove', function(ev) {
-			
-			resizeObject.eventHandler(function(){
+			resizeObject.eventHandler(function(ev){
 				console.log(ev.clientX, ev.clientY);
 	            var x,
 					y,
