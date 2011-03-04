@@ -46,7 +46,7 @@ function main($language)
 
 	<head>
 
-		<title>Firefox 4 Twitter Party</title>
+		<title><?= /* Browser title */ _('Firefox 4 Twitter Party') ?></title>
 
 		<meta charset="utf-8" />
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -82,7 +82,7 @@ function main($language)
 
 				<!-- HEADER -->
 				<header id="brand" role="banner">
-					<h1><a href="#" title="<?= _('Join the Firefox 4 Twitter Party') ?>"><?= _('Join the Firefox 4 Twitter Party') ?></a></h1>
+					<h1><a href="/" title="<?= _('Start over') ?>"><?= _('Join the Firefox 4 Twitter Party') ?></a></h1>
 				</header>
 
 				<!-- CONTENT -->
@@ -93,7 +93,7 @@ function main($language)
 
 					<div id="twitter-counter" class="clearfix">
 						<dl>
-							<dt><a href="http://twitter.com/share?url=http://twitterparty.mozilla.org&via=firefox&related=firefox&text=<?= urlencode(_('Join me at the Firefox 4 Twitter Party and celebrate the newest version #fx4 #teamfirefox')) ?>" title="<?= _('Tweet') ?>" rel="external"><?= _('Tweet') ?></a></dt>
+							<dt><a href="http://twitter.com/share?url=http://twitterparty.mozilla.org&via=firefox&related=firefox&text=<?= urlencode( /* Default text to tweet */_('Join me at the Firefox 4 Twitter Party and celebrate the newest version') . ' #fx4 #teamfirefox') ?>" title="<?= _('Tweet') ?>" rel="external"><?= _('Tweet') ?></a></dt>
 							<dd><span></span></dd>
 						</dl>
 					</div><!-- twitter-counter -->
@@ -111,22 +111,22 @@ function main($language)
 					</form><!-- search-box -->
 
 					<div id="download">
-						<a class="download-link download-firefox" href="http://www.mozilla.com/"><span class="download-content"><span class="download-title">Firefox 4</span><?= _('Download here') ?></span></a>
+						<a class="download-link download-firefox" href="http://www.mozilla.com/"><span class="download-content"><span class="download-title">Firefox 4</span><?= /* Max of 15 characters */ _('Download here') ?></span></a>
 					</div><!-- download -->
 
 				</aside><!-- main-content -->
 
 
 				<section id="mosaic" role="img">
-					<h2><?= _('Firefox Twitter Mosaic') ?></h2>
+					<h2><?= _('Firefox Twitter Party') ?></h2>
 
           <ul id="loading">
-            <li><?= _('Sorting guest list alphabetically') ?></li>
-            <li><?= _('Randomizing seating order') ?></li>
-            <li><?= _('Cooling drinks to optimal temperature') ?></li>
-            <li><?= _('Handing out name tags') ?></li>
-            <li><?= _('Waxing the dance floor') ?></li>
-            <li><?= _('Setting up Firefox deco') ?></li>
+            <li><?= /* Funny loading message */ _('Sorting guest list alphabetically') ?></li>
+            <li><?= /* Funny loading message */ _('Randomizing seating order') ?></li>
+            <li><?= /* Funny loading message */ _('Cooling drinks to optimal temperature') ?></li>
+            <li><?= /* Funny loading message */ _('Handing out name tags') ?></li>
+            <li><?= /* Funny loading message */ _('Waxing the dance floor') ?></li>
+            <li><?= /* Funny loading message */ _('Setting up Firefox deco') ?></li>
           </ul>
 
 					<img src="" id="tile-hover" />
@@ -163,7 +163,7 @@ function main($language)
 
 			<div id="sub-footer" role="content-info" class="clearfix">
 
-				<h3><?= _("Let's be <span>Friends!</span>") ?></h3>
+				<h3><?= /* Keep the span at beginning or end only */ _("Let's be <span>Friends!</span>") ?></h3>
 
 				<ul>
 					<li id="footer-twitter"><a href="http://twitter.com/firefox"><?= _('Twitter') ?></a></li>
@@ -172,8 +172,8 @@ function main($language)
 				</ul>
 
 				<p id="sub-footer-newsletter">
-					<span class="intro"><?= _('Want us to keep in touch?') ?></span>
-					<a href="http://www.mozilla.com/newsletter/"><?= _('Get Monthly News') ?> <span>»</span></a>
+					<span class="intro"><?= /* Max of 30 characters*/ _('Want us to keep in touch?') ?></span>
+					<a href="http://www.mozilla.com/newsletter/"><?= /* Max of 25 characters */ _('Get Monthly News') ?> <span>»</span></a>
 				</p>
 
 			</div><!-- sub-footer -->
@@ -187,14 +187,14 @@ function main($language)
 						<a href="http://www.mozilla.com/legal/fraud-report/index.html"><?= _('Report Trademark Abuse') ?></a>
 					</p>
 
-					<p><?= _('Except where otherwise <a href="http://www.mozilla.com/about/legal.html#site">noted</a>, content on this site is licensed under the <br /><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.') ?></p>
+					<p><?= /* Leave all html code unchanged */ _('Except where otherwise <a href="http://www.mozilla.com/about/legal.html#site">noted</a>, content on this site is licensed under the <br /><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.') ?></p>
 				</div><!-- footer-left -->
-
+        
 				<div id="footer-right">
 
 					<form id="lang_form" dir="ltr" method="get">
 
-						<label for="flang">Other Languages</label>
+						<label for="flang"><?= _('Other Languages') ?></label>
 
 						<select id="flang" name="flang">
 							<option value="en-US">English (US)</option>
@@ -213,6 +213,11 @@ function main($language)
 		//<![CDATA[
 		(function($) {
 		  $.extend(party, <?=json_encode($uiOptions)?>);
+		  $.extend(party, {l10n: {
+		    date_format:<?= /* Date format. Documentation: http://php.net/manual/en/function.date.php */ _('y/D/m') ?>,
+		    dec_point:<?= /* Decimal separator for numbers (dec_point). */ _('.') ?>,
+		    thousands_sep:<?= /* Thousands separator for numbers (thousands_sep) */ _(',') ?>
+		  }});
 		})(jQuery);
 		//]]>
 		</script>
