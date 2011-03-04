@@ -96,7 +96,7 @@ function main($language)
 				<!-- HEADER -->
 				<header id="brand" role="banner">
 					<a href="/" title="<?= _('Start over') ?>">
-						<?= /* L10n: Logo translation. Feel free to change the order of the h1, h2 and p blocks. h1 max of 9 chars. h2 max of 13 chars. em max of 18 chars. */ _('<p><em>Join the</em></p><h1>Firefox 4</h1><h2>Twitter Party</h2>') ?>
+						<?= /* L10n: Logo translation. Feel free to change the order of the h1, h2 and p blocks. h1 max of 9 characters. h2 max of 13 characters. em max of 18 characters. */ _('<p><em>Join the</em></p><h1>Firefox 4</h1><h2>Twitter Party</h2>') ?>
 					</a>
 				</header>
 
@@ -108,7 +108,7 @@ function main($language)
 
 					<div id="twitter-counter" class="clearfix">
 						<dl>
-							<dt><a href="http://twitter.com/share?url=http://mzl.la/hDx6aM&via=firefox&related=firefox&text=<?= urlencode( /* L10n: Default text to tweet */_('Join me at the Firefox 4 Twitter Party and celebrate the newest version') . ' #fx4 #teamfirefox') ?>" title="<?= /* L10n: Action verb, will open the new tweet window */ _('Tweet') ?>" rel="external"><?= _('Tweet') ?></a></dt>
+							<dt><a href="http://twitter.com/share?url=http://mzl.la/hDx6aM&via=firefox&related=firefox&text=<?= urlencode( /* L10n: Default text to tweet, max 89 characters */ _('Join me at the Firefox 4 Twitter Party and celebrate the newest version') . ' #fx4 #teamfirefox') ?>" title="<?= /* L10n: Action verb, will open the new tweet window */ _('Tweet') ?>" rel="external"><?= _('Tweet') ?></a></dt>
 							<dd><span></span></dd>
 						</dl>
 					</div><!-- twitter-counter -->
@@ -126,7 +126,7 @@ function main($language)
 					</form><!-- search-box -->
 
 					<div id="download">
-						<a class="download-link download-firefox" href="http://www.mozilla.com/"><span class="download-content"><span class="download-title">Firefox 4</span><?= /* L10n: Max of 15 chars */ _('Download here') ?></span></a>
+						<a class="download-link download-firefox" href="http://www.mozilla.com/"><span class="download-content"><span class="download-title">Firefox 4</span><?= /* L10n: Max of 15 characters */ _('Download here') ?></span></a>
 					</div><!-- download -->
 
 				</aside><!-- main-content -->
@@ -178,17 +178,17 @@ function main($language)
 		<footer>
 
 			<div id="sub-footer" role="content-info" class="clearfix">
-				<h3><span><?= /* L10n: Keep the <em> at beginning or end only. Max 20 chars before the em, Max 10 chars for the em. */ _("Let's be <em>Friends!</em>") ?></span></h3>
+				<h3><span><?= /* L10n: Keep the <em> at beginning or end only. Max 20 characters before the em, Max 10 characters for the em. */ _("Let's be <em>Friends!</em>") ?></span></h3>
 
 				<ul>
 					<li id="footer-twitter"><a href="http://twitter.com/firefox" rel="external"><?= _('Twitter') ?></a></li>
 					<li id="footer-facebook"><a href="http://Facebook.com/Firefox" rel="external"><?= _('Facebook') ?></a></li>
-					<li id="footer-connect"><a href="/en-US/firefox/connect/" rel="external"><?= /* L10n: Max of 20 chars */ _('More Ways to Connect') ?></a></li>
+					<li id="footer-connect"><a href="/en-US/firefox/connect/" rel="external"><?= /* L10n: Max of 20 characters */ _('More Ways to Connect') ?></a></li>
 				</ul>
 
 				<p id="sub-footer-newsletter">
-					<span class="intro"><?= /* L10n: Max of 30 chars*/ _('Want us to keep in touch?') ?></span>
-					<a href="http://www.mozilla.com/newsletter/"><?= /* L10n: Max of 25 chars */ _('Get Monthly News') ?> <span>»</span></a>
+					<span class="intro"><?= /* L10n: Max of 30 characters */ _('Want us to keep in touch?') ?></span>
+					<a href="http://www.mozilla.com/newsletter/"><?= /* L10n: Max of 25 characters */ _('Get Monthly News') ?> <span>»</span></a>
 				</p>
 
 			</div><!-- sub-footer -->
