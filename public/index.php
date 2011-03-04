@@ -215,7 +215,7 @@ function main($language)
 		(function($) {
 		  $.extend(party, <?=json_encode($uiOptions)?>);
 		  $.extend(party, {l10n: {
-		    date_format:'<?= /* Date format. Documentation: http://php.net/manual/en/function.date.php */ _('M j Y, ga') ?>',
+		    date_format:'<?= /* Date format. Documentation: http://php.net/manual/en/function.date.php */ _('M j Y, g:i A') ?>',
 		    dec_point:'<?= /* Decimal separator for numbers (dec_point). */ _('.') ?>',
 		    thousands_sep:'<?= /* Thousands separator for numbers (thousands_sep) */ _(',') ?>'
 		  }});
