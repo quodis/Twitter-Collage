@@ -115,7 +115,7 @@ var party = party || {};
 		// Randomize!
 		visible_tiles_random.shuffle();
 		// Calculate the number of frames
-		f = parseInt(total_positions/party.performance.initial_frames_per_second, 10);
+		f = parseInt(total_positions/party.performance.initial_tiles_per_frame, 10);
 		// Calculate the counter increment on each frame
 		counter.increment = parseInt(state.total_tiles/f, 10);
 		// Start the recursive call for each frame
@@ -778,10 +778,10 @@ $(document).ready(function() {
 	});
 	
 	// Draw the lines on the logo
-	brand_center = parseInt($('#brand em').width(), 10);
+	brand_center = parseInt($('#brand em').width(), 10) + 20;
 	brand_total = parseInt($('#brand p').width(), 10);
-	$('#brand em').before('<span style="left:0; width:' + ((brand_total-brand_center)/2)-9 + 'px" />').fadeIn('slow');
-	$('#brand em').after('<span style="right:0; width:' + ((brand_total-brand_center)/2)-9 + 'px" />').fadeIn('slow');
+	$('#brand em').before('<span style="left:0; width:' + (brand_total-brand_center)/2 + 'px" />').fadeIn('slow');
+	$('#brand em').after('<span style="right:0; width:' + (brand_total-brand_center)/2 + 'px" />').fadeIn('slow');
 	
 	// Let's get it started!
 	party.init();
