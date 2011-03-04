@@ -72,37 +72,7 @@ var party = party || {};
 				initial_tiles_per_frame: 200,
 				new_tiles_per_second: 1
 			}
-		},
-		resizeObject = new HungryThrottler(100);
-	
-	function HungryThrottler(delay) {
-	       var delay = (!delay) ? 1000 : delay,
-	       self = this;
-
-	       this.lastExecThrottle = delay; // limit to one call every "n" msec
-	       this.lastExec = new Date();
-	       this.timer = null;
-
-	       this.eventHandler = function(callback) {
-	               if (typeof callback != 'function') {
-	                       return false;
-	               }
-	               var d = new Date();
-
-	               if (d-self.lastExec < self.lastExecThrottle) {
-	                // This function has been called "too soon," before the allowed "rate" of twice per second
-	                // Set (or reset) timer so the throttled handler execution happens "n" msec from now instead
-	                if (self.timer) {
-	                    window.clearTimeout(self.timer);
-	                }
-	                self.timer = window.setTimeout(self.eventHandler, self.lastExecThrottle);
-	                return false; // exit
-	               } else {
-	                       self.lastExec = d; // update "last exec" time
-	                       window.setTimeout(callback, self.lastExecThrottle);
-	               }
-	    	}
-	}
+		};
 	
 	function create_urls(input) {
 		return input
@@ -274,49 +244,7 @@ var party = party || {};
 		getVisibleTiles();
 		// Bind the hover action
 		
-
-		//calling
-		resizeObject.eventHandler(function(){
-		   //Code to run
-		});
         party.canvas.bind('mousemove', function(ev) {
-            /*
-			resizeObject.eventHandler(function(){
-				console.log(ev.clientX, ev.clientY);
-	            var x,
-					y,
-					pos,
-					offset = party.canvas.offset();
-
-				if (state.keep_bubble_open) {
-				    console.log('keeping bubble open...');
-					return;
-				}
-
-				x = Math.ceil((ev.clientX + f_scrollLeft() - offset.left) / 12) - 1;
-				y = Math.ceil((ev.clientY + f_scrollTop() - offset.top) / 12) - 1;
-	            if (x < 0 || y < 0) {
-					return;
-				}
-
-	            pos = party.mosaic.grid[x][y];
-
-	            // is valid x,y
-	            if (pos) {
-	                console.log('is valid pos...');
-					// Check if this is not the already opened bubble
-					if (state.active_bubble_pos != pos.i) {
-						stopAutoBubble();
-						state.active_bubble_pos = pos.i;
-						showBubble(pos.i);
-					}
-	            } else {
-					// Not a tile
-					startAutoBubble();
-				}
-			});
-			*/
-			
 			var x,
 				y,
 				pos,
@@ -349,7 +277,7 @@ var party = party || {};
     				// Not a tile
     				startAutoBubble();
     			}
-            }, 200);			
+            }, 100);			
         });
 		// Hide the bubble if the mouse leavese the mosaic
 		// party.canvas.bind('mouseout', function() {
