@@ -138,7 +138,7 @@ function main($language)
 
 						<header>
 
-							<h1><a href="#" title="<?= _('Twitter profile') ?>" rel="author external"></a><span> <?= _('wrote') ?></span></h1>
+							<h1><a href="#" title="<?= _('Twitter profile') ?>" rel="author external"></a><span> <?= /* Used in: "twitter username" wrote */ _('wrote') ?></span></h1>
 							<a href="#" title="" rel="author external" class="twitter-avatar">
 							  <img src="" alt="<?= _('Twitter profile picture') ?>" width="48" height="48" />
 							</a>
