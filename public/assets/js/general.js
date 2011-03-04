@@ -568,14 +568,20 @@ var party = party || {};
 				}
 			}
 			total_positions = autoplay_pool.length;
-			console.log(autoplay_pool);
 			autoplay_pool.sort(function(a, b) {
 				return b.id - a.id;
 			});
 			
 			//autoplay_pool.reverse();
 			autoplay_pool = autoplay_pool.slice(0, 199);
-			
+			console.log(autoplay_pool[0]);
+			console.log(autoplay_pool[10]);
+			console.log(autoplay_pool[20]);
+			console.log(autoplay_pool[30]);
+			console.log(autoplay_pool[40]);
+			console.log(autoplay_pool[50]);
+			console.log(autoplay_pool[100]);
+			console.log(autoplay_pool[199]);
 			state.total_tiles = parseInt(party.state.last_page * total_positions, 10);
 			
 			// Draw the mosaic!
