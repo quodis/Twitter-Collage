@@ -277,7 +277,7 @@ var party = party || {};
     				// Not a tile
     				startAutoBubble();
     			}
-            }, 100);			
+            }, 50);			
         });
 		// Hide the bubble if the mouse leavese the mosaic
 		// party.canvas.bind('mouseout', function() {
