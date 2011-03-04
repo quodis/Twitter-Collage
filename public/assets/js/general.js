@@ -294,7 +294,6 @@ var party = party || {};
 		// });
 		// Keep bubble open/hover
 		tile_hover.bind('click', function(event){
-		    console.log('clicking the tile');
 			state.keep_bubble_open = true;
 			event.stopPropagation();
 			return false;
