@@ -190,48 +190,84 @@ body {
 
 
 /* 4.HEADER */
+
+/* 4.HEADER */
 #brand {
-	background: url(../images/layout/ftp-logo-bg.png) left top no-repeat;
 	width: 250px;
 	height: 155px;
 	position: absolute;
 	top:25px;
 	left:20px;
 	z-index:40;
-	
-/*
-	-moz-transform: rotate(-2deg);
-	-webkit-transform: rotate(-2deg);
-	transform: rotate(-2deg);
-*/
-	
-/* 	-webkit-transition: -webkit-transform 0.5s ease-in; */
 }
 
-#brand:hover {
-	-moz-transform: rotate(2deg);
-	-webkit-transform: rotate(2deg);
-	transform: rotate(2deg);
-}
-
-#brand h1 a{
-	background: url(../images/layout/ftp-logo.png) center 20px no-repeat;
-	width: 250px;
-	height: 150px;
+#brand a{
+	background: url(../images/layout/ftp-logo-bg.png) left top no-repeat; 	
+	width: 225px;
+	height: 115px;
 	display:block;
-	text-indent: -9999px;
+	padding:12px 12px 40px 12px;
 	overflow: hidden;
+	text-decoration: none;
+	text-align: center;
 	
 	-moz-transform: rotate(0deg);
 	-webkit-transform: rotate(0deg);
 	transform: rotate(0deg);
 }
 
+#brand a:hover {
+	-moz-transform: rotate(2deg);
+	-webkit-transform: rotate(2deg);
+	transform: rotate(2deg);
+}
 
-#brand h1 a:hover, #brand:hover a {
-	-moz-transform: rotate(-2deg);
-	-webkit-transform: rotate(-2deg);
-	transform: rotate(-2deg);
+#brand p, #brand h1, #brand h2 {
+	margin:0;
+	color:#fff;
+}
+
+#brand p {
+	width:210px;
+	margin:0 10px;
+	position:relative;
+	height:30px;
+	z-index:30;
+}
+
+#brand p em{
+	font-size:22px;
+	font-family: Georgia, serif;
+	font-style: italic;
+	line-height:30px;
+	text-shadow: 0 1px 0px rgba(0,0,0,0.3);
+	padding: 0 5px;
+	height:30px;
+	display:inline-block;
+	margin: 0 auto;
+}
+
+#brand p span{
+	height:30px;
+	position:absolute;	
+	top:0;
+	background: url(../images/layout/join-bg.png) center center repeat-x;
+}
+
+#brand h1, #brand h2{
+	font-family: 'MetaBlackRoman',"Trebuchet MS",sans-serif;
+	text-transform: uppercase;
+	text-shadow: 0 1px 0px rgba(0,0,0,0.3);
+}
+
+#brand h1{
+	font-size:48px;
+	line-height:50px;
+}
+
+#brand h2 {
+	font-size:30px;
+	line-height: 30px;
 }
 
 
@@ -243,7 +279,7 @@ footer {
 	margin:-165px 0 0;
 	overflow:hidden;
 	position:relative;
-	z-index:10;
+	z-index: 10;
 }
 
 footer a { text-decoration: none;}
@@ -253,33 +289,45 @@ footer a:hover {
 }
 
 #sub-footer {
-	height:80px;
+	height:90px;
 	margin:0 auto;
-	padding:20px 0;
+	padding:30px 0 20px 0;
 	width:940px;
 	overflow: hidden;
 }
 
 #sub-footer h3 {
-	background:url(../images/layout/footer-social.png) -35px 0 no-repeat;
+	background:url(../images/layout/footer-social.png) -20px 0 no-repeat;
 	float:left;
-	width:126px;
-	margin: 0;
-	padding:15px 0 25px 10px;
+	width:125px;
+	margin:-10px 15px 0 0;
+	padding:5px 5px 25px 5px;
 	font-family:georgia,serif;
 	font-weight:normal;
 	font-style:italic;
 	color:#33559b;
 	font-size:22px;
-	line-height:22px
+	line-height:22px;
+	height:100px;
+	display:table;
+	overflow: hidden;
+	#position: relative;
 }
 
 #sub-footer h3 span{
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+	#position: absolute; 
+}
+
+#sub-footer h3 em{
 	font-family: 'MetaBlackRoman',"Trebuchet MS",sans-serif;
 	text-transform:uppercase;
 	font-style:normal;
 	font-size:22px;
-	color:#fff
+	color:#fff;
+	display:block;
 }
 
 #sub-footer ul li {

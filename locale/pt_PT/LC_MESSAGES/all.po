@@ -1,121 +1,205 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Firefox Twitter Party\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-01 21:29+0100\n"
-"PO-Revision-Date: 2011-03-01 21:29+0100\n"
-"Last-Translator: Luis Abreu <lmjabreu@gmail.com>\n"
-"Language-Team: Quodis <hello@quodis.com>\n"
+"POT-Creation-Date: 2011-03-04 15:56+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
-"X-Poedit-Basepath: /Users/lmjabreu/Documents/Code/php/twitter-collage\n"
-"X-Poedit-Language: Portuguese\n"
-"X-Poedit-Country: PORTUGAL\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-SearchPath-0: .\n"
 
-#: public/dashboard.php:164
-#: public/index.php:140
-msgid "Visit Mozilla"
-msgstr "Visite a Mozilla"
+#. Browser title
+#: ../../../public/index.php:50
+msgid "Firefox 4 Twitter Party"
+msgstr ""
 
-#: public/index.php:81
-msgid "Join the Firefox 4 Twitter Party"
-msgstr "Junta-te à Festa do Firefox 4 no Twitter"
+#. Meta tag keywords
+#: ../../../public/index.php:55
+msgid "Mozilla, Firefox, Firefox 4, Party, Twitter, Tweet"
+msgstr ""
 
-#: public/index.php:88
+#. Meta tag description
+#: ../../../public/index.php:56
+msgid ""
+"Firefox 4 Twitter Party is an interactive visualization of Firefox 4 "
+"activity on Twitter."
+msgstr ""
+
+#: ../../../public/index.php:86
+msgid "Start over"
+msgstr ""
+
+#. Logo translation. Feel free to change the order of the h1, h2 and p blocks. h1 max of 9 chars. h2 max of 13 chars. em max of 18 chars.
+#: ../../../public/index.php:87
+msgid "<h1>Firefox 4</h1><h2>Twitter Party</h2><p><em>Join the</em></p>"
+msgstr ""
+
+#: ../../../public/index.php:95
 #, php-format
-msgid "Be part of Team Firefox! Tweet about Firefox 4 with the %s hashtag and your avatar will join thousands of others from around the world as part of our logo mosaic."
-msgstr "Junta-te à Equipa Firefox! Envia um Tweet sobre o Firefox com a hashtag <span class=\"hashtag\">#fx4</span> para juntares o teu avatar a milhares de outros de todo o mundo fazendo parte do mosaico do nosso logotipo."
+msgid ""
+"Be part of Team Firefox! Tweet about Firefox 4 with the %s hashtag and your "
+"avatar will join thousands of others from around the world as part of our "
+"logo mosaic."
+msgstr ""
 
-#: public/index.php:92
+#. Default text to tweet
+#: ../../../public/index.php:99
 msgid "Join me at the Firefox 4 Twitter Party and celebrate the newest version"
-msgstr "Junta-te a mim na Festa do Firefox 4 no Twitter e celebra a versão mais recente"
+msgstr ""
 
-#: public/index.php:92
+#: ../../../public/index.php:99
 msgid "Tweet"
-msgstr "Tweet"
+msgstr ""
 
-#: public/index.php:99
+#: ../../../public/index.php:106
 msgid "Who's at the party?"
-msgstr "Quem está na festa?"
+msgstr ""
 
-#: public/index.php:100
-#: public/index.php:101
+#: ../../../public/index.php:107 ../../../public/index.php:108
 msgid "Find a Twitter username"
-msgstr "Procurar por um utilizador Twitter"
+msgstr ""
 
-#: public/index.php:102
+#: ../../../public/index.php:109
 msgid "Find"
-msgstr "Procurar"
+msgstr ""
 
-#: public/index.php:103
+#: ../../../public/index.php:111
 msgid "This user hasn't joined the party yet."
-msgstr "Este utilizador ainda não se juntou à festa."
+msgstr ""
 
-#: public/index.php:107
+#. Max of 15 chars
+#: ../../../public/index.php:117
 msgid "Download here"
-msgstr "Descarregar"
+msgstr ""
 
-#: public/index.php:113
-msgid "Firefox Twitter Mosaic"
-msgstr "Mosaico Twitter do Firefox"
+#: ../../../public/index.php:124
+msgid "Mosaic"
+msgstr ""
 
-#: public/index.php:122
+#. Funny loading message
+#: ../../../public/index.php:127
+msgid "Sorting guest list alphabetically"
+msgstr ""
+
+#. Funny loading message
+#: ../../../public/index.php:128
+msgid "Randomizing seating order"
+msgstr ""
+
+#. Funny loading message
+#: ../../../public/index.php:129
+msgid "Cooling drinks to optimal temperature"
+msgstr ""
+
+#. Funny loading message
+#: ../../../public/index.php:130
+msgid "Handing out name tags"
+msgstr ""
+
+#. Funny loading message
+#: ../../../public/index.php:131
+msgid "Waxing the dance floor"
+msgstr ""
+
+#. Funny loading message
+#: ../../../public/index.php:132
+msgid "Setting up Firefox deco"
+msgstr ""
+
+#: ../../../public/index.php:141
 msgid "Twitter profile"
-msgstr "perfil Twitter"
+msgstr ""
 
-#: public/index.php:122
+#. Used in: "twitter username" wrote
+#: ../../../public/index.php:141
 msgid "wrote"
-msgstr "escreveu"
+msgstr ""
 
-#: public/index.php:124
+#: ../../../public/index.php:143
 msgid "Twitter profile picture"
-msgstr "fotografia de perfil Twitter"
+msgstr ""
 
-#: public/index.php:127
+#: ../../../public/index.php:146
 msgid "Permalink"
-msgstr "Permalink"
+msgstr ""
 
-#: public/index.php:150
-msgid "Let's be <span>Friends!</span>"
-msgstr "Vamos ser <span>Amigos!</span>"
+#: ../../../public/index.php:159
+msgid "Visit Mozilla"
+msgstr ""
 
-#: public/index.php:153
+#. Keep the <em> at beginning or end only. Max 20 chars before the em, Max 10 chars for the em.
+#: ../../../public/index.php:168
+msgid "Let's be <em>Friends!</em>"
+msgstr ""
+
+#: ../../../public/index.php:171
 msgid "Twitter"
-msgstr "Twitter"
+msgstr ""
 
-#: public/index.php:154
+#: ../../../public/index.php:172
 msgid "Facebook"
-msgstr "Facebook"
+msgstr ""
 
-#: public/index.php:155
+#. Max of 20 chars
+#: ../../../public/index.php:173
 msgid "More Ways to Connect"
-msgstr "More Ways to Connect"
+msgstr ""
 
-#: public/index.php:159
+#. Max of 30 chars
+#: ../../../public/index.php:177
 msgid "Want us to keep in touch?"
-msgstr "Want us to keep in touch?"
+msgstr ""
 
-#: public/index.php:160
+#. Max of 25 chars
+#: ../../../public/index.php:178
 msgid "Get Monthly News"
-msgstr "Recebe Notícias Mensalmente"
+msgstr ""
 
-#: public/index.php:169
+#: ../../../public/index.php:187
 msgid "Privacy Policy"
-msgstr "Política de Privacidade"
+msgstr ""
 
-#: public/index.php:170
+#: ../../../public/index.php:188
 msgid "Legal Notices"
-msgstr "Avisos Legais"
+msgstr ""
 
-#: public/index.php:171
+#: ../../../public/index.php:189
 msgid "Report Trademark Abuse"
-msgstr "Reportar Abuso de Trademark"
+msgstr ""
 
-#: public/index.php:174
-msgid "Except where otherwise <a href=\"http://www.mozilla.com/about/legal.html#site\">noted</a>, content on this site is licensed under the <br /><a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">Creative Commons Attribution Share-Alike License v3.0</a> or any later version."
-msgstr "Except where otherwise <a href=\"http://www.mozilla.com/about/legal.html#site\">noted</a>, content on this site is licensed under the <br /><a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">Creative Commons Attribution Share-Alike License v3.0</a> or any later version."
+#. Leave all html code unchanged
+#: ../../../public/index.php:192
+msgid ""
+"Except where otherwise <a href=\"http://www.mozilla.com/about/legal.html#site"
+"\">noted</a>, content on this site is licensed under the <br /><a href="
+"\"http://creativecommons.org/licenses/by-sa/3.0/\">Creative Commons "
+"Attribution Share-Alike License v3.0</a> or any later version."
+msgstr ""
 
+#: ../../../public/index.php:199
+msgid "Other Languages"
+msgstr ""
+
+#. Date format. Documentation: http://php.net/manual/en/function.date.php
+#: ../../../public/index.php:219
+msgid "M j Y, g:i A"
+msgstr ""
+
+#. Decimal separator for numbers (dec_point).
+#: ../../../public/index.php:220
+msgid "."
+msgstr ""
+
+#. Thousands separator for numbers (thousands_sep)
+#: ../../../public/index.php:221
+msgid ","
+msgstr ""

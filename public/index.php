@@ -47,13 +47,13 @@ function main($language)
 
 	<head>
 
-		<title>Firefox 4 Twitter Party</title>
+		<title><?= /* Browser title */ _('Firefox 4 Twitter Party') ?></title>
 
 		<meta charset="utf-8" />
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="keywords" content="Mozilla,Firefox, Firefox 4, Collage, Twitter, Tweet" />
-		<meta name="description" content="Firefox 4 Twitter Party is a visualization of Firefox 4 activity on Twitter. It is an experiment with exclusively open web tools and technologies." />
+		<meta name="keywords" content="<?= /* Meta tag keywords */ _('Mozilla, Firefox, Firefox 4, Party, Twitter, Tweet') ?>" />
+		<meta name="description" content="<?= /* Meta tag description */ _('Firefox 4 Twitter Party is an interactive visualization of Firefox 4 activity on Twitter.') ?>" />
 		<meta name="author" content="Quodis, Mozilla" />
 		<meta name="copyright" content="© 2011" />
 		<meta name="distribution" content="global" />
@@ -67,7 +67,7 @@ function main($language)
 		<link rel="image_src" href="assets/images/global/ftp-facebook-thumb.png">
 
 		<!-- scripts -->
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
 		<script type="text/javascript" src="/assets/js/global.js?>"></script>
 		<script type="text/javascript" src="<?=$config['UI']['js']['general']?>"></script>
 		<script type="text/javascript" src="<?=$jsMosaicConfig?>"></script>
@@ -83,7 +83,9 @@ function main($language)
 
 				<!-- HEADER -->
 				<header id="brand" role="banner">
-					<h1><a href="#" title="<?= _('Join the Firefox 4 Twitter Party') ?>"><?= _('Join the Firefox 4 Twitter Party') ?></a></h1>
+					<a href="/" title="<?= _('Start over') ?>">
+						<?= /* Logo translation. Feel free to change the order of the h1, h2 and p blocks. h1 max of 9 chars. h2 max of 13 chars. em max of 18 chars. */ _('<h1>Firefox 4</h1><h2>Twitter Party</h2><p><em>Join the</em></p>') ?>
+					</a>
 				</header>
 
 				<!-- CONTENT -->
@@ -94,7 +96,7 @@ function main($language)
 
 					<div id="twitter-counter" class="clearfix">
 						<dl>
-							<dt><a href="http://twitter.com/share?url=http://twitterparty.mozilla.org&via=firefox&related=firefox&text=<?= urlencode(_('Join me at the Firefox 4 Twitter Party and celebrate the newest version #fx4 #teamfirefox')) ?>" title="<?= _('Tweet') ?>" rel="external"><?= _('Tweet') ?></a></dt>
+							<dt><a href="http://twitter.com/share?url=http://twitterparty.mozilla.org&via=firefox&related=firefox&text=<?= urlencode( /* Default text to tweet */_('Join me at the Firefox 4 Twitter Party and celebrate the newest version') . ' #fx4 #teamfirefox') ?>" title="<?= _('Tweet') ?>" rel="external"><?= _('Tweet') ?></a></dt>
 							<dd><span></span></dd>
 						</dl>
 					</div><!-- twitter-counter -->
@@ -112,23 +114,23 @@ function main($language)
 					</form><!-- search-box -->
 
 					<div id="download">
-						<a class="download-link download-firefox" href="http://www.mozilla.com/"><span class="download-content"><span class="download-title">Firefox 4</span><?= _('Download here') ?></span></a>
+						<a class="download-link download-firefox" href="http://www.mozilla.com/"><span class="download-content"><span class="download-title">Firefox 4</span><?= /* Max of 15 chars */ _('Download here') ?></span></a>
 					</div><!-- download -->
 
 				</aside><!-- main-content -->
 
 
 				<section id="mosaic" role="img">
-					<h2><?= _('Firefox Twitter Mosaic') ?></h2>
-
-					<ul id="loading">
-						<li><?= _('Sorting guest list alphabetically') ?></li>
-						<li><?= _('Randomizing seating order') ?></li>
-						<li><?= _('Cooling drinks to optimal temperature') ?></li>
-						<li><?= _('Handing out name tags') ?></li>
-						<li><?= _('Waxing the dance floor') ?></li>
-						<li><?= _('Setting up Firefox deco') ?></li>
-					 </ul>
+					<h2><?= _('Mosaic') ?></h2>
+					
+          <ul id="loading">
+            <li><?= /* Funny loading message */ _('Sorting guest list alphabetically') ?></li>
+            <li><?= /* Funny loading message */ _('Randomizing seating order') ?></li>
+            <li><?= /* Funny loading message */ _('Cooling drinks to optimal temperature') ?></li>
+            <li><?= /* Funny loading message */ _('Handing out name tags') ?></li>
+            <li><?= /* Funny loading message */ _('Waxing the dance floor') ?></li>
+            <li><?= /* Funny loading message */ _('Setting up Firefox deco') ?></li>
+          </ul>
 
 					<img src="" id="tile-hover" />
 
@@ -136,7 +138,7 @@ function main($language)
 
 						<header>
 
-							<h1><a href="#" title="<?= _('Twitter profile') ?>" rel="author external"></a><span> <?= _('wrote') ?></span></h1>
+							<h1><a href="#" title="<?= _('Twitter profile') ?>" rel="author external"></a><span> <?= /* Used in: "twitter username" wrote */ _('wrote') ?></span></h1>
 							<a href="#" title="" rel="author external" class="twitter-avatar">
 							  <img src="" alt="<?= _('Twitter profile picture') ?>" width="48" height="48" />
 							</a>
@@ -163,18 +165,17 @@ function main($language)
 		<footer>
 
 			<div id="sub-footer" role="content-info" class="clearfix">
-
-				<h3><?= _("Let's be <span>Friends!</span>") ?></h3>
+				<h3><span><?= /* Keep the <em> at beginning or end only. Max 20 chars before the em, Max 10 chars for the em. */ _("Let's be <em>Friends!</em>") ?></span></h3>
 
 				<ul>
 					<li id="footer-twitter"><a href="http://twitter.com/firefox"><?= _('Twitter') ?></a></li>
 					<li id="footer-facebook"><a href="http://Facebook.com/Firefox"><?= _('Facebook') ?></a></li>
-					<li id="footer-connect"><a href="/en-US/firefox/connect/"><?= _('More Ways to Connect') ?></a></li>
+					<li id="footer-connect"><a href="/en-US/firefox/connect/"><?= /* Max of 20 chars */ _('More Ways to Connect') ?></a></li>
 				</ul>
 
 				<p id="sub-footer-newsletter">
-					<span class="intro"><?= _('Want us to keep in touch?') ?></span>
-					<a href="http://www.mozilla.com/newsletter/"><?= _('Get Monthly News') ?> <span>»</span></a>
+					<span class="intro"><?= /* Max of 30 chars*/ _('Want us to keep in touch?') ?></span>
+					<a href="http://www.mozilla.com/newsletter/"><?= /* Max of 25 chars */ _('Get Monthly News') ?> <span>»</span></a>
 				</p>
 
 			</div><!-- sub-footer -->
@@ -188,14 +189,14 @@ function main($language)
 						<a href="http://www.mozilla.com/legal/fraud-report/index.html"><?= _('Report Trademark Abuse') ?></a>
 					</p>
 
-					<p><?= _('Except where otherwise <a href="http://www.mozilla.com/about/legal.html#site">noted</a>, content on this site is licensed under the <br /><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.') ?></p>
+					<p><?= /* Leave all html code unchanged */ _('Except where otherwise <a href="http://www.mozilla.com/about/legal.html#site">noted</a>, content on this site is licensed under the <br /><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.') ?></p>
 				</div><!-- footer-left -->
-
+        
 				<div id="footer-right">
 
 					<form id="lang_form" dir="ltr" method="get">
 
-						<label for="flang">Other Languages</label>
+						<label for="flang"><?= _('Other Languages') ?></label>
 
 						<select id="flang" name="flang">
 							<option value="en-US">English (US)</option>
@@ -214,6 +215,11 @@ function main($language)
 		//<![CDATA[
 		(function($) {
 		  $.extend(party, <?=json_encode($uiOptions)?>);
+		  $.extend(party, {l10n: {
+		    date_format:'<?= /* Date format. Documentation: http://php.net/manual/en/function.date.php */ _('M j Y, g:i A') ?>',
+		    dec_point:'<?= /* Decimal separator for numbers (dec_point). */ _('.') ?>',
+		    thousands_sep:'<?= /* Thousands separator for numbers (thousands_sep) */ _(',') ?>'
+		  }});
 		})(jQuery);
 		//]]>
 		</script>
