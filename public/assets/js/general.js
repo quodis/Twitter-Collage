@@ -245,7 +245,7 @@ var party = party || {};
 		// Bind the hover action
 		
 		party.canvas.bind('mouseleave', function(){
-		   party.autoBubbleStartTimer = setTimeout(startAutoBubble, 150);
+		   party.autoBubbleStartTimer = setTimeout(startAutoBubble, 250);
 		});
 		
         party.canvas.bind('mousemove', function(ev) {
