@@ -209,7 +209,21 @@ var party = party || {};
 	
 	// First to be called
 	function init() {
-		var bubble;		
+		var bubble,
+		    imgsToPreload = [
+		        'assets/images/layout/bubble-light-blue.png',
+		        'assets/images/layout/bubble-dark-blue.png',
+		        'assets/images/layout/bubble-yellow.png',
+		        'assets/images/layout/bubble-dark-orange.png'
+		    ];
+		
+		//Bubble image preloading
+		for (var i=imgsToPreload.length; i--; ) {
+		    (function(){
+		        var img = new Image();
+		        img.src = imgsToPreload[i];
+		    })();
+		}
 		
 		// Check the browser's performance
 		party.performance = party.performance_settings.high;
