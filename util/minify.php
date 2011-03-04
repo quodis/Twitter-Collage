@@ -25,15 +25,15 @@ function main()
 
 		$ftp    = file_get_contents($cssPath . '/ftp.css');
 		$mosaic = file_get_contents($cssPath . '/mosaic.css');
-		file_put_contents($cssPath  . '/party.css', $ftp . $mosaic);
+		file_put_contents('/tmp/party.css', $ftp . $mosaic);
 
-		shell_exec(APP_PATH . '/src/yuicompressor-2.4.2.jar  ' . $cssPath  . '/party.css -o ' . $cssPath . '/party-min.css');
+		shell_exec(APP_PATH . '/src/yuicompressor-2.4.2.jar  /tmp/party.css -o ' . $cssPath . '/party-min.css');
 
 		$global  = file_get_contents($jsPath . '/global.js');
 		$general = file_get_contents($jsPath . '/general.js');
-		file_put_contents($jsPath . '/party.js', $global . $general);
+		file_put_contents('/tmp/party.js', $global . $general);
 
-		shell_exec(APP_PATH . '/src/yuicompressor-2.4.2.jar  ' . $jsPath  . '/party.js -o ' . $jsPath . '/party-min.js');
+		shell_exec(APP_PATH . '/src/yuicompressor-2.4.2.jar  /tmp/party.js -o ' . $jsPath . '/party-min.js');
 	}
 
 	Dispatch::now(1, 'OK');
