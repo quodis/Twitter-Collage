@@ -309,7 +309,7 @@ var party = party || {};
 			return (event.target.nodeName.toLowerCase() == 'a');
 		});
 		
-		party.bubble.container.bind('moseenter', function() {
+		party.bubble.container.bind('mouseenter', function() {
 		    tile_hover.trigger('click');
 		})
 	}
