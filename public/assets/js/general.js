@@ -53,7 +53,8 @@ var party = party || {};
 			initial_tiles_per_frame_incremental: 1,
 			draw_new_tiles_every: 0,
 			draw_new_tiles_every_counter: 0,
-			total_tiles: 0
+			total_tiles: 0,
+			last_tile_drawn_pos: null
 		},
 		performance_settings = {
 			high: {
@@ -279,10 +280,8 @@ var party = party || {};
 		   //Code to run
 		});
         party.canvas.bind('mousemove', function(ev) {
-			console.log('triggering mousemove');
 			
 			resizeObject.eventHandler(function(){
-				console.log('triggering throttled mousemove');
 				
 	            var x,
 					y,
@@ -568,20 +567,12 @@ var party = party || {};
 				}
 			}
 			total_positions = autoplay_pool.length;
+			// Put the newest on top
 			autoplay_pool.sort(function(a, b) {
 				return b.id - a.id;
 			});
-			
-			//autoplay_pool.reverse();
+			// Keep the newest 200
 			autoplay_pool = autoplay_pool.slice(0, 199);
-			console.log(autoplay_pool[0]);
-			console.log(autoplay_pool[10]);
-			console.log(autoplay_pool[20]);
-			console.log(autoplay_pool[30]);
-			console.log(autoplay_pool[40]);
-			console.log(autoplay_pool[50]);
-			console.log(autoplay_pool[100]);
-			console.log(autoplay_pool[199]);
 			state.total_tiles = parseInt(party.state.last_page * total_positions, 10);
 			
 			// Draw the mosaic!
@@ -604,7 +595,8 @@ var party = party || {};
 			new_tile,
 			idx,
 			grid,
-			css_changes;
+			css_changes,
+			last_tile;
 
 		// Priority to new tiles
 		if (state.draw_new_tiles_every_counter >= state.draw_new_tiles_every) {
@@ -647,6 +639,16 @@ var party = party || {};
 				'background-color': colors[grid.r]
 			};
 		}
+
+		// Update the previous tile
+		if (last_tile_drawn_pos) {
+			$('#' + pos).css({
+				'background-image': 'url(data:image/gif;base64,' + visible_tiles[last_tile_drawn_pos].d + ')'
+			});
+		}
+		
+		// Save the previous tile
+		last_tile_drawn_pos = pos;
 		
 		// Update the new tile
 		$('#' + pos).css(css_changes);
