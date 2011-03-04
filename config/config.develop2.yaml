@@ -54,29 +54,11 @@ Cache:
         - host: localhost
           port: 11211
 Db:
-    schemaDir: schema
-    databases:
-        - name: twitterparty2
-          schemaFile: db.sql
-          defaults: &connectionDefaults
-              host: localhost
-              name: twitterparty
-              user: twitterparty
-              pass: twitterparty
-              client: localhost
-          connections:
-              read: 
-                  <<: *connectionDefaults
-                  mode: _modeRead
-              write:
-                  <<: *connectionDefaults
-                  mode: _modeWrite
-          installConnection:
-              <<: *connectionDefaults
-              name: 
-              mode: _modeWrite
-              user: install
-              pass: install
+    connection:
+        host: localhost
+        name: twitterparty2
+        user: twitterparty2
+        pass: twitterparty2
 UI:
     gaEnabled: "0"
     gaId: ""

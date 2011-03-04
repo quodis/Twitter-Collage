@@ -20,7 +20,7 @@ Config:
     group: www-data
 Twitter:
     urlSearch: "http://search.twitter.com/search.json"
-    terms: "#benfica OR #porto"
+    terms: "benfica OR porto"
     rpp: 100
     pageLimit: 15
     timeout:
@@ -54,29 +54,11 @@ Cache:
         - host: localhost
           port: 11211
 Db:
-    schemaDir: schema
-    databases:
-        - name: twitterparty
-          schemaFile: db.sql
-          defaults: &connectionDefaults
-              host: localhost
-              name: twitterparty
-              user: twitterparty
-              pass: twitterparty
-              client: localhost
-          connections:
-              read: 
-                  <<: *connectionDefaults
-                  mode: _modeRead
-              write:
-                  <<: *connectionDefaults
-                  mode: _modeWrite
-          installConnection:
-              <<: *connectionDefaults
-              name: 
-              mode: _modeWrite
-              user: install
-              pass: install
+    connection:
+        host: localhost
+        name: twitterparty
+        user: twitterparty
+        pass: twitterparty
 UI:
     gaEnabled: "0"
     gaId: ""
