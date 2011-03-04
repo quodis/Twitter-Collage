@@ -52,8 +52,8 @@ function main($language)
 		<meta charset="utf-8" />
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="keywords" content="Mozilla,Firefox, Firefox 4, Collage, Twitter, Tweet" />
-		<meta name="description" content="Firefox 4 Twitter Party is a visualization of Firefox 4 activity on Twitter. It is an experiment with exclusively open web tools and technologies." />
+		<meta name="keywords" content="<?= /* Meta tag keywords */ _('Mozilla, Firefox, Firefox 4, Party, Twitter, Tweet') ?>" />
+		<meta name="description" content="<?= /* Meta tag description */ _('Firefox 4 Twitter Party is an interactive visualization of Firefox 4 activity on Twitter.') ?>" />
 		<meta name="author" content="Quodis, Mozilla" />
 		<meta name="copyright" content="© 2011" />
 		<meta name="distribution" content="global" />
@@ -215,9 +215,9 @@ function main($language)
 		(function($) {
 		  $.extend(party, <?=json_encode($uiOptions)?>);
 		  $.extend(party, {l10n: {
-		    date_format:<?= /* Date format. Documentation: http://php.net/manual/en/function.date.php */ _('y/D/m') ?>,
-		    dec_point:<?= /* Decimal separator for numbers (dec_point). */ _('.') ?>,
-		    thousands_sep:<?= /* Thousands separator for numbers (thousands_sep) */ _(',') ?>
+		    date_format:'<?= /* Date format. Documentation: http://php.net/manual/en/function.date.php */ _('M j Y, ga') ?>',
+		    dec_point:'<?= /* Decimal separator for numbers (dec_point). */ _('.') ?>',
+		    thousands_sep:'<?= /* Thousands separator for numbers (thousands_sep) */ _(',') ?>'
 		  }});
 		})(jQuery);
 		//]]>
