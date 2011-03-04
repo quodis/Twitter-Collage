@@ -67,7 +67,7 @@ function main($language)
 		<link rel="image_src" href="assets/images/global/ftp-facebook-thumb.png">
 
 		<!-- scripts -->
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
 		<script type="text/javascript" src="/assets/js/global.js?>"></script>
 		<script type="text/javascript" src="<?=$config['UI']['js']['general']?>"></script>
 		<script type="text/javascript" src="<?=$jsMosaicConfig?>"></script>
@@ -83,7 +83,9 @@ function main($language)
 
 				<!-- HEADER -->
 				<header id="brand" role="banner">
-					<h1><a href="/" title="<?= _('Start over') ?>"><?= _('Join the Firefox 4 Twitter Party') ?></a></h1>
+					<a href="/" title="<?= _('Start over') ?>">
+						<?= /* Logo translation. Feel free to change the order of the h1, h2 and p blocks. h1 max of 9 chars. h2 max of 13 chars. em max of 18 chars. */ _('<h1>Firefox 4</h1><h2>Twitter Party</h2><p><em>Join the</em></p>') ?>
+					</a>
 				</header>
 
 				<!-- CONTENT -->
@@ -112,14 +114,14 @@ function main($language)
 					</form><!-- search-box -->
 
 					<div id="download">
-						<a class="download-link download-firefox" href="http://www.mozilla.com/"><span class="download-content"><span class="download-title">Firefox 4</span><?= /* Max of 15 characters */ _('Download here') ?></span></a>
+						<a class="download-link download-firefox" href="http://www.mozilla.com/"><span class="download-content"><span class="download-title">Firefox 4</span><?= /* Max of 15 chars */ _('Download here') ?></span></a>
 					</div><!-- download -->
 
 				</aside><!-- main-content -->
 
 
 				<section id="mosaic" role="img">
-					<h2><?= _('Firefox Twitter Party') ?></h2>
+					<h2><?= _('Mosaic') ?></h2>
 					
           <ul id="loading">
             <li><?= /* Funny loading message */ _('Sorting guest list alphabetically') ?></li>
@@ -163,18 +165,17 @@ function main($language)
 		<footer>
 
 			<div id="sub-footer" role="content-info" class="clearfix">
-
-				<h3><?= /* Keep the span at beginning or end only */ _("Let's be <span>Friends!</span>") ?></h3>
+				<h3><span><?= /* Keep the <em> at beginning or end only. Max 20 chars before the em, Max 10 chars for the em. */ _("Let's be <em>Friends!</em>") ?></span></h3>
 
 				<ul>
 					<li id="footer-twitter"><a href="http://twitter.com/firefox"><?= _('Twitter') ?></a></li>
 					<li id="footer-facebook"><a href="http://Facebook.com/Firefox"><?= _('Facebook') ?></a></li>
-					<li id="footer-connect"><a href="/en-US/firefox/connect/"><?= _('More Ways to Connect') ?></a></li>
+					<li id="footer-connect"><a href="/en-US/firefox/connect/"><?= /* Max of 20 chars */ _('More Ways to Connect') ?></a></li>
 				</ul>
 
 				<p id="sub-footer-newsletter">
-					<span class="intro"><?= /* Max of 30 characters*/ _('Want us to keep in touch?') ?></span>
-					<a href="http://www.mozilla.com/newsletter/"><?= /* Max of 25 characters */ _('Get Monthly News') ?> <span>»</span></a>
+					<span class="intro"><?= /* Max of 30 chars*/ _('Want us to keep in touch?') ?></span>
+					<a href="http://www.mozilla.com/newsletter/"><?= /* Max of 25 chars */ _('Get Monthly News') ?> <span>»</span></a>
 				</p>
 
 			</div><!-- sub-footer -->
