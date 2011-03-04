@@ -279,7 +279,7 @@ footer {
 	margin:-165px 0 0;
 	overflow:hidden;
 	position:relative;
-	z-index:10;
+	z-index: 10;
 }
 
 footer a { text-decoration: none;}
@@ -288,11 +288,19 @@ footer a:hover {
 	text-decoration: underline;
 }
 
+#sub-footer {
+	height:90px;
+	margin:0 auto;
+	padding:30px 0 20px 0;
+	width:940px;
+	overflow: hidden;
+}
+
 #sub-footer h3 {
 	background:url(../images/layout/footer-social.png) -20px 0 no-repeat;
 	float:left;
 	width:125px;
-	margin:-10px 0 0 0;
+	margin:-10px 15px 0 0;
 	padding:5px 5px 25px 5px;
 	font-family:georgia,serif;
 	font-weight:normal;
@@ -311,7 +319,6 @@ footer a:hover {
 	vertical-align: middle;
 	text-align: center;
 	#position: absolute; 
-/* 	#top: 50%; */
 }
 
 #sub-footer h3 em{
