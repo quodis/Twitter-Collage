@@ -640,9 +640,8 @@ var party = party || {};
 		}
 
 		// Update the previous tile
-		if (state.last_tile_drawn_pos >= 0) {
-			console.log(state.last_tile_drawn_pos);
-			$('#' + pos).css({
+		if (state.last_tile_drawn_pos > -1) {
+			$('#' + state.last_tile_drawn_pos).css({
 				'background-image': 'url(data:image/gif;base64,' + visible_tiles[state.last_tile_drawn_pos].d + ')'
 			});
 		}
