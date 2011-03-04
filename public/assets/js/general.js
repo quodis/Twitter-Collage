@@ -280,6 +280,7 @@ var party = party || {};
 		   //Code to run
 		});
         party.canvas.bind('mousemove', function(ev) {
+            /*
 			resizeObject.eventHandler(function(){
 				console.log(ev.clientX, ev.clientY);
 	            var x,
@@ -314,6 +315,41 @@ var party = party || {};
 					startAutoBubble();
 				}
 			});
+			*/
+			
+			var x,
+				y,
+				pos,
+				offset = party.canvas.offset();
+				
+			clearTimeout(party.mousemoveTimer);
+
+			if (state.keep_bubble_open) {
+				return;
+			}
+
+			x = Math.ceil((ev.clientX + f_scrollLeft() - offset.left) / 12) - 1;
+			y = Math.ceil((ev.clientY + f_scrollTop() - offset.top) / 12) - 1;
+            if (x < 0 || y < 0) {
+				return;
+			}
+
+            pos = party.mosaic.grid[x][y];
+            
+            party.mousemoveTimer = setTimeout(function(){
+                // is valid x,y
+                if (pos) {
+    				// Check if this is not the already opened bubble
+    				if (state.active_bubble_pos != pos.i) {
+    					stopAutoBubble();
+    					state.active_bubble_pos = pos.i;
+    					showBubble(pos.i);
+    				}
+                } else {
+    				// Not a tile
+    				startAutoBubble();
+    			}
+            }, 200);			
         });
 		// Hide the bubble if the mouse leavese the mosaic
 		// party.canvas.bind('mouseout', function() {
