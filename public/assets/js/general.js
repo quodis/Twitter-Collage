@@ -170,7 +170,7 @@ var party = party || {};
 	
 	// Set the counter to a new int
 	function setCounter() {
-		counter.canvas.text(counter.current);
+		counter.canvas.text(number_format(counter.current, 0, party.l10n.dec_point, party.l10n.thousands_sep));
 	}
 	
 	
