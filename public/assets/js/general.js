@@ -296,6 +296,7 @@ var party = party || {};
 				x = Math.ceil((ev.clientX + f_scrollLeft() - offset.left) / 12) - 1;
 				y = Math.ceil((ev.clientY + f_scrollTop() - offset.top) / 12) - 1;
 	            if (x < 0 || y < 0) {
+	                console.log('keeping bubble open...');
 					return;
 				}
 
