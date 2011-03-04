@@ -209,7 +209,7 @@ var party = party || {};
 	
 	// First to be called
 	function init() {
-		var bubble;
+		var bubble;		
 		
 		// Check the browser's performance
 		party.performance = party.performance_settings.high;
@@ -307,6 +307,10 @@ var party = party || {};
 			event.stopPropagation();
 			return (event.target.nodeName.toLowerCase() == 'a');
 		});
+		
+		party.bubble.container.bind('moseenter', function() {
+		    party.bubble.container.trigger('click');
+		})
 	}
 	
 	function searchInit() {
