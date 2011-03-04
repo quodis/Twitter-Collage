@@ -641,14 +641,14 @@ var party = party || {};
 		}
 
 		// Update the previous tile
-		if (last_tile_drawn_pos) {
+		if (state.last_tile_drawn_pos >= 0) {
 			$('#' + pos).css({
-				'background-image': 'url(data:image/gif;base64,' + visible_tiles[last_tile_drawn_pos].d + ')'
+				'background-image': 'url(data:image/gif;base64,' + visible_tiles[state.last_tile_drawn_pos].d + ')'
 			});
 		}
 		
 		// Save the previous tile
-		last_tile_drawn_pos = pos;
+		state.last_tile_drawn_pos = pos;
 		
 		// Update the new tile
 		$('#' + pos).css(css_changes);
