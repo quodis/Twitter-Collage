@@ -21,7 +21,7 @@ function main()
 
 	$lastTweet = Mosaic::getLastTweet();
 	$lastProcessedTweet = Mosaic::getLastTweetWithImage();
-	$elapsed = Tweet::getAverageDelay(100);
+	$elapsed = Tweet::getAverageDelay(10);
 	$tweets = ($lastTweet['id'] - $lastProcessedTweet['id']);
 
 	// dashboard state

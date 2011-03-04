@@ -47,12 +47,19 @@ set_error_handler(array('Debug', 'handleError'));
  */
 function initDb(array & $config)
 {
-	require LIB_PATH . '/Db.class.php';
-	require LIB_PATH . '/DataResult.class.php';
-	foreach ($config['Db']['databases'][0]['connections'] as $id => $connectionDetails)
+	$con = $config['Db']['connection'];
+	global $mysqli;
+
+	/* FIX mysqli subclass class defined in model file */
+	$mysqli = new mysqli_Extended();
+	$mysqli->options(MYSQLI_INIT_COMMAND, "SET AUTOCOMMIT=1");
+	$mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 5);
+	$connected = $mysqli->real_connect($con['host'], $con['user'], $con['pass'], $con['name']);
+	if ($connected)
 	{
-		Db::addConnection($id, $connectionDetails);
+		$mysqli->set_charset('utf8');
 	}
+	else throw new Exception('Fail connecting to db');
 }
 
 // CONFIG

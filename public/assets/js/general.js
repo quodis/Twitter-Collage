@@ -72,37 +72,7 @@ var party = party || {};
 				initial_tiles_per_frame: 200,
 				new_tiles_per_second: 1
 			}
-		},
-		resizeObject = new HungryThrottler(200);
-	
-	function HungryThrottler(delay) {
-	       var delay = (!delay) ? 1000 : delay,
-	       self = this;
-
-	       this.lastExecThrottle = delay; // limit to one call every "n" msec
-	       this.lastExec = new Date();
-	       this.timer = null;
-
-	       this.eventHandler = function(callback) {
-	               if (typeof callback != 'function') {
-	                       return false;
-	               }
-	               var d = new Date();
-
-	               if (d-self.lastExec < self.lastExecThrottle) {
-	                // This function has been called "too soon," before the allowed "rate" of twice per second
-	                // Set (or reset) timer so the throttled handler execution happens "n" msec from now instead
-	                if (self.timer) {
-	                    window.clearTimeout(self.timer);
-	                }
-	                self.timer = window.setTimeout(self.eventHandler, self.lastExecThrottle);
-	                return false; // exit
-	               } else {
-	                       self.lastExec = d; // update "last exec" time
-	                       window.setTimeout(callback, self.lastExecThrottle);
-	               }
-	    	}
-	}
+		};
 	
 	function create_urls(input) {
 		return input
@@ -200,7 +170,7 @@ var party = party || {};
 	
 	// Set the counter to a new int
 	function setCounter() {
-		counter.canvas.text(counter.current);
+		counter.canvas.text(number_format(counter.current, 0, party.l10n.dec_point, party.l10n.thousands_sep));
 	}
 	
 	
@@ -239,7 +209,21 @@ var party = party || {};
 	
 	// First to be called
 	function init() {
-		var bubble;
+		var bubble,
+		    imgsToPreload = [
+		        'assets/images/layout/bubble-light-blue.png',
+		        'assets/images/layout/bubble-dark-blue.png',
+		        'assets/images/layout/bubble-yellow.png',
+		        'assets/images/layout/bubble-dark-orange.png'
+		    ];
+		
+		//Bubble image preloading
+		for (var i=imgsToPreload.length; i--; ) {
+		    (function(){
+		        var img = new Image();
+		        img.src = imgsToPreload[i];
+		    })();
+		}
 		
 		// Check the browser's performance
 		party.performance = party.performance_settings.high;
@@ -274,45 +258,45 @@ var party = party || {};
 		getVisibleTiles();
 		// Bind the hover action
 		
-
-		//calling
-		resizeObject.eventHandler(function(){
-		   //Code to run
+		party.canvas.bind('mouseleave', function(){
+		   party.autoBubbleStartTimer = setTimeout(startAutoBubble, 1000);
 		});
+		
         party.canvas.bind('mousemove', function(ev) {
-			
-			resizeObject.eventHandler(function(){
+			var x,
+				y,
+				pos,
+				offset = party.canvas.offset();
 				
-	            var x,
-					y,
-					pos,
-					offset = party.canvas.offset();
+			clearTimeout(party.mousemoveTimer);
+			clearTimeout(party.autoBubbleStartTimer);
 
-				if (state.keep_bubble_open) {
-					return;
-				}
+			if (state.keep_bubble_open) {
+				return;
+			}
 
-				x = Math.ceil((ev.clientX + f_scrollLeft() - offset.left) / 12) - 1;
-				y = Math.ceil((ev.clientY + f_scrollTop() - offset.top) / 12) - 1;
-	            if (x < 0 || y < 0) {
-					return;
-				}
+			x = Math.ceil((ev.clientX + f_scrollLeft() - offset.left) / 12) - 1;
+			y = Math.ceil((ev.clientY + f_scrollTop() - offset.top) / 12) - 1;
+            if (x < 0 || y < 0) {
+				return;
+			}
 
-	            pos = party.mosaic.grid[x][y];
-
-	            // is valid x,y
-	            if (pos) {
-					// Check if this is not the already opened bubble
-					if (state.active_bubble_pos != pos.i) {
-						stopAutoBubble();
-						state.active_bubble_pos = pos.i;
-						showBubble(pos.i);
-					}
-	            } else {
-					// Not a tile
-					startAutoBubble();
-				}
-			});
+            pos = party.mosaic.grid[x][y];
+            
+            party.mousemoveTimer = setTimeout(function(){
+                // is valid x,y
+                if (pos) {
+    				// Check if this is not the already opened bubble
+    				if (state.active_bubble_pos != pos.i) {
+    					stopAutoBubble();
+    					state.active_bubble_pos = pos.i;
+    					showBubble(pos.i);
+    				}
+                } else {
+    				// Not a tile
+    				startAutoBubble();
+    			}
+            }, 50);			
         });
 		// Hide the bubble if the mouse leavese the mosaic
 		// party.canvas.bind('mouseout', function() {
@@ -336,6 +320,15 @@ var party = party || {};
 			}
 			event.stopPropagation();
 			return (event.target.nodeName.toLowerCase() == 'a');
+		});
+		
+		//Proxying bubble mouseenter and mouseleave to above click events
+		party.bubble.container.bind('mouseenter', function() {
+		    tile_hover.trigger('click');
+		});
+		
+		party.bubble.container.bind('mouseleave', function() {
+		    party.canvas.trigger('click');
 		});
 	}
 	
@@ -511,11 +504,20 @@ var party = party || {};
 		// Change the bubble
 		b.username_a.text(tile.u).attr('href', 'http://twitter.com/' + tile.u);
 		b.avatar_a.attr('title', tile.u).attr('href', 'http://twitter.com/' + tile.u);
-		b.avatar_img.attr('src', tile.m);
 		b.p.html(create_urls(tile.n));
 		b.time_a.attr('href', 'http://twitter.com/' + tile.u + '/status/' + tile.w).text(tile.c);
 		b.time.attr('datetime', tile.c);
+		b.avatar_img.hide();
 		b.container.css(position_css).removeClass().addClass('bubble ' + position_class + ' color-' + g.r);
+		
+		//Show the image on a small timeout window
+		party.showBubbleImageTimer = setTimeout(function(){
+		    b.avatar_img.attr('src', tile.m);
+		    b.avatar_img.load(function(){
+		        $(this).fadeIn('fast');
+		    })
+		    party.showBubbleImageTimer = null;
+		}, 500);
 		
 		// Show
 		b.container.show();
@@ -528,6 +530,12 @@ var party = party || {};
 		state.keep_bubble_open = false;
 		party.bubble.container.hide();
 		tile_hover.hide();
+		
+		//Clean the image showing timer if bubble is closed in the meanwhile
+		if (party.showBubbleImageTimer) {
+		    clearTimeout(party.showBubbleImageTimer);
+		    party.showBubbleImageTimer = null;
+		}
 	}
 	
 	// Reload the whole page

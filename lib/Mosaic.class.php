@@ -17,8 +17,8 @@ class Mosaic
 	/**
 	 * @const string cache key
 	 */
-	const CACHE_KEY_LAST_TWEET = 'TWITTER-MOSAIC::lastTweet::';
-	const CACHE_KEY_LAST_TWEET_WITH_IMAGE = 'TWITTER-MOSAIC::lastTweetWithImage::';
+	const CACHE_KEY_LAST_TWEET = 'TWITTERPARTY::Mosaic::lastTweet::';
+	const CACHE_KEY_LAST_TWEET_WITH_IMAGE = 'TWITTERPARTY::Mosaic::lastTweetWithImage::';
 
 
 	/**
@@ -406,7 +406,10 @@ party.mosaic = ' . json_encode($js) . ';
 		}
 		catch (Exception $e)
 		{
-			Debug::logError($e, 'FAIL Mosaic::addTweet()');
+			if (strpos('Duplicate entry', $e->getMessage() !== FALSE))
+			{
+				Debug::logError($e, 'FAIL Mosaic::addTweet()');
+			}
 		}
 	}
 

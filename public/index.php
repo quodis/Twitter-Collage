@@ -18,20 +18,21 @@ include('../lib/localization.php');
  */
 function main($language)
 {
-	header("ETag: PUB" . time());
-	header("Last-Modified: " . gmdate("D, d M Y H:i:s", time()-10) . " GMT");
-	header("Expires: " . gmdate("D, d M Y H:i:s", time() + 5) . " GMT");
-	header("Pragma: no-cache");
-	header("Cache-Control: max-age=1, s-maxage=1, no-cache, must-revalidate");
-	header('P3P: CP="CAO PSA OUR"');
-
+	DEFINE('NO_DB', TRUE);
 	DEFINE('CLIENT', 'html');
 	DEFINE('CONTEXT', __FILE__);
 	include '../bootstrap.php';
-	session_cache_limiter("nocache");
 
 	Debug::setLogMsgFile($config['App']['pathLog'] .'/dashboard.msg.log');
 	Debug::setLogErrorFile($config['App']['pathLog'] .'/dashboard.error.log');
+
+	// check cache
+	if ($output = Cache::get('TWITTER-PARTY::index::lang=' . $language))
+	{
+		Dispatch::now(1);
+	}
+
+	initDb($config);
 
 	// mosaic config file
 	$jsMosaicConfig = $config['Store']['url'] . $config['UI']['js-config']['grid'];
@@ -119,7 +120,7 @@ function main($language)
 
 				<section id="mosaic" role="img">
 					<h2><?= _('Firefox Twitter Party') ?></h2>
-
+					
           <ul id="loading">
             <li><?= /* Funny loading message */ _('Sorting guest list alphabetically') ?></li>
             <li><?= /* Funny loading message */ _('Randomizing seating order') ?></li>

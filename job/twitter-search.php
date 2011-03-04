@@ -59,8 +59,6 @@ function main()
 		// add new tweets
 		foreach ($newTweets as $tweet)
 		{
-			$tweets++;
-
 			// no positions left in this page
 			if (!count($freeSlots))
 			{
@@ -69,6 +67,7 @@ function main()
 			}
 
 			// pop one
+			$tweets++;
 			$position = $freeSlots[count($freeSlots) - 1];
 
 			// insert tweet
