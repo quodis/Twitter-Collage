@@ -32,6 +32,8 @@ function main($language)
 		Dispatch::now(1);
 	}
 
+	initDb($config);
+
 	// mosaic config file
 	$jsMosaicConfig = $config['Store']['url'] . $config['UI']['js-config']['grid'];
 
