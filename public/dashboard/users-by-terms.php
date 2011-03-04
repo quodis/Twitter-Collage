@@ -31,6 +31,7 @@ function main()
 		'count' => $result->count()
 	);
 
+
 	while ($user = $result->row())
 	{
 		$data['users'][] = $user;
