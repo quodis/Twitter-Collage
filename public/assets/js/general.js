@@ -249,6 +249,8 @@ var party = party || {};
 		    //console.log('is mosaic: ', $(evt.currentTarget).is('#mosaic'));
 		    if (!$(evt.originalEvent.target).is('#mosaic')) {
 		        startAutoBubble();
+		    } else {
+		        stopAutoBubble();
 		    }
 		});
 		
