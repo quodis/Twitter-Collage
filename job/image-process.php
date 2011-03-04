@@ -53,8 +53,15 @@ function main()
 			{
 				$time['dwnld'] = microtime(TRUE);
 
+				$imageUrl = $tweet['imageUrl'];
+
 				try
 				{
+					// prevent downloading faulty image (response is a 404 html in twitter.com)
+					if (strpos($imageUrl, 'default_profile_normal.png'))
+					{
+						throw new Exception('skip faulty "default_profile_normal.png"');
+					}
 					// make image with
 					$encoded = Image::makeTile($fileName, $tweet['id'], $tweet['position']);
 				}
@@ -65,12 +72,13 @@ function main()
 					// make default
 					$defaultPic = $config['App']['path'] . '/' . $config['Mosaic']['defaultPic'];
 					$encoded = Image::makeTile($defaultPic, $tweet['id'], $tweet['position']);
+					$imageUrl = 'http://a3.twimg.com/sticky/default_profile_images/default_profile_' . rand(0, 6) . '_normal.png';
 				}
 
 				$time['tile'] = microtime(TRUE);
 
 				// update db with image data
-				Tweet::updateImage($tweet['id'], $encoded);
+				Tweet::updateImage($tweet['id'], $encoded, $imageUrl);
 
 				$time['db'] = microtime(TRUE);
 

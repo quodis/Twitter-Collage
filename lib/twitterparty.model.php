@@ -88,10 +88,11 @@ final class Tweet
 	 *
 	 * @param integer $id
 	 * @param string $imageData (by reference)
+	 * @param string $imageUrl (optional)
 	 *
 	 * @throws Exception
 	 */
-	public static function updateImage($id, & $imageData)
+	public static function updateImage($id, & $imageData, $imageUrl = null)
 	{
 		global $mysqli;
 
@@ -100,11 +101,16 @@ final class Tweet
 		// update tweet
 		$sql = "UPDATE `tweet` SET";
 		$sql.= "  `imageData` = ?,";
+		if ($imageUrl) $sql.= "  `imageUrl` = ?,";
 		$sql.= "  `processedTs` = ?";
 		$sql.= "  WHERE id = ?";
 
 		$stmt = $mysqli->prepare($sql);
-		$stmt->bind_param('sss', $imageData, $processedTs, $id);
+		if ($imageUrl)
+		{
+			$stmt->bind_param('ssss', $imageData, $imageUrl, $processedTs, $id);
+		}
+		else $stmt->bind_param('sss', $imageData, $processedTs, $id);
 
 		$ok = $stmt->execute();
 		if (!$ok) throw new Exception('could not update tweet: ' . $stmt->error);
