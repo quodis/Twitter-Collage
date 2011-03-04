@@ -128,11 +128,15 @@ var party = party || {};
 		var tiles_to_draw = "",
 			i = 0,
 			j = 0,
-			p;
+			p,
+			inc = 0;
 		
 		// Next time draw one tile more towards initial_tiles_per_frame
 		if (state.initial_tiles_per_frame_incremental < party.performance.initial_tiles_per_frame) {
-			state.initial_tiles_per_frame_incremental  += 0.02;
+			state.initial_tiles_per_frame_incremental += 0.02;
+			inc = (counter.increment/(party.performance.initial_tiles_per_frame/state.initial_tiles_per_frame_incremental));
+		} else {
+			inc = counter.increment;
 		}
 		
 		j = (tile_counter + state.initial_tiles_per_frame_incremental);
@@ -151,7 +155,7 @@ var party = party || {};
 			party.canvas.append(tiles_to_draw);
 			// Update counter
 			if (counter.current < state.total_tiles) {
-				counter.current += counter.increment;
+				counter.current += inc;
 				setCounter();
 			}
 			
@@ -212,10 +216,7 @@ var party = party || {};
 	function init() {
 		var bubble,
 		    imgsToPreload = [
-		        'assets/images/layout/bubble-light-blue.png',
-		        'assets/images/layout/bubble-dark-blue.png',
-		        'assets/images/layout/bubble-yellow.png',
-		        'assets/images/layout/bubble-dark-orange.png'
+		        'assets/images/layout/bubbles.png'
 		    ];
 		
 		//Bubble image preloading

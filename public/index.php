@@ -73,6 +73,10 @@ function main($language)
 		<script type="text/javascript" src="<?=$jsMosaicConfig?>"></script>
 		<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
+    <style  type="text/css">
+       <?= /* Replace this with your CSS rules to tweak the site in your locale */ _('placeholder{}') ?>
+    </style>
+    
 	</head>
 
 	<body>
@@ -84,7 +88,7 @@ function main($language)
 				<!-- HEADER -->
 				<header id="brand" role="banner">
 					<a href="/" title="<?= _('Start over') ?>">
-						<?= /* Logo translation. Feel free to change the order of the h1, h2 and p blocks. h1 max of 9 chars. h2 max of 13 chars. em max of 18 chars. */ _('<h1>Firefox 4</h1><h2>Twitter Party</h2><p><em>Join the</em></p>') ?>
+						<?= /* Logo translation. Feel free to change the order of the h1, h2 and p blocks. h1 max of 9 chars. h2 max of 13 chars. em max of 18 chars. */ _('<p><em>Join the</em></p><h1>Firefox 4</h1><h2>Twitter Party</h2>') ?>
 					</a>
 				</header>
 
@@ -96,7 +100,7 @@ function main($language)
 
 					<div id="twitter-counter" class="clearfix">
 						<dl>
-							<dt><a href="http://twitter.com/share?url=http://twitterparty.mozilla.org&via=firefox&related=firefox&text=<?= urlencode( /* Default text to tweet */_('Join me at the Firefox 4 Twitter Party and celebrate the newest version') . ' #fx4 #teamfirefox') ?>" title="<?= _('Tweet') ?>" rel="external"><?= _('Tweet') ?></a></dt>
+							<dt><a href="http://twitter.com/share?url=http://mzl.la/hDx6aM&via=firefox&related=firefox&text=<?= urlencode( /* Default text to tweet */_('Join me at the Firefox 4 Twitter Party and celebrate the newest version') . ' #fx4 #teamfirefox') ?>" title="<?= /* Action verb, will open the new tweet window */ _('Tweet') ?>" rel="external"><?= _('Tweet') ?></a></dt>
 							<dd><span></span></dd>
 						</dl>
 					</div><!-- twitter-counter -->
@@ -104,8 +108,8 @@ function main($language)
 
 					<form id="search-box" role="search">
 						<h3><?= _("Who's at the party?") ?></h3>
-						<label for="search-input" accesskey="f"><?= _('Find a Twitter username') ?></label>
-						<input type="text" name="search-input" id="search-input" value="<?= _('Find a Twitter username') ?>" tabindex="1" />
+						<label for="search-input" accesskey="f"><?= /* This is an invisible label field for the input */ _('Find a Twitter username') ?></label>
+						<input type="text" name="search-input" id="search-input" value="<?= /* This is an input placeholder. Users can only find exact twitter usernames */ _('Find a Twitter username') ?>" tabindex="1" />
 						<button type="submit" name="search-button" id="search-submit-bttn" value="<?= _('Find') ?>" tabindex="2" title="<?= _('Find') ?>" class="button"><?= _('Find') ?></button>
 						<div class="error">
 							<p><?= _("This user hasn't joined the party yet.") ?></p>
@@ -137,8 +141,9 @@ function main($language)
 					<article id="bubble" class="bubble">
 
 						<header>
-
-							<h1><a href="#" title="<?= _('Twitter profile') ?>" rel="author external"></a><span> <?= /* Used in: "twitter username" wrote */ _('wrote') ?></span></h1>
+						  
+<?php $link = '<a href="#" title="' . _('Twitter profile') . '" rel="author external"></a>'; ?>
+							<h1><?= sprintf(/* Used in: "twitter username" wrote */ _('%s <span>wrote</span>'), $link) ?></h1>
 							<a href="#" title="" rel="author external" class="twitter-avatar">
 							  <img src="" alt="<?= _('Twitter profile picture') ?>" width="48" height="48" />
 							</a>
@@ -168,9 +173,9 @@ function main($language)
 				<h3><span><?= /* Keep the <em> at beginning or end only. Max 20 chars before the em, Max 10 chars for the em. */ _("Let's be <em>Friends!</em>") ?></span></h3>
 
 				<ul>
-					<li id="footer-twitter"><a href="http://twitter.com/firefox"><?= _('Twitter') ?></a></li>
-					<li id="footer-facebook"><a href="http://Facebook.com/Firefox"><?= _('Facebook') ?></a></li>
-					<li id="footer-connect"><a href="/en-US/firefox/connect/"><?= /* Max of 20 chars */ _('More Ways to Connect') ?></a></li>
+					<li id="footer-twitter"><a href="http://twitter.com/firefox" rel="external"><?= _('Twitter') ?></a></li>
+					<li id="footer-facebook"><a href="http://Facebook.com/Firefox" rel="external"><?= _('Facebook') ?></a></li>
+					<li id="footer-connect"><a href="/en-US/firefox/connect/" rel="external"><?= /* Max of 20 chars */ _('More Ways to Connect') ?></a></li>
 				</ul>
 
 				<p id="sub-footer-newsletter">
@@ -189,7 +194,8 @@ function main($language)
 						<a href="http://www.mozilla.com/legal/fraud-report/index.html"><?= _('Report Trademark Abuse') ?></a>
 					</p>
 
-					<p><?= /* Leave all html code unchanged */ _('Except where otherwise <a href="http://www.mozilla.com/about/legal.html#site">noted</a>, content on this site is licensed under the <br /><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.') ?></p>
+					<p><?= /* Leave all html code unchanged */ _('Except where otherwise <a href="http://www.mozilla.com/about/legal.html#site">noted</a>, content on this site is licensed under the <br /><a href="http://creativecommons.org/licenses/by-sa/3.0/" rel="external">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.') ?></p>
+					<p><?= sprintf( /* The variable will hold a linked name to the web agency */ _('Visualization by $'), '<a href="http://quodis.com" title="Quodis" rel="external">Quodis</a>') ?></p>
 				</div><!-- footer-left -->
         
 				<div id="footer-right">
