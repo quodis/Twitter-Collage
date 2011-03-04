@@ -54,7 +54,7 @@ var party = party || {};
 			draw_new_tiles_every: 0,
 			draw_new_tiles_every_counter: 0,
 			total_tiles: 0,
-			last_tile_drawn_pos: null
+			last_tile_drawn_pos: -1
 		},
 		performance_settings = {
 			high: {
@@ -591,7 +591,6 @@ var party = party || {};
 		
 		// Get a random position
 		var pos,
-			old_visible,
 			new_tile,
 			idx,
 			grid,
@@ -642,6 +641,7 @@ var party = party || {};
 
 		// Update the previous tile
 		if (state.last_tile_drawn_pos >= 0) {
+			console.log(state.last_tile_drawn_pos);
 			$('#' + pos).css({
 				'background-image': 'url(data:image/gif;base64,' + visible_tiles[state.last_tile_drawn_pos].d + ')'
 			});
