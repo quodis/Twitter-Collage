@@ -130,7 +130,7 @@ var party = party || {};
 		
 		// Add it to the HTML to draw
 		// return '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + tile.d + '); left: ' + (index[0]*12) + 'px; top: ' + (index[1]*12) + 'px;"></div>';
-		return '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + tile.d + '); left: ' + (index[0]*12) + 'px; top: ' + (index[1]*12) + 'px;"></div>';
+		return '<div class="tile" id="' + position + '" style=" left: ' + (index[0]*12) + 'px; top: ' + (index[1]*12) + 'px;"></div>';
 		
 	}
 	
@@ -615,7 +615,7 @@ var party = party || {};
 			
 			// Update the CSS
 			css_changes = {
-				'background-image': 'url(data:image/gif;base64,' + new_tile.d + ')'
+				//'background-image': 'url(data:image/gif;base64,' + new_tile.d + ')'
 			};
 			// Write the new tile over the visible
 			$.extend(visible_tiles[pos], new_tile);
@@ -635,14 +635,14 @@ var party = party || {};
 			// Update the CSS
 			css_changes = {
 				'background-image': 'none',
-				'background-color': colors[grid.r]
+				//'background-color': colors[grid.r]
 			};
 		}
 
 		// Update the previous tile
 		if (state.last_tile_drawn_pos > -1) {
 			$('#' + state.last_tile_drawn_pos).css({
-				'background-image': 'url(data:image/gif;base64,' + visible_tiles[state.last_tile_drawn_pos].d + ')'
+				//'background-image': 'url(data:image/gif;base64,' + visible_tiles[state.last_tile_drawn_pos].d + ')'
 			});
 		}
 		
