@@ -480,11 +480,12 @@ var party = party || {};
 		b.p.html(create_urls(tile.n));
 		b.time_a.attr('href', 'http://twitter.com/' + tile.u + '/status/' + tile.w).text(tile.c);
 		b.time.attr('datetime', tile.c);
+		b.avatar_img.hide();
 		b.container.css(position_css).removeClass().addClass('bubble ' + position_class + ' color-' + g.r);
 		
 		//Show the image on a small timeout window
 		party.showBubbleImageTimer = setTimeout(function(){
-		    b.avatar_img.hide().attr('src', tile.m);
+		    b.avatar_img.attr('src', tile.m);
 		    b.avatar_img.load(function(){
 		        $(this).fadeIn('fast');
 		    })
