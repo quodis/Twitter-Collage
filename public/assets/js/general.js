@@ -564,7 +564,7 @@ var party = party || {};
 			var key;
 			for (key in visible_tiles) {
 				if (visible_tiles[key].p) {
-					autoplay_pool.push({id: parseInt(visible_tiles[key].i,10), position: parseInt(visible_tiles[key].p,10));
+					autoplay_pool.push({id: parseInt(visible_tiles[key].i,10), position: parseInt(visible_tiles[key].p,10)});
 				}
 			}
 			total_positions = autoplay_pool.length;
