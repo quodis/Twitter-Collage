@@ -63,19 +63,19 @@ var party = party || {};
 				initial_frames_per_second: 24,
 				initial_tiles_per_frame: 10,
 				new_tiles_per_second: 8,
-				pause_after: 2 // Minutes
+				pause_after: 10 // Minutes
 			},
 			medium: {
 				initial_frames_per_second: 12,
 				initial_tiles_per_frame: 20,
 				new_tiles_per_second: 4,
-				pause_after: 2 // Minutes
+				pause_after: 10 // Minutes
 			},
 			low: {
 				initial_frames_per_second: 1,
 				initial_tiles_per_frame: 200,
 				new_tiles_per_second: 1,
-				pause_after: 2 // Minutes
+				pause_after: 10 // Minutes
 			}
 		};
 	
@@ -757,6 +757,7 @@ var party = party || {};
 	function pause() {
 		window.clearInterval(draw_tiles_timer);
 		window.clearInterval(polling_timer);
+		stopAutoBubble();
 	}
 	
 	/**
@@ -767,6 +768,7 @@ var party = party || {};
 	function resume() {
 		startDrawNewTiles();
 		startPolling();
+		startAutoBubble();
 	}
 	
 	
