@@ -220,7 +220,7 @@ var party = party || {};
 		
 		// Start the sprite animation
 		loadingIndicator();
-		loading_indicator_timer = window.setInterval(loadingIndicator, party.loading_indicator_milliseconds);
+		loading_indicator_timer = window.setInterval(loadingIndicator, loading_indicator_milliseconds);
 	}
 	
 	// Hide the loading message
