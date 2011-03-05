@@ -62,17 +62,20 @@ var party = party || {};
 			high: {
 				initial_frames_per_second: 24,
 				initial_tiles_per_frame: 10,
-				new_tiles_per_second: 8
+				new_tiles_per_second: 8,
+				pause_after: 2 // Minutes
 			},
 			medium: {
 				initial_frames_per_second: 12,
 				initial_tiles_per_frame: 20,
-				new_tiles_per_second: 4
+				new_tiles_per_second: 4,
+				pause_after: 2 // Minutes
 			},
 			low: {
 				initial_frames_per_second: 1,
 				initial_tiles_per_frame: 200,
-				new_tiles_per_second: 1
+				new_tiles_per_second: 1,
+				pause_after: 2 // Minutes
 			}
 		};
 	
@@ -171,8 +174,7 @@ var party = party || {};
 			counter.current = parseInt(state.total_tiles, 10);
 			setCounter();
 			startAutoBubble();
-			// Start the recursive "tile updater"
-			draw_tiles_timer = window.setInterval(drawNewTiles, (1000/party.performance.new_tiles_per_second));
+			startDrawNewTiles();
 		}
 		
 	}
@@ -584,7 +586,7 @@ var party = party || {};
 		
 		// Show the loading
 		loadingShow();
-		return;
+
 		// Request URL
 		var url = party.store_url + '/mosaic.json';
 		
@@ -627,6 +629,10 @@ var party = party || {};
 			data = null;
 
 		});
+	}
+	
+	function startDrawNewTiles() {
+		draw_tiles_timer = window.setInterval(drawNewTiles, (1000/party.performance.new_tiles_per_second));
 	}
 	
 	function drawNewTiles() {
@@ -703,6 +709,10 @@ var party = party || {};
 		poll();
 		polling_timer = window.setInterval(poll, (party.polling_timer_seconds * 1000));
 		
+		// End the polling after 10 minutes?
+		if (window.location.href.indexOf('keepgoing') < 0) {
+			window.setTimeout(pause, party.performance.pause_after * 60 * 1000);
+		}
 	}
 	
 	function poll() {
@@ -748,7 +758,6 @@ var party = party || {};
 		window.clearInterval(draw_tiles_timer);
 		window.clearInterval(polling_timer);
 	}
-
 	
 	/**
 	 * public, enable dashboard ui
@@ -756,6 +765,7 @@ var party = party || {};
 	 * @return
 	 */
 	function resume() {
+		startDrawNewTiles();
 		startPolling();
 	}
 	
