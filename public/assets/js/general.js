@@ -207,7 +207,12 @@ var party = party || {};
 		
 		// Animate the loading sprite
 		loadingIndicator = function() {
-
+			loading_indicator.css('background-position', -(loading_indicator_index*240) + 'px');
+			console.log(-(loading_indicator_index*240) + 'px');
+			loading_indicator_index += 1;
+			if (loading_indicator_index >= loading_indicator_frames) {
+				loading_indicator_index = 0;
+			}
 		}
 		
 		// Loop through the messages
@@ -216,7 +221,7 @@ var party = party || {};
 		
 		// Start the sprite animation
 		loadingIndicator();
-		loading_indicator_timer = window.setInterval(loadingIndicator, 200);
+		loading_indicator_timer = window.setInterval(loadingIndicator, loading_indicator_milliseconds);
 	}
 	
 	// Hide the loading message
@@ -569,16 +574,16 @@ var party = party || {};
 	
 	// Get the last complete page of tiles
 	function getVisibleTiles() {
-		return;
+		
 		// Check if we have a complete page. If not, try again later
 		if (party.state.last_page == 0) {
-			setTimeout(reloadPage, 60 * 1000);
+			setTimeout(reloadPage, 3 * 60 * 1000);
 			return;
 		}
 		
 		// Show the loading
 		loadingShow();
-		
+		return;
 		// Request URL
 		var url = party.store_url + '/mosaic.json';
 		
