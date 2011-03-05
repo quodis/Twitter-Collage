@@ -187,7 +187,7 @@ var party = party || {};
 		var loading_messages = $.makeArray($('#loading li')),
 			loading_message_index = 0,
 			loadingMessage,
-			loading_indicator_frames = 4,
+			loading_indicator_frames = 5,
 			loading_indicator_index = 0,
 			loading_indicator = $('#loading'),
 			loadingIndicator;
@@ -207,8 +207,7 @@ var party = party || {};
 		
 		// Animate the loading sprite
 		loadingIndicator = function() {
-			loading_indicator.css('background-position', -(loading_indicator_index*240) + 'px');
-			console.log(-(loading_indicator_index*240) + 'px');
+			loading_indicator.css('background-position', -(loading_indicator_index*240) + 'px 0px');
 			loading_indicator_index += 1;
 			if (loading_indicator_index >= loading_indicator_frames) {
 				loading_indicator_index = 0;
