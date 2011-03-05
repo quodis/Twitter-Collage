@@ -165,6 +165,8 @@ var party = party || {};
 			
 			// No Tiles were built - task is complete
 			window.clearInterval(initial_draw_timer);
+			// Remove the grid
+			party.canvas.css('background', 'none');
 			// Set counter to last id
 			counter.current = parseInt(state.total_tiles, 10);
 			setCounter();
