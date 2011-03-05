@@ -23,7 +23,7 @@ var party = party || {};
 	var initial_draw_timer,
 		loading_message_timer,
 		loading_indicator_timer,
-		loading_indicator_milliseconds,
+		loading_indicator_milliseconds = 200,
 		polling_timer,
 		tile_counter = 0,
 		auto_bubble_timer,
@@ -220,7 +220,7 @@ var party = party || {};
 		
 		// Start the sprite animation
 		loadingIndicator();
-		loading_indicator_timer = window.setInterval(loadingIndicator, (party.loading_indicator_milliseconds * 1000));
+		loading_indicator_timer = window.setInterval(loadingIndicator, party.loading_indicator_milliseconds);
 	}
 	
 	// Hide the loading message
@@ -573,7 +573,7 @@ var party = party || {};
 	
 	// Get the last complete page of tiles
 	function getVisibleTiles() {
-		
+		return;
 		// Check if we have a complete page. If not, try again later
 		if (party.state.last_page == 0) {
 			setTimeout(reloadPage, 60 * 1000);
