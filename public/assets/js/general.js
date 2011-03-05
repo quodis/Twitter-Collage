@@ -208,6 +208,7 @@ var party = party || {};
 		// Animate the loading sprite
 		loadingIndicator = function() {
 			loading_indicator.css('background-position', -(loading_indicator_index*240) + 'px');
+			console.log(-(loading_indicator_index*240) + 'px');
 			loading_indicator_index += 1;
 			if (loading_indicator_index >= loading_indicator_frames) {
 				loading_indicator_index = 0;
