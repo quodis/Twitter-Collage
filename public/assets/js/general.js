@@ -221,7 +221,7 @@ var party = party || {};
 		
 		// Start the sprite animation
 		loadingIndicator();
-		loading_indicator_timer = window.setInterval(loadingIndicator, loading_indicator_milliseconds);
+		loading_indicator_timer = window.setInterval(loadingIndicator, 200);
 	}
 	
 	// Hide the loading message
