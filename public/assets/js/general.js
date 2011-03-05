@@ -22,6 +22,8 @@ var party = party || {};
 	*/
 	var initial_draw_timer,
 		loading_message_timer,
+		loading_indicator_timer,
+		loading_indicator_milliseconds,
 		polling_timer,
 		tile_counter = 0,
 		auto_bubble_timer,
@@ -184,7 +186,11 @@ var party = party || {};
 	function loadingShow() {
 		var loading_messages = $.makeArray($('#loading li')),
 			loading_message_index = 0,
-			loadingMessage;
+			loadingMessage,
+			loading_indicator_frames = 4,
+			loading_indicator_index = 0,
+			loading_indicator = $('#loading'),
+			loadingIndicator;
 			
 		loading_messages.shuffle();
 		
@@ -199,15 +205,28 @@ var party = party || {};
 			$(loading_messages[loading_message_index]).show();
 		}
 		
-		// Loop through the array
+		// Animate the loading sprite
+		loadingIndicator = function() {
+			loading_indicator.css('background-position', -(loading_indicator_index*240) + 'px');
+			loading_indicator_index += 1;
+			if (loading_indicator_index >= loading_indicator_frames) {
+				loading_indicator_index = 0;
+			}
+		}
+		
+		// Loop through the messages
 		loadingMessage();
 		loading_message_timer = window.setInterval(loadingMessage, (party.loading_message_seconds * 1000));
 		
+		// Start the sprite animation
+		loadingIndicator();
+		loading_indicator_timer = window.setInterval(loadingIndicator, (party.loading_indicator_milliseconds * 1000));
 	}
 	
 	// Hide the loading message
 	function loadingHide(){
 		window.clearInterval(loading_message_timer);
+		window.clearInterval(loading_indicator_timer);
 		$('#loading').remove();
 	}
 	

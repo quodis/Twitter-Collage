@@ -20,6 +20,8 @@ http://www.opensource.org/licenses/mit-license.php
 }
 
 #loading {
+	background: url(../images/layout/initial-loading.png) top left no-repeat;
+	min-height: 82px;
 	width: 240px;
 	display: block;
 	text-align: center;
