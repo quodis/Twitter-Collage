@@ -27,9 +27,7 @@ var party = party || {};
 		defaults : {
 			'store_url' : '',
 			'tile_size' : 0,
-			'idle_timeout' : 120 * 1000,
-			'highlight_timeout' : 500,
-			'short_stat_interval' : 3000
+			'short_stat_interval' : 10 * 1000
 		},
 		options : { },
 
@@ -40,8 +38,6 @@ var party = party || {};
 			'last_id' : 0,
 			'tweet_count' : 0,
 			'last_page' : 0,
-			'idle_timeout' : null,
-			'highlight_timeout' : null,
 			'short_stat_interval' : null
 		},
 		
@@ -82,9 +78,9 @@ var party = party || {};
 		buildInterface : function() 
 		{
 			// show last id
-			$('#guest-count span').rollNumbers(this.state.guest_count, 3000);
-			$('#tweet-count span').rollNumbers(this.state.tweet_count, 5000);
-			$('#last-page span').rollNumbers(this.state.last_page, 3000);
+			$('#guest-count span').rollNumbers(this.state.guest_count, 2000);
+			$('#tweet-count span').rollNumbers(this.state.tweet_count, 2000);
+			$('#last-page span').rollNumbers(this.state.last_page, 2000);
 			
 			// bind search user
 			$('#find-user').inputDefault().inputState( { 'onEnter' : function() {
@@ -120,7 +116,6 @@ var party = party || {};
 					// is loaded tile
 					if ('undefined' !== typeof this.tiles[tile.i]) {
 						$('#' + tile.i).addClass('excite');
-						console.log($('#' + tile.i));
 						this.highlightTilePos(tile.i);
 						$('#highlight').addClass('excite');
 					}
@@ -138,7 +133,7 @@ var party = party || {};
 				this.load('/dashboard/stat-short.php', null, function(data) {
 					if (!data) return;
 					$.extend(this.state, data);
-					$('#tweet-count span').rollNumbers(this.state.tweet_count, this.options.short_stat_interval);
+					$('#tweet-count span').rollNumbers(this.state.tweet_count, parseInt(this.options.short_stat_interval / 2, 10));
 					$('#last-page span').text(this.state.last_page);
 					$('#job-delay span').html('<em>' + this.state.delay.seconds + ' sec / ' + this.state.delay.tweets + ' tweets</em>');
 				}.bind(this) );
@@ -223,17 +218,17 @@ var party = party || {};
 
 		addTile : function(tile)
 		{
-			this.tiles[tile.position] = tile;
-			$('#' + tile.position).remove();
-			var x = this.mosaic.index[tile.position].x;
-			var y = this.mosaic.index[tile.position].y;
+			this.tiles[tile.p] = tile;
+			$('#' + tile.p).remove();
+			var x = this.mosaic.index[tile.p][0];
+			var y = this.mosaic.index[tile.p][1];
 			var offsetX = this.options.tile_size * x;
 			var offsetY = this.options.tile_size * y;
-			var html = '<li id="' + tile.position + '" style="position: absolute; top: ' + offsetY +'px; left: ' + offsetX + 'px"><img src="data:image/gif;base64,' + tile.imageData + '" /></li>';
+			var html = '<li id="' + tile.p + '" style="position: absolute; top: ' + offsetY +'px; left: ' + offsetX + 'px"><img src="data:image/gif;base64,' + tile.d + '" /></li>';
 			$(html).appendTo('#mosaic');
-			$('#' + tile.position).click( function(ev) {
+			$('#' + tile.p).click( function(ev) {
 				ev.stopPropagation();
-				this.openTile(tile.position);
+				this.openTile(tile.p);
 			}.bind(this) );
 		},
 		
@@ -248,15 +243,15 @@ var party = party || {};
 			$('#highlight .tweet').remove();
 			$('#highlight .user').remove();
 			var deleteBtn ='<button class="delete">delete tweet</button>';
-			var userBtn = '<span class="user-link">all tweets by ' + tile.userName + '</span>';
+			var userBtn = '<span class="user-link">all tweets by ' + tile.u + '</span>';
 			$(this.getTitleHtml('Tweet') + '<article class="tweet clearfix">' + this.getTweetHtml(tile) + userBtn + deleteBtn + '</article>').appendTo('#widgets #highlight');
 			$('#highlight .delete').click( function() {
-				this.deleteTweet(tile.id, function() {
+				this.deleteTweet(tile.i, function() {
 					this.reset();
 				}.bind(this) );
 			}.bind(this) );
 			$('#highlight .user-link').click( function() {
-				this.showUser(tile.userId, tile.userName, tile.imageUrl);
+				this.findUser(tile.u);
 			}.bind(this)  );
 		},
 		
@@ -266,20 +261,18 @@ var party = party || {};
 		
 		getTweetHtml : function(tweet)
 		{
-			var date = new Date(tweet.createdTs * 1000);
-			// page, position, twitterId, userId, isoLanguage
-			var contents = '<img src="' + tweet.imageUrl + '">\
-				<p class="contents">' + tweet.contents + '</p>\
-				<p class="user-name">' + tweet.userName + '</p>\
+			var date = new Date(tweet.c * 1000);
+			var contents = '<img src="' + tweet.m + '">\
+				<p class="contents">' + tweet.n + '</p>\
+				<p class="user-name">' + tweet.u + '</p>\
 				<p class="created-date">' + date + '</p>';
 			return contents;
 		},
 		
 		getUserHtml : function(tweet)
 		{
-			// page, position, twitterId, userId, isoLanguage
-			var contents = '<img src="' + tweet.imageUrl + '">\
-				<p class="user-name">' + tweet.userName + '</p>';
+			var contents = '<img src="' + tweet.m + '">\
+				<p class="user-name">' + tweet.u + '</p>';
 			return contents;
 		},
 		
@@ -311,7 +304,7 @@ var party = party || {};
 				$('#loading').remove();
 				
 				if (data.total == 1) {
-					this.showUser(data.users[0].userId, data.users[0].userName, data.users[0].imageUrl);
+					this.showUser(data.users[0].u, data.users[0].m);
 					return;
 				}
 				
@@ -328,20 +321,20 @@ var party = party || {};
 				
 				for (i = 0; i < data.users.length; i++) {
 					for (i = 0; i < data.users.length; i++) {
-						$('<article class="user clearfix" data-id="' + data.users[i].userId + '">' + this.getUserHtml(data.users[i]) + '</article>').appendTo('#widgets #user-list');
+						$('<article class="user clearfix">' + this.getUserHtml(data.users[i]) + '</article>').appendTo('#widgets #user-list');
 					}
 					// user-name click
 					$('#user-list .user').click( function(ev) {
 						ev.stopPropagation();
 						var el = $(ev.target).hasClass('user') ? $(ev.target) : $(ev.target).parents('.user');
-						this.showUser(el.attr('data-id'), el.find('.user-name').text(), el.find('img').attr('src'));
+						this.showUser(el.find('.user-name').text(), el.find('img').attr('src'));
 					}.bind(this) );
 				}
 			}.bind(this), 'users-by-terms' );
 		},
 		
 		
-		showUser : function(userId, name, picture_url)
+		showUser : function(name, picture_url)
 		{
 			this.reset();
 			
@@ -356,9 +349,9 @@ var party = party || {};
 				<img src="' + picture_url + '" />\
 				<p class="user-name">' + name + '</p>\
 				<button class="delete">delete user</button>';
-			$('<article class="user clearfix" data-id="' + userId + '">' + html + '</article>').appendTo('#widgets #highlight');
+			$('<article class="user clearfix">' + html + '</article>').appendTo('#widgets #highlight');
 			$('.user .delete').click( function() {
-				this.deleteUser(userId, function() {
+				this.deleteUser(name, function() {
 					this.reset();
 				}.bind(this) );
 			}.bind(this) );
@@ -380,7 +373,7 @@ var party = party || {};
 				}
 				
 				for (i = 0; i < data.tweets.length; i++) {
-					$('<article class="tweet clearfix">' + this.getTweetHtml(data.tweets[i]) + '<button class="delete" data-id="' + data.tweets[i].id + '">delete tweet</button></article>').appendTo('#widgets #tweet-list');
+					$('<article class="tweet clearfix">' + this.getTweetHtml(data.tweets[i]) + '<button class="delete" data-id="' + data.tweets[i].i + '">delete tweet</button></article>').appendTo('#widgets #tweet-list');
 				}
 				$('.tweet .delete').click( function(ev) {
 					ev.stopPropagation();
@@ -416,14 +409,14 @@ var party = party || {};
 				
 				for (i = 0; i < data.tweets.length; i++) {
 					var deleteBtn ='<button class="delete">delete tweet</button>';
-					var userBtn = '<span class="user-link">all tweets by ' + data.tweets[i].userName + '</span>';
-					$('<article class="tweet clearfix" data-id="' + data.tweets[i].id + '">' + this.getTweetHtml(data.tweets[i]) + userBtn + deleteBtn + '</article>').appendTo('#widgets #tweet-list');
+					var userBtn = '<span class="user-link">all tweets by ' + data.tweets[i].u + '</span>';
+					$('<article class="tweet clearfix" data-id="' + data.tweets[i].i + '">' + this.getTweetHtml(data.tweets[i]) + userBtn + deleteBtn + '</article>').appendTo('#widgets #tweet-list');
 				}
 				// user-name click
 				$('#tweet-list .user-link').click( function(ev) {
 					ev.stopPropagation();
 					var el = $(ev.target).hasClass('tweet') ? $(ev.target) : $(ev.target).parents('.tweet');
-					this.showUser(el.attr('data-id'), el.find('.user-name').text(), el.find('img').attr('src'));
+					this.showUser(el.find('.user-name').text(), el.find('img').attr('src'));
 				}.bind(this) );
 				// delete
 				$('.tweet .delete').click( function(ev) {
@@ -440,8 +433,8 @@ var party = party || {};
 			this.post('/dashboard/tweet-delete.php', { 'id' : id }, callback )
 		},
 		
-		deleteUser : function(id, callback) {
-			this.post('/dashboard/user-delete.php', { 'user_id' : id}, callback )
+		deleteUser : function(name, callback) {
+			this.post('/dashboard/user-delete.php', { 'user_name' : name}, callback )
 		},
 
 		// ---- ajax helpers
@@ -465,8 +458,6 @@ var party = party || {};
 				var date = new Date();
 				this.load_requests[id] = request_key;
 			}
-			
-			console.log(url, params, request_key);
 			
 			return $.ajax( {
 				'type': 'GET',
@@ -498,15 +489,12 @@ var party = party || {};
 
 		loadError : function() 
 		{
-			console.log('load fail, error:', arguments);
 			$('#loading').remove();
 			$('<li id="loading">not found</li>').appendTo('#mosaic');
 		},
 		
 		post : function(url, params, callback, noFeedback) 
 		{
-			console.log(url, params);
-			
 			$.ajax( {
 				'type': 'POST',
 				'url': url,
@@ -540,12 +528,10 @@ var party = party || {};
 		
 		postError : function() 
 		{
-			console.log('post fail, error:', arguments);
 		},
 		
 		postSuccess : function(message) 
 		{
-			console.log('post ok, message:', message);
 		},
 
 		

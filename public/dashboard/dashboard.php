@@ -17,11 +17,10 @@ function main()
 	header("Expires: " . gmdate("D, d M Y H:i:s", time() + 5) . " GMT");
 	header("Pragma: no-cache");
 	header("Cache-Control: max-age=1, s-maxage=1, no-cache, must-revalidate");
-	header('P3P: CP="CAO PSA OUR"');
 
 	DEFINE('CLIENT', 'html');
 	DEFINE('CONTEXT', __FILE__);
-	include '../bootstrap.php';
+	include '../../bootstrap.php';
 	session_cache_limiter("nocache");
 
 	Debug::setLogMsgFile($config['App']['pathLog'] .'/dashboard.msg.log');
@@ -42,7 +41,7 @@ function main()
 
 	$lastTweet = Mosaic::getLastTweet();
 	$lastProcessedTweet = Mosaic::getLastTweetWithImage();
-	$elapsed = Tweet::getAverageDelay(100);
+	$elapsed = Tweet::getAverageDelay(10);
 	$tweets = ($lastTweet['id'] - $lastProcessedTweet['id']);
 	if (!$tweets) $elapsed = 0;
 

@@ -17,7 +17,7 @@ class Twitter
 	/**
 	 * @const string cache key
 	 */
-	const CACHE_KEY_RESET_FLAG = 'TWITTER-MOSAIC::Twitter::resetFlag';
+	const CACHE_KEY_RESET_FLAG = 'TWITTERPARTY::Twitter::resetFlag';
 
 	/**
 	 * @var array

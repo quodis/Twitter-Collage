@@ -1,13 +1,15 @@
-/**
+/*
 
-Firefox 4 Twitter Party
-Design and development by Mozilla, Quodis
-http://www.mozilla.com
-http://www.quodis.com
+Firefox Twitter Party
+Design and development by Mozilla/Quodis:
+www.mozilla.com
+www.quodis.com 
 
-Licensed under a Creative Commons Attribution Share-Alike License v3.0 http://creativecommons.org/licenses/by-sa/3.0/ 
+Licensed under the MIT license: 
+http://www.opensource.org/licenses/mit-license.php
 
 */
+
 
 /* 1.General */
 
@@ -18,12 +20,18 @@ Licensed under a Creative Commons Attribution Share-Alike License v3.0 http://cr
 }
 
 #loading {
+	background: url(../images/layout/initial-loading.png) 0 0 no-repeat;
+	min-height: 100px;
+	width: 240px;
+	display: block;
 	text-align: center;
 	margin: 230px auto 0 auto;
-	z-index:200;
+	list-style-type: none;
+	padding: 108px 0 0 0;
 }
+
 #loading li {
-	display:none;
+	display: none;
 }
 
 /* 2.Bubbles */
@@ -32,10 +40,10 @@ Licensed under a Creative Commons Attribution Share-Alike License v3.0 http://cr
 	float:left;
 	font-size: 13px;
 	min-height: 130px;
-	width: 290px;
+	width: 284px;
 	position: absolute;
- 	display: none; 
-	z-index: 50;
+	z-index: 20;
+	display: none;
 }
 
 .bubble a,
@@ -96,17 +104,31 @@ Licensed under a Creative Commons Attribution Share-Alike License v3.0 http://cr
 	word-wrap: break-word;
 }
 
+
+
 /* 3.Bubbles Colors */
 
-
-/* Light blue */
 .color-0.top-left header, .color-0.top-left p,
 .color-0.bottom-left header, .color-0.bottom-left p,
 .color-0.top-right header, .color-0.top-right p,
-.color-0.bottom-right header, .color-0.bottom-right p {
-	background-image: url(../images/layout/bubble-light-blue.png);
+.color-0.bottom-right header, .color-0.bottom-right p,
+.color-1.top-left header, .color-1.top-left p,
+.color-1.bottom-left header, .color-1.bottom-left p,
+.color-1.top-right header, .color-1.top-right p,
+.color-1.bottom-right header, .color-1.bottom-right p,
+.color-2.top-left header, .color-2.top-left p,
+.color-2.bottom-left header, .color-2.bottom-left p,
+.color-2.top-right header, .color-2.top-right p,
+.color-2.bottom-right header, .color-2.bottom-right p,
+.color-3.top-left header, .color-3.top-left p,
+.color-3.bottom-left header, .color-3.bottom-left p,
+.color-3.top-right header, .color-3.top-right p,
+.color-3.bottom-right header, .color-3.bottom-right p {
+	background-image: url(../images/layout/bubbles.png);
 	background-repeat: no-repeat;
 }
+
+/* Light blue */
 
 .bubble.color-0, 
 .bubble.color-0 h1 span,
@@ -119,14 +141,25 @@ Licensed under a Creative Commons Attribution Share-Alike License v3.0 http://cr
 	color:#1D2D67;
 }
 
-/* Dark blue */
-.color-1.top-left header, .color-1.top-left p,
-.color-1.bottom-left header, .color-1.bottom-left p,
-.color-1.top-right header, .color-1.top-right p,
-.color-1.bottom-right header, .color-1.bottom-right p {
-	background-image: url(../images/layout/bubble-dark-blue.png);
-	background-repeat: no-repeat;
+.bubble.color-0 .twitter-avatar{
+	border-color:#fff;
 }
+
+.bubble.color-0 .twitter-avatar img{
+	background-color: #e1f0fa;
+}
+
+.color-0.top-left header{ background-position: -5px top; }
+.color-0.top-left p{ background-position: -620px bottom;}
+.color-0.bottom-left header{ background-position: -620px top;}
+.color-0.bottom-left p{ background-position: -5px bottom;}
+.color-0.top-right header{ background-position: -320px top;}
+.color-0.top-right p{ background-position: -638px bottom;}
+.color-0.bottom-right header{ background-position: -638px top;}
+.color-0.bottom-right p{ background-position: -320px bottom;}
+
+
+/* Dark blue */
 
 .bubble.color-1, 
 .bubble.color-1 h1 span,
@@ -139,14 +172,24 @@ Licensed under a Creative Commons Attribution Share-Alike License v3.0 http://cr
 	color:#9bc3e2;
 }
 
-/* Yellow */
-.color-2.top-left header, .color-2.top-left p,
-.color-2.bottom-left header, .color-2.bottom-left p,
-.color-2.top-right header, .color-2.top-right p,
-.color-2.bottom-right header, .color-2.bottom-right p {
-	background-image: url(../images/layout/bubble-yellow.png);
-	background-repeat: no-repeat;
+.bubble.color-1 .twitter-avatar{
+	border-color:#e1f0fa;
 }
+
+.bubble.color-1 .twitter-avatar img{
+	background-color: #9bc3e2;
+}
+
+.color-1.top-left header{ background-position: -930px top; }
+.color-1.top-left p{ background-position: -1545px bottom;}
+.color-1.bottom-left header{ background-position: -1545px top;}
+.color-1.bottom-left p{ background-position: -930px bottom;}
+.color-1.top-right header{ background-position: -1245px top;}
+.color-1.top-right p{ background-position: -1563px bottom;}
+.color-1.bottom-right header{ background-position: -1563px top;}
+.color-1.bottom-right p{ background-position: -1245px bottom;}
+
+/* Yellow */
 
 .bubble.color-2, 
 .bubble.color-2 h1 span,
@@ -158,14 +201,26 @@ Licensed under a Creative Commons Attribution Share-Alike License v3.0 http://cr
 .bubble.color-2 a {
 	color:#c21924;
 }
-/* Dark Orange */
-.color-3.top-left header, .color-3.top-left p,
-.color-3.bottom-left header, .color-3.bottom-left p,
-.color-3.top-right header, .color-3.top-right p,
-.color-3.bottom-right header, .color-3.bottom-right p {
-	background-image: url(../images/layout/bubble-dark-orange.png);
-	background-repeat: no-repeat;
+
+.bubble.color-2 .twitter-avatar{
+	border-color:#fff;
 }
+
+.bubble.color-2 .twitter-avatar img{
+	background-color: #fde9c7;
+}
+
+.color-2.top-left header{ background-position: -1850px top; }
+.color-2.top-left p{ background-position: -2465px bottom;}
+.color-2.bottom-left header{ background-position: -2465px top;}
+.color-2.bottom-left p{ background-position: -1850px bottom;}
+.color-2.top-right header{ background-position: -2165px top;}
+.color-2.top-right p{ background-position: -2483px bottom;}
+.color-2.bottom-right header{ background-position: -2483px top;}
+.color-2.bottom-right p{ background-position: -2165px bottom;}
+
+
+/* Dark Orange */
 
 .bubble.color-3, 
 .bubble.color-3 h1 span,
@@ -177,6 +232,23 @@ Licensed under a Creative Commons Attribution Share-Alike License v3.0 http://cr
 .bubble.color-3 a {
 	color:#e8d683;
 }
+
+.bubble.color-3 .twitter-avatar{
+	border-color:#fde9c7;
+}
+
+.bubble.color-3 .twitter-avatar img{
+	background-color: #fde9c7;
+}
+
+.color-3.top-left header{ background-position: -2775px top; }
+.color-3.top-left p{ background-position: -3390px bottom;}
+.color-3.bottom-left header{ background-position: -3390px top;}
+.color-3.bottom-left p{ background-position: -2775px bottom;}
+.color-3.top-right header{ background-position: -3090px top;}
+.color-3.top-right p{ background-position: -3408px bottom;}
+.color-3.bottom-right header{ background-position: -3408px top;}
+.color-3.bottom-right p{ background-position: -3090px bottom;}
 
 
 
@@ -215,95 +287,14 @@ Licensed under a Creative Commons Attribution Share-Alike License v3.0 http://cr
 	padding: 0 50px 30px 25px; 
 }
 
-.bubble.top-left header{ 
-	background-position: top left; 
-}
-
-.bubble.top-left p{ 
-	background-position: -615px bottom;
-/*
-	background-position-y: bottom; 
-	background-position-x: -615px;
-*/
-}
-
-.bubble.bottom-left header{ 
-	background-position: -616px top;
-/*
-	background-position-y: top; 
-	background-position-x: -616px;
-*/
-}
-
-.bubble.bottom-left p{ 
-	background-position: -1px bottom;
-/*
-	background-position-y: bottom;
-	background-position-x: -1px; 
-*/
-}
-
-.bubble.top-right header{ 
-	background-position: -320px top;
-/*
-	background-position-y: top; 
-	background-position-x: -320px;
-*/
-}
-
-.bubble.top-right p{
-	background-position: -638px bottom;
-/*
-	background-position-y: bottom; 
-	background-position-x: -638px;
-*/
-}
-
-.bubble.bottom-right header{ 
-	background-position: -638px top;
-/*
-	background-position-y: top; 
-	background-position-x: -638px;
-*/
-}
-
-.bubble.bottom-right p{ 
-	background-position: -320px bottom;
-/*
-	background-position-y: bottom; 
-	background-position-x: -320px;
-*/
-}
-
-
-#bubble-1 {
-	top:420px;
-	left:200px;
-}
-
-#bubble-2 {
-	top:220px;
-	left:250px;
-}
-
-#bubble-3 {
-	top:20px;
-	left:200px;
-}
-
-#bubble-4 {
-	top:120px;
-	left:20px;
-}
-
 #tile-hover {
 	position: absolute;
-	border: 1px solid #fff;
-	margin-left: -6px;
-	margin-top: -6px;
-	width: 20px;
-	height: 20px;
+	border-width: 2px;
+	border-style: solid;
+	margin-left: -5px;
+	margin-top: -5px;
+	width: 18px;
+	height: 18px;
 	display: none;
-	z-index: 60;
-	cursor: pointer;
+	z-index: 15;
 }

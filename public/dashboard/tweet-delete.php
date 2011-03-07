@@ -21,9 +21,7 @@ function main()
 
 	$id = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : null;
 
-	$result = Tweet::delete($id);
-
-	$ok = $result->success();
+	$ok = Tweet::delete($id);
 	$msg = $ok ? 'OK' : 'FAIL';
 
 	Debug::logMsg('delete tweet:' . $id . ' msg:' . $msg);

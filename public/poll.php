@@ -38,7 +38,7 @@ function main()
 	while ($tweet = $result->row())
 	{
 		$tiles[] = $tweet;
-		if ($tweet['id'] > $lastId) $lastId = $tweet['id'];
+		if ($tweet['i'] > $lastId) $lastId = $tweet['i'];
 	}
 
 	if (count($tiles))

@@ -35,117 +35,6 @@ class Req
 		return self::$_time;
 	}
 
-	/**
-	 * @param array $source (by refrence)
-	 * @param array $noise (returned by refrence)
-	 *
-	 * @return array
-	 */
-	public static function decode(array & $source, & $noise)
-	{
-		switch (CLIENT)
-		{
-			// ---- ---- ---- AJAX ENCODED dispatcher
-			case ENCODED:
-
-				// no encoded data found... wish you good luck handling that
-				if (!isset($source['secrets']) || !isset($source['payload'])) return $source;
-
-				// check encoded string in foobar vars
-				$arr = array();
-				for ($i = 0; $i < count($source['secrets']); $i++)
-				{
-					// just log the odd error, one numeric key is missing
-					if (!isset($source['secrets'][$i]))
-					{
-						Debug::logError('source secrets curruption wtf!? ' . implode(',', array_keys($source['secrets'])));
-					}
-				}
-
-				// rebuild encoded string from foobar vars
-				reset ($source['secrets']);
-				foreach ($source['secrets'] as $secret)
-				{
-					foreach ($secret as $fooName => $value) $arr[] = $value;
-				}
-				$arr[] = $source['payload'];
-				$text = implode($arr);
-
-				return self::_decodeString($text, $noise);
-
-				// nothing to see here, move along
-			default:
-				return $source;
-		}
-	}
-
-
-
-	/**
-	 * @param string $text encoded
-	 * @param array $noise (returned by refrence)
-	 *
-	 * @return string
-	 */
-	public static function _decodeString($text, & $noise)
-	{
-		$size = strlen($text);
-		$d = self::_getD($text, $size);
-		$s = self::_getS($text, $size);
-		$d1 = self::_dehash($d);
-		$d2 = self::_checksum($d1, $s, $noise);
-
-		return json_decode($d2, TRUE);
-	}
-
-	public static function _getD($str, $size)
-	{
-		return substr($str, 0, -5);
-	}
-
-	public static function _getS($str, $size)
-	{
-		return substr($str, $size - 5);
-	}
-
-	public static function _dehash($str)
-	{
-		return base64_decode($str);
-	}
-
-
-	/**
-	 * @param string $str to decode
-	 * @param string $size of noise signature
-	 * @param string $serverNoise (returned by reference)
-	 *
-	 * @return string
-	 */
-	public static function _checksum($str, $size, & $serverNoise)
-	{
-		$inc = 0;
-		$pos = 0;
-		$size = (int)($size);
-		$c = 0;
-
-		$arr = array();
-
-		while($inc < $size){
-
-			$c = (int)$str[$pos];
-
-			$serverNoise .= substr($str, $pos, $c);
-			$arr[] = substr($str, $pos + 1, $c);
-
-			$str = (substr($str, 0, $pos) . substr($str, $pos + $c + 1));
-
-			$pos += 10;
-			$inc += (10 + 1 + $c);
-		}
-
-		return base64_decode($str);
-	}
-
 
 	// ---- cli arguments
 
@@ -216,23 +105,19 @@ class Dispatch
 
 			// ---- ---- ---- IMAGE dispatcher
 			case IMAGE:
-				header('P3P: CP="CAO PSA OUR"');
 				header('Content-type: image/jpeg');
 				// TODO SERVER ERROR IMAGE!?
 				if ($code == 1) echo $contents;
 				break;
 
-				// ---- ---- ---- HTML dispatcher
+			// ---- ---- ---- HTML dispatcher
 			case HTML:
-				header('P3P: CP="CAO PSA OUR"');
 				if (!headers_sent()) header('Content-type: text/html');
 				echo $contents;
 				break;
 
-				// ---- ---- ---- AJAX dispatcher
+			// ---- ---- ---- AJAX dispatcher
 			case AJAX:
-				header('P3P: CP="CAO PSA OUR"');
-				header('P3P: href="/p3p.xml"  CP="your compact policy"');
 				header('Content-type: application/text-json');
 
 				$var = array(
@@ -245,11 +130,10 @@ class Dispatch
 
 				break;
 
-				// ---- ---- ---- HJSON dispatcher (used for uploads)
+			// ---- ---- ---- HJSON dispatcher (used for uploads)
 			case HJSON:
 
 				header('Content-type: text/html');
-				header('P3P: CP="CAO PSA OUR"');
 
 				$var = array(
 					'code' => $code,
@@ -265,7 +149,7 @@ class Dispatch
 
 				break;
 
-				// ---- ---- ---- SCRIPT dispatcher
+			// ---- ---- ---- SCRIPT dispatcher
 			case SCRIPT:
 				if ($data) Debug::logMsg($data);
 				if ($code == 1)
@@ -619,11 +503,11 @@ class Debug
 		$message  = 'ERROR '  . $args[1] . ' (' . $args[2] . ':' . $args[3] . ')';
 
 		if (is_array($args[4])) foreach ($args[4] as $name => $value) {
-			$args[4][$name] = substr(json_encode($value), 0, 100);
+			$args[4][$name] = substr(serialize($value), 0, 100);
 		}
 
 		self::logError($args, $message);
-		if (CLIENT != SCRIPT) Dispatch::now(0, 'Sorry, something went terribly wrong. If you\'d like to give us a little help, please visit <a href="http://getsatisfaction.com/quodis/products/quodis_face_sticker" title="FF4 on Get Satisfaction">our support community</a> and tell us what went wrong, including the following code in your message: ' . Req::time() );
+		Dispatch::now(0, 'Sorry, something went terribly wrong.');
 	}
 
 
@@ -939,6 +823,26 @@ function rmkdir($dir, $dirPermissions = null, $group = null)
 	return TRUE;
 }
 
+/**
+ * call_user_func_array changes PHP 5.3+
+ *
+ * @param array $arr
+ *
+ * @return array
+ */
+function refValues($arr)
+{
+	if (strnatcmp(phpversion(),'5.3') >= 0)
+	{
+		$refs = array();
+		foreach($arr as $key => $value)
+		{
+			$refs[$key] = &$arr[$key];
+		}
+		return $refs;
+	}
+	return $arr;
+}
 
 
 /**

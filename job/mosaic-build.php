@@ -24,25 +24,16 @@ function main()
 
 	$pageSize = Mosaic::getPageSize();
 
-	$lastProcessedTs = null;
-
 	while (TRUE)
 	{
 		// start time
 		$start = time();
 
-		// get all pages
-		$pages = Mosaic::getProcessedPages($lastProcessedTs);
+		// update page
+		$pageNo = null;
+		$pageNo = Mosaic::updatePage();
 
-		foreach ($pages as $pageNo)
-		{
-			// update page
-			$tweetCount = Mosaic::updatePage($pageNo);
-
-			Debug::logMsg('OK! ... updated page:' . $pageNo . ' ... page has ' . $tweetCount . ' tweets');
-
-			$lastProcessedTs = time();
-		}
+		Debug::logMsg('OK! ... updated page:' . $pageNo);
 
 		// sleep?
 		$elapsed = time() - $start;

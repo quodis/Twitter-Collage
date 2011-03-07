@@ -50,6 +50,8 @@ final class Tweet
 	 */
 	public static function insert(array & $data, & $insertId = null)
 	{
+		global $mysqli;
+
 		// add timestamp
 		$data['created_ts'] = strtotime($data['created_at']);
 
@@ -57,27 +59,27 @@ final class Tweet
 		{
 			// fail silently
 			if (!isset($data[$from])) $data[$from] = '';
-
-			$values[$to] = Db::escape($data[$from]);
+			$values[$to] = $data[$from];
 		}
 
 		// add payload
-		$values['payload'] = Db::escape(json_encode($data));
+		$values['payload'] = json_encode($data);
+
+		$sql = "INSERT INTO `tweet` (`page`, `position`, `twitterId`, `userId`, `userName`, `imageUrl`, `createdDate`, `createdTs`, `contents`, `isoLanguage`, `payload`) ";
+		$sql.= " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		// insert tweet
-		$sql = "INSERT INTO `tweet` (`" . implode("`, `", array_keys($values)) . "`)";
-		$sql.= "  VALUES ('" . implode("', '", $values) . "')";
+		$stmt = $mysqli->prepare($sql);
+		$stmt->bind_param('sisssssssss', $values['page'], $values['position'], $values['twitterId'], $values['userId'], $values['userName'], $values['imageUrl'], $values['createdDate'], $values['createdTs'], $values['contents'], $values['isoLanguage'], $values['payload']);
 
-		$result = Db::execute($sql);
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception('could not insert tweet: ' . $stmt->error);
 
-		// ERROR
-		if (!$result->success()) throw new Exception('could not insert tweet: ' . $result->error());
-
-		$insertId = Db::lastInsertId();
+		$insertId = $mysqli->insert_id;
 
 		$values['id'] = $insertId;
 
-		return $result->success() ? $values : null;
+		return $ok ? $values : null;
 	}
 
 
@@ -86,26 +88,32 @@ final class Tweet
 	 *
 	 * @param integer $id
 	 * @param string $imageData (by reference)
+	 * @param string $imageUrl (optional)
 	 *
-	 * @return boolean
+	 * @throws Exception
 	 */
-	public static function updateImage($id, & $imageData)
+	public static function updateImage($id, & $imageData, $imageUrl = null)
 	{
-		$id = Db::escape($id);
+		global $mysqli;
 
 		$processedTs = time();
 
 		// update tweet
-		$sql = "UPDATE `tweet` SET ";
-		$sql.= "  `imageData` = '$imageData', ";
-		$sql.= "  `processedTs` = '$processedTs'";
-		$sql.= "  WHERE id = '$id'";
-		$result = Db::execute($sql);
+		$sql = "UPDATE `tweet` SET";
+		$sql.= "  `imageData` = ?,";
+		if ($imageUrl) $sql.= "  `imageUrl` = ?,";
+		$sql.= "  `processedTs` = ?";
+		$sql.= "  WHERE id = ?";
 
-		// ERROR
-		if (!$result->success()) throw new Exception('could not update tweet: ' . $result->error());
+		$stmt = $mysqli->prepare($sql);
+		if ($imageUrl)
+		{
+			$stmt->bind_param('ssss', $imageData, $imageUrl, $processedTs, $id);
+		}
+		else $stmt->bind_param('sss', $imageData, $processedTs, $id);
 
-		return $result->success();
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception('could not update tweet: ' . $stmt->error);
 	}
 
 
@@ -115,36 +123,44 @@ final class Tweet
 	 * @param integer $id
 	 * @param string $imageData (by reference)
 	 *
-	 * @return DataResult
+	 * @return boolean
 	 */
 	public static function delete($id)
 	{
-		$id = Db::escape($id);
+		global $mysqli;
 
-		// update tweet
-		$sql = "DELETE FROM `tweet` WHERE id = '$id'";
-		$result = Db::execute($sql);
+		// delete tweet
+		$sql = "DELETE FROM `tweet` WHERE id = ?";
 
-		return $result;
+		$stmt = $mysqli->prepare($sql);
+		$stmt->bind_param('s', $id);
+
+		$ok = $stmt->execute();
+		$stmt->close();
+		return $ok;
 	}
 
 
 	/**
 	 * delete tweets of user
 	 *
-	 * @param integer $userId
+	 * @param string $userName
 	 *
-	 * @return DataResult
+	 * @return boolean
 	 */
-	public static function deleteUser($userId)
+	public static function deleteUser($userName)
 	{
-		$userId = Db::escape($userId);
+		global $mysqli;
 
-		// update tweet
-		$sql = "DELETE FROM `tweet` WHERE `userid` = '$userId'";
-		$result = Db::execute($sql);
+		// delete all tweets of user
+		$sql = "DELETE FROM `tweet` WHERE `userName` = ?";
 
-		return $result;
+		$stmt = $mysqli->prepare($sql);
+		$stmt->bind_param('s', $userName);
+
+		$ok = $stmt->execute();
+		$stmt->close();
+		return $ok;
 	}
 
 
@@ -157,6 +173,8 @@ final class Tweet
 	 */
 	public static function getCount($withImage = FALSE)
 	{
+		global $mysqli;
+
 		$withImage = !!$withImage;
 
 		// or from db
@@ -164,9 +182,16 @@ final class Tweet
 
 		if ($withImage) $sql.= " WHERE processedTs";
 
-		$row = Db::queryValue($sql, 'cnt');
+		$stmt = $mysqli->prepare($sql);
 
-		return $row;
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
+
+		if ($row = $stmt->row())
+		{
+			return $row['cnt'];
+		}
 	}
 
 
@@ -179,11 +204,18 @@ final class Tweet
 	 */
 	public static function getById($id)
 	{
-		$id = Db::escape($id);
-		$sql = "SELECT * FROM `tweet` WHERE `id` = '$id'";
-		$row = Db::queryRow($sql);
+		global $mysqli;
 
-		return $row;
+		$sql = "SELECT * FROM `tweet` WHERE `id` = ?";
+
+		$stmt = $mysqli->prepare($sql);
+		$stmt->bind_param('s', $id);
+
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
+
+		return $stmt->row();
 	}
 
 
@@ -196,13 +228,23 @@ final class Tweet
 	 */
 	public static function getFirstIncompletePage($pageSize)
 	{
-		$pageSize = Db::escape($pageSize);
+		global $mysqli;
 
 		$sql = "SELECT page, cnt FROM ";
 		$sql.="  (SELECT page, COUNT(1) AS cnt FROM tweet GROUP BY page) AS pages";
-		$sql.=" WHERE cnt < $pageSize ORDER BY page LIMIT 1";
+		$sql.=" WHERE cnt < ? ORDER BY page LIMIT 1";
 
-		return Db::queryValue($sql, 'page');
+		$stmt = $mysqli->prepare($sql);
+		$stmt->bind_param('i', $pageSize);
+
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
+
+		if ($row = $stmt->row())
+		{
+			return $row['page'];
+		}
 	}
 
 
@@ -215,13 +257,23 @@ final class Tweet
 	 */
 	public static function getLastCompletePage($pageSize)
 	{
-		$pageSize = Db::escape($pageSize);
+		global $mysqli;
 
 		$sql = "SELECT page, cnt FROM ";
-		$sql.="  (SELECT page, COUNT(1) AS cnt FROM tweet GROUP BY page) AS pages";
-		$sql.=" WHERE cnt = $pageSize ORDER BY page DESC LIMIT 1";
+		$sql.="  (SELECT page, COUNT(1) AS cnt FROM tweet WHERE processedTs GROUP BY page) AS pages";
+		$sql.=" WHERE cnt = ? ORDER BY page DESC LIMIT 1";
 
-		return Db::queryValue($sql, 'page');
+		$stmt = $mysqli->prepare($sql);
+		$stmt->bind_param('i', $pageSize);
+
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
+
+		if ($row = $stmt->row())
+		{
+			return $row['page'];
+		}
 	}
 
 
@@ -230,17 +282,24 @@ final class Tweet
 	 *
 	 * @param integer $processedTs
 	 *
-	 * @return integer
+	 * @return mysqli_stmt
 	 */
 	public static function getProcessedPages($processedTs)
 	{
-		$processedTs = Db::escape($processedTs);
+		global $mysqli;
 
 		if (empty($processedTs)) $processedTs = 0;
 
-		$sql = "SELECT page FROM tweet WHERE processedTs > $processedTs GROUP BY page ORDER BY processedTs DESC";
+		$sql = "SELECT page FROM tweet WHERE processedTs > ? GROUP BY page ORDER BY processedTs DESC";
 
-		return Db::query($sql);
+		$stmt = $mysqli->prepare($sql);
+		$stmt->bind_param('s', $processedTs);
+
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
+
+		return $stmt;
 	}
 
 
@@ -249,9 +308,20 @@ final class Tweet
 	 */
 	public static function getLastPage()
 	{
+		global $mysqli;
+
 		$sql = "SELECT MAX(page) AS page FROM `tweet`";
 
-		return Db::queryValue($sql, 'page');
+		$stmt = $mysqli->prepare($sql);
+
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
+
+		if ($row = $stmt->row())
+		{
+			return $row['page'];
+		}
 	}
 
 
@@ -264,6 +334,8 @@ final class Tweet
 	 */
 	public static function getLast($withImage = FALSE)
 	{
+		global $mysqli;
+
 		$withImage = !!$withImage;
 
 		$sql = "SELECT * FROM `tweet` ";
@@ -272,29 +344,15 @@ final class Tweet
 
 		$sql.= " ORDER BY `id` DESC LIMIT 1";
 
-		$row = Db::queryRow($sql);
+		$stmt = $mysqli->prepare($sql);
 
-		return $row;
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
+
+		return $stmt->row();
 	}
 
-
-	/**
-	 * last tweet by user id
-	 *
-	 * @param string $userId
-	 *
-	 * @return array
-	 */
-	public static function getLastByUserId($userId)
-	{
-		$userId = Db::escape($userId);
-		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData, processedTs FROM `tweet` ";
-		$sql.= " WHERE `userid` = '$userId' ORDER BY `id` DESC LIMIT 1";
-
-		$row = Db::queryRow($sql);
-
-		return $row;
-	}
 
 
 	/**
@@ -306,13 +364,19 @@ final class Tweet
 	 */
 	public static function getLastByUserName($userName)
 	{
-		$userName = Db::escape($userName);
+		global $mysqli;
+
 		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData, processedTs FROM `tweet` ";
-		$sql.= " WHERE `userName` = '$userName' ORDER BY `id` DESC LIMIT 1";
+		$sql.= " WHERE `userName` = ? ORDER BY `id` DESC LIMIT 1";
 
-		$row = Db::queryRow($sql);
+		$stmt = $mysqli->prepare($sql);
+		$stmt->bind_param('s', $userName);
 
-		return $row;
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
+
+		return $stmt->row();
 	}
 
 
@@ -321,19 +385,26 @@ final class Tweet
 	 *
 	 * @param integer $limit (optional)
 	 *
-	 * @return array
+	 * @return stmt_Extended
 	 */
 	public static function getUnprocessed($limit = null)
 	{
+		global $mysqli;
+
 		$limit = (int)$limit;
 		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
 
 		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData, processedTs FROM `tweet` ";
-		$sql.= " WHERE `imageData` IS NULL LIMIT $limit";
+		$sql.= " WHERE `imageData` IS NULL LIMIT ?";
 
-		$result = Db::query($sql);
+		$stmt = $mysqli->prepare($sql);
+		$stmt->bind_param('s', $limit);
 
-		return $result;
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
+
+		return $stmt;
 	}
 
 
@@ -344,26 +415,37 @@ final class Tweet
 	 * @param integer $lastId
 	 * @param boolean $withImage (optional, defaults to FALSE)
 	 *
-	 * @return array
+	 * @return stmt_Extended
 	 */
 	public static function getByPage($pageNo, $lastId = null, $withImage = FALSE)
 	{
+		global $mysqli;
+
 		$pageNo = (int)$pageNo;
 		$lastId = (int)$lastId;
 		$withImage = !!$withImage;
 
-		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
-		$sql.= " WHERE page = $pageNo ";
+		$sql = "SELECT id AS i, position AS p, twitterId AS w, userName AS u, imageUrl AS m , createdTs AS c, contents AS n, imageData AS d FROM `tweet` ";
+		$sql.= " WHERE page = ? ";
 
 		if ($withImage) $sql.= "  AND processedTs";
 
-		if ($lastId) $sql.= "  AND id > $lastId";
+		if ($lastId) $sql.= "  AND id > ?";
 
 		$sql.= " ORDER BY `id` ASC";
 
-		$result = Db::query($sql);
+		$stmt = $mysqli->prepare($sql);
+		if ($lastId)
+		{
+			$stmt->bind_param('is', $pageNo, $lastId);
+		}
+		else $stmt->bind_param('i', $pageNo);
 
-		return $result;
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
+
+		return $stmt;
 	}
 
 
@@ -372,22 +454,21 @@ final class Tweet
 	 * @param integer $lastId
 	 * @para ingeger $limit (optional)
 	 *
-	 * @return array
+	 * @return stmt_Extended
 	 */
 	public static function getSinceLastId($lastId, $limit = null)
 	{
-		$lastId = Db::escape($lastId);
+		global $mysqli;
 
 		$limit = (int)$limit;
 		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
 
-		//$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
-		$sql = "SELECT id, position, twitterId, userName, imageUrl, createdTs, contents, imageData FROM `tweet` ";
+		$sql = "SELECT id AS i, position AS p, twitterId AS w, userName AS u, imageUrl AS m , createdTs AS c, contents AS n, imageData AS d FROM `tweet` ";
 		$sql.= " WHERE `imageData` IS NOT NULL";
 
 		if ($lastId)
 		{
-			$sql.= " AND id > $lastId";
+			$sql.= " AND id > ?";
 			$sql.= " ORDER BY `id` ASC";
 		}
 		else
@@ -395,11 +476,20 @@ final class Tweet
 			$sql.= " ORDER BY `id` DESC";
 		}
 
-		$sql.= " LIMIT $limit";
+		$sql.= " LIMIT ?";
 
-		$result = Db::query($sql);
+		$stmt = $mysqli->prepare($sql);
+		if ($lastId)
+		{
+			$stmt->bind_param('si', $lastId, $limit);
+		}
+		else $stmt->bind_param('i', $limit);
 
-		return $result;
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
+
+		return $stmt;
 	}
 
 
@@ -412,14 +502,26 @@ final class Tweet
 	 */
 	public static function getUserCount($withImage = null)
 	{
+		global $mysqli;
+
 		$withImage = !!$withImage;
 
 		$sql = "SELECT COUNT(DISTINCT userId) AS cnt FROM `tweet` ";
 
 		if ($withImage) $sql.= " WHERE processedTs";
 
-		return Db::queryValue($sql, 'cnt');
+		$stmt = $mysqli->prepare($sql);
+
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
+
+		if ($row = $stmt->row())
+		{
+			return $row['cnt'];
+		}
 	}
+
 
 	/**
 	 * users by terms
@@ -428,44 +530,60 @@ final class Tweet
 	 * @param integer $limit (optional)
 	 * @param boolean $withImage (optional, defaults to FALSE)
 	 *
-	 * @return array
+	 * @return stmt_Extended
 	 */
 	public static function getUsersByTerms($terms, $limit = null, $withImage = null)
 	{
-		$terms = Db::escape($terms);
+		global $mysqli;
 
 		$limit = (int)$limit;
 		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
 
 		$withImage = !!$withImage;
 
-		//$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
-		$sql = "SELECT id, position, twitterId, userId, userName, imageUrl, createdTs, contents, imageData FROM `tweet` ";
-		$sql.= " WHERE `userName` LIKE '%$terms%'";
+		$terms = '%' . str_replace(array('%', '_'), array('\%', '\_'), $terms) . '%';
+
+		// count query
+		$sql= "SELECT count(distinct userName) AS cnt FROM `tweet`  WHERE `userName` LIKE ? AND processedTs" ;
+		if ($withImage) $sql.= "  AND processedTs";
+
+		$stmt = $mysqli->prepare($sql);
+		$stmt->bind_param('s', $terms);
+
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
+
+		$total = ($row = $stmt->row()) ? $row['cnt'] : 0;
+
+		// no results, bail out
+		if (!$total) return new stmt_Empty();
+
+		// get results
+		$sql = "SELECT id AS i, position AS p, twitterId AS w, userName AS u, imageUrl AS m , createdTs AS c, contents AS n, imageData AS d FROM `tweet` ";
+		$sql.= " WHERE `userName` LIKE ?";
 
 		if ($withImage) $sql.= "  AND processedTs";
 
 		$sql.= " GROUP BY `userName`";
 		$sql.= " ORDER BY `userName` ASC";
-		$sql.= " LIMIT $limit";
+		$sql.= " LIMIT ?";
 
-		$result = Db::query($sql);
+		$stmt = $mysqli->prepare($sql);
+		$stmt->bind_param('si', $terms, $limit);
 
-		if ($result->count() == $limit)
-		{
-			$sql = "SELECT count(distinct userName) AS cnt FROM `tweet` ";
-			$sql.= " WHERE `userName` LIKE '%$terms%'";
-			if ($withImage) $sql.= "  AND processedTs";
-			$total = Db::queryValue($sql, 'cnt');
-			if ($total) $result->setTotal($total);
-		}
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
 
-		return $result;
+		$stmt->setTotal($total);
+
+		return $stmt;
 	}
 
 
 	/**
-	 * tweets by user
+	 * tweets by user (compacted version)
 	 *
 	 * @param string $userName
 	 * @param integer $limit (optional)
@@ -473,36 +591,51 @@ final class Tweet
 	 *
 	 * @return array
 	 */
-	public static function getByUsername($userName, $limit = null, $withImage = null)
+	public static function getByUserName($userName, $limit = null, $withImage = null)
 	{
-		$userName = Db::escape($userName);
+		global $mysqli;
 
 		$limit = (int)$limit;
 		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
 
 		$withImage = !!$withImage;
 
-		//$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
-		$sql = "SELECT id, position, twitterId, userName, imageUrl, createdTs, contents, imageData FROM `tweet` ";
-		$sql.= " WHERE`userName` = '$userName'";
+		// count query
+		$sql = "SELECT count(1) AS cnt FROM `tweet` ";
+		$sql.= " WHERE `userName` = ?";
+		if ($withImage) $sql.= "  AND processedTs";
+
+		$stmt = $mysqli->prepare($sql);
+		$stmt->bind_param('s', $userName);
+
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
+
+		$total = ($row = $stmt->row()) ? $row['cnt'] : 0;
+
+		// no results, bail out
+		if (!$total) return new stmt_Empty();
+
+		// get results
+		$sql = "SELECT id AS i, position AS p, twitterId AS w, userName AS u, imageUrl AS m , createdTs AS c, contents AS n, imageData AS d FROM `tweet` ";
+		$sql.= " WHERE`userName` = ?";
 
 		if ($withImage) $sql.= "  AND processedTs";
 
 		$sql.= " ORDER BY `id` DESC";
-		$sql.= " LIMIT $limit";
+		$sql.= " LIMIT ?";
 
-		$result = Db::query($sql);
+		$stmt = $mysqli->prepare($sql);
+		$stmt->bind_param('si', $userName, $limit);
 
-		if ($result->count() == $limit)
-		{
-			$sql = "SELECT count(1) AS cnt FROM `tweet` ";
-			$sql.= " WHERE `userName` = '$userName'";
-			if ($withImage) $sql.= "  AND processedTs";
-			$total = Db::queryValue($sql, 'cnt');
-			if ($total) $result->setTotal($total);
-		}
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
 
-		return $result;
+		$stmt->setTotal($total);
+
+		return $stmt;
 	}
 
 
@@ -517,33 +650,51 @@ final class Tweet
 	 */
 	public static function getByTerms($terms, $limit = null, $withImage = null)
 	{
-		$terms = Db::escape($terms);
+		global $mysqli;
 
 		$limit = (int)$limit;
 		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
 
 		$withImage = !!$withImage;
 
-		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData FROM `tweet` ";
-		$sql.= " WHERE `contents` LIKE '%$terms%'";
+		$terms = '%' . str_replace(array('%', '_'), array('\%', '\_'), $terms) . '%';
+
+		// count query
+		$sql = "SELECT count(1) AS cnt FROM `tweet` ";
+		$sql.= " WHERE `contents` LIKE ?";
+		if ($withImage) $sql.= "  AND processedTs";
+
+		$stmt = $mysqli->prepare($sql);
+		$stmt->bind_param('s', $terms);
+
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
+
+		$total = ($row = $stmt->row()) ? $row['cnt'] : 0;
+
+		// no results, bail out
+		if (!$total) return new stmt_Empty();
+
+		// get results
+		$sql = "SELECT id AS i, position AS p, twitterId AS w, userName AS u, imageUrl AS m , createdTs AS c, contents AS n, imageData AS d FROM `tweet` ";
+		$sql.= " WHERE `contents` LIKE ?";
 
 		if ($withImage) $sql.= "  AND processedTs";
 
 		$sql.= " ORDER BY `id` DESC";
-		$sql.= " LIMIT $limit";
+		$sql.= " LIMIT ?";
 
-		$result = Db::query($sql);
+		$stmt = $mysqli->prepare($sql);
+		$stmt->bind_param('si', $terms, $limit);
 
-		if ($result->count() == $limit)
-		{
-			$sql = "SELECT count(1) AS cnt FROM `tweet` ";
-			$sql.= " WHERE `contents` LIKE '%$terms%'";
-			if ($withImage) $sql.= "  AND processedTs";
-			$total = Db::queryValue($sql, 'cnt');
-			if ($total) $result->setTotal($total);
-		}
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
 
-		return $result;
+		$stmt->setTotal($total);
+
+		return $stmt;
 	}
 
 	/**
@@ -555,6 +706,8 @@ final class Tweet
 	 */
 	public static function getAverageDelay($limit = null)
 	{
+		global $mysqli;
+
 		$limit = (int)$limit;
 		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
 
@@ -563,17 +716,126 @@ final class Tweet
 		$sql.=" ORDER BY id DESC ";
 		$sql.= " LIMIT 2";
 
-		$result = Db::query($sql);
+		$stmt = $mysqli->prepare($sql);
+
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
 
 		$elapsed = 0;
-		while ($row = $result->row())
+		while ($row = $stmt->row())
 		{
 			$elapsed += $row['elapsed'];
 		}
 
-		return $elapsed ? floor($elapsed / $result->count()) : 0;
+		return $elapsed && $stmt->count() ? floor($elapsed / $stmt->count()) : 0;
 	}
 
 }
+
+/**
+ * extended to yeld handier version of mysqli_stmt
+ */
+class mysqli_Extended extends mysqli
+{
+	protected $selfReference;
+
+	public function __construct()
+	{
+		parent::__construct();
+
+	}
+
+	public function prepare($query)
+	{
+		$stmt = new stmt_Extended($this, $query);
+
+		return $stmt;
+	}
+}
+
+/**
+ * mocks DataResult on client code
+ * and gets rid of hard-coded bind calls + references in returned rows
+ */
+class stmt_Extended extends mysqli_stmt
+{
+	protected $varsBound = false;
+	protected $results;
+	protected $total;
+
+	public function __construct($link, $query)
+	{
+		parent::__construct($link, $query);
+	}
+
+	public function row()
+	{
+		// bind once
+		if (!$this->varsBound)
+		{
+			$meta = $this->result_metadata();
+			while ($column = $meta->fetch_field())
+			{
+				// prevent syntax errors if column names have a space in
+				$columnName = str_replace(' ', '_', $column->name);
+				$bindVarArray[] = &$this->results[$columnName];
+			}
+			// using refValues() for compatibility with PHP 5.3 (dev and staging boxes)
+			call_user_func_array(array($this, 'bind_result'), refValues($bindVarArray));
+			$this->varsBound = true;
+		}
+
+		if ($this->fetch() != null)
+		{
+			// copy values (get rid of references)
+			foreach ($this->results as $k => $v)
+			{
+				$results[$k] = $v;
+			}
+			return $results;
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public function setTotal($total)
+	{
+		$this->total = $total;
+	}
+
+	public function total()
+	{
+		return isset($this->total) ? $this->total : $this->count();
+	}
+
+	public function count()
+	{
+		return $this->num_rows;
+	}
+}
+
+/**
+ * mocks DataResult on client code
+ */
+class stmt_Empty
+{
+	public function row()
+	{
+		return false;
+	}
+	public function total()
+	{
+		return 0;
+	}
+
+	public function count()
+	{
+		return 0;
+	}
+}
+
 
 ?>

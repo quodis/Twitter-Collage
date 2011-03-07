@@ -19,14 +19,13 @@ function main()
 	Debug::setLogMsgFile($config['App']['pathLog'] .'/dashboard.msg.log');
 	Debug::setLogErrorFile($config['App']['pathLog'] .'/dashboard.error.log');
 
-	$userId = (isset($_REQUEST['user_id'])) ? $_REQUEST['user_id'] : null;
+	$userName = (isset($_REQUEST['user_name'])) ? $_REQUEST['user_name'] : null;
 
-	$result = Tweet::deleteUser($userId);
+	$ok = Tweet::deleteUser($userName);
 
-	$ok = $result->success();
 	$msg = $ok ? 'OK' : 'FAIL';
 
-	Debug::logMsg('delete user:' . $userId . ' msg:' . $msg);
+	Debug::logMsg('delete user:' . $userName . ' msg:' . $msg);
 
 	Dispatch::now($ok, $msg);
 
