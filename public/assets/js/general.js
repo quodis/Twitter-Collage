@@ -104,7 +104,8 @@ var party = party || {};
 		}
 		
 		// Add it to the HTML to draw
-		return '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + tile.d + '); left: ' + (index[0]*12) + 'px; top: ' + (index[1]*12) + 'px;"></div>';
+		//return '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + tile.d + '); left: ' + (index[0]*12) + 'px; top: ' + (index[1]*12) + 'px;"></div>';
+		return '<div class="tile" id="' + position + '" style="background-image:url(http://swap.quodis.com/collage/sprite.png); background-position:-200 -200; left: ' + (index[0]*12) + 'px; top: ' + (index[1]*12) + 'px;"></div>';
 		
 	}
 	
