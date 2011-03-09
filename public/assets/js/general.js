@@ -62,7 +62,7 @@ var party = party || {};
 			high: {
 				initial_frames_per_second: 24,
 				initial_tiles_per_frame: 10,
-				new_tiles_per_second: 8,
+				new_tiles_per_second: 1,
 				pause_after: 10 // Minutes
 			},
 			medium: {
