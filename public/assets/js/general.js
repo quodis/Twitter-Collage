@@ -525,6 +525,7 @@ var party = party || {};
 		}
 		
 		// Hide previous
+		b.avatar_img.attr('src', '');
 		b.container.hide();
 		tile_hover.hide();
 		
