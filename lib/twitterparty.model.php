@@ -7,7 +7,8 @@
  * @license    http://www.opensource.org/licenses/bsd-license.php BSD License
  *
  * WARNING this file defines serveral classes:
- *  - Tweet
+ *  - Tweet, implements all db operations
+ *  - mysqli_stmt_wrap + mysqli_stmt_empty, a sweet pair of anti-patterns due to php's mysqli poor api and some annoying bug in php 5.2.6 that won't let you subclass mysqli and mysqli_stmt
  */
 
 /**
@@ -69,11 +70,11 @@ final class Tweet
 		$sql.= " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		// insert tweet
-		$stmt = $mysqli->prepare($sql);
-		$stmt->bind_param('sisssssssss', $values['page'], $values['position'], $values['twitterId'], $values['userId'], $values['userName'], $values['imageUrl'], $values['createdDate'], $values['createdTs'], $values['contents'], $values['isoLanguage'], $values['payload']);
+		$this->stmt = $mysqli->prepare($sql);
+		$this->stmt->bind_param('sisssssssss', $values['page'], $values['position'], $values['twitterId'], $values['userId'], $values['userName'], $values['imageUrl'], $values['createdDate'], $values['createdTs'], $values['contents'], $values['isoLanguage'], $values['payload']);
 
-		$ok = $stmt->execute();
-		if (!$ok) throw new Exception('could not insert tweet: ' . $stmt->error);
+		$ok = $this->stmt->execute();
+		if (!$ok) throw new Exception('could not insert tweet: ' . $this->stmt->error);
 
 		$insertId = $mysqli->insert_id;
 
@@ -187,8 +188,9 @@ final class Tweet
 		$ok = $stmt->execute();
 		if (!$ok) throw new Exception($stmt->error);
 		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
 
-		if ($row = $stmt->row())
+		if ($row = $result->row())
 		{
 			return $row['cnt'];
 		}
@@ -214,8 +216,9 @@ final class Tweet
 		$ok = $stmt->execute();
 		if (!$ok) throw new Exception($stmt->error);
 		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
 
-		return $stmt->row();
+		return $result->row();
 	}
 
 
@@ -240,8 +243,9 @@ final class Tweet
 		$ok = $stmt->execute();
 		if (!$ok) throw new Exception($stmt->error);
 		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
 
-		if ($row = $stmt->row())
+		if ($row = $result->row())
 		{
 			return $row['page'];
 		}
@@ -269,8 +273,9 @@ final class Tweet
 		$ok = $stmt->execute();
 		if (!$ok) throw new Exception($stmt->error);
 		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
 
-		if ($row = $stmt->row())
+		if ($row = $result->row())
 		{
 			return $row['page'];
 		}
@@ -298,8 +303,9 @@ final class Tweet
 		$ok = $stmt->execute();
 		if (!$ok) throw new Exception($stmt->error);
 		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
 
-		return $stmt;
+		return $result;
 	}
 
 
@@ -317,8 +323,9 @@ final class Tweet
 		$ok = $stmt->execute();
 		if (!$ok) throw new Exception($stmt->error);
 		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
 
-		if ($row = $stmt->row())
+		if ($row = $result->row())
 		{
 			return $row['page'];
 		}
@@ -349,10 +356,10 @@ final class Tweet
 		$ok = $stmt->execute();
 		if (!$ok) throw new Exception($stmt->error);
 		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
 
-		return $stmt->row();
+		return $result->row();
 	}
-
 
 
 	/**
@@ -375,8 +382,9 @@ final class Tweet
 		$ok = $stmt->execute();
 		if (!$ok) throw new Exception($stmt->error);
 		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
 
-		return $stmt->row();
+		return $result->row();
 	}
 
 
@@ -403,8 +411,9 @@ final class Tweet
 		$ok = $stmt->execute();
 		if (!$ok) throw new Exception($stmt->error);
 		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
 
-		return $stmt;
+		return $result;
 	}
 
 
@@ -444,8 +453,9 @@ final class Tweet
 		$ok = $stmt->execute();
 		if (!$ok) throw new Exception($stmt->error);
 		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
 
-		return $stmt;
+		return $result;
 	}
 
 
@@ -488,8 +498,9 @@ final class Tweet
 		$ok = $stmt->execute();
 		if (!$ok) throw new Exception($stmt->error);
 		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
 
-		return $stmt;
+		return $result;
 	}
 
 
@@ -515,8 +526,9 @@ final class Tweet
 		$ok = $stmt->execute();
 		if (!$ok) throw new Exception($stmt->error);
 		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
 
-		if ($row = $stmt->row())
+		if ($row = $result->row())
 		{
 			return $row['cnt'];
 		}
@@ -553,17 +565,18 @@ final class Tweet
 		$ok = $stmt->execute();
 		if (!$ok) throw new Exception($stmt->error);
 		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
 
-		$total = ($row = $stmt->row()) ? $row['cnt'] : 0;
+		$total = ($row = $result->row()) ? $row['cnt'] : 0;
 
 		// no results, bail out
-		if (!$total) return new stmt_Empty();
+		if (!$total) return new mysqli_stmt_empty();
 
 		// get results
 		$sql = "SELECT id AS i, position AS p, twitterId AS w, userName AS u, imageUrl AS m , createdTs AS c, contents AS n, imageData AS d FROM `tweet` ";
 		$sql.= " WHERE `userName` LIKE ?";
 
-		if ($withImage) $sql.= "  AND processedTs";
+		if ($withImage) $sql.= " AND processedTs";
 
 		$sql.= " GROUP BY `userName`";
 		$sql.= " ORDER BY `userName` ASC";
@@ -575,10 +588,11 @@ final class Tweet
 		$ok = $stmt->execute();
 		if (!$ok) throw new Exception($stmt->error);
 		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
 
-		$stmt->setTotal($total);
+		$result->setTotal($total);
 
-		return $stmt;
+		return $result;
 	}
 
 
@@ -611,15 +625,16 @@ final class Tweet
 		$ok = $stmt->execute();
 		if (!$ok) throw new Exception($stmt->error);
 		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
 
-		$total = ($row = $stmt->row()) ? $row['cnt'] : 0;
+		$total = ($row = $result->row()) ? $row['cnt'] : 0;
 
 		// no results, bail out
-		if (!$total) return new stmt_Empty();
+		if (!$total) return new mysqli_stmt_empty();
 
 		// get results
 		$sql = "SELECT id AS i, position AS p, twitterId AS w, userName AS u, imageUrl AS m , createdTs AS c, contents AS n, imageData AS d FROM `tweet` ";
-		$sql.= " WHERE`userName` = ?";
+		$sql.= " WHERE `userName` = ?";
 
 		if ($withImage) $sql.= "  AND processedTs";
 
@@ -632,10 +647,11 @@ final class Tweet
 		$ok = $stmt->execute();
 		if (!$ok) throw new Exception($stmt->error);
 		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
 
-		$stmt->setTotal($total);
+		$result->setTotal($total);
 
-		return $stmt;
+		return $result;
 	}
 
 
@@ -670,11 +686,12 @@ final class Tweet
 		$ok = $stmt->execute();
 		if (!$ok) throw new Exception($stmt->error);
 		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
 
-		$total = ($row = $stmt->row()) ? $row['cnt'] : 0;
+		$total = ($row = $result->row()) ? $row['cnt'] : 0;
 
 		// no results, bail out
-		if (!$total) return new stmt_Empty();
+		if (!$total) return new mysqli_stmt_empty();
 
 		// get results
 		$sql = "SELECT id AS i, position AS p, twitterId AS w, userName AS u, imageUrl AS m , createdTs AS c, contents AS n, imageData AS d FROM `tweet` ";
@@ -691,10 +708,11 @@ final class Tweet
 		$ok = $stmt->execute();
 		if (!$ok) throw new Exception($stmt->error);
 		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
 
-		$stmt->setTotal($total);
+		$result->setTotal($total);
 
-		return $stmt;
+		return $result;
 	}
 
 	/**
@@ -721,52 +739,33 @@ final class Tweet
 		$ok = $stmt->execute();
 		if (!$ok) throw new Exception($stmt->error);
 		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
 
 		$elapsed = 0;
-		while ($row = $stmt->row())
+		while ($row = $result->row())
 		{
 			$elapsed += $row['elapsed'];
 		}
 
-		return $elapsed && $stmt->count() ? floor($elapsed / $stmt->count()) : 0;
+		return $elapsed && $result->count() ? floor($elapsed / $result->count()) : 0;
 	}
 
-}
-
-/**
- * extended to yeld handier version of mysqli_stmt
- */
-class mysqli_Extended extends mysqli
-{
-	protected $selfReference;
-
-	public function __construct()
-	{
-		parent::__construct();
-
-	}
-
-	public function prepare($query)
-	{
-		$stmt = new stmt_Extended($this, $query);
-
-		return $stmt;
-	}
 }
 
 /**
  * mocks DataResult on client code
  * and gets rid of hard-coded bind calls + references in returned rows
  */
-class stmt_Extended extends mysqli_stmt
+class mysqli_stmt_wrap
 {
+	protected $stmt = null;
 	protected $varsBound = false;
 	protected $results;
 	protected $total;
 
-	public function __construct($link, $query)
+	public function __construct(mysqli_stmt $stmt)
 	{
-		parent::__construct($link, $query);
+		$this->stmt = $stmt;
 	}
 
 	public function row()
@@ -774,7 +773,7 @@ class stmt_Extended extends mysqli_stmt
 		// bind once
 		if (!$this->varsBound)
 		{
-			$meta = $this->result_metadata();
+			$meta = $this->stmt->result_metadata();
 			while ($column = $meta->fetch_field())
 			{
 				// prevent syntax errors if column names have a space in
@@ -782,11 +781,11 @@ class stmt_Extended extends mysqli_stmt
 				$bindVarArray[] = &$this->results[$columnName];
 			}
 			// using refValues() for compatibility with PHP 5.3 (dev and staging boxes)
-			call_user_func_array(array($this, 'bind_result'), refValues($bindVarArray));
+			call_user_func_array(array($this->stmt, 'bind_result'), refValues($bindVarArray));
 			$this->varsBound = true;
 		}
 
-		if ($this->fetch() != null)
+		if ($this->stmt->fetch() != null)
 		{
 			// copy values (get rid of references)
 			foreach ($this->results as $k => $v)
@@ -813,14 +812,14 @@ class stmt_Extended extends mysqli_stmt
 
 	public function count()
 	{
-		return $this->num_rows;
+		return $this->stmt->num_rows;
 	}
 }
 
 /**
  * mocks DataResult on client code
  */
-class stmt_Empty
+class mysqli_stmt_empty
 {
 	public function row()
 	{
