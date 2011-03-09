@@ -261,7 +261,8 @@ function main($language)
 
 try
 {
-	main($request_uri[1][0] . strtoupper($request_uri[2][0]));
+	$locale = $_GET['locale'];
+	main($locale, $available_locales);
 }
 catch(Exception $e) {
 	Debug::logError($e, 'EXCEPTION ' . $e->getMessage());

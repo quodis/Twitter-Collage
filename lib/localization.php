@@ -19,7 +19,7 @@ if (empty($_GET['locale']))
 	header('Location: ' . $accept_language[1][0] . strtoupper($accept_language[2][0]));
 
 // load and instantiate localeDetails class
-require_once('./localeDetails.class.php');
+require_once(dirname(__FILE__) . '/localeDetails.class.php');
 $locale_details = new localeDetails;
 
 /**
@@ -63,7 +63,7 @@ $dir_contents = array_splice($dir_contents, 2, count($dir_contents));
 $dir_contents = array_change_key($dir_contents);
 // read total list of languages
 $languages = $locale_details->languages;
-// intersect total languages and available languages TODO: lang codes must be moved over to array keys
+// intersect total languages and available languages
 $available_locales = array_intersect_key($languages, $dir_contents);
 
 // define where the translation files are stored in disk
