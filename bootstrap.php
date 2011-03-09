@@ -51,7 +51,7 @@ function initDb(array & $config)
 	global $mysqli;
 
 	/* FIX mysqli subclass class defined in model file */
-	$mysqli = new mysqli_Extended();
+	$mysqli = mysqli_init();
 	$mysqli->options(MYSQLI_INIT_COMMAND, "SET AUTOCOMMIT=1");
 	$mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 5);
 	$connected = $mysqli->real_connect($con['host'], $con['user'], $con['pass'], $con['name']);

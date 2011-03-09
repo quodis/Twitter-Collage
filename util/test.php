@@ -54,7 +54,7 @@ function main()
 		if (is_array($response)) {
 			dd($func . '(' . implode(', ', $args) . ') [ ' . substr(implode(', ' , $response), 0, 80));
 		}
-		elseif ($response instanceof stmt_Extended || $response instanceof stmt_Empty) {
+		elseif ($response instanceof mysqli_stmt_wrap || $response instanceof mysqli_stmt_empty) {
 			$row = ($row = $response->row()) ? substr(implode(', ', $row), 0, 80) : '----';
 			dd($func . '(' . implode(', ', $args) . ') -> ' . $response->count() . '/' . $response->total() . ' -> ' . $row);
 		}
