@@ -60,14 +60,14 @@ var party = party || {};
 		},
 		performance_settings = {
 			high: {
-				initial_frames_per_second: 50,
-				initial_tiles_per_frame: 10,
+				initial_frames_per_second: 8,
+				initial_tiles_per_frame: 40,
 				new_tiles_per_second: 8,
 				pause_after: 10 // Minutes
 			},
 			medium: {
-				initial_frames_per_second: 12,
-				initial_tiles_per_frame: 20,
+				initial_frames_per_second: 4,
+				initial_tiles_per_frame: 80,
 				new_tiles_per_second: 4,
 				pause_after: 10 // Minutes
 			},
