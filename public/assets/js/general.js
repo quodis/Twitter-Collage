@@ -680,7 +680,7 @@ var party = party || {};
 			new_tiles.shift();
 			
 			counter.current += 1;
-			//setCounter();
+			setCounter();
 		} else {
 			// Choose a random position
 			pos = Math.floor(Math.random() * total_positions);
@@ -704,7 +704,7 @@ var party = party || {};
 		state.last_tile_drawn_pos = pos;
 		
 		// Update the new tile
-		$('#' + pos).css(css_changes);
+		//$('#' + pos).css(css_changes);
 		
 	}
 	
