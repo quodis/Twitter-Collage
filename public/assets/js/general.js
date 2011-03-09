@@ -137,12 +137,15 @@ var party = party || {};
 			inc = 0;
 		
 		// Next time draw one tile more towards initial_tiles_per_frame
+		/*
 		if (state.initial_tiles_per_frame_incremental < party.performance.initial_tiles_per_frame) {
 			state.initial_tiles_per_frame_incremental += 0.02;
 			inc = (counter.increment/(party.performance.initial_tiles_per_frame/state.initial_tiles_per_frame_incremental));
 		} else {
 			inc = counter.increment;
 		}
+		*/
+		inc = counter.increment;
 		
 		j = (tile_counter + state.initial_tiles_per_frame_incremental);
 		
