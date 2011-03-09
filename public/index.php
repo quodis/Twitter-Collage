@@ -223,8 +223,7 @@ function main($language)
 						<label for="flang"><?= _('Other Languages') ?></label>
 
 						<select id="flang" name="flang">
-							<option value="en-US">English (US)</option>
-							<option value="pt-PT">Português (Europeu)</option>
+							<?= populate_language_select($available_locales); ?>
 						</select>
 
 					</form>
