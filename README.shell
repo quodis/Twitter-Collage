@@ -30,8 +30,8 @@
 
 ## -- required --
 
-apt-get-install memcached mysql-server
-apt-get install php5 php5-dbg php5-dev php5-common php5-cli php5-cgi php-pear php5-curl php5-mysql php5-tidy php5-memcache php5-imagick
+apt-get install memcached mysql-server
+apt-get install php5 php5-dbg php5-dev php5-common php5-cli php5-cgi php-pear php5-curl php5-mysql php5-tidy php5-memcache php5-imagick imagemagick
 apt-get install daemontools
 
 # dameontools specific:
@@ -56,7 +56,7 @@ sudo telinit Q
 
 cd /servers/prod
 git clone git@github.com:quodis/Twitter-Collage.git twitterparty 
-cd /servers/prod/twitterparty
+cd twitterparty
 
 ln -s config.prod.yaml config/config.yaml
 
@@ -107,8 +107,8 @@ mysql -u root -p
 ## -- web (apache)
 
 
-# HOST twitterparty.mozilla.org 
-# doc root /servers/develop/twitterparty/public
+# HOST twitterparty.mozilla.org
+# doc root /servers/prod/twitterparty/public
 # public/.htaccess does the rest
 
 # web should now be available at http://twitterparty.mozilla.org and http://twitterparty.mozilla.org/dashboard

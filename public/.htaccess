@@ -6,8 +6,10 @@ Options -Indexes
 	# Block access to "hidden" directories whose names begin with a period.
 	RewriteRule "(^|/)\." - [F]
 
-	# Pass language code onto index.php
-	RewriteRule ^([a-z]{2}-[a-zA-Z]{2})$ index.php [L]
+	# Pass language code onto index.php as a locale get parameter
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^(?:(\w{2,3}(?:-\w{2}(?:-mac)?)?)?)?.*$ index.php?locale=$1 [L,QSA]
 
 	# Alias for /dashboard
 	RewriteRule ^dashboard$ dashboard.php

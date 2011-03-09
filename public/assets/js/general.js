@@ -60,15 +60,15 @@ var party = party || {};
 		},
 		performance_settings = {
 			high: {
-				initial_frames_per_second: 50,
-				initial_tiles_per_frame: 10,
-				new_tiles_per_second: 8,
+				initial_frames_per_second: 8,
+				initial_tiles_per_frame: 40,
+				new_tiles_per_second: 4,
 				pause_after: 10 // Minutes
 			},
 			medium: {
-				initial_frames_per_second: 12,
-				initial_tiles_per_frame: 20,
-				new_tiles_per_second: 4,
+				initial_frames_per_second: 4,
+				initial_tiles_per_frame: 80,
+				new_tiles_per_second: 2,
 				pause_after: 10 // Minutes
 			},
 			low: {
@@ -551,7 +551,7 @@ var party = party || {};
 		//Show the image on a small timeout window
 		
 		party.showBubbleImageTimer = setTimeout(function(){
-		    b.avatar_img.attr('src', tile.m).show();
+		    b.avatar_img.attr('src', tile.m);
 		    b.avatar_img.load(function(){
 		        $(this).show();
 		    })
@@ -696,18 +696,16 @@ var party = party || {};
 
 		// Update the previous tile
 		if (state.last_tile_drawn_pos > -1) {
-		    /*
 			$('#' + state.last_tile_drawn_pos).css({
 				'background-image': 'url(data:image/gif;base64,' + visible_tiles[state.last_tile_drawn_pos].d + ')'
 			});
-			*/
 		}
 		
 		// Save the previous tile
 		state.last_tile_drawn_pos = pos;
 		
 		// Update the new tile
-		//$('#' + pos).css(css_changes);		
+		$('#' + pos).css(css_changes);		
 	}
 	
 	// Start the Real-time polling
