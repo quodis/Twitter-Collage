@@ -62,7 +62,7 @@ var party = party || {};
 			high: {
 				initial_frames_per_second: 24,
 				initial_tiles_per_frame: 10,
-				new_tiles_per_second: 1,
+				new_tiles_per_second: 8,
 				pause_after: 10 // Minutes
 			},
 			medium: {
@@ -680,7 +680,7 @@ var party = party || {};
 			new_tiles.shift();
 			
 			counter.current += 1;
-			setCounter();
+			//setCounter();
 		} else {
 			// Choose a random position
 			pos = Math.floor(Math.random() * total_positions);
