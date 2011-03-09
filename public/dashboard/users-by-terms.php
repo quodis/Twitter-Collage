@@ -37,7 +37,7 @@ function main()
 		$data['users'][] = $user;
 	}
 
-	Debug::logMsg('terms:' . $terms . ' count:' . $data['count'] . ' total:' . $data['total']);
+	Debug::logMsg('terms:' . rawurlencode($terms) . ' count:' . $data['count'] . ' total:' . $data['total']);
 
 	Dispatch::now(1, 'OK', $data);
 
