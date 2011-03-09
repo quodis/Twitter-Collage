@@ -642,7 +642,7 @@ var party = party || {};
 	}
 	
 	function drawNewTiles() {
-		
+		var startDate = new Date();
 		// Get a random position
 		var pos,
 			new_tile,
@@ -705,6 +705,8 @@ var party = party || {};
 		
 		// Update the new tile
 		$('#' + pos).css(css_changes);
+		
+		console.log('drawNewTiles() ran in ' + new Date() - startDate + ' secs');
 		
 	}
 	
