@@ -61,7 +61,7 @@ var party = party || {};
 		performance_settings = {
 			high: {
 				initial_frames_per_second: 12,
-				initial_tiles_per_frame: 100,
+				initial_tiles_per_frame: 50,
 				new_tiles_per_second: 8,
 				pause_after: 10 // Minutes
 			},
@@ -146,8 +146,6 @@ var party = party || {};
 		
 		//j = (tile_counter + state.initial_tiles_per_frame_increment);
 		j = (tile_counter + party.performance.initial_tiles_per_frame);
-		
-		console.log(j);
 		
 		// Draw tiles_per_frame tiles and draw them
 		for (i = tile_counter; i < j; i += 1) {
