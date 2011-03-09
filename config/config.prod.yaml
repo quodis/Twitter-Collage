@@ -59,6 +59,8 @@ Cache:
     TTL:
         mosaicConfig: 2000 
         tweetIds: 200
+        index: 30
+        poll: 15
     servers:
         - host: localhost
           port: 11211

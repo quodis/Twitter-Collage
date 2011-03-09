@@ -26,10 +26,19 @@ function main($language)
 	Debug::setLogMsgFile($config['App']['pathLog'] .'/www.msg.log');
 	Debug::setLogErrorFile($config['App']['pathLog'] .'/www.error.log');
 
+	$cacheKey = 'TWITTER-PARTY::index::lang=' . $language;
+	$cacheTTL = $config['Cache']['TTL']['index'];
+
+	ob_start();
+
+	header("Expires: " . gmdate("D, d M Y H:i:s", time() + $cacheTTL) . " GMT");
+	header("Cache-Control: max-age=$cacheTTL, s-maxage=$cacheTTL, public, must-revalidate");
+	ini_set('zlib.output_compression', 1);
+
 	// check cache
-	if ($output = Cache::get('TWITTER-PARTY::index::lang=' . $language))
+	if ($output = Cache::get($cacheKey))
 	{
-		Dispatch::now(1);
+		Dispatch::now(1, $output);
 	}
 
 	initDb($config);
@@ -81,10 +90,10 @@ function main($language)
 		<script type="text/javascript" src="<?=$jsMosaicConfig?>"></script>
 		<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
-    <style  type="text/css">
-       <?= /* L10n: Replace this with your CSS rules to tweak the site in your locale */ _('placeholder{}') ?>
-    </style>
-    
+		<style  type="text/css">
+			<?= /* L10n: Replace this with your CSS rules to tweak the site in your locale */ _('placeholder{}') ?>
+		</style>
+
 	</head>
 
 	<body>
@@ -135,28 +144,27 @@ function main($language)
 				<section id="mosaic" role="img">
 					<h2><?= _('Mosaic') ?></h2>
 
-          <ul id="loading">
-            <li><?= /* L10n: Funny loading message */ _('Sorting guest list alphabetically') ?></li>
-            <li><?= /* L10n: Funny loading message */ _('Randomizing seating order') ?></li>
-            <li><?= /* L10n: Funny loading message */ _('Cooling drinks to optimal temperature') ?></li>
-            <li><?= /* L10n: Funny loading message */ _('Handing out name tags') ?></li>
-            <li><?= /* L10n: Funny loading message */ _('Waxing the dance floor') ?></li>
-            <li><?= /* L10n: Funny loading message */ _('Setting up Firefox deco') ?></li>
-          </ul>
+					<ul id="loading">
+						<li><?= /* L10n: Funny loading message */ _('Sorting guest list alphabetically') ?></li>
+						<li><?= /* L10n: Funny loading message */ _('Randomizing seating order') ?></li>
+						<li><?= /* L10n: Funny loading message */ _('Cooling drinks to optimal temperature') ?></li>
+						<li><?= /* L10n: Funny loading message */ _('Handing out name tags') ?></li>
+						<li><?= /* L10n: Funny loading message */ _('Waxing the dance floor') ?></li>
+						<li><?= /* L10n: Funny loading message */ _('Setting up Firefox deco') ?></li>
+					</ul>
 
 					<img src="" id="tile-hover" />
 
 					<article id="bubble" class="bubble">
 
 						<header>
-						  
-<?php $link = '<a href="#" title="' . _('Twitter profile') . '" rel="author external"></a>'; ?>
+
+							<?php $link = '<a href="#" title="' . _('Twitter profile') . '" rel="author external"></a>'; ?>
 							<h1><?= sprintf(/* L10n: Used in: "twitter username" wrote */ _('%s <span>wrote</span>'), $link) ?></h1>
 							<a href="#" title="" rel="author external" class="twitter-avatar">
-							  <img src="" alt="<?= _('Twitter profile picture') ?>" width="48" height="48" />
+								<img src="" alt="<?= _('Twitter profile picture') ?>" width="48" height="48" />
 							</a>
-
-						  <time datetime="" pubdate><a href="#" rel="bookmark external" title="<?= _('Permalink') ?>"></a></time>
+							<time datetime="" pubdate><a href="#" rel="bookmark external" title="<?= _('Permalink') ?>"></a></time>
 
 						</header>
 
@@ -230,13 +238,13 @@ function main($language)
 		<script type="text/javascript">
 		//<![CDATA[
 		(function($) {
-		  $.extend(party, <?=json_encode($uiOptions)?>);
-		  $.extend(party, {l10n: {
-		    date_format:'<?= /* L10n: Date format. Documentation: http://php.net/manual/en/function.date.php */ _('M j Y, g:i A') ?>',
-		    dec_point:'<?= /* L10n: Decimal separator for numbers (dec_point). */ _('.') ?>',
-		    thousands_sep:'<?= /* L10n: Thousands separator for numbers (thousands_sep) */ _(',') ?>'
-		  }});
-		})(jQuery);
+			$.extend(party, <?=json_encode($uiOptions)?>);
+			$.extend(party, {l10n: {
+				date_format:'<?= /* L10n: Date format. Documentation: http://php.net/manual/en/function.date.php */ _('M j Y, g:i A') ?>',
+				dec_point:'<?= /* L10n: Decimal separator for numbers (dec_point). */ _('.') ?>',
+				thousands_sep:'<?= /* L10n: Thousands separator for numbers (thousands_sep) */ _(',') ?>'
+			} } );
+		} )(jQuery);
 		//]]>
 		</script>
 
@@ -244,6 +252,11 @@ function main($language)
 
 </html>
 <?php
+
+	$output = ob_get_contents();
+	Cache::set($cacheKey, $output, $cacheTTL);
+	header('Content-type: text/html');
+	exit();
 
 } // main()
 

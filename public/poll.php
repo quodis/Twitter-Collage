@@ -12,6 +12,7 @@
  */
 function main()
 {
+	DEFINE('NO_DB', TRUE);
 	DEFINE('CLIENT', 'ajax');
 	DEFINE('CONTEXT', __FILE__);
 	include '../bootstrap.php';
@@ -20,6 +21,22 @@ function main()
 	Debug::setLogErrorFile($config['App']['pathLog'] .'/www.error.log');
 
 	$lastId = (isset($_REQUEST['last_id'])) ? (int)$_REQUEST['last_id'] : null;
+
+	$cacheKey = 'TWITTER-PARTY::index::poll=' . $lastId;
+	$cacheTTL = $config['Cache']['TTL']['poll'];
+
+	header("Expires: " . gmdate("D, d M Y H:i:s", time() + $cacheTTL) . " GMT");
+	header("Cache-Control: max-age=$cacheTTL, s-maxage=$cacheTTL, public, must-revalidate");
+	ini_set('zlib.output_compression', 1);
+
+	// check cache
+	if ($output = Cache::get($cacheKey))
+	{
+		echo $output;
+		exit();
+	}
+
+	initDb($config);
 
 	$limit = $config['UI']['pollLimit'] - 5 + rand(0, 10);
 
@@ -47,9 +64,20 @@ function main()
 		$data['last_id'] = $lastId;
 	}
 
-	Debug::logMsg('lastId:' .  $lastId . ' count:' . count($data['tiles']) . ' lastId:' . $data['last_id']);
+	Debug::logMsg('requested lastId:' .  $lastId . ' count:' . count($data['tiles']) . ' lastId:' . $data['last_id']);
 
-	Dispatch::now(1, 'POLL OK', $data);
+	header('Content-type: application/text-json');
+
+	$var = array(
+		'code' => 1,
+		'msg' => 'POLL_OK',
+		'payload' => $data
+	);
+
+	$output = json_encode($var);
+	Cache::set($cacheKey, $output, $cacheTTL);
+	echo $output;
+	exit();
 
 } // main()
 

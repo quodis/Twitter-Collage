@@ -1,0 +1,16 @@
+
+== 2011-03-09 ==
+
+Updated config files with some Cache TTLs
+
+Cache:
+    enabled: 1
+    TTL:
+        mosaicConfig: 2000 
+        tweetIds: 200
+        index: 30
+        poll: 15
+    servers:
+        - host: localhost
+          port: 11211
+

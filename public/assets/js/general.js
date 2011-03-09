@@ -60,8 +60,8 @@ var party = party || {};
 		},
 		performance_settings = {
 			high: {
-				initial_frames_per_second: 24,
-				initial_tiles_per_frame: 10,
+				initial_frames_per_second: 12,
+				initial_tiles_per_frame: 100,
 				new_tiles_per_second: 8,
 				pause_after: 10 // Minutes
 			},
@@ -144,7 +144,10 @@ var party = party || {};
 			inc = counter.increment;
 		}
 		
-		j = (tile_counter + state.initial_tiles_per_frame_incremental);
+		//j = (tile_counter + state.initial_tiles_per_frame_increment);
+		j = (tile_counter + party.performance.initial_tiles_per_frame);
+		
+		console.log(j);
 		
 		// Draw tiles_per_frame tiles and draw them
 		for (i = tile_counter; i < j; i += 1) {
@@ -258,6 +261,7 @@ var party = party || {};
 			// Remove the download button if this is already firefox >= 4
 			if (window.navigator.userAgent.search('Firefox/4') != -1) {
 				$('#download').remove();
+				//party.performance = party.performance_settings.medium;
 			}
 		}
 		
@@ -358,6 +362,10 @@ var party = party || {};
 		party.bubble.container.bind('mouseleave', function() {
 		    party.canvas.trigger('click');
 		});
+		
+		party.init = function() {
+		    return party;
+		}
 	}
 	
 	function searchInit() {
@@ -543,12 +551,14 @@ var party = party || {};
 		b.container.css(position_css).removeClass().addClass('bubble ' + position_class + ' color-' + g.r);
 		
 		//Show the image on a small timeout window
+		
 		party.showBubbleImageTimer = setTimeout(function(){
-		    b.avatar_img.attr('src', tile.m);
+		    b.avatar_img.attr('src', tile.m).show();
 		    b.avatar_img.load(function(){
-		        $(this).fadeIn('fast');
+		        $(this).show();
 		    })
 		    party.showBubbleImageTimer = null;
+		    tile = null;
 		}, 500);
 		
 		// Show
@@ -636,7 +646,6 @@ var party = party || {};
 	}
 	
 	function drawNewTiles() {
-		
 		// Get a random position
 		var pos,
 			new_tile,
@@ -689,17 +698,18 @@ var party = party || {};
 
 		// Update the previous tile
 		if (state.last_tile_drawn_pos > -1) {
+		    /*
 			$('#' + state.last_tile_drawn_pos).css({
 				'background-image': 'url(data:image/gif;base64,' + visible_tiles[state.last_tile_drawn_pos].d + ')'
 			});
+			*/
 		}
 		
 		// Save the previous tile
 		state.last_tile_drawn_pos = pos;
 		
 		// Update the new tile
-		$('#' + pos).css(css_changes);
-		
+		//$('#' + pos).css(css_changes);		
 	}
 	
 	// Start the Real-time polling
