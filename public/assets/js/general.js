@@ -551,7 +551,7 @@ var party = party || {};
 		//Show the image on a small timeout window
 		
 		party.showBubbleImageTimer = setTimeout(function(){
-		    b.avatar_img.attr('src', tile.m).show();
+		    b.avatar_img.attr('src', tile.m);
 		    b.avatar_img.load(function(){
 		        $(this).show();
 		    })
