@@ -258,7 +258,7 @@ var party = party || {};
 			// Remove the download button if this is already firefox >= 4
 			if (window.navigator.userAgent.search('Firefox/4') != -1) {
 				$('#download').remove();
-				party.performance = party.performance_settings.medium;
+				//party.performance = party.performance_settings.medium;
 			}
 		}
 		
@@ -641,7 +641,6 @@ var party = party || {};
 	}
 	
 	function drawNewTiles() {
-		var startDate = new Date();
 		// Get a random position
 		var pos,
 			new_tile,
@@ -694,20 +693,18 @@ var party = party || {};
 
 		// Update the previous tile
 		if (state.last_tile_drawn_pos > -1) {
+		    /*
 			$('#' + state.last_tile_drawn_pos).css({
 				'background-image': 'url(data:image/gif;base64,' + visible_tiles[state.last_tile_drawn_pos].d + ')'
 			});
+			*/
 		}
 		
 		// Save the previous tile
 		state.last_tile_drawn_pos = pos;
 		
 		// Update the new tile
-		$('#' + pos).css(css_changes);
-		
-		var endDate = new Date() - startDate;
-		console.log('drawNewTiles() ran in ' + endDate + ' milisecs');
-		
+		//$('#' + pos).css(css_changes);		
 	}
 	
 	// Start the Real-time polling
