@@ -544,7 +544,7 @@ var party = party || {};
 		b.p.html(create_urls(tile.n));
 		b.time_a.attr('href', 'http://twitter.com/' + tile.u + '/status/' + tile.w).text(formatted_date);
 		b.time.attr('datetime', formatted_date);
-		//b.avatar_img.attr('src', '').hide();
+		b.avatar_img.attr('src', '');
 		b.avatar_img.attr('src', tile.m);
 		b.container.css(position_css).removeClass().addClass('bubble ' + position_class + ' color-' + g.r);
 		
