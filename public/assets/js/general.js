@@ -706,7 +706,8 @@ var party = party || {};
 		// Update the new tile
 		$('#' + pos).css(css_changes);
 		
-		console.log('drawNewTiles() ran in ' + new Date() - startDate + ' secs');
+		var endDate = new Date() - startDate;
+		console.log('drawNewTiles() ran in ' + endDate + ' milisecs');
 		
 	}
 	
