@@ -62,13 +62,13 @@ var party = party || {};
 			high: {
 				initial_frames_per_second: 8,
 				initial_tiles_per_frame: 40,
-				new_tiles_per_second: 8,
+				new_tiles_per_second: 2,
 				pause_after: 10 // Minutes
 			},
 			medium: {
 				initial_frames_per_second: 4,
 				initial_tiles_per_frame: 80,
-				new_tiles_per_second: 4,
+				new_tiles_per_second: 1,
 				pause_after: 10 // Minutes
 			},
 			low: {
