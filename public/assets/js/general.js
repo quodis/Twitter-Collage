@@ -696,18 +696,16 @@ var party = party || {};
 
 		// Update the previous tile
 		if (state.last_tile_drawn_pos > -1) {
-		    /*
 			$('#' + state.last_tile_drawn_pos).css({
 				'background-image': 'url(data:image/gif;base64,' + visible_tiles[state.last_tile_drawn_pos].d + ')'
 			});
-			*/
 		}
 		
 		// Save the previous tile
 		state.last_tile_drawn_pos = pos;
 		
 		// Update the new tile
-		//$('#' + pos).css(css_changes);		
+		$('#' + pos).css(css_changes);		
 	}
 	
 	// Start the Real-time polling
