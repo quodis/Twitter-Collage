@@ -525,7 +525,6 @@ var party = party || {};
 		}
 		
 		// Hide previous
-		b.avatar_img.attr('src', '');
 		b.container.hide();
 		tile_hover.hide();
 		
@@ -545,22 +544,16 @@ var party = party || {};
 		b.p.html(create_urls(tile.n));
 		b.time_a.attr('href', 'http://twitter.com/' + tile.u + '/status/' + tile.w).text(formatted_date);
 		b.time.attr('datetime', formatted_date);
-		//b.avatar_img.attr('src', '');
-		//b.avatar_img.attr('src', '').hide();
-		//b.avatar_img.attr('src', tile.m);
-		//b.avatar_img.attr('src', tile.m);
+		b.avatar_img.attr('src', '').hide();
 		b.container.css(position_css).removeClass().addClass('bubble ' + position_class + ' color-' + g.r);
 		
 		//Show the image on a small timeout window
 		
 		party.showBubbleImageTimer = setTimeout(function(){
 		    b.avatar_img.attr('src', tile.m).show();
-		    
-		    /*
 		    b.avatar_img.load(function(){
-		        $(this).show;
+		        $(this).show();
 		    })
-		    */
 		    party.showBubbleImageTimer = null;
 		    tile = null;
 		}, 500);
