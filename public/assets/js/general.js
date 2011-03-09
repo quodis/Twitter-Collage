@@ -236,7 +236,7 @@ var party = party || {};
 	
 	
 	// First to be called
-	function init() {
+	var init = function() {
 		var bubble,
 		    imgsToPreload = [
 		        'assets/images/layout/bubbles.png'
@@ -358,6 +358,12 @@ var party = party || {};
 		party.bubble.container.bind('mouseleave', function() {
 		    party.canvas.trigger('click');
 		});
+		/*
+		init = function() {
+		    return party;
+		}
+		*/
+		console.log('running init...');
 	}
 	
 	function searchInit() {
