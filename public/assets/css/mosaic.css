@@ -20,12 +20,14 @@ http://www.opensource.org/licenses/mit-license.php
 }
 
 #loading {
+	background: url(../images/layout/initial-loading.png) 0 0 no-repeat;
+	min-height: 100px;
 	width: 240px;
 	display: block;
 	text-align: center;
 	margin: 230px auto 0 auto;
 	list-style-type: none;
-	padding: 0px;
+	padding: 108px 0 0 0;
 }
 
 #loading li {
@@ -139,6 +141,14 @@ http://www.opensource.org/licenses/mit-license.php
 	color:#1D2D67;
 }
 
+.bubble.color-0 .twitter-avatar{
+	border-color:#fff;
+}
+
+.bubble.color-0 .twitter-avatar img{
+	background-color: #e1f0fa;
+}
+
 .color-0.top-left header{ background-position: -5px top; }
 .color-0.top-left p{ background-position: -620px bottom;}
 .color-0.bottom-left header{ background-position: -620px top;}
@@ -160,6 +170,14 @@ http://www.opensource.org/licenses/mit-license.php
 
 .bubble.color-1 a {
 	color:#9bc3e2;
+}
+
+.bubble.color-1 .twitter-avatar{
+	border-color:#e1f0fa;
+}
+
+.bubble.color-1 .twitter-avatar img{
+	background-color: #9bc3e2;
 }
 
 .color-1.top-left header{ background-position: -930px top; }
@@ -184,6 +202,14 @@ http://www.opensource.org/licenses/mit-license.php
 	color:#c21924;
 }
 
+.bubble.color-2 .twitter-avatar{
+	border-color:#fff;
+}
+
+.bubble.color-2 .twitter-avatar img{
+	background-color: #fde9c7;
+}
+
 .color-2.top-left header{ background-position: -1850px top; }
 .color-2.top-left p{ background-position: -2465px bottom;}
 .color-2.bottom-left header{ background-position: -2465px top;}
@@ -205,6 +231,14 @@ http://www.opensource.org/licenses/mit-license.php
 
 .bubble.color-3 a {
 	color:#e8d683;
+}
+
+.bubble.color-3 .twitter-avatar{
+	border-color:#fde9c7;
+}
+
+.bubble.color-3 .twitter-avatar img{
+	background-color: #fde9c7;
 }
 
 .color-3.top-left header{ background-position: -2775px top; }

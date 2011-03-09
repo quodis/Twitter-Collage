@@ -22,6 +22,8 @@ var party = party || {};
 	*/
 	var initial_draw_timer,
 		loading_message_timer,
+		loading_indicator_timer,
+		loading_indicator_milliseconds = 200,
 		polling_timer,
 		tile_counter = 0,
 		auto_bubble_timer,
@@ -60,17 +62,20 @@ var party = party || {};
 			high: {
 				initial_frames_per_second: 24,
 				initial_tiles_per_frame: 10,
-				new_tiles_per_second: 8
+				new_tiles_per_second: 8,
+				pause_after: 10 // Minutes
 			},
 			medium: {
 				initial_frames_per_second: 12,
 				initial_tiles_per_frame: 20,
-				new_tiles_per_second: 4
+				new_tiles_per_second: 4,
+				pause_after: 10 // Minutes
 			},
 			low: {
 				initial_frames_per_second: 1,
 				initial_tiles_per_frame: 200,
-				new_tiles_per_second: 1
+				new_tiles_per_second: 1,
+				pause_after: 10 // Minutes
 			}
 		};
 	
@@ -163,12 +168,13 @@ var party = party || {};
 			
 			// No Tiles were built - task is complete
 			window.clearInterval(initial_draw_timer);
+			// Remove the grid
+			party.canvas.css('background', 'none');
 			// Set counter to last id
 			counter.current = parseInt(state.total_tiles, 10);
 			setCounter();
 			startAutoBubble();
-			// Start the recursive "tile updater"
-			draw_tiles_timer = window.setInterval(drawNewTiles, (1000/party.performance.new_tiles_per_second));
+			startDrawNewTiles();
 		}
 		
 	}
@@ -184,7 +190,11 @@ var party = party || {};
 	function loadingShow() {
 		var loading_messages = $.makeArray($('#loading li')),
 			loading_message_index = 0,
-			loadingMessage;
+			loadingMessage,
+			loading_indicator_frames = 5,
+			loading_indicator_index = 0,
+			loading_indicator = $('#loading'),
+			loadingIndicator;
 			
 		loading_messages.shuffle();
 		
@@ -199,15 +209,28 @@ var party = party || {};
 			$(loading_messages[loading_message_index]).show();
 		}
 		
-		// Loop through the array
+		// Animate the loading sprite
+		loadingIndicator = function() {
+			loading_indicator.css('background-position', -(loading_indicator_index*240) + 'px 0px');
+			loading_indicator_index += 1;
+			if (loading_indicator_index >= loading_indicator_frames) {
+				loading_indicator_index = 0;
+			}
+		}
+		
+		// Loop through the messages
 		loadingMessage();
 		loading_message_timer = window.setInterval(loadingMessage, (party.loading_message_seconds * 1000));
 		
+		// Start the sprite animation
+		loadingIndicator();
+		loading_indicator_timer = window.setInterval(loadingIndicator, loading_indicator_milliseconds);
 	}
 	
 	// Hide the loading message
 	function loadingHide(){
 		window.clearInterval(loading_message_timer);
+		window.clearInterval(loading_indicator_timer);
 		$('#loading').remove();
 	}
 	
@@ -516,7 +539,7 @@ var party = party || {};
 		b.p.html(create_urls(tile.n));
 		b.time_a.attr('href', 'http://twitter.com/' + tile.u + '/status/' + tile.w).text(formatted_date);
 		b.time.attr('datetime', formatted_date);
-		b.avatar_img.hide().attr('src', '');
+		b.avatar_img.attr('src', '').hide();
 		b.container.css(position_css).removeClass().addClass('bubble ' + position_class + ' color-' + g.r);
 		
 		//Show the image on a small timeout window
@@ -557,13 +580,13 @@ var party = party || {};
 		
 		// Check if we have a complete page. If not, try again later
 		if (party.state.last_page == 0) {
-			setTimeout(reloadPage, 60 * 1000);
+			setTimeout(reloadPage, 3 * 60 * 1000);
 			return;
 		}
 		
 		// Show the loading
 		loadingShow();
-		
+
 		// Request URL
 		var url = party.store_url + '/mosaic.json';
 		
@@ -606,6 +629,10 @@ var party = party || {};
 			data = null;
 
 		});
+	}
+	
+	function startDrawNewTiles() {
+		draw_tiles_timer = window.setInterval(drawNewTiles, (1000/party.performance.new_tiles_per_second));
 	}
 	
 	function drawNewTiles() {
@@ -682,6 +709,10 @@ var party = party || {};
 		poll();
 		polling_timer = window.setInterval(poll, (party.polling_timer_seconds * 1000));
 		
+		// End the polling after 10 minutes?
+		if (window.location.href.indexOf('keepgoing') < 0) {
+			window.setTimeout(pause, party.performance.pause_after * 60 * 1000);
+		}
 	}
 	
 	function poll() {
@@ -726,8 +757,8 @@ var party = party || {};
 	function pause() {
 		window.clearInterval(draw_tiles_timer);
 		window.clearInterval(polling_timer);
+		stopAutoBubble();
 	}
-
 	
 	/**
 	 * public, enable dashboard ui
@@ -735,7 +766,9 @@ var party = party || {};
 	 * @return
 	 */
 	function resume() {
+		startDrawNewTiles();
 		startPolling();
+		startAutoBubble();
 	}
 	
 	
