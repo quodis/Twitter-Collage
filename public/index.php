@@ -254,7 +254,6 @@ function main($language)
 <?php
 
 	$output = ob_get_contents();
-	ob_end_clean();
 	Cache::set($cacheKey, $output, $cacheTTL);
 	echo $output;
 
