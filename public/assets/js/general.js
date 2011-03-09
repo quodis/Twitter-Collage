@@ -258,6 +258,7 @@ var party = party || {};
 			// Remove the download button if this is already firefox >= 4
 			if (window.navigator.userAgent.search('Firefox/4') != -1) {
 				$('#download').remove();
+				party.performance = party.performance_settings.low;
 			}
 		}
 		
