@@ -32,7 +32,8 @@ function main()
 	// check cache
 	if ($output = Cache::get($cacheKey))
 	{
-		Dispatch::now(1, $output);
+		echo $output;
+		exit();
 	}
 
 	initDb($config);
@@ -76,6 +77,7 @@ function main()
 	$output = json_encode($var);
 	Cache::set($cacheKey, $output, $cacheTTL);
 	echo $output;
+	exit();
 
 } // main()
 
