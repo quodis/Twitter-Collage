@@ -38,7 +38,6 @@ function main($language)
 	// check cache
 	if ($output = Cache::get($cacheKey))
 	{
-		$output .= '<!-- from cache -->';
 		Dispatch::now(1, $output);
 	}
 
@@ -257,7 +256,7 @@ function main($language)
 	$output = ob_get_contents();
 	Cache::set($cacheKey, $output, $cacheTTL);
 	header('Content-type: text/html');
-	echo $output;
+	exit();
 
 } // main()
 

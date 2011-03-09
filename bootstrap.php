@@ -81,5 +81,4 @@ if (!defined('NO_CONFIG'))
 
 }
 
-
 ?>
