@@ -704,7 +704,7 @@ var party = party || {};
 		state.last_tile_drawn_pos = pos;
 		
 		// Update the new tile
-		//$('#' + pos).css(css_changes);
+		$('#' + pos).css(css_changes);
 		
 	}
 	
