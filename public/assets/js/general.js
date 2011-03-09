@@ -147,6 +147,8 @@ var party = party || {};
 		//j = (tile_counter + state.initial_tiles_per_frame_increment);
 		j = (tile_counter + party.performance.initial_tiles_per_frame);
 		
+		console.log(j);
+		
 		// Draw tiles_per_frame tiles and draw them
 		for (i = tile_counter; i < j; i += 1) {
 			p = visible_tiles_random[i];
