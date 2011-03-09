@@ -64,7 +64,7 @@ function main()
 		$data['last_id'] = $lastId;
 	}
 
-	Debug::logMsg('requested lastId:' .  $lastId . ' count:' . count($data['tiles']) . ' lastId:' . $data['last_id']);
+	Debug::logMsg('requested lastId:' .  rawurlencode($lastId) . ' count:' . count($data['tiles']) . ' lastId:' . $data['last_id']);
 
 	header('Content-type: application/text-json');
 

@@ -25,7 +25,7 @@ function main()
 
 	$msg = $ok ? 'OK' : 'FAIL';
 
-	Debug::logMsg('delete user:' . $userName . ' msg:' . $msg);
+	Debug::logMsg('delete user:' . rawurlencode($userName) . ' msg:' . $msg);
 
 	Dispatch::now($ok, $msg);
 

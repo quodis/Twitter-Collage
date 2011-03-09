@@ -24,7 +24,7 @@ function main()
 	$ok = Tweet::delete($id);
 	$msg = $ok ? 'OK' : 'FAIL';
 
-	Debug::logMsg('delete tweet:' . $id . ' msg:' . $msg);
+	Debug::logMsg('delete tweet:' . rawurlencode($id) . ' msg:' . $msg);
 
 	Dispatch::now($ok, $msg);
 
