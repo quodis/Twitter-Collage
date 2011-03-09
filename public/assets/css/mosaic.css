@@ -124,7 +124,7 @@ http://www.opensource.org/licenses/mit-license.php
 .color-3.bottom-left header, .color-3.bottom-left p,
 .color-3.top-right header, .color-3.top-right p,
 .color-3.bottom-right header, .color-3.bottom-right p {
-	background-image: url(../images/layout/bubbles.png);
+	/*background-image: url(../images/layout/bubbles.png);*/
 	background-repeat: no-repeat;
 }
 
