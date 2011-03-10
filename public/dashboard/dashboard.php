@@ -26,7 +26,11 @@ function main()
 	Debug::setLogMsgFile($config['App']['pathLog'] .'/dashboard.msg.log');
 	Debug::setLogErrorFile($config['App']['pathLog'] .'/dashboard.error.log');
 
+	// not in use
 	$isOldBrowser = isset($_GET['oldBrowser']);
+
+	// generate a session token
+	$_SESSION['token'] = md5(serialize($config) . time());
 
 	// body classes
 	$classes = array();
@@ -39,27 +43,27 @@ function main()
 	$uiOptions = $config['UI']['options'];
 	$uiOptions['tile_size'] = $config['Mosaic']['tileSize'];
 
+	// mosaic data
 	$lastTweet = Mosaic::getLastTweet();
 	$lastProcessedTweet = Mosaic::getLastTweetWithImage();
-	$elapsed = Tweet::getAverageDelay(10);
-	$tweets = ($lastTweet['id'] - $lastProcessedTweet['id']);
-	if (!$tweets) $elapsed = 0;
+	$delaySeconds = Tweet::getAverageDelay(10);
+	$delayTweets = ($lastTweet['id'] - $lastProcessedTweet['id']);
+	if (!$delayTweets) $delaySeconds = 0;
 
 	// dashboard state
 	$dashboardState = array(
-		'last_page' => Mosaic::getLastCompletePage(),
+		'token' => $_SESSION['token'],
 		'last_id' => $lastProcessedTweet['id'],
 		'tweet_count' =>  Tweet::getCount(TRUE),
 		'guest_count' =>  Tweet::getUserCount(TRUE),
 		'delay' => array(
-			'tweets' => $tweets,
-			'seconds' => $elapsed
+			'tweets' => $delayTweets,
+			'seconds' => $delaySeconds
 		)
 	);
 
-	$delay = '<em>' . $elapsed . ' sec / ' . $tweets . ' tweets</em>';
+?>
 
-	?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -115,19 +119,19 @@ function main()
 					<div class="counter">
 						<dl class="guests">
 							<dt><span>Guests</span></dt>
-							<dd id="guest-count"><span>0</span></dd>
+							<dd class="value" id="guest-count"><span>0</span></dd>
 						</dl>
 						<dl class="tweets">
 							<dt><span>Tweets</span></dt>
-							<dd id="tweet-count"><span>0</span></dd>
+							<dd class="value" id="tweet-count"><span>0</span></dd>
 						</dl>
-						<dl class="pages">
-							<dt><span>Pages</span></dt>
-							<dd id="last-page"><span>0</span></dd>
-						</dl>
-						<dl class="delay">
+						<dl class="delay delay-seconds">
 							<dt><span>Delay</span></dt>
-							<dd id="job-delay"><span><?=$delay?></span></dd>
+							<dd id="job-delay-secos"><strong class="value"><span>1123</span></strong> <em>secs</em></dd>
+						</dl>
+						<dl class="delay delay-tweets">
+							<dt><span>Delay</span></dt>
+							<dd id="job-delay-tts"><strong class="value"><span>1212</span></strong> <em>tweets</em></dd>
 						</dl>
 					</div><!-- counters -->
 
@@ -146,13 +150,10 @@ function main()
 					</div><!-- control-box terms -->
 
 					<div class="control-box page clearfix">
-						<h3>Page</h3>
-						<label for="page-no" accesskey="p">Page No</label>
-						<input type="text" id="page-no" value="<?=(Mosaic::getLastCompletePage() + 1)?>" tabindex="5" />
-						<button class="submit" type="submit" id="page-load-bttn" tabindex="6" title="Go" class="button"><span>Go</span></button>
-						<button class="submit" type="submit" id="force-poll-bttn" tabindex="7" title="Force Poll" class="button"><span>Poll Now</span></button>
+						<h3>Load tiles</h3>
+						<button class="submit" type="submit" id="load-mosaic-bttn" tabindex="5" class="button"><span>Full Mosaic</span></button>
+						<button class="submit" type="submit" id="force-poll-bttn" tabindex="6" class="button"><span>Poll</span></button>
 					</div><!-- control-box page -->
-
 
 				</aside><!-- main-content -->
 

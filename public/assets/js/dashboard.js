@@ -33,11 +33,11 @@ var party = party || {};
 
 		// state
 		state : {
+			'token' : null,
 			'party_on' : 'wild',
 			'guest_count' : 0,
 			'last_id' : 0,
 			'tweet_count' : 0,
-			'last_page' : 0,
 			'short_stat_interval' : null
 		},
 		
@@ -66,7 +66,7 @@ var party = party || {};
 			
 			this.buildInterface();
 			
-			this.loadPage(parseInt(this.state.last_page, 10) + 1);
+			this.loadMosaic();
 		},
 
 
@@ -80,7 +80,6 @@ var party = party || {};
 			// show last id
 			$('#guest-count span').rollNumbers(this.state.guest_count, 2000);
 			$('#tweet-count span').rollNumbers(this.state.tweet_count, 2000);
-			$('#last-page span').rollNumbers(this.state.last_page, 2000);
 			
 			// bind search user
 			$('#find-user').inputDefault().inputState( { 'onEnter' : function() {
@@ -96,13 +95,15 @@ var party = party || {};
 				}
 			}.bind(this) } );
 			
-			// bind go to page
-			$('#page-load-bttn').click( function(ev) {
-				ev.stopPropagation();
-				this.loadPage($('#page-no').val());
+			// bind load tiles buttons
+			$('#force-poll-bttn').click( function(ev) {
+				this.poll();
+			}.bind(this) );
+			$('#load-mosaic-bttn').click( function(ev) {
+				this.loadMosaic();
 			}.bind(this) );
 			
-			// bind poll
+			// bind mouse move over mosaic
 			$('#mosaic').mousemove( function(ev) {
 				if ($('body').hasClass('shade')) return;
 				var offset = $('#mosaic').offset();
@@ -133,9 +134,9 @@ var party = party || {};
 				this.load('/dashboard/stat-short.php', null, function(data) {
 					if (!data) return;
 					$.extend(this.state, data);
-					$('#tweet-count span').rollNumbers(this.state.tweet_count, parseInt(this.options.short_stat_interval / 2, 10));
-					$('#last-page span').text(this.state.last_page);
-					$('#job-delay span').html('<em>' + this.state.delay.seconds + ' sec / ' + this.state.delay.tweets + ' tweets</em>');
+					$('#tweet-count .value span').rollNumbers(this.state.tweet_count, parseInt(this.options.short_stat_interval / 2, 10));
+					$('#job-delay-seconds .value span').html(this.state.delay.seconds);
+					$('#job-delay-tweets .value span').html(this.state.delay.tweets);
 				}.bind(this) );
 			}.bind(this), this.options.short_stat_interval);
 		},
@@ -143,7 +144,7 @@ var party = party || {};
 		
 		// ---- state
 
-		loadPage : function(page)
+		loadMosaic : function()
 		{
 			this.reset();
 			
@@ -151,17 +152,17 @@ var party = party || {};
 			this.tiles = {};
 			$('#mosaic li').remove();
 			
-			$('<li id="loading">loading page...</li>').appendTo('#mosaic');
+			$('<li id="loading">loading mosaic...</li>').appendTo('#mosaic');
 
 			// load
-			var url = this.freshUrl(this.options.store_url+ '/pages/page_' + page + '.json');
+			var url = this.freshUrl(this.options.store_url + '/mosaic.json');
 			this.load(url, {}, function(data) {
 				$('#loading').remove();
 				var count = this.addTiles(data.tiles);
 				if (!count) {
-					$('<li id="loading" class="empty">empty page...</li>').appendTo('#mosaic');
+					$('<li id="loading" class="empty">no mosaic...</li>').appendTo('#mosaic');
 				}
-			}.bind(this), 'page', function() { 
+			}.bind(this), 'mosaic', function() { 
 				$('#loading').remove();
 				$('<li id="loading">not found</li>').appendTo('#mosaic');
 			} ) ;
@@ -180,7 +181,7 @@ var party = party || {};
 			var params = {
 				'last_id' : this.state.last_id
 			}
-
+			
 			Dashboard.load('/poll.php', params, function(data) {
 				$('#loading').remove();
 				var count = this.addTiles(data.tiles);
@@ -188,7 +189,7 @@ var party = party || {};
 					this.state.last_id = data.last_id;
 				}
 				else {
-					$('<li id="loading" class="empty">empty poll...</li>').appendTo('#mosaic');
+					$('<li id="loading" class="empty">no new results...</li>').appendTo('#mosaic');
 				}
 			}.bind(this) );
 		},
@@ -208,12 +209,20 @@ var party = party || {};
 
 		addTiles : function(tiles)
 		{
-			var imageData, i = 0, count = 0;
-			for (i in tiles) {
-				count++;
-				this.addTile(tiles[i])
+			if ('undefined' == typeof tiles.length) {
+				var i = 0, count = 0;
+				for (i in tiles) {
+					count++;
+					this.addTile(tiles[i])
+				}
+				return count;
 			}
-			return count;
+			else {
+				for (var i = 0; i < tiles.length; i++) {
+					this.addTile(tiles[i]);
+				}
+				return tiles.length;
+			}
 		},
 
 		addTile : function(tile)
@@ -918,4 +927,5 @@ var party = party || {};
 		}
 	});
 })(jQuery);
+
 
