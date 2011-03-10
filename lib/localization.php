@@ -63,15 +63,18 @@ $dir_contents = array_splice($dir_contents, 2, count($dir_contents));
 $dir_contents = array_change_key($dir_contents);
 // read total list of languages
 $languages = $locale_details->languages;
+// 
+if (!is_array($dir_contents)) $dir_contents = array();
 // intersect total languages and available languages
 $available_locales = array_intersect_key($languages, $dir_contents);
 
-// define where the translation files are stored in disk
-bindtextdomain("all", $locale_dir);
+if (!$available_locales) $available_locales = array();
+
 // set the locale
 $locale = $_GET['locale'] . '.utf8';
 putenv("LC_ALL=$locale");
 setlocale(LC_ALL, $locale);
 textdomain("messages");
+bindtextdomain("messages", $locale_dir);
 bind_textdomain_codeset("messages", 'UTF-8');
 ?>

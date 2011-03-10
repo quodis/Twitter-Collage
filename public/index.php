@@ -16,7 +16,7 @@ include('../lib/localization.php');
 /**
  * escape from global scope
  */
-function main($language)
+function main($language, $available_locales)
 {
 	DEFINE('NO_DB', TRUE);
 	DEFINE('CLIENT', 'html');
