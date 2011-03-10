@@ -553,7 +553,7 @@ var party = party || {};
 		party.showBubbleImageTimer = setTimeout(function(){
 		    b.avatar_img.attr('src', tile.m);
 		    b.avatar_img.load(function(){
-		        $(this).show();
+		        $(this).fadeIn('fast');
 		    })
 		    party.showBubbleImageTimer = null;
 		    tile = null;
