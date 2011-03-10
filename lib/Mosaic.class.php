@@ -218,28 +218,7 @@ class Mosaic
 			}
 		}
 
-		$contents = '/**
- * Firefox 4 Twitter Party
- * by Mozilla, Quodis © 2011
- * http://www.mozilla.com
- * http://www.quodis.com
- *
- * Licensed under a Creative Commons Attribution Share-Alike License v3.0 http://creativecommons.org/licenses/by-sa/3.0/
- */
-
-/**
- * data file generated: ' . date('Y-m-d H:i:s') . '
- */
-
-/**
- * party.mosaic.grid = array of rows
- *   row - { 23: cell, ... } // index is column index
- *   cell - { c: [r,g,b], x: 34, y: 23, i: 1} // i = position
- * party.mosaic.index = array of pos
- *   pos - {x: 34, y: 23}
- */
-party.mosaic = ' . json_encode($js) . ';
-';
+		$contents = 'party.mosaic = ' . json_encode($js) . ';';
 
 		file_put_contents($fileName, $contents);
 		chmod($fileName, octdec(self::$_config['Store']['filePermissions']));
