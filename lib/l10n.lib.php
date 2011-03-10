@@ -257,8 +257,8 @@ class localeDetails {
 	 * @param string locale to lookup
 	 * @return string native name for locale
 	 */
-	public static function getNativeNameForLocale($locale) {
-
+	public static function getNativeNameForLocale($locale)
+	{
 		if (array_key_exists($locale, self::$_languages)) {
 			return self::$_languages[$locale]['native'];
 		}
@@ -267,28 +267,18 @@ class localeDetails {
 
 class Locale
 {
-	public static $_languageMap = array(
-		'en-US' => array(
-			'language' => 'en-US',
-			'locale' => 'en-US.utf8',
-		),
-		'pt-PT' => array(
-			'language' => 'pt-PT',
-			'locale' => 'pt_PT.utf8',
-		),
-		'af' => array(
-			'language' => 'af',
-			'locale' => 'pt_PT.utf8',
-		),
-	);
+	public static $_languageMap = null;
 
 
 	private static function _loadlanguageMap()
 	{
+		global $config;
+
 		if (!isset(self::$_languageMap))
 		{
-			$configDir = dirname(__FILE__) . '/config';
-			self::$_languageMap = Spyc::YAMLLoad($configDir . '/locale.yaml');
+			require_once LIB_PATH . '/spyc-0.4.5/spyc.php';
+			$configFile = $config['App']['path'] . '/config/locale.yaml';
+			self::$_languageMap = Spyc::YAMLLoad($configFile);
 		}
 	}
 
