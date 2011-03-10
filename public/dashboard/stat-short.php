@@ -14,10 +14,13 @@ function main()
 {
 	DEFINE('CLIENT', 'ajax');
 	DEFINE('CONTEXT', __FILE__);
+	DEFINE('VALIDATETOKEN', 'ajax');
 	include '../../bootstrap.php';
 
 	Debug::setLogMsgFile($config['App']['pathLog'] .'/dashboard.msg.log');
 	Debug::setLogErrorFile($config['App']['pathLog'] .'/dashboard.error.log');
+
+	Debug::logMsg($_REQUEST);
 
 	$lastTweet = Mosaic::getLastTweet();
 	$lastProcessedTweet = Mosaic::getLastTweetWithImage();

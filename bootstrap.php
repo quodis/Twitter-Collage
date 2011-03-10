@@ -21,7 +21,6 @@ DEFINE ('IMAGE',  'image');
 DEFINE ('HTML',   'html');
 DEFINE ('SCRIPT', 'script');
 
-// TODO AUTOLOAD
 require LIB_PATH . '/tiny.lib.php';
 require LIB_PATH . '/twitterparty.model.php';
 require LIB_PATH . '/Curl.class.php';
@@ -33,12 +32,17 @@ Debug::setCtx(basename(CONTEXT));
 Debug::setLogMsgFile('/var/log/twitterparty/msg.log');
 Debug::setLogErrorFile('/var/log/twitterparty/error.log');
 
-
-// TODO SESSION
 session_start();
 
 // DEBUG
 set_error_handler(array('Debug', 'handleError'));
+
+//
+if (defined('VALIDATETOKEN')) {
+	if ($_REQUEST['token'] !== $_SESSION['token']) {
+		Dispatch::now(9, '');
+	}
+}
 
 
 /**

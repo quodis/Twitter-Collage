@@ -468,6 +468,9 @@ var party = party || {};
 				this.load_requests[id] = request_key;
 			}
 			
+			if (!params) params = {};
+			params.token = this.state.token;
+			
 			return $.ajax( {
 				'type': 'GET',
 				'url': url,
@@ -482,6 +485,9 @@ var party = party || {};
 					}
 					else if ("undefined" == typeof data.payload) {
 						callback(data);
+					}
+					else if (data.code == 9) {
+						document.location.href = '/dashboard';
 					}
 					else if ("function" == typeof callback) {
 						callback(data.payload);
@@ -504,6 +510,9 @@ var party = party || {};
 		
 		post : function(url, params, callback, noFeedback) 
 		{
+			if (!params) params = {};
+			params.token = this.state.token;
+			
 			$.ajax( {
 				'type': 'POST',
 				'url': url,
@@ -519,6 +528,9 @@ var party = party || {};
 					}
 					else if (data.code != 1) {
 						this.postError('ERROR_CODE:' + data.code, data);
+					}
+					else if (data.code == 9) {
+						document.location.href = '/dashboard';
 					}
 					else if ("function" == typeof callback) {
 						var payload = ("undefined" != typeof data.payload) ? data.payload : {}; 
