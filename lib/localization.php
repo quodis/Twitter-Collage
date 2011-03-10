@@ -70,12 +70,11 @@ $available_locales = array_intersect_key($languages, $dir_contents);
 
 if (!$available_locales) $available_locales = array();
 
-// define where the translation files are stored in disk
-bindtextdomain("all", $locale_dir);
 // set the locale
 $locale = $_GET['locale'] . '.utf8';
 putenv("LC_ALL=$locale");
 setlocale(LC_ALL, $locale);
-textdomain("all");
-bind_textdomain_codeset("all", 'UTF-8');
+textdomain("messages");
+bindtextdomain("messages", $locale_dir);
+bind_textdomain_codeset("messages", 'UTF-8');
 ?>
