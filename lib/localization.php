@@ -72,6 +72,6 @@ bindtextdomain("all", $locale_dir);
 $locale = $_GET['locale'] . '.utf8';
 putenv("LC_ALL=$locale");
 setlocale(LC_ALL, $locale);
-textdomain("all");
-bind_textdomain_codeset("all", 'UTF-8');
+textdomain("messages");
+bind_textdomain_codeset("messages", 'UTF-8');
 ?>
