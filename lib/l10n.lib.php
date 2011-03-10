@@ -348,9 +348,9 @@ class Locale
 
 		foreach (self::$_languageMap as $key => $value) {
 			// check for active option
-			$active_option = ($key == $current_locale) ? ' selected' : '';
+			$active_option = ($key == $current_locale) ? ' selected="selected"' : '';
 			// append
-			$output .= '<option' . $active_option . ' value="' . $key . '">' . localeDetails::getNativeNameForLocale($value['language']) . '</option>' . "\n";
+			$output .= '<option' . $active_option . ' value="' . $key . '">' . localeDetails::getNativeNameForLocale($value['language']) . '</option>';
 		}
 		return $output;
 	}
