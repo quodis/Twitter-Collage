@@ -8,15 +8,9 @@
  */
 
 /**
- * load localization lib - provides: $locale, $request_uri, $accept_language
- *
- */
-include('../lib/localization.php');
-
-/**
  * escape from global scope
  */
-function main($language, $available_locales)
+function main()
 {
 	DEFINE('NO_DB', TRUE);
 	DEFINE('CLIENT', 'html');
@@ -26,11 +20,19 @@ function main($language, $available_locales)
 	Debug::setLogMsgFile($config['App']['pathLog'] .'/www.msg.log');
 	Debug::setLogErrorFile($config['App']['pathLog'] .'/www.error.log');
 
-	$cacheKey = 'TWITTER-PARTY::index::lang=' . $language;
+	// requested locale
+	$locale = isset($_GET['locale']) ? $_GET['locale'] : null;
+	if (!$locale)
+	{
+		$locale = Locale::choose();
+		Locale::redirect($locale);
+	}
+
+	// cache
+	$cacheKey = 'TWITTER-PARTY::index::locale=' . $locale;
 	$cacheTTL = $config['Cache']['TTL']['index'];
 
 	ob_start();
-
 	header("Expires: " . gmdate("D, d M Y H:i:s", time() + $cacheTTL) . " GMT");
 	header("Cache-Control: max-age=$cacheTTL, s-maxage=$cacheTTL, public, must-revalidate");
 	ini_set('zlib.output_compression', 1);
@@ -40,6 +42,12 @@ function main($language, $available_locales)
 	{
 		Dispatch::now(1, $output);
 	}
+
+	// not in cache, we must validate locale
+	$locale = Locale::setUp($locale);
+
+	// reset cache key to actual locale used
+	$cacheKey = 'TWITTER-PARTY::index::locale=' . $locale;
 
 	initDb($config);
 
@@ -51,8 +59,9 @@ function main($language, $available_locales)
 	$uiOptions['state']['last_page'] = Mosaic::getLastCompletePage();
 
 ?>
+<?=Locale::langOptions($locale); ?>
 <!DOCTYPE html>
-<html lang="<?= $language ?>">
+<html lang="<?= $locale ?>">
 
 	<head>
 
@@ -223,7 +232,7 @@ function main($language, $available_locales)
 						<label for="flang"><?= _('Other Languages') ?></label>
 
 						<select id="flang" name="flang">
-							<?= populate_language_select($available_locales); ?>
+							<?=Locale::langOptions($locale); ?>
 						</select>
 
 					</form>
@@ -261,8 +270,7 @@ function main($language, $available_locales)
 
 try
 {
-	$locale = $_GET['locale'];
-	main($locale, $available_locales);
+	main();
 }
 catch(Exception $e) {
 	Debug::logError($e, 'EXCEPTION ' . $e->getMessage());

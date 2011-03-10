@@ -22,6 +22,7 @@ DEFINE ('HTML',   'html');
 DEFINE ('SCRIPT', 'script');
 
 require LIB_PATH . '/tiny.lib.php';
+require LIB_PATH . '/l10n.lib.php';
 require LIB_PATH . '/twitterparty.model.php';
 require LIB_PATH . '/Curl.class.php';
 require LIB_PATH . '/Image.class.php';
