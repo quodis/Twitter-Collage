@@ -22,18 +22,14 @@ function main()
 
 	$period = $config['Jobs']['mosaic-build']['period'];
 
-	$pageSize = Mosaic::getPageSize();
-
 	while (TRUE)
 	{
 		// start time
 		$start = time();
 
-		// update page
-		$pageNo = null;
-		$pageNo = Mosaic::updatePage();
+		$numTiles = Mosaic::updateMosaic();
 
-		Debug::logMsg('OK! ... updated page:' . $pageNo);
+		Debug::logMsg('OK! ... updated mosaic. number of tiles:' . $numTiles);
 
 		// sleep?
 		$elapsed = time() - $start;

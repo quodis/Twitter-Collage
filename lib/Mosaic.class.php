@@ -236,7 +236,7 @@ class Mosaic
 	 *
 	 * @return integer page number
 	 */
-	public static function updatePage()
+	public static function updateMosaic()
 	{
 		$pageNo = Tweet::getLastCompletePage(self::getPageSize());
 		$result = Tweet::getByPage($pageNo, 0, TRUE);
@@ -266,8 +266,15 @@ class Mosaic
 			$fileData['last_id'] = $lastId;
 		}
 
-		$fileName = self::getDataFileName();
+		// save jpeg file
+		$fileName = self::getImageFileName();
+		$image = Image::makeMosaic(self::$_config['Mosaic']['cols'], self::$_config['Mosaic']['rows'], self::$_pageConfig['index'], $tiles);
+		$image->writeImage($fileName);
+		chmod($fileName, octdec(self::$_config['Store']['filePermissions']));
+		chgrp($fileName, self::$_config['Store']['group']);
 
+		// save js file
+		$fileName = self::getDataFileName();
 		file_put_contents($fileName, json_encode($fileData));
 		chmod($fileName, octdec(self::$_config['Store']['filePermissions']));
 		chgrp($fileName, self::$_config['Store']['group']);
@@ -442,6 +449,23 @@ class Mosaic
 	public static function getDataFileName()
 	{
 		$filename = self::$_config['Store']['path'] . '/mosaic.json';
+
+		if (!is_dir(dirname($filename)))
+		{
+			rmkdir(dirname($filename), self::$_config['Store']['dirPermissions'], self::$_config['Store']['group']);
+		}
+
+		return $filename;
+	}
+
+
+
+	/**
+	 * @return string
+	 */
+	public static function getImageFileName()
+	{
+		$filename = self::$_config['Store']['path'] . '/mosaic.jpg';
 
 		if (!is_dir(dirname($filename)))
 		{
