@@ -70,11 +70,11 @@ final class Tweet
 		$sql.= " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		// insert tweet
-		$this->stmt = $mysqli->prepare($sql);
-		$this->stmt->bind_param('sisssssssss', $values['page'], $values['position'], $values['twitterId'], $values['userId'], $values['userName'], $values['imageUrl'], $values['createdDate'], $values['createdTs'], $values['contents'], $values['isoLanguage'], $values['payload']);
+		$stmt = $mysqli->prepare($sql);
+		$stmt->bind_param('sisssssssss', $values['page'], $values['position'], $values['twitterId'], $values['userId'], $values['userName'], $values['imageUrl'], $values['createdDate'], $values['createdTs'], $values['contents'], $values['isoLanguage'], $values['payload']);
 
-		$ok = $this->stmt->execute();
-		if (!$ok) throw new Exception('could not insert tweet: ' . $this->stmt->error);
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception('could not insert tweet: ' . $stmt->error);
 
 		$insertId = $mysqli->insert_id;
 
