@@ -59,7 +59,6 @@ function main()
 	$uiOptions['state']['last_page'] = Mosaic::getLastCompletePage();
 
 ?>
-<?=Locale::langOptions($locale); ?>
 <!DOCTYPE html>
 <html lang="<?= $locale ?>">
 

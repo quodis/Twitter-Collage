@@ -4,7 +4,7 @@
  *
  * @subpackage front-end
  * @version    v.0.1
- * @author		Luis Abreu, André Torgal, Pascal Chevrel, Wil Clouser, Mozilla
+ * @author     Luis Abreu, André Torgal, Pascal Chevrel, Wil Clouser, Mozilla
  **/
 
 
@@ -33,7 +33,6 @@ class ChooseLocale
 		$this->setDefaultLocale('en-US');
 		$this->setCompatibleLocale();
 		$this->mapLonglocales = true;
-
 	}
 
 	public function getAcceptLangArray()
