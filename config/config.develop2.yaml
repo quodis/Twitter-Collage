@@ -4,6 +4,8 @@ App:
     pathLog: /var/log/twitterparty2
     # url
     url: http://dev2.twitterparty.quodis.com
+    # enable logs 
+    logEnabled: 0
 Store:
     url: http://dev2.twitterparty.quodis.com/store
     path: /servers/develop/twitterparty2/public/store

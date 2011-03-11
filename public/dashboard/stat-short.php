@@ -20,8 +20,6 @@ function main()
 	Debug::setLogMsgFile($config['App']['pathLog'] .'/dashboard.msg.log');
 	Debug::setLogErrorFile($config['App']['pathLog'] .'/dashboard.error.log');
 
-	Debug::logMsg($_REQUEST);
-
 	$lastTweet = Mosaic::getLastTweet();
 	$lastProcessedTweet = Mosaic::getLastTweetWithImage();
 	$elapsed = Tweet::getAverageDelay(10);

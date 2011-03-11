@@ -199,7 +199,7 @@ function main()
 				<ul>
 					<li id="footer-twitter"><a href="http://twitter.com/firefox" rel="external"><?= _('Twitter') ?></a></li>
 					<li id="footer-facebook"><a href="http://Facebook.com/Firefox" rel="external"><?= _('Facebook') ?></a></li>
-					<li id="footer-connect"><a href="/<?=$locale?>/firefox/connect/" rel="external"><?= /* L10n: Max of 20 characters */ _('More Ways to Connect') ?></a></li>
+					<li id="footer-connect"><a href="http://www.mozilla.com/en-US/firefox/connect/" rel="external"><?= /* L10n: Max of 20 characters */ _('More Ways to Connect') ?></a></li>
 				</ul>
 
 				<p id="sub-footer-newsletter">

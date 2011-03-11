@@ -1,4 +1,16 @@
 
+== 2011-03-11 ==
+
+Updated config file with logEnabled setting
+
+App:
+
+    ...
+    
+    # enable logs 
+    logEnabled: 0
+
+
 == 2011-03-10 ==
 
 Added config/locale.yaml, language mapping requested by Staś@mozilla
