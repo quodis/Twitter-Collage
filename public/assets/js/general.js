@@ -690,7 +690,7 @@ var party = party || {};
 			last_tile = visible_tiles[state.last_tile_drawn_pos];
 			if (last_tile.base64_only) {
 				$('#' + state.last_tile_drawn_pos).css({
-					'background-image': 'url(data:image/gif;base64,' + .d + ')',
+					'background-image': 'url(data:image/gif;base64,' + last_tile.d + ')',
 					'background-position': '0px 0px'
 				});
 			} else {
