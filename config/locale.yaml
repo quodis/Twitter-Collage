@@ -1,9 +1,15 @@
+ar:
+  language: ar
+  locale: ar_DZ.utf8
+ca:
+  language: ca
+  locale: ca_ES.utf8
+cs:
+  language: cs
+  locale: cs_CZ.utf8
 en-US:
   language: en-US
   locale: en-US.utf8
 pt-PT:
   language: pt-PT
   locale: pt_PT.utf8
-af:
-  language: af
-  locale: af_AF.utf8
