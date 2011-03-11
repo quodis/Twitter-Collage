@@ -31,7 +31,7 @@ Config:
     group: www-data
 Twitter:
     urlSearch: "http://search.twitter.com/search.json"
-    terms: "firefox"
+    terms: "#fx4 OR #ff4 OR #teamfirefox"
     rpp: 100
     pageLimit: 30
     timeout:
