@@ -1,4 +1,10 @@
 
+== 2011-03-10 ==
+
+Added config/locale.yaml, language mapping requested by Staś@mozilla
+Mozilla's localization team wants to have some degree of control over this file. 
+
+
 == 2011-03-09 ==
 
 Updated config files with some Cache TTLs
