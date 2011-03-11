@@ -38,13 +38,6 @@ session_start();
 // DEBUG
 set_error_handler(array('Debug', 'handleError'));
 
-//
-if (defined('VALIDATETOKEN')) {
-	if ($_REQUEST['token'] !== $_SESSION['token']) {
-		Dispatch::now(9, '');
-	}
-}
-
 
 /**
  * boot db
@@ -67,6 +60,15 @@ function initDb(array & $config)
 	else throw new Exception('Fail connecting to db');
 }
 
+// VALIDATE TOKENS
+if (defined('VALIDATETOKEN')) {
+	// generate a session token
+	if (!isset($_SESSION['token']) || $_REQUEST['token'] !== $_SESSION['token']) {
+		Dispatch::now(9, '');
+	}
+}
+
+
 // CONFIG
 if (!defined('NO_CONFIG'))
 {
@@ -83,6 +85,10 @@ if (!defined('NO_CONFIG'))
 	Cache::connect();
 	if (!defined('NO_DB')) initDb($config);
 
+	// GENERATE TOKENS
+	if (defined('GENERATETOKEN')) {
+		$_SESSION['token'] = md5(serialize($config) . time());
+	}
 }
 
 ?>

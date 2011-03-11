@@ -18,6 +18,7 @@ function main()
 	header("Pragma: no-cache");
 	header("Cache-Control: max-age=1, s-maxage=1, no-cache, must-revalidate");
 
+	DEFINE('GENERATETOKEN', 1);
 	DEFINE('CLIENT', 'html');
 	DEFINE('CONTEXT', __FILE__);
 	include '../../bootstrap.php';
@@ -28,9 +29,6 @@ function main()
 
 	// not in use
 	$isOldBrowser = isset($_GET['oldBrowser']);
-
-	// generate a session token
-	$_SESSION['token'] = md5(serialize($config) . time());
 
 	// body classes
 	$classes = array();
