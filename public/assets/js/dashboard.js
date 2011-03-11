@@ -38,7 +38,9 @@ var party = party || {};
 			'guest_count' : 0,
 			'last_id' : 0,
 			'tweet_count' : 0,
-			'short_stat_interval' : null
+			'short_stat_interval' : null,
+			'highlighted_position' : null,
+			'highlight_img_timeout' : null
 		},
 		
 		
@@ -243,6 +245,9 @@ var party = party || {};
 		
 		highlightTilePos : function(position)
 		{
+			if (position == this.state.highlighted_position) return;
+			this.state.highlighted_position = position;
+				
 			if ('undefined' == typeof this.tiles[position]) return;
 
 			var tile = this.tiles[position];
@@ -254,6 +259,11 @@ var party = party || {};
 			var deleteBtn ='<button class="delete">delete tweet</button>';
 			var userBtn = '<span class="user-link">all tweets by ' + tile.u + '</span>';
 			$(this.getTitleHtml('Tweet') + '<article class="tweet clearfix">' + this.getTweetHtml(tile) + userBtn + deleteBtn + '</article>').appendTo('#widgets #highlight');
+			// todo set timeout
+			window.clearTimeout(this.state.highlight_img_timeout);
+			this.state.highlight_img_timeout = window.setTimeout( function() {
+				$('#highlight article img').attr('src', tile.m);
+			}, 500 );
 			$('#highlight .delete').click( function() {
 				this.deleteTweet(tile.i, function() {
 					this.reset();
@@ -268,11 +278,11 @@ var party = party || {};
 			return '<h3><span class="title">' + text + '</span><span class="close">close</span></h3>';
 		},
 		
-		getTweetHtml : function(tweet)
+		getTweetHtml : function(tweet, showImage)
 		{
 			var date = new Date(tweet.c * 1000);
-			var contents = '<img src="' + tweet.m + '">\
-				<p class="contents">' + tweet.n + '</p>\
+			var contents = (showImage) ? '<img src="' + tweet.m + '">' : '<img>';
+			contents += '<p class="contents">' + tweet.n + '</p>\
 				<p class="user-name">' + tweet.u + '</p>\
 				<p class="created-date">' + date + '</p>';
 			return contents;
@@ -382,7 +392,7 @@ var party = party || {};
 				}
 				
 				for (i = 0; i < data.tweets.length; i++) {
-					$('<article class="tweet clearfix">' + this.getTweetHtml(data.tweets[i]) + '<button class="delete" data-id="' + data.tweets[i].i + '">delete tweet</button></article>').appendTo('#widgets #tweet-list');
+					$('<article class="tweet clearfix">' + this.getTweetHtml(data.tweets[i], true) + '<button class="delete" data-id="' + data.tweets[i].i + '">delete tweet</button></article>').appendTo('#widgets #tweet-list');
 				}
 				$('.tweet .delete').click( function(ev) {
 					ev.stopPropagation();
@@ -419,7 +429,7 @@ var party = party || {};
 				for (i = 0; i < data.tweets.length; i++) {
 					var deleteBtn ='<button class="delete">delete tweet</button>';
 					var userBtn = '<span class="user-link">all tweets by ' + data.tweets[i].u + '</span>';
-					$('<article class="tweet clearfix" data-id="' + data.tweets[i].i + '">' + this.getTweetHtml(data.tweets[i]) + userBtn + deleteBtn + '</article>').appendTo('#widgets #tweet-list');
+					$('<article class="tweet clearfix" data-id="' + data.tweets[i].i + '">' + this.getTweetHtml(data.tweets[i], true) + userBtn + deleteBtn + '</article>').appendTo('#widgets #tweet-list');
 				}
 				// user-name click
 				$('#tweet-list .user-link').click( function(ev) {
