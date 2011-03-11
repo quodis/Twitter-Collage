@@ -105,7 +105,6 @@ var party = party || {};
 		}
 		
 		element = document.createElement('div');
-		element.className = 'title';
 		element.style.backgroundImage = 'url(http://dev2.twitterparty.quodis.com/store/mosaic.jpg)';
 		element.style.backgroundPosition = '-' + (index[0]*12) + 'px -' + (index[1]*12) + 'px';
 		element.style.left = (index[0]*12) + 'px';

@@ -13,7 +13,7 @@ http://www.opensource.org/licenses/mit-license.php
 
 /* 1.General */
 
-#mosaic > .tile {
+#mosaic > div {
 	position: absolute;
 	width: 12px;
 	height: 12px;
