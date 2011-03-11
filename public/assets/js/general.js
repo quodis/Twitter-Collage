@@ -89,7 +89,8 @@ var party = party || {};
 	
 	function tileHtml(tile) {
 		var position,
-			index;
+			index,
+			element;
 			
 		// Make sure this is an existing data entry
 		if (!tile) {
@@ -98,14 +99,22 @@ var party = party || {};
 		
 		// Cache the tile's position
 		position = tile.p;
-		index = [12,12];
+		index = party.mosaic.index[position];
 		if (!index) {
 		  return '';
 		}
 		
+		element = document.createElement('div');
+		element.className = 'title';
+		element.style.backgroundImage = 'url(http://dev2.twitterparty.quodis.com/store/mosaic.jpg)';
+		element.style.backgroundPosition = '-' + (index[0]*12) + 'px -' + (index[1]*12) + 'px';
+		element.style.left = (index[0]*12) + 'px';
+		element.style.right = (index[1]*12) + 'px';
+		
+		return element;
 		// Add it to the HTML to draw
 		//return '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + tile.d + '); left: ' + (index[0]*12) + 'px; top: ' + (index[1]*12) + 'px;"></div>';
-		return '<div class="tile" id="' + position + '" style="background-image:url(http://dev2.twitterparty.quodis.com/store/mosaic.jpg); background-position:-' + (index[0]*12) + 'px -' + (index[1]*12) + 'px; left: ' + (index[0]*12) + 'px; top: ' + (index[1]*12) + 'px;"></div>';
+		//return '<div class="tile" id="' + position + '" style="; background-position: left: ' + ; top: ' +  + 'px;"></div>';
 		
 	}
 	
@@ -131,7 +140,7 @@ var party = party || {};
 	// Construct each frame for the initial draw
 	function initialDrawFrame() {
 		
-		var tiles_to_draw = "",
+		var tiles_to_draw = [],
 			i = 0,
 			j = 0,
 			p,
@@ -151,7 +160,7 @@ var party = party || {};
 		// Draw tiles_per_frame tiles and draw them
 		for (i = tile_counter; i < j; i += 1) {
 			p = visible_tiles_random[i];
-			tiles_to_draw = tiles_to_draw + tileHtml(visible_tiles[p]);
+			tiles_to_draw.push(tileHtml(visible_tiles[p]));
 		}
 		tile_counter = i;
 		
@@ -161,8 +170,10 @@ var party = party || {};
 			// Draw the tiles and proceed
 			party.canvas.append(tiles_to_draw);
 			// Update counter
-			counter.current += inc;
-			setCounter();
+			if (counter.current < state.total_tiles) {
+				counter.current += inc;
+				setCounter();
+			}
 			
 		} else {
 			
