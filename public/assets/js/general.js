@@ -98,7 +98,7 @@ var party = party || {};
 		
 		// Cache the tile's position
 		position = tile.p;
-		index = party.mosaic.index[position];
+		index = [12,12];
 		if (!index) {
 		  return '';
 		}
@@ -161,10 +161,8 @@ var party = party || {};
 			// Draw the tiles and proceed
 			party.canvas.append(tiles_to_draw);
 			// Update counter
-			if (counter.current < state.total_tiles) {
-				counter.current += inc;
-				setCounter();
-			}
+			counter.current += inc;
+			setCounter();
 			
 		} else {
 			
