@@ -46,7 +46,7 @@ Jobs:
     mosaic-build:
         period: 5
 Cache:
-    enabled: 1
+    enabled: 0
     TTL:
         mosaicConfig: 2000 
         tweetIds: 200
