@@ -820,8 +820,7 @@ var party = party || {};
 // Preload important stuff
 (function(){
 	var imgsToPreload = [
-	    'assets/images/layout/bubbles.png',
-		party.store_url + '/mosaic.jpg'
+	    'assets/images/layout/bubbles.png'
 	];
 	for (var i=imgsToPreload.length; i--; ) {
 		    var img = new Image();
@@ -833,7 +832,8 @@ var party = party || {};
 
 $(document).ready(function() {
 	var brand_center = 0,
-		brand_total = 0;
+		brand_total = 0,
+		mosaic_image;
 	
 	// Language chooser
 	$('#flang').change(function(){
@@ -856,7 +856,9 @@ $(document).ready(function() {
 	$('#brand em').before('<span style="left:0; width:' + (brand_total-brand_center)/2 + 'px" />').fadeIn('slow');
 	$('#brand em').after('<span style="right:0; width:' + (brand_total-brand_center)/2 + 'px" />').fadeIn('slow');
 	
-	// Let's get it started!
-	party.init();
+	// Let's get it started as soon as the mosaic is loaded
+	mosaic_image = new Image();
+	mosaic_image.load(party.init);
+	mosaic_image.src = party.store_url + '/mosaic.jpg';
 	
 });
