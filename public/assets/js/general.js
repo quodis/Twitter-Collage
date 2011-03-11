@@ -698,6 +698,7 @@ var party = party || {};
 					'background-image': 'url(http://dev2.twitterparty.quodis.com/store/mosaic.jpg)',
 					'background-position': '-' + $(this).css('left') + ' -' + $(this).css('top')
 				});
+				console.log('background-position': '-' + $(this).css('left') + ' -' + $(this).css('top'));
 			}
 		}
 		
