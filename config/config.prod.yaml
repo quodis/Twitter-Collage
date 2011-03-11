@@ -13,6 +13,8 @@ App:
     pathLog: /var/log/twitterparty
     # url
     url: http://twitterparty.mozilla.org
+    # enable logs 
+    logEnabled: 0
 Store:
     url: http://twitterparty.mozilla.org/store
     path: /servers/prod/twitterparty/public/store
@@ -29,7 +31,7 @@ Config:
     group: www-data
 Twitter:
     urlSearch: "http://search.twitter.com/search.json"
-    terms: "firefox"
+    terms: "#fx4 OR #ff4 OR #teamfirefox"
     rpp: 100
     pageLimit: 30
     timeout:

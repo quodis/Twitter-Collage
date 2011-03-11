@@ -4,6 +4,8 @@ App:
     pathLog: /var/log/twitterparty
     # url
     url: http://twitterparty.quodis.worker
+    # enable logs 
+    logEnabled: 1
 Store:
     url: http://twitterparty.quodis.worker/store
     path: /servers/sites/quodis/twitterparty/public/store
@@ -20,7 +22,7 @@ Config:
     group: www-data
 Twitter:
     urlSearch: "http://search.twitter.com/search.json"
-    terms: "benfica OR porto"
+    terms: "#fx4 OR #ff4 OR #teamfirefox"
     rpp: 100
     pageLimit: 15
     timeout:
@@ -67,7 +69,7 @@ UI:
     title: "Firefox 4 Twitter Party"
     keywords: "Mozilla,Firefox, Firefox 4, Collage, Twitter, Tweet"
     description: "Firefox 4 Twitter Party is a visualization of Firefox 4 activity on Twitter. It is an experiment with exclusively open web tools and technologies."
-    minified: 1
+    minified: 0
     js: 
         general: "/assets/js/general.js?v=1"
         config: "/assets/js/config.js?v=1"
