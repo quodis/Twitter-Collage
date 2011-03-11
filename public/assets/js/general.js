@@ -833,7 +833,7 @@ var party = party || {};
 $(document).ready(function() {
 	var brand_center = 0,
 		brand_total = 0,
-		mosaic_image;
+		$mosaic_image;
 	
 	// Language chooser
 	$('#flang').change(function(){
@@ -857,8 +857,7 @@ $(document).ready(function() {
 	$('#brand em').after('<span style="right:0; width:' + (brand_total-brand_center)/2 + 'px" />').fadeIn('slow');
 	
 	// Let's get it started as soon as the mosaic is loaded
-	mosaic_image = new Image();
-	mosaic_image.load(party.init);
-	mosaic_image.src = party.store_url + '/mosaic.jpg';
+	$mosaic_image = $('<img src="' + party.store_url + '/mosaic.jpg">');
+	$mosaic_image.load(party.init);
 	
 });
