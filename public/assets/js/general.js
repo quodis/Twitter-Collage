@@ -801,7 +801,20 @@ var party = party || {};
 		"performance": performance,
 		"performance_settings": performance_settings,
 		"state": state,
-		"new_tiles": new_tiles
+		"new_tiles": new_tiles,
+		"test_lookup": function (){
+			var tile,
+				start,
+				end,
+				executionTime;
+			start = new Date().getMilliseconds();
+			for (var i = 0, i < 1800, i += 1) {
+				tile = party.mosaic.index[i];
+			}
+			stop = new Date().getMilliseconds();
+			executionTime = stop - start;
+			console.log('test_lookup() executed in ' + executionTime + ' milliseconds');
+		}
 	});
 	
 }());
