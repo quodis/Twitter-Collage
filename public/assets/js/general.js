@@ -108,7 +108,7 @@ var party = party || {};
 		element.style.backgroundImage = 'url(http://dev2.twitterparty.quodis.com/store/mosaic.jpg)';
 		element.style.backgroundPosition = '-' + (index[0]*12) + 'px -' + (index[1]*12) + 'px';
 		element.style.left = (index[0]*12) + 'px';
-		element.style.right = (index[1]*12) + 'px';
+		element.style.top = (index[1]*12) + 'px';
 		
 		return element;
 		// Add it to the HTML to draw
@@ -161,7 +161,7 @@ var party = party || {};
 			p = visible_tiles_random[i];
 			tiles_to_draw = tileHtml(visible_tiles[p]);
 			party.canvas.append(tiles_to_draw);
-			console.log(tiles_to_draw);
+			//console.log(tiles_to_draw);
 		}
 		tile_counter = i;
 		
