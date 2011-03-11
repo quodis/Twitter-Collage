@@ -33,12 +33,14 @@ var party = party || {};
 
 		// state
 		state : {
+			'token' : null,
 			'party_on' : 'wild',
 			'guest_count' : 0,
 			'last_id' : 0,
 			'tweet_count' : 0,
-			'last_page' : 0,
-			'short_stat_interval' : null
+			'short_stat_interval' : null,
+			'highlighted_position' : null,
+			'highlight_img_timeout' : null
 		},
 		
 		
@@ -66,7 +68,7 @@ var party = party || {};
 			
 			this.buildInterface();
 			
-			this.loadPage(parseInt(this.state.last_page, 10) + 1);
+			this.loadMosaic();
 		},
 
 
@@ -80,7 +82,6 @@ var party = party || {};
 			// show last id
 			$('#guest-count span').rollNumbers(this.state.guest_count, 2000);
 			$('#tweet-count span').rollNumbers(this.state.tweet_count, 2000);
-			$('#last-page span').rollNumbers(this.state.last_page, 2000);
 			
 			// bind search user
 			$('#find-user').inputDefault().inputState( { 'onEnter' : function() {
@@ -96,13 +97,15 @@ var party = party || {};
 				}
 			}.bind(this) } );
 			
-			// bind go to page
-			$('#page-load-bttn').click( function(ev) {
-				ev.stopPropagation();
-				this.loadPage($('#page-no').val());
+			// bind load tiles buttons
+			$('#force-poll-bttn').click( function(ev) {
+				this.poll();
+			}.bind(this) );
+			$('#load-mosaic-bttn').click( function(ev) {
+				this.loadMosaic();
 			}.bind(this) );
 			
-			// bind poll
+			// bind mouse move over mosaic
 			$('#mosaic').mousemove( function(ev) {
 				if ($('body').hasClass('shade')) return;
 				var offset = $('#mosaic').offset();
@@ -133,9 +136,9 @@ var party = party || {};
 				this.load('/dashboard/stat-short.php', null, function(data) {
 					if (!data) return;
 					$.extend(this.state, data);
-					$('#tweet-count span').rollNumbers(this.state.tweet_count, parseInt(this.options.short_stat_interval / 2, 10));
-					$('#last-page span').text(this.state.last_page);
-					$('#job-delay span').html('<em>' + this.state.delay.seconds + ' sec / ' + this.state.delay.tweets + ' tweets</em>');
+					$('#tweet-count .value span').rollNumbers(this.state.tweet_count, parseInt(this.options.short_stat_interval / 2, 10));
+					$('#job-delay-seconds .value span').html(this.state.delay.seconds);
+					$('#job-delay-tweets .value span').html(this.state.delay.tweets);
 				}.bind(this) );
 			}.bind(this), this.options.short_stat_interval);
 		},
@@ -143,7 +146,7 @@ var party = party || {};
 		
 		// ---- state
 
-		loadPage : function(page)
+		loadMosaic : function()
 		{
 			this.reset();
 			
@@ -151,17 +154,17 @@ var party = party || {};
 			this.tiles = {};
 			$('#mosaic li').remove();
 			
-			$('<li id="loading">loading page...</li>').appendTo('#mosaic');
+			$('<li id="loading">loading mosaic...</li>').appendTo('#mosaic');
 
 			// load
-			var url = this.freshUrl(this.options.store_url+ '/pages/page_' + page + '.json');
+			var url = this.freshUrl(this.options.store_url + '/mosaic.json');
 			this.load(url, {}, function(data) {
 				$('#loading').remove();
 				var count = this.addTiles(data.tiles);
 				if (!count) {
-					$('<li id="loading" class="empty">empty page...</li>').appendTo('#mosaic');
+					$('<li id="loading" class="empty">no mosaic...</li>').appendTo('#mosaic');
 				}
-			}.bind(this), 'page', function() { 
+			}.bind(this), 'mosaic', function() { 
 				$('#loading').remove();
 				$('<li id="loading">not found</li>').appendTo('#mosaic');
 			} ) ;
@@ -180,7 +183,7 @@ var party = party || {};
 			var params = {
 				'last_id' : this.state.last_id
 			}
-
+			
 			Dashboard.load('/poll.php', params, function(data) {
 				$('#loading').remove();
 				var count = this.addTiles(data.tiles);
@@ -188,7 +191,7 @@ var party = party || {};
 					this.state.last_id = data.last_id;
 				}
 				else {
-					$('<li id="loading" class="empty">empty poll...</li>').appendTo('#mosaic');
+					$('<li id="loading" class="empty">no new results...</li>').appendTo('#mosaic');
 				}
 			}.bind(this) );
 		},
@@ -208,12 +211,20 @@ var party = party || {};
 
 		addTiles : function(tiles)
 		{
-			var imageData, i = 0, count = 0;
-			for (i in tiles) {
-				count++;
-				this.addTile(tiles[i])
+			if ('undefined' == typeof tiles.length) {
+				var i = 0, count = 0;
+				for (i in tiles) {
+					count++;
+					this.addTile(tiles[i])
+				}
+				return count;
 			}
-			return count;
+			else {
+				for (var i = 0; i < tiles.length; i++) {
+					this.addTile(tiles[i]);
+				}
+				return tiles.length;
+			}
 		},
 
 		addTile : function(tile)
@@ -234,6 +245,9 @@ var party = party || {};
 		
 		highlightTilePos : function(position)
 		{
+			if (position == this.state.highlighted_position) return;
+			this.state.highlighted_position = position;
+				
 			if ('undefined' == typeof this.tiles[position]) return;
 
 			var tile = this.tiles[position];
@@ -245,6 +259,11 @@ var party = party || {};
 			var deleteBtn ='<button class="delete">delete tweet</button>';
 			var userBtn = '<span class="user-link">all tweets by ' + tile.u + '</span>';
 			$(this.getTitleHtml('Tweet') + '<article class="tweet clearfix">' + this.getTweetHtml(tile) + userBtn + deleteBtn + '</article>').appendTo('#widgets #highlight');
+			// todo set timeout
+			window.clearTimeout(this.state.highlight_img_timeout);
+			this.state.highlight_img_timeout = window.setTimeout( function() {
+				$('#highlight article img').attr('src', tile.m);
+			}, 500 );
 			$('#highlight .delete').click( function() {
 				this.deleteTweet(tile.i, function() {
 					this.reset();
@@ -259,11 +278,11 @@ var party = party || {};
 			return '<h3><span class="title">' + text + '</span><span class="close">close</span></h3>';
 		},
 		
-		getTweetHtml : function(tweet)
+		getTweetHtml : function(tweet, showImage)
 		{
 			var date = new Date(tweet.c * 1000);
-			var contents = '<img src="' + tweet.m + '">\
-				<p class="contents">' + tweet.n + '</p>\
+			var contents = (showImage) ? '<img src="' + tweet.m + '">' : '<img>';
+			contents += '<p class="contents">' + tweet.n + '</p>\
 				<p class="user-name">' + tweet.u + '</p>\
 				<p class="created-date">' + date + '</p>';
 			return contents;
@@ -373,7 +392,7 @@ var party = party || {};
 				}
 				
 				for (i = 0; i < data.tweets.length; i++) {
-					$('<article class="tweet clearfix">' + this.getTweetHtml(data.tweets[i]) + '<button class="delete" data-id="' + data.tweets[i].i + '">delete tweet</button></article>').appendTo('#widgets #tweet-list');
+					$('<article class="tweet clearfix">' + this.getTweetHtml(data.tweets[i], true) + '<button class="delete" data-id="' + data.tweets[i].i + '">delete tweet</button></article>').appendTo('#widgets #tweet-list');
 				}
 				$('.tweet .delete').click( function(ev) {
 					ev.stopPropagation();
@@ -410,7 +429,7 @@ var party = party || {};
 				for (i = 0; i < data.tweets.length; i++) {
 					var deleteBtn ='<button class="delete">delete tweet</button>';
 					var userBtn = '<span class="user-link">all tweets by ' + data.tweets[i].u + '</span>';
-					$('<article class="tweet clearfix" data-id="' + data.tweets[i].i + '">' + this.getTweetHtml(data.tweets[i]) + userBtn + deleteBtn + '</article>').appendTo('#widgets #tweet-list');
+					$('<article class="tweet clearfix" data-id="' + data.tweets[i].i + '">' + this.getTweetHtml(data.tweets[i], true) + userBtn + deleteBtn + '</article>').appendTo('#widgets #tweet-list');
 				}
 				// user-name click
 				$('#tweet-list .user-link').click( function(ev) {
@@ -459,6 +478,9 @@ var party = party || {};
 				this.load_requests[id] = request_key;
 			}
 			
+			if (!params) params = {};
+			params.token = this.state.token;
+			
 			return $.ajax( {
 				'type': 'GET',
 				'url': url,
@@ -473,6 +495,9 @@ var party = party || {};
 					}
 					else if ("undefined" == typeof data.payload) {
 						callback(data);
+					}
+					else if (data.code == 9) {
+						document.location.href = '/dashboard';
 					}
 					else if ("function" == typeof callback) {
 						callback(data.payload);
@@ -495,6 +520,9 @@ var party = party || {};
 		
 		post : function(url, params, callback, noFeedback) 
 		{
+			if (!params) params = {};
+			params.token = this.state.token;
+			
 			$.ajax( {
 				'type': 'POST',
 				'url': url,
@@ -510,6 +538,9 @@ var party = party || {};
 					}
 					else if (data.code != 1) {
 						this.postError('ERROR_CODE:' + data.code, data);
+					}
+					else if (data.code == 9) {
+						document.location.href = '/dashboard';
 					}
 					else if ("function" == typeof callback) {
 						var payload = ("undefined" != typeof data.payload) ? data.payload : {}; 
@@ -918,4 +949,5 @@ var party = party || {};
 		}
 	});
 })(jQuery);
+
 

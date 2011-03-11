@@ -19,7 +19,7 @@ function main()
 	DEFINE('NO_SESSION', 'TRUE');
 	include dirname(__FILE__) . '/../bootstrap.php';
 
-	require LIB_PATH . '/spyc-0.4.5/spyc.php';
+	require_once LIB_PATH . '/spyc-0.4.5/spyc.php';
 
 	$configDir = realpath(dirname(__FILE__) . '/../config');
 

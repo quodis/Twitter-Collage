@@ -198,6 +198,43 @@ class Image
 		return $contents;
 	}
 
+	/**
+	 * @param integr $cols
+	 * @param integer $rows
+	 * @param array $tiles
+	 * @param array $config
+	 *
+	 * @return Imagick
+	 */
+	public static function makeMosaic($cols, $rows, array & $config, array & $tiles)
+	{
+		$tileSize = self::$_config['Mosaic']['tileSize'];
+
+		$image = new Imagick();
+		$image->newImage($tileSize * $cols, $tileSize * $rows, new ImagickPixel('#FFFFFF'));
+		$image->setImageFormat('jpg');
+		$image->setImageCompression(50);
+
+		$count = count($tiles);
+		for ($i = 0; $i < $count; $i++)
+		{
+			$processedFileName = self::fileName('processed', md5($tiles[$i]['i']), 'gif');
+			$processed = new Imagick($processedFileName);
+
+			$position = $tiles[$i]['p'];
+
+			$offsetX = $config[$position]['x'] * $tileSize;
+			$offsetY = $config[$position]['y'] * $tileSize;
+
+			dd($i . '/' . $count . ' [' . $config[$position]['x'] . ',' . $config[$position]['y'] . '] > [' . $offsetX . ',' . $offsetY . '] < ' . $processedFileName);
+
+			$image->compositeImage($processed, $processed->getImageCompose(), $offsetX, $offsetY);
+			continue;
+		}
+
+		return $image;
+	}
+
 
 	// --- file path/url
 
