@@ -38,7 +38,7 @@ function main()
 	ini_set('zlib.output_compression', 1);
 
 	// check cache
-	if ($output = Cache::get($cacheKey))
+	if (FALSE || $output = Cache::get($cacheKey))
 	{
 		Dispatch::now(1, $output);
 	}
@@ -161,7 +161,7 @@ function main()
 						<li><?= /* L10n: Funny loading message */ _('Setting up Firefox deco') ?></li>
 					</ul>
 
-					<img id="tile-hover" />
+					<img  src="data:image/gif;base64,R0lGODlhAQABAPAAAP8A/wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" id="tile-hover" />
 
 					<article id="bubble" class="bubble">
 
@@ -170,9 +170,9 @@ function main()
 							<?php $link = '<a href="#" title="' . _('Twitter profile') . '" rel="author external"></a>'; ?>
 							<h1><?= sprintf(/* L10n: Used in: "twitter username" wrote */ _('%s <span>wrote</span>'), $link) ?></h1>
 							<a href="#" title="" rel="author external" class="twitter-avatar">
-								<img  alt="<?= _('Twitter profile picture') ?>" width="48" height="48" />
+								<img  src="data:image/gif;base64,R0lGODlhAQABAPAAAP8A/wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="<?= _('Twitter profile picture') ?>" width="48" height="48" />
 							</a>
-							<time datetime="" pubdate><a href="#" rel="bookmark external" title="<?= _('Permalink') ?>"></a></time>
+							<time datetime="<?=date('Y-m-d')?>" pubdate><a href="#" rel="bookmark external" title="<?= _('Permalink') ?>"></a></time>
 
 						</header>
 
@@ -193,7 +193,7 @@ function main()
 		<!-- FOOTER -->
 		<footer>
 
-			<div id="sub-footer" role="content-info" class="clearfix">
+			<div id="sub-footer" role="contentinfo" class="clearfix">
 				<h3><span><?= /* L10n: Keep the <em> at beginning or end only. Max 20 characters before the em, Max 10 characters for the em. */ _("Let's be <em>Friends!</em>") ?></span></h3>
 
 				<ul>
