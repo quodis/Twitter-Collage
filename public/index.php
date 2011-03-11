@@ -134,8 +134,8 @@ function main()
 					<form id="search-box" role="search">
 						<h3><?= _("Who's at the party?") ?></h3>
 						<label for="search-input" accesskey="f"><?= /* L10n: This is an invisible label field for the input */ _('Find a Twitter username') ?></label>
-						<input type="text" name="search-input" id="search-input" value="<?= /* L10n: This is an input placeholder. Users can only find exact twitter usernames */ _('Find a Twitter username') ?>" tabindex="1" />
-						<button type="submit" name="search-button" id="search-submit-bttn" value="<?= _('Find') ?>" tabindex="2" title="<?= _('Find') ?>" class="button"><?= _('Find') ?></button>
+						<input type="text" name="search-input" id="search-input" value="<?= /* L10n: This is an input placeholder. Users can only find exact twitter usernames */ _('Find a Twitter username') ?>" tabindex="1" disabled="disabled" class="disabled" />
+						<button type="submit" name="search-button" id="search-submit-bttn" value="<?= _('Find') ?>" tabindex="2" title="<?= _('Find') ?>" disabled="disabled" class="button disabled"><?= _('Find') ?></button>
 						<div class="error">
 							<p><?= _("This user hasn't joined the party yet.") ?></p>
 						</div>
