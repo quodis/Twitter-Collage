@@ -139,7 +139,7 @@ var party = party || {};
 	// Construct each frame for the initial draw
 	function initialDrawFrame() {
 		
-		var tiles_to_draw = null,
+		var tiles_to_draw = [],
 			i = 0,
 			j = 0,
 			p,
