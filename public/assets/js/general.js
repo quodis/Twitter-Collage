@@ -143,7 +143,6 @@ var party = party || {};
 			i = 0,
 			j = 0,
 			new_tile = null,
-			append_tiles = false,
 			p;
 				
 		//j = (tile_counter + state.initial_tiles_per_frame_increment);
@@ -155,13 +154,12 @@ var party = party || {};
 			new_tile = tileHtml(visible_tiles[p]);
 			if (new_tile) {
 				tiles_to_draw.push();
-				append_tiles = true;
 			}
 		}
 		tile_counter = i;
 		
 		// Check if anything to draw was processed
-		if (append_tiles) {
+		if (tiles_to_draw.length > 0) {
 
 			// Draw the tiles and proceed
 			//console.log(tiles_to_draw);
