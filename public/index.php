@@ -125,7 +125,7 @@ function main()
 
 					<div id="twitter-counter" class="clearfix">
 						<dl>
-							<dt><a href="http://twitter.com/share?url=http://mzl.la/hDx6aM&via=firefox&related=firefox&text=<?= urlencode( /* L10n: Default text to tweet, max 89 characters */ _('Join me at the Firefox 4 Twitter Party and celebrate the newest version') . ' #fx4 #teamfirefox') ?>" title="<?= /* L10n: Action verb, will open the new tweet window */ _('Tweet') ?>" rel="external"><?= _('Tweet') ?></a></dt>
+							<dt><a href="http://twitter.com/share?url=http://mzl.la/hDx6aM&amp;via=firefox&amp;related=firefox&amp;text=<?= urlencode( /* L10n: Default text to tweet, max 89 characters */ _('Join me at the Firefox 4 Twitter Party and celebrate the newest version') . ' #fx4 #teamfirefox') ?>" title="<?= /* L10n: Action verb, will open the new tweet window */ _('Tweet') ?>" rel="external"><?= _('Tweet') ?></a></dt>
 							<dd><span></span></dd>
 						</dl>
 					</div><!-- twitter-counter -->
@@ -161,7 +161,7 @@ function main()
 						<li><?= /* L10n: Funny loading message */ _('Setting up Firefox deco') ?></li>
 					</ul>
 
-					<img src="" id="tile-hover" />
+					<img id="tile-hover" />
 
 					<article id="bubble" class="bubble">
 
@@ -170,7 +170,7 @@ function main()
 							<?php $link = '<a href="#" title="' . _('Twitter profile') . '" rel="author external"></a>'; ?>
 							<h1><?= sprintf(/* L10n: Used in: "twitter username" wrote */ _('%s <span>wrote</span>'), $link) ?></h1>
 							<a href="#" title="" rel="author external" class="twitter-avatar">
-								<img src="" alt="<?= _('Twitter profile picture') ?>" width="48" height="48" />
+								<img  alt="<?= _('Twitter profile picture') ?>" width="48" height="48" />
 							</a>
 							<time datetime="" pubdate><a href="#" rel="bookmark external" title="<?= _('Permalink') ?>"></a></time>
 
