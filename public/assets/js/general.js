@@ -62,13 +62,13 @@ var party = party || {};
 			high: {
 				initial_frames_per_second: 12,
 				initial_tiles_per_frame: 60,
-				new_tiles_per_second: 8,
+				new_tiles_per_second: 4,
 				pause_after: 10 // Minutes
 			},
 			medium: {
 				initial_frames_per_second: 4,
 				initial_tiles_per_frame: 80,
-				new_tiles_per_second: 6,
+				new_tiles_per_second: 2,
 				pause_after: 10 // Minutes
 			},
 			low: {
@@ -104,8 +104,8 @@ var party = party || {};
 		}
 		
 		// Add it to the HTML to draw
-		//return '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + tile.d + '); left: ' + (index[0]*12) + 'px; top: ' + (index[1]*12) + 'px;"></div>';
-		return '<div class="tile" id="' + position + '" style="background-image:url(http://dev2.twitterparty.quodis.com/store/mosaic.jpg); background-position:-' + (index[0]*12) + 'px -' + (index[1]*12) + 'px; left: ' + (index[0]*12) + 'px; top: ' + (index[1]*12) + 'px;"></div>';
+		return '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + tile.d + '); left: ' + (index[0]*12) + 'px; top: ' + (index[1]*12) + 'px;"></div>';
+		//return '<div class="tile" id="' + position + '" style="background-image:url(http://swap.quodis.com/collage/sprite.png); background-position:-' + (index[0]*12) + 'px -' + (index[1]*12) + 'px; left: ' + (index[0]*12) + 'px; top: ' + (index[1]*12) + 'px;"></div>';
 		
 	}
 	
@@ -239,7 +239,19 @@ var party = party || {};
 	
 	// First to be called
 	function init() {
-		var bubble;
+		var bubble,
+		    imgsToPreload = [
+		        'assets/images/layout/bubbles.png'
+				//'http://swap.quodis.com/collage/sprite.png'
+		    ];
+		
+		//Bubble image preloading
+		for (var i=imgsToPreload.length; i--; ) {
+		    (function(){
+		        var img = new Image();
+		        img.src = imgsToPreload[i];
+		    })();
+		}
 		
 		// Check the browser's performance
 		party.performance = party.performance_settings.high;
@@ -517,6 +529,14 @@ var party = party || {};
 		
 		// Hide previous
 		b.container.hide();
+		tile_hover.hide();
+		
+		// Create a fake "zoomed tile" element
+		tile_hover.attr('src', 'data:image/gif;base64,' + tile.d);
+		tile_hover.css({
+			'left': (x*12) + 'px',
+			'top': (y*12) + 'px'
+		});
 		
 		// Localize stuff
 		formatted_date = date(party.l10n.date_format, tile.c);
@@ -535,21 +555,15 @@ var party = party || {};
 		party.showBubbleImageTimer = setTimeout(function(){
 		    b.avatar_img.attr('src', tile.m);
 		    b.avatar_img.load(function(){
-		        $(this).fadeIn('fast');
+		        $(this).show();
 		    })
 		    party.showBubbleImageTimer = null;
 		    tile = null;
 		}, 500);
 		
-		// Position the selected tile element
-		tile_hover.css({
-			'left': (x*12) + 'px',
-			'top': (y*12) + 'px',
-			'border-color': colors[g.r]
-		});
-		
 		// Show
 		b.container.show();
+		tile_hover.show();
 		
 	}
 	
@@ -650,7 +664,7 @@ var party = party || {};
 		
 		if (new_tile) {
 			// Get the position
-			pos = parseInt(new_tile.p, 10);
+			pos = parseInt(new_tile.p);
 			if (!visible_tiles[pos]) {
 				new_tiles.shift();
 				return;
@@ -661,8 +675,6 @@ var party = party || {};
 				'background-image': 'url(data:image/gif;base64,' + new_tile.d + ')',
 				'background-position': '0px 0px'
 			};
-			// Remember that this does not exist on the initial sprite
-			new_tile.base64_only = true;
 			// Write the new tile over the visible
 			$.extend(visible_tiles[pos], new_tile);
 			// Store this to the newest tiles to autoplay
@@ -687,18 +699,10 @@ var party = party || {};
 
 		// Update the previous tile
 		if (state.last_tile_drawn_pos > -1) {
-			last_tile = visible_tiles[state.last_tile_drawn_pos];
-			if (last_tile.base64_only) {
-				$('#' + state.last_tile_drawn_pos).css({
-					'background-image': 'url(data:image/gif;base64,' + last_tile.d + ')',
-					'background-position': '0px 0px'
-				});
-			} else {
-				$('#' + state.last_tile_drawn_pos).css({
-					'background-image': 'url(http://dev2.twitterparty.quodis.com/store/mosaic.jpg)',
-					'background-position': '-' + $(this).css('left') + ' -' + $(this).css('top')
-				});
-			}
+			$('#' + state.last_tile_drawn_pos).css({
+				'background-image': 'url(data:image/gif;base64,' + visible_tiles[state.last_tile_drawn_pos].d + ')',
+				'background-position': '0px 0px'
+			});
 		}
 		
 		// Save the previous tile
@@ -796,19 +800,6 @@ var party = party || {};
 	});
 	
 }());
-
-
-// Preload important stuff
-imgsToPreload = [
-    'assets/images/layout/bubbles.png',
-	'http://dev2.twitterparty.quodis.com/store/mosaic.jpg'
-];
-for (var i=imgsToPreload.length; i--; ) {
-	(function(){
-	    var img = new Image();
-	    img.src = imgsToPreload[i];
-	})();
-}
 
 
 $(document).ready(function() {
