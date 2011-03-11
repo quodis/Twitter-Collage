@@ -60,8 +60,8 @@ var party = party || {};
 		},
 		performance_settings = {
 			high: {
-				initial_frames_per_second: 24,
-				initial_tiles_per_frame: 1,
+				initial_frames_per_second: 12,
+				initial_tiles_per_frame: 60,
 				new_tiles_per_second: 8,
 				pause_after: 10 // Minutes
 			},
@@ -159,7 +159,7 @@ var party = party || {};
 		if (tiles_to_draw) {
 
 			// Draw the tiles and proceed
-			//party.canvas.append(tiles_to_draw);
+			party.canvas.append(tiles_to_draw);
 			// Update counter
 			if (counter.current < state.total_tiles) {
 				counter.current += inc;
