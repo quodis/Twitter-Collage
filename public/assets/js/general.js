@@ -94,14 +94,14 @@ var party = party || {};
 			
 		// Make sure this is an existing data entry
 		if (!tile) {
-		  return '';
+		  return null;
 		}
 		
 		// Cache the tile's position
 		position = tile.p;
 		index = party.mosaic.index[position];
 		if (!index) {
-		  return '';
+		  return null;
 		}
 		
 		element = document.createElement('div');
@@ -142,7 +142,7 @@ var party = party || {};
 		var tiles_to_draw = [],
 			i = 0,
 			j = 0,
-			new_tile = "",
+			new_tile = null,
 			append_tiles = false,
 			p;
 				
