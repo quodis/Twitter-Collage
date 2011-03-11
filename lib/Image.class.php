@@ -216,7 +216,6 @@ class Image
 		$image->setImageCompression(50);
 
 		$count = count($tiles);
-		$count = 12;
 		for ($i = 0; $i < $count; $i++)
 		{
 			$processedFileName = self::fileName('processed', md5($tiles[$i]['i']), 'gif');
@@ -227,9 +226,10 @@ class Image
 			$offsetX = $config[$position]['x'] * $tileSize;
 			$offsetY = $config[$position]['y'] * $tileSize;
 
-			dd($offsetX . ',' . $offsetY . ' < ' . $processedFileName);
+			dd($i . '/' . $count . ' [' . $config[$position]['x'] . ',' . $config[$position]['y'] . '] > [' . $offsetX . ',' . $offsetY . '] < ' . $processedFileName);
 
-			$image->compositeImage($processed, 0, $offsetX, $offsetY);
+			$image->compositeImage($processed, $processed->getImageCompose(), $offsetX, $offsetY);
+			continue;
 		}
 
 		return $image;

@@ -37,7 +37,7 @@ function main()
 		if ($sleep < 1) $sleep = 1;
 		sleep($sleep);
 
-		Debug::logMsg('OK! ... sleeping for ' . $sleep . ' seconds ...');
+		Debug::logMsg('OK! ... took ' . $elapsed . ' seconds, sleeping for ' . $sleep . ' seconds ...');
 	}
 
 } // main()
