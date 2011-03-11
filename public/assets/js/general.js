@@ -638,7 +638,8 @@ var party = party || {};
 			idx,
 			grid,
 			css_changes,
-			last_tile;
+			last_tile,
+			$last_tile_dom;
 
 		// Priority to new tiles
 		if (state.draw_new_tiles_every_counter >= state.draw_new_tiles_every) {
@@ -688,17 +689,17 @@ var party = party || {};
 		// Update the previous tile
 		if (state.last_tile_drawn_pos > -1) {
 			last_tile = visible_tiles[state.last_tile_drawn_pos];
+			$last_tile_dom = $('#' + state.last_tile_drawn_pos);
 			if (last_tile.base64_only) {
-				$('#' + state.last_tile_drawn_pos).css({
+				$last_tile_dom.css({
 					'background-image': 'url(data:image/gif;base64,' + last_tile.d + ')',
 					'background-position': '0px 0px'
 				});
 			} else {
-				$('#' + state.last_tile_drawn_pos).css({
+				$last_tile_dom.css({
 					'background-image': 'url(http://dev2.twitterparty.quodis.com/store/mosaic.jpg)',
-					'background-position': '-' + $(this).css('left') + ' -' + $(this).css('top')
+					'background-position': '-' + $last_tile_dom.css('left') + ' -' + $last_tile_dom.css('top')
 				});
-				console.log('background-position': '-' + $(this).css('left') + ' -' + $(this).css('top'));
 			}
 		}
 		
