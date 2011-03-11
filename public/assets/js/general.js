@@ -61,13 +61,13 @@ var party = party || {};
 		performance_settings = {
 			high: {
 				initial_frames_per_second: 8,
-				initial_tiles_per_frame: 40,
+				initial_tiles_per_frame: 2,
 				new_tiles_per_second: 8,
 				pause_after: 10 // Minutes
 			},
 			medium: {
 				initial_frames_per_second: 4,
-				initial_tiles_per_frame: 80,
+				initial_tiles_per_frame: 30,
 				new_tiles_per_second: 6,
 				pause_after: 10 // Minutes
 			},
@@ -106,15 +106,12 @@ var party = party || {};
 		
 		element = document.createElement('div');
 		element.setAttribute('id', position);
-		element.style.backgroundImage = 'url(http://dev2.twitterparty.quodis.com/store/mosaic.jpg)';
+		element.style.backgroundImage = 'url(' + party.store_url + '/mosaic.jpg)';
 		element.style.backgroundPosition = '-' + (index[0]*12) + 'px -' + (index[1]*12) + 'px';
 		element.style.left = (index[0]*12) + 'px';
 		element.style.top = (index[1]*12) + 'px';
 		
 		return element;
-		// Add it to the HTML to draw
-		//return '<div class="tile" id="' + position + '" style="background-image:url(data:image/gif;base64,' + tile.d + '); left: ' + (index[0]*12) + 'px; top: ' + (index[1]*12) + 'px;"></div>';
-		//return '<div class="tile" id="' + position + '" style="; background-position: left: ' + ; top: ' +  + 'px;"></div>';
 		
 	}
 	
@@ -704,7 +701,7 @@ var party = party || {};
 				});
 			} else {
 				$last_tile_dom.css({
-					'background-image': 'url(http://dev2.twitterparty.quodis.com/store/mosaic.jpg)',
+					'background-image': 'url(' + party.store_url + '/mosaic.jpg)',
 					'background-position': '-' + $last_tile_dom.css('left') + ' -' + $last_tile_dom.css('top')
 				});
 			}
@@ -786,6 +783,19 @@ var party = party || {};
 		startAutoBubble();
 	}
 	
+	function test_lookup(){
+		var tile,
+			start,
+			end,
+			executionTime;
+		start = new Date().getMilliseconds();
+		for (var i = 0; i < 180000; i += 1) {
+			tile = party.mosaic.index[parseInt(i/100, 10)];
+		}
+		stop = new Date().getMilliseconds();
+		executionTime = stop - start;
+		console.log('test_lookup() executed in ' + executionTime + ' milliseconds');
+	}
 	
 	$.extend(party, {
 		"loading_message_seconds": 2,
@@ -801,28 +811,29 @@ var party = party || {};
 		"performance": performance,
 		"performance_settings": performance_settings,
 		"state": state,
-		"new_tiles": new_tiles
+		"new_tiles": new_tiles,
+		"test_lookup": test_lookup
 	});
 	
 }());
 
-
 // Preload important stuff
-imgsToPreload = [
-    'assets/images/layout/bubbles.png',
-	'http://dev2.twitterparty.quodis.com/store/mosaic.jpg'
-];
-for (var i=imgsToPreload.length; i--; ) {
-	(function(){
-	    var img = new Image();
-	    img.src = imgsToPreload[i];
-	})();
-}
+(function(){
+	var imgsToPreload = [
+	    'assets/images/layout/bubbles.png'
+	];
+	for (var i=imgsToPreload.length; i--; ) {
+		    var img = new Image();
+		    img.src = imgsToPreload[i];
+		}
+	}
+)();
 
 
 $(document).ready(function() {
 	var brand_center = 0,
-		brand_total = 0;
+		brand_total = 0,
+		$mosaic_image;
 	
 	// Language chooser
 	$('#flang').change(function(){
@@ -845,7 +856,8 @@ $(document).ready(function() {
 	$('#brand em').before('<span style="left:0; width:' + (brand_total-brand_center)/2 + 'px" />').fadeIn('slow');
 	$('#brand em').after('<span style="right:0; width:' + (brand_total-brand_center)/2 + 'px" />').fadeIn('slow');
 	
-	// Let's get it started!
-	party.init();
+	// Let's get it started as soon as the mosaic is loaded
+	$mosaic_image = $('<img src="' + party.store_url + '/mosaic.jpg">');
+	$mosaic_image.load(party.init);
 	
 });
