@@ -35,9 +35,9 @@ function main()
 		$elapsed = time() - $start;
 		$sleep = $period - $elapsed;
 		if ($sleep < 1) $sleep = 1;
-		sleep($sleep);
 
 		Debug::logMsg('OK! ... took ' . $elapsed . ' seconds, sleeping for ' . $sleep . ' seconds ...');
+		sleep($sleep);
 	}
 
 } // main()
