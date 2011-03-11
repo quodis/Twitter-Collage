@@ -786,6 +786,19 @@ var party = party || {};
 		startAutoBubble();
 	}
 	
+	function test_lookup(){
+		var tile,
+			start,
+			end,
+			executionTime;
+		start = new Date().getMilliseconds();
+		for (var i = 0, i < 1800, i += 1) {
+			tile = party.mosaic.index[i];
+		}
+		stop = new Date().getMilliseconds();
+		executionTime = stop - start;
+		console.log('test_lookup() executed in ' + executionTime + ' milliseconds');
+	}
 	
 	$.extend(party, {
 		"loading_message_seconds": 2,
@@ -802,19 +815,7 @@ var party = party || {};
 		"performance_settings": performance_settings,
 		"state": state,
 		"new_tiles": new_tiles,
-		"test_lookup": function (){
-			var tile,
-				start,
-				end,
-				executionTime;
-			start = new Date().getMilliseconds();
-			for (var i = 0, i < 1800, i += 1) {
-				tile = party.mosaic.index[i];
-			}
-			stop = new Date().getMilliseconds();
-			executionTime = stop - start;
-			console.log('test_lookup() executed in ' + executionTime + ' milliseconds');
-		}
+		"test_lookup": test_lookup
 	});
 	
 }());
