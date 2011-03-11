@@ -431,6 +431,10 @@ class Debug
 	/**
 	 * @var boolean
 	 */
+	private static $_logEnabled = FALSE;
+	/**
+	 * @var boolean
+	 */
 	private static $_forceLogToFile = FALSE;
 
 	/**
@@ -452,6 +456,10 @@ class Debug
 		self::$_logErrorFile = $logErrorFile;
 	}
 
+	public static function logEnabled($enable)
+	{
+		self::$_logEnabled = $enable;
+	}
 	public static function setForceLogToFile($force)
 	{
 		self::$_forceLogToFile = $force;
@@ -535,7 +543,7 @@ class Debug
 
 		$text = date('Y-m-d H:i:s') . ' | ' . Req::time() . ' > ' . self::$_context . ' > ' . $text . NL;
 
-		if (CLIENT != SCRIPT || self::$_forceLogToFile)
+		if (self::$_logEnabled && (CLIENT != SCRIPT || self::$_forceLogToFile))
 		{
 			if ($file)
 			{

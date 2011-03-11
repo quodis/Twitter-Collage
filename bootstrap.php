@@ -75,6 +75,10 @@ if (!defined('NO_CONFIG'))
 	global $config;
 	// load
 	include dirname(__FILE__) . '/config/config.php';
+
+	// configure
+	if (isset($config['App']['logEnabled'])) Debug::logEnabled($config['App']['logEnabled']);
+
 	// configure facebook, cache and game
 	Cache::configure($config);
 	Image::configure($config);
