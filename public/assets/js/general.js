@@ -140,7 +140,7 @@ var party = party || {};
 	// Construct each frame for the initial draw
 	function initialDrawFrame() {
 		
-		var tiles_to_draw = [],
+		var tiles_to_draw = null,
 			i = 0,
 			j = 0,
 			p,
@@ -160,7 +160,8 @@ var party = party || {};
 		// Draw tiles_per_frame tiles and draw them
 		for (i = tile_counter; i < j; i += 1) {
 			p = visible_tiles_random[i];
-			tiles_to_draw.push(tileHtml(visible_tiles[p]));
+			tiles_to_draw = tileHtml(visible_tiles[p]);
+			party.canvas.append(tiles_to_draw);
 		}
 		tile_counter = i;
 		
@@ -168,8 +169,8 @@ var party = party || {};
 		if (tiles_to_draw) {
 
 			// Draw the tiles and proceed
-			console.log(tiles_to_draw);
-			party.canvas.append(tiles_to_draw);
+			//console.log(tiles_to_draw);
+			//party.canvas.append(tiles_to_draw);
 			// Update counter
 			if (counter.current < state.total_tiles) {
 				counter.current += inc;
