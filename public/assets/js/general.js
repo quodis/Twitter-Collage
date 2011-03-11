@@ -168,6 +168,7 @@ var party = party || {};
 		if (tiles_to_draw) {
 
 			// Draw the tiles and proceed
+			console.log(tiles_to_draw);
 			party.canvas.append(tiles_to_draw);
 			// Update counter
 			if (counter.current < state.total_tiles) {
