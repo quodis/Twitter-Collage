@@ -159,7 +159,7 @@ var party = party || {};
 		if (tiles_to_draw) {
 
 			// Draw the tiles and proceed
-			party.canvas.append(tiles_to_draw);
+			party.canvas.append($(tiles_to_draw).fadeIn());
 			// Update counter
 			if (counter.current < state.total_tiles) {
 				counter.current += inc;
