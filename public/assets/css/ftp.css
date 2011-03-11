@@ -569,6 +569,7 @@ footer a:hover {
 	filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0f7fc',  endColorstr='#ffffff', GradientType=0 );
 	border: 1px solid #87b7dd;
 	-moz-border-radius: 5px; border-radius: 5px;
+	box-sizing: content-box;
 	color:#6f7fA3;
 	display: block;
 	float:left;
