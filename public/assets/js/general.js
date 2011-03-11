@@ -159,18 +159,16 @@ var party = party || {};
 		// Draw tiles_per_frame tiles and draw them
 		for (i = tile_counter; i < j; i += 1) {
 			p = visible_tiles_random[i];
-			tiles_to_draw = tileHtml(visible_tiles[p]);
-			party.canvas.append(tiles_to_draw);
-			//console.log(tiles_to_draw);
+			tiles_to_draw.push(tileHtml(visible_tiles[p]));
 		}
 		tile_counter = i;
 		
 		// Check if anything to draw was processed
-		if (tiles_to_draw) {
+		if (tiles_to_draw[0]) {
 
 			// Draw the tiles and proceed
 			//console.log(tiles_to_draw);
-			//party.canvas.append(tiles_to_draw);
+			party.canvas.append(tiles_to_draw.join(''));
 			// Update counter
 			if (counter.current < state.total_tiles) {
 				counter.current += inc;
