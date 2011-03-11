@@ -105,6 +105,7 @@ var party = party || {};
 		}
 		
 		element = document.createElement('div');
+		element.setAttribute('id', position);
 		element.style.backgroundImage = 'url(http://dev2.twitterparty.quodis.com/store/mosaic.jpg)';
 		element.style.backgroundPosition = '-' + (index[0]*12) + 'px -' + (index[1]*12) + 'px';
 		element.style.left = (index[0]*12) + 'px';
@@ -180,7 +181,6 @@ var party = party || {};
 			party.canvas.css('background', 'none');
 			// Set counter to last id
 			counter.current = parseInt(state.total_tiles, 10);
-			alert('gi');
 			setCounter();
 			startAutoBubble();
 			startDrawNewTiles();
