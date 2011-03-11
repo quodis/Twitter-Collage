@@ -792,8 +792,8 @@ var party = party || {};
 			end,
 			executionTime;
 		start = new Date().getMilliseconds();
-		for (var i = 0; i < 1800; i += 1) {
-			tile = party.mosaic.index[i];
+		for (var i = 0; i < 180000; i += 1) {
+			tile = party.mosaic.index[parseInt(i/100, 10)];
 		}
 		stop = new Date().getMilliseconds();
 		executionTime = stop - start;
