@@ -60,15 +60,15 @@ var party = party || {};
 		},
 		performance_settings = {
 			high: {
-				initial_frames_per_second: 8,
-				initial_tiles_per_frame: 40,
-				new_tiles_per_second: 4,
+				initial_frames_per_second: 12,
+				initial_tiles_per_frame: 30,
+				new_tiles_per_second: 8,
 				pause_after: 10 // Minutes
 			},
 			medium: {
 				initial_frames_per_second: 4,
 				initial_tiles_per_frame: 80,
-				new_tiles_per_second: 2,
+				new_tiles_per_second: 6,
 				pause_after: 10 // Minutes
 			},
 			low: {
@@ -696,7 +696,7 @@ var party = party || {};
 			} else {
 				$('#' + state.last_tile_drawn_pos).css({
 					'background-image': 'url(http://dev2.twitterparty.quodis.com/store/mosaic.jpg)',
-					'background-position': '0px 0px'
+					'background-position': '-' + $(this).css('left') + ' -' + $(this).css('top')
 				});
 			}
 		}
