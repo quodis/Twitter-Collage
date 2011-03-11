@@ -162,6 +162,7 @@ var party = party || {};
 			p = visible_tiles_random[i];
 			tiles_to_draw = tileHtml(visible_tiles[p]);
 			party.canvas.append(tiles_to_draw);
+			console.log(tiles_to_draw);
 		}
 		tile_counter = i;
 		
