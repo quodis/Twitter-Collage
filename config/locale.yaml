@@ -1,9 +1,87 @@
+ar:
+  language: ar
+  locale: ar_DZ.utf8
+ca:
+  language: ca
+  locale: ca_ES.utf8
+cs:
+  language: cs
+  locale: cs_CZ.utf8
+de:
+  language: de
+  locale: de_DE.utf8
+el:
+  language: el
+  locale: el_GR.utf8
 en-US:
   language: en-US
-  locale: en-US.utf8
+  locale: en_US.utf8
+es:
+  language: es
+  locale: es_ES.utf8
+eu:
+  language: eu
+  locale: eu_ES.utf8
+fr:
+  language: fr
+  locale: fr_FR.utf8
+fy:
+  language: fy-NL
+  locale: fy_NL.utf8
+ga:
+  language: ga
+  locale: ga_IE.utf8
+he:
+  language: he
+  locale: he_IL.utf8
+hu:
+  language: hu
+  locale: hu_HU.utf8
+id:
+  language: id
+  locale: id_ID.utf8
+it:
+  language: it
+  locale: it_IT.utf8
+ja:
+  language: ja
+  locale: ja_JP.utf8
+ko:
+  language: ko
+  locale: ko_KR.utf8
+nl:
+  language: nl
+  locale: nl_NL.utf8
+pl:
+  language: pl
+  locale: pl_PL.utf8
 pt-PT:
   language: pt-PT
   locale: pt_PT.utf8
-af:
-  language: af
-  locale: af_AF.utf8
+rm:
+  language: rm
+  locale: rm_CH.utf8
+ru:
+  language: ru
+  locale: ru_RU.utf8
+si:
+  language: si
+  locale: si_LK.utf8
+sl:
+  language: sl
+  locale: sl_SI.utf8
+sq:
+  language: sq
+  locale: sq_AL.utf8
+th:
+  language: th
+  locale: th_TH.utf8
+tr:
+  language: tr
+  locale: tr_TR.utf8
+vi:
+  language: vi
+  locale: vi_VN.utf8
+zh-TW:
+  language: zh-TW
+  locale: zh_TW.utf8
