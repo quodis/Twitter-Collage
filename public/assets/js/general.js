@@ -26,7 +26,6 @@ var party = party || {};
 		loading_indicator_milliseconds = 200,
 		polling_timer,
 		tile_counter = 0,
-		auto_bubble_timer,
 		auto_bubble_index = 0,
 		visible_tiles = {},
 		visible_tiles_random = [],
@@ -280,7 +279,7 @@ var party = party || {};
 		// Bind the hover action
 		
 		party.canvas.bind('mouseleave', function(){
-		   party.autoBubbleStartTimer = setTimeout(startAutoBubble, 1000);
+		   startAutoBubble();
 		});
 		
         party.canvas.bind('mousemove', function(ev) {
@@ -289,8 +288,8 @@ var party = party || {};
 				pos,
 				offset = party.canvas.offset();
 				
-			clearTimeout(party.mousemoveTimer);
-			clearTimeout(party.autoBubbleStartTimer);
+			window.clearTimeout(party.mousemoveTimer);
+			window.clearTimeout(party.auto_bubble_timer);
 
 			if (state.keep_bubble_open) {
 				return;
@@ -304,7 +303,7 @@ var party = party || {};
 
             pos = party.mosaic.grid[x][y];
             
-            party.mousemoveTimer = setTimeout(function(){
+            party.mousemoveTimer = window.setTimeout(function(){
                 // is valid x,y
                 if (pos) {
     				// Check if this is not the already opened bubble
@@ -319,14 +318,7 @@ var party = party || {};
     			}
             }, 50);			
         });
-		// Hide the bubble if the mouse leavese the mosaic
-		// party.canvas.bind('mouseout', function() {
-		// 	if (state.keep_bubble_open || auto_bubble_timer) {
-		// 		return;
-		// 	}
-		// 	hideBubble();
-		// 	startAutoBubble();
-		// });
+
 		// Keep bubble open/hover
 		tile_hover.bind('click', function(event){
 			state.keep_bubble_open = true;
@@ -336,23 +328,18 @@ var party = party || {};
 		// Close the bubble
 		party.canvas.bind('click', hideBubble);
 		party.bubble.container.bind('click', function(event){
-			if (!state.keep_bubble_open) {
-				state.keep_bubble_open = true;
-			}
-			
-			stopAutoBubble();
-						
 			event.stopPropagation();
 			return (event.target.nodeName.toLowerCase() == 'a' || event.target.nodeName.toLowerCase() == 'img');
 		});
 		
 		//Proxying bubble mouseenter and mouseleave to above click events
 		party.bubble.container.bind('mouseenter', function() {
-		    tile_hover.trigger('click');
+			state.keep_bubble_open = true;
+			stopAutoBubble();
 		});
 		
 		party.bubble.container.bind('mouseleave', function() {
-		    party.canvas.trigger('click');
+		    state.keep_bubble_open = false;
 		});
 		
 		party.init = function() {
@@ -446,15 +433,14 @@ var party = party || {};
 	
 	function startAutoBubble() {
 		// Start it only if it's not already started
-		if (!auto_bubble_timer) {
-			showAutoBubble();
-			auto_bubble_timer = setInterval(showAutoBubble, party.auto_bubble_seconds * 1000);
+		if (!party.auto_bubble_timer) {
+			party.auto_bubble_timer = window.setInterval(showAutoBubble, party.auto_bubble_seconds * 1000);
 		}
 	}
 	
 	function stopAutoBubble() {
-		clearInterval(auto_bubble_timer);
-		auto_bubble_timer = null;
+		window.clearInterval(party.auto_bubble_timer);
+		party.auto_bubble_timer = null;
 	}
 	
 	function showBubble(pos) {
@@ -541,7 +527,7 @@ var party = party || {};
 		
 		//Show the image on a small timeout window
 		
-		party.showBubbleImageTimer = setTimeout(function(){
+		party.showBubbleImageTimer = window.setTimeout(function(){
 		    b.avatar_img.attr('src', tile.m);
 		    b.avatar_img.load(function(){
 		        $(this).fadeIn('fast');
@@ -585,7 +571,7 @@ var party = party || {};
 		
 		// Check if we have a complete page. If not, try again later
 		if (party.state.last_page == 0) {
-			setTimeout(reloadPage, 3 * 60 * 1000);
+			window.setTimeout(reloadPage, 3 * 60 * 1000);
 			return;
 		}
 
