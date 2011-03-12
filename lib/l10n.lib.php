@@ -28,7 +28,7 @@ class ChooseLocale
 
 	public function __construct($list=array('en-US'))
 	{
-		$this->HTTPAcceptLang   = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+		$this->HTTPAcceptLang   = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : '';
 		$this->supportedLocales = array_unique($list);
 		$this->setDefaultLocale('en-US');
 		$this->setCompatibleLocale();
@@ -324,7 +324,7 @@ class Locale
 		else list($locale, $l) = each(self::$_languageMap);
 
 		// set the locale
-		$locale_dir = dirname(__FILE__) . '/locale';
+		$locale_dir = dirname(__FILE__) . '/../locale';
 		putenv("LC_ALL=" . $l['locale']);
 		setlocale(LC_ALL, $l['locale']);
 		textdomain("messages");
