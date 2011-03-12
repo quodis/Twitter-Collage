@@ -277,11 +277,7 @@ var party = party || {};
 		// Get the page of visible tiles
 		getVisibleTiles();
 		// Bind the hover action
-		
-		party.canvas.bind('mouseleave', function(){
-		   startAutoBubble();
-		});
-		
+
         party.canvas.bind('mousemove', function(ev) {
 			var x,
 				y,
@@ -308,7 +304,6 @@ var party = party || {};
                 if (pos) {
     				// Check if this is not the already opened bubble
     				if (state.active_bubble_pos != pos.i) {
-    					stopAutoBubble();
     					state.active_bubble_pos = pos.i;
     					showBubble(pos.i);
     				}
@@ -318,26 +313,27 @@ var party = party || {};
     			}
             }, 50);			
         });
-
-		// Keep bubble open/hover
-		tile_hover.bind('click', function(event){
-			state.keep_bubble_open = true;
-			event.stopPropagation();
-			return false;
+		
+		party.canvas.bind('mouseleave', function(){
+			startAutoBubble();
 		});
+
 		// Close the bubble
 		party.canvas.bind('click', hideBubble);
+		
+		// Bubble link clicks
 		party.bubble.container.bind('click', function(event){
 			event.stopPropagation();
 			return (event.target.nodeName.toLowerCase() == 'a' || event.target.nodeName.toLowerCase() == 'img');
 		});
 		
-		//Proxying bubble mouseenter and mouseleave to above click events
+		// Keep bubble open on enter
 		party.bubble.container.bind('mouseenter', function() {
 			state.keep_bubble_open = true;
 			stopAutoBubble();
 		});
 		
+		// Close bubble on leave
 		party.bubble.container.bind('mouseleave', function() {
 		    state.keep_bubble_open = false;
 		});
@@ -433,6 +429,7 @@ var party = party || {};
 	
 	function startAutoBubble() {
 		// Start it only if it's not already started
+		showAutoBubble();
 		if (!party.auto_bubble_timer) {
 			party.auto_bubble_timer = window.setInterval(showAutoBubble, party.auto_bubble_seconds * 1000);
 		}
@@ -556,7 +553,7 @@ var party = party || {};
 		
 		//Clean the image showing timer if bubble is closed in the meanwhile
 		if (party.showBubbleImageTimer) {
-		    clearTimeout(party.showBubbleImageTimer);
+		    window.clearTimeout(party.showBubbleImageTimer);
 		    party.showBubbleImageTimer = null;
 		}
 	}
