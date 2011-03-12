@@ -429,8 +429,8 @@ var party = party || {};
 	
 	function startAutoBubble() {
 		// Start it only if it's not already started
-		showAutoBubble();
 		if (!party.auto_bubble_timer) {
+			showAutoBubble();
 			party.auto_bubble_timer = window.setInterval(showAutoBubble, party.auto_bubble_seconds * 1000);
 		}
 	}
