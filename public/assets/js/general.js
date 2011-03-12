@@ -343,7 +343,7 @@ var party = party || {};
 			stopAutoBubble();
 						
 			event.stopPropagation();
-			return (event.target.nodeName.toLowerCase() == 'a');
+			return (event.target.nodeName.toLowerCase() == 'a' || event.target.nodeName.toLowerCase() == 'img');
 		});
 		
 		//Proxying bubble mouseenter and mouseleave to above click events
@@ -358,6 +358,11 @@ var party = party || {};
 		party.init = function() {
 		    return party;
 		}
+	}
+	
+	function searchEnable() {
+		search.input_dom.attr('disabled', '').removeClass('disabled');
+		$('#search-box button').attr('disabled', '').removeClass('disabled');
 	}
 	
 	function searchInit() {
@@ -583,9 +588,6 @@ var party = party || {};
 			setTimeout(reloadPage, 3 * 60 * 1000);
 			return;
 		}
-		
-		// Show the loading
-		loadingShow();
 
 		// Request URL
 		var url = party.store_url + '/mosaic.json';
@@ -618,6 +620,9 @@ var party = party || {};
 			// Keep the newest 200
 			autoplay_pool = autoplay_pool.slice(0, 199);
 			state.total_tiles = parseInt(party.state.last_page * total_positions, 10);
+			
+			// Enable search box
+			searchEnable();
 			
 			// Draw the mosaic!
 			initialDraw();
@@ -783,20 +788,6 @@ var party = party || {};
 		startAutoBubble();
 	}
 	
-	function test_lookup(){
-		var tile,
-			start,
-			end,
-			executionTime;
-		start = new Date().getMilliseconds();
-		for (var i = 0; i < 180000; i += 1) {
-			tile = party.mosaic.index[parseInt(i/100, 10)];
-		}
-		stop = new Date().getMilliseconds();
-		executionTime = stop - start;
-		console.log('test_lookup() executed in ' + executionTime + ' milliseconds');
-	}
-	
 	$.extend(party, {
 		"loading_message_seconds": 2,
 		"polling_timer_seconds": 180, 
@@ -812,7 +803,7 @@ var party = party || {};
 		"performance_settings": performance_settings,
 		"state": state,
 		"new_tiles": new_tiles,
-		"test_lookup": test_lookup
+		"loadingShow": loadingShow
 	});
 	
 }());
@@ -855,6 +846,8 @@ $(document).ready(function() {
 	brand_total = parseInt($('#brand p').width(), 10);
 	$('#brand em').before('<span style="left:0; width:' + (brand_total-brand_center)/2 + 'px" />').fadeIn('slow');
 	$('#brand em').after('<span style="right:0; width:' + (brand_total-brand_center)/2 + 'px" />').fadeIn('slow');
+	
+	party.loadingShow();
 	
 	// Let's get it started as soon as the mosaic is loaded
 	$mosaic_image = $('<img src="' + party.store_url + '/mosaic.jpg">');

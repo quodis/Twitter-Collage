@@ -580,6 +580,10 @@ footer a:hover {
 	z-index: 100;
 }
 
+#search-box input.disabled {
+	opacity: 0.5;
+}
+
 #search-box button {
  	background: url(../images/layout/search-icon-bg.png) center center no-repeat;
 	width:16px;
@@ -592,6 +596,10 @@ footer a:hover {
 	overflow: hidden;
 	z-index: 300;
 	margin:-24px 10px 0 0px;
+}
+
+#search-box button.disabled {
+	opacity: 0.2;
 }
 
 #search-box button.loading {

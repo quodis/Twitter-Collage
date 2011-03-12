@@ -324,7 +324,7 @@ class Locale
 		else list($locale, $l) = each(self::$_languageMap);
 
 		// set the locale
-		$locale_dir = dirname(__FILE__) . '/locale';
+		$locale_dir = dirname(__FILE__) . '/../locale';
 		putenv("LC_ALL=" . $l['locale']);
 		setlocale(LC_ALL, $l['locale']);
 		textdomain("messages");

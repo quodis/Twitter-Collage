@@ -134,8 +134,8 @@ function main()
 					<form id="search-box" role="search">
 						<h3><?= _("Who's at the party?") ?></h3>
 						<label for="search-input" accesskey="f"><?= /* L10n: This is an invisible label field for the input */ _('Find a Twitter username') ?></label>
-						<input type="text" name="search-input" id="search-input" value="<?= /* L10n: This is an input placeholder. Users can only find exact twitter usernames */ _('Find a Twitter username') ?>" tabindex="1" />
-						<button type="submit" name="search-button" id="search-submit-bttn" value="<?= _('Find') ?>" tabindex="2" title="<?= _('Find') ?>" class="button"><?= _('Find') ?></button>
+						<input type="text" name="search-input" id="search-input" value="<?= /* L10n: This is an input placeholder. Users can only find exact twitter usernames */ _('Find a Twitter username') ?>" tabindex="1" disabled="disabled" class="disabled" />
+						<button type="submit" name="search-button" id="search-submit-bttn" value="<?= _('Find') ?>" tabindex="2" title="<?= _('Find') ?>" disabled="disabled" class="button disabled"><?= _('Find') ?></button>
 						<div class="error">
 							<p><?= _("This user hasn't joined the party yet.") ?></p>
 						</div>
@@ -167,12 +167,12 @@ function main()
 
 						<header>
 
-							<?php $link = '<a href="#" title="' . _('Twitter profile') . '" rel="author external"></a>'; ?>
+							<?php $link = '<a href="#" title="' . _('Twitter profile') . '" rel="author external" target="_blank"></a>'; ?>
 							<h1><?= sprintf(/* L10n: Used in: "twitter username" wrote */ _('%s <span>wrote</span>'), $link) ?></h1>
-							<a href="#" title="" rel="author external" class="twitter-avatar">
+							<a href="#" title="" rel="author external" class="twitter-avatar" target="_blank">
 								<img  src="data:image/gif;base64,R0lGODlhAQABAPAAAP8A/wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="<?= _('Twitter profile picture') ?>" width="48" height="48" />
 							</a>
-							<time datetime="<?=date('Y-m-d')?>" pubdate><a href="#" rel="bookmark external" title="<?= _('Permalink') ?>"></a></time>
+							<time datetime="<?=date('Y-m-d')?>" pubdate><a href="#" rel="bookmark external" title="<?= _('Permalink') ?>" target="_blank"></a></time>
 
 						</header>
 
