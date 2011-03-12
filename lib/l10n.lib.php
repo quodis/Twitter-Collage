@@ -28,7 +28,7 @@ class ChooseLocale
 
 	public function __construct($list=array('en-US'))
 	{
-		$this->HTTPAcceptLang   = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+		$this->HTTPAcceptLang   = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : '';
 		$this->supportedLocales = array_unique($list);
 		$this->setDefaultLocale('en-US');
 		$this->setCompatibleLocale();
