@@ -237,7 +237,15 @@ var party = party || {};
 			var y = this.mosaic.index[tile.p][1];
 			var offsetX = this.options.tile_size * x;
 			var offsetY = this.options.tile_size * y;
-			var html = '<li id="' + tile.p + '" style="position: absolute; top: ' + offsetY +'px; left: ' + offsetX + 'px"><img src="data:image/gif;base64,' + tile.d + '" /></li>';
+			var tileImg;
+			if (tile.d) {
+				tileImg = '<img src="data:image/gif;base64,' + tile.d + '" />';
+			}
+			else {
+				var bgStyle = 'url(' + party.store_url + '/mosaic.jpg) no-repeat  -' + (x * 12) + 'px -' + (y * 12) + 'px';
+				tileImg = '<span style="display: block; width: 12px; height: 12px; background: '  + bgStyle + '"></span>';
+			}
+			var html = '<li id="' + tile.p + '" style="position: absolute; top: ' + offsetY +'px; left: ' + offsetX + 'px">' + tileImg + '</li>';
 			$(html).appendTo('#mosaic');
 			$('#' + tile.p).click( function(ev) {
 				ev.stopPropagation();
@@ -303,13 +311,12 @@ var party = party || {};
 				this.reset();
 				return;
 			}
+			
 			this.reset();
 			
 			$('body').addClass('shade highlight');
 			
 			this.highlightTilePos(position);
-			
-			// FIX user click
 		},
 		
 		findUser : function(user_name)
