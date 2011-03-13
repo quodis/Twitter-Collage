@@ -785,6 +785,32 @@ final class Tweet
 		return $elapsed && $result->count() ? floor($elapsed / $result->count()) : 0;
 	}
 
+
+	/**
+	 * number of unprocessed tweets
+	 *
+	 * @return integer
+	 */
+	public static function getCountUnprocessed()
+	{
+		global $mysqli;
+
+		$sql = "SELECT COUNT(id) AS cnt FROM `tweet` ";
+		$sql.= " WHERE `imageData` IS NULL ";
+
+		$stmt = $mysqli->prepare($sql);
+
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
+
+		if ($row = $result->row())
+		{
+			return $row['cnt'];
+		}
+	}
+
 }
 
 /**
