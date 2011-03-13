@@ -5,7 +5,7 @@ App:
     # url
     url: http://dev2.twitterparty.quodis.com
     # enable logs 
-    logEnabled: 0
+    logEnabled: 1
 Store:
     url: http://dev2.twitterparty.quodis.com/store
     path: /servers/develop/twitterparty2/public/store
