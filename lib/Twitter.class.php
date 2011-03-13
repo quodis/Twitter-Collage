@@ -44,7 +44,7 @@ class Twitter
 
 
 	/**
-	 * post data to this url
+	 * search
 	 *
 	 * @param string $terms
 	 * @param integer $rpp
@@ -60,11 +60,11 @@ class Twitter
 
 		$params = array('q' => $terms);
 
-		// don't use lastId?
+		// use lastId?
 		// NOTE: this behaviour controlled by flag (using memcached)
 		//   use reset-twitter-api script to trigger once
 		//   will probably result in duplicated tweets being fetched (insert fails silently)
-		if (!Cache::get(self::CACHE_KEY_RESET_FLAG))
+		if ($lastId && !Cache::get(self::CACHE_KEY_RESET_FLAG))
 		{
 			$params['since_id'] = $lastId;
 		}
