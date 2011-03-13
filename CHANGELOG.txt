@@ -1,7 +1,28 @@
 
+== 2011-03-12 ==
+
+Updated config file with "hasCronSchedule" setting in each job configuration
+
+Should be set to "1" if jobs are to be run as cron jobs (in which case the "period" 
+setting is irrelevant because job script will not loop, it will run once and exit)
+
+Jobs:
+    twitter-search:
+        hasCronSchedule: 1
+        period: 30
+    image-process:
+        hasCronSchedule: 1
+        period: 30
+        dbLimit: 100
+        imgLimit: 100
+    mosaic-build:
+        hasCronSchedule: 1
+        period: 60
+
+
 == 2011-03-11 ==
 
-Updated config file with logEnabled setting
+Updated config file with "logEnabled" setting
 
 App:
 

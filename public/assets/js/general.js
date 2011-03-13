@@ -49,7 +49,6 @@ var party = party || {};
 			active_bubble_pos: 0,
 			keep_bubble_open: false,
 			last_id: 0,
-			last_page: 0,
 			mosaic_offset: {},
 			initial_tiles_per_frame_incremental: 1,
 			draw_new_tiles_every: 0,
@@ -566,12 +565,6 @@ var party = party || {};
 	// Get the last complete page of tiles
 	function getVisibleTiles() {
 		
-		// Check if we have a complete page. If not, try again later
-		if (party.state.last_page == 0) {
-			window.setTimeout(reloadPage, 3 * 60 * 1000);
-			return;
-		}
-
 		// Request URL
 		var url = party.store_url + '/mosaic.json';
 		
@@ -602,7 +595,7 @@ var party = party || {};
 			});
 			// Keep the newest 200
 			autoplay_pool = autoplay_pool.slice(0, 199);
-			state.total_tiles = parseInt(party.state.last_page * total_positions, 10);
+			state.total_tiles = data.total_tiles;
 			
 			// Enable search box
 			searchEnable();
@@ -727,6 +720,7 @@ var party = party || {};
 				if (data.payload.last_id > state.last_id) {
 					state.last_id = data.payload.last_id;
 				}
+				state.total_tiles = data.payload.total_tiles;
 				
 				// Reverse the tiles to get the newest first and append the data to the buffer
 				new_tiles = new_tiles.concat(data.payload.tiles.reverse());

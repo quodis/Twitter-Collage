@@ -22,7 +22,7 @@ Config:
     group: www-data
 Twitter:
     urlSearch: "http://search.twitter.com/search.json"
-    terms: "#fx4 OR #ff4 OR #teamfirefox"
+    terms: "firefox OR chrome OR ie"
     rpp: 100
     pageLimit: 15
     timeout:
@@ -40,12 +40,15 @@ Mosaic:
     internalComposite: 1
 Jobs:
     twitter-search:
+        hasCronSchedule: 1
         period: 10
     image-process:
+        hasCronSchedule: 1
         period: 1
         dbLimit: 100
         imgLimit: 2500
     mosaic-build:
+        hasCronSchedule: 1
         period: 5
 Cache:
     enabled: 1

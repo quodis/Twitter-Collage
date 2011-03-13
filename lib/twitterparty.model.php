@@ -223,82 +223,24 @@ final class Tweet
 
 
 	/**
-	 * first incomplete page
+	 * determine the "page to be completed" (changed: gives priority to p-1
+	 * this means preserving a "fresh complete page", even if deletes occur
 	 *
-	 * @param integer $pageSize
+	 * @param boolean $withImage (optional, defaults to FALSE)
 	 *
-	 * @return integer
+	 * @return mysqli_stmt_wrap (columns: page, cnt)
 	 */
-	public static function getFirstIncompletePage($pageSize)
+	public static function getLastCoupleOfPages($withImage = FALSE)
 	{
 		global $mysqli;
 
-		$sql = "SELECT page, cnt FROM ";
-		$sql.="  (SELECT page, COUNT(1) AS cnt FROM tweet GROUP BY page) AS pages";
-		$sql.=" WHERE cnt < ? ORDER BY page LIMIT 1";
+		$withImage = !!$withImage;
+
+		$sql = "SELECT page, COUNT(1) AS cnt FROM tweet ";
+		if ($withImage) $sql.= " WHERE processedTs";
+		$sql.= "  GROUP BY page ORDER BY page DESC LIMIT 2";
 
 		$stmt = $mysqli->prepare($sql);
-		$stmt->bind_param('i', $pageSize);
-
-		$ok = $stmt->execute();
-		if (!$ok) throw new Exception($stmt->error);
-		$stmt->store_result();
-		$result = new mysqli_stmt_wrap($stmt);
-
-		if ($row = $result->row())
-		{
-			return $row['page'];
-		}
-	}
-
-
-	/**
-	 * last complete page
-	 *
-	 * @param integer $pageSize
-	 *
-	 * @return integer
-	 */
-	public static function getLastCompletePage($pageSize)
-	{
-		global $mysqli;
-
-		$sql = "SELECT page, cnt FROM ";
-		$sql.="  (SELECT page, COUNT(1) AS cnt FROM tweet WHERE processedTs GROUP BY page) AS pages";
-		$sql.=" WHERE cnt = ? ORDER BY page DESC LIMIT 1";
-
-		$stmt = $mysqli->prepare($sql);
-		$stmt->bind_param('i', $pageSize);
-
-		$ok = $stmt->execute();
-		if (!$ok) throw new Exception($stmt->error);
-		$stmt->store_result();
-		$result = new mysqli_stmt_wrap($stmt);
-
-		if ($row = $result->row())
-		{
-			return $row['page'];
-		}
-	}
-
-
-	/**
-	 * pages modified since
-	 *
-	 * @param integer $processedTs
-	 *
-	 * @return mysqli_stmt
-	 */
-	public static function getProcessedPages($processedTs)
-	{
-		global $mysqli;
-
-		if (empty($processedTs)) $processedTs = 0;
-
-		$sql = "SELECT page FROM tweet WHERE processedTs > ? GROUP BY page ORDER BY processedTs DESC";
-
-		$stmt = $mysqli->prepare($sql);
-		$stmt->bind_param('s', $processedTs);
 
 		$ok = $stmt->execute();
 		if (!$ok) throw new Exception($stmt->error);
@@ -308,6 +250,66 @@ final class Tweet
 		return $result;
 	}
 
+
+	/**
+	 * last complete page^H^H^H^Hmosaic (changed: complete mosaic, regardless of page, this means freshness++)
+	 *
+	 * @param integer $pageSize
+	 *
+	 * @return mysqli_stmt_wrap
+	 */
+	public static function getLatestMosaic($pageSize)
+	{
+		global $mysqli;
+
+		$sql = "SELECT id AS i, position AS p, twitterId AS w, userName AS u, imageUrl AS m , createdTs AS c, contents AS n FROM ";
+		$sql.="  (SELECT id, page, position, twitterId, userName, imageUrl, createdTs, contents FROM tweet WHERE processedTs ORDER BY page DESC LIMIT ?) AS latest";
+		$sql.=" GROUP BY position ORDER BY createdTs DESC";
+
+		$stmt = $mysqli->prepare($sql);
+		$limit = $pageSize * 3;
+		$stmt->bind_param('i', $limit);
+
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
+
+		return $result;
+	}
+
+
+	/**
+	 * last fallback tiles for certain positions (deja-vu)
+	 *
+	 * @param integer $positions
+	 *
+	 * @return mysqli_stmt_wrap
+	 */
+	public static function getFallbackTiles(array $positions)
+	{
+		global $mysqli;
+
+		foreach ($positions as $foo) $placeholders[] = '?';
+
+		$sql = "SELECT id AS i, position AS p, twitterId AS w, userName AS u, imageUrl AS m , createdTs AS c, contents AS n, imageData AS d FROM tweet ";
+		$sql.=" WHERE processedTs AND id in (" . implode(', ', $placeholders) . ")";
+		$sql.=" ORDER BY createdTs DESC";
+
+		$stmt = $mysqli->prepare($sql);
+
+		$types = str_repeat('i', count($positions));
+		$args = array_merge(array($types), $positions);
+
+		call_user_func_array(array($stmt, 'bind_param'), refValues($args));
+
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
+
+		return $result;
+	}
 
 	/**
 	 * @return integer
@@ -363,6 +365,32 @@ final class Tweet
 
 
 	/**
+	 * latest tweet from twitter
+	 *
+	 * @return integer
+	 */
+	public static function getLastTwitterId()
+	{
+		global $mysqli;
+
+		$sql = "SELECT twitterId FROM `tweet` ";
+		$sql.= " ORDER BY `createdTs` DESC LIMIT 1";
+
+		$stmt = $mysqli->prepare($sql);
+
+		$ok = $stmt->execute();
+		if (!$ok) throw new Exception($stmt->error);
+		$stmt->store_result();
+		$result = new mysqli_stmt_wrap($stmt);
+
+		if ($row = $result->row())
+		{
+			return $row['twitterId'];
+		}
+	}
+
+
+	/**
 	 * last tweet by user name
 	 *
 	 * @param string $userName
@@ -389,24 +417,31 @@ final class Tweet
 
 
 	/**
-	 * tweets without processed image
+	 * tweets without processed image (changed: give priority to newest tweets)
 	 *
+	 * @param integer $pageNo (optional)
 	 * @param integer $limit (optional)
 	 *
-	 * @return stmt_Extended
+	 * @return mysqli_stmt_wrap
 	 */
-	public static function getUnprocessed($limit = null)
+	public static function getUnprocessed($pageNo = null, $limit = null)
 	{
 		global $mysqli;
 
 		$limit = (int)$limit;
 		if (!$limit || $limit > self::HARDCODED_LIMIT) $limit = self::HARDCODED_LIMIT;
 
-		$sql = "SELECT id, page, position, twitterId, userId, userName, imageUrl, createdDate, createdTs, contents, isoLanguage, imageData, processedTs FROM `tweet` ";
-		$sql.= " WHERE `imageData` IS NULL LIMIT ?";
+		$sql = "SELECT id, page, position, imageUrl, processedTs FROM `tweet` ";
+		$sql.= " WHERE `imageData` IS NULL ";
+		if ($pageNo) $sql.= " AND `page` = ? ";
+		$sql.= " ORDER BY createdTs ASC LIMIT ?";
 
 		$stmt = $mysqli->prepare($sql);
-		$stmt->bind_param('s', $limit);
+		if ($pageNo)
+		{
+			$stmt->bind_param('ii', $pageNo, $limit);
+		}
+		else $stmt->bind_param('i', $limit);
 
 		$ok = $stmt->execute();
 		if (!$ok) throw new Exception($stmt->error);
@@ -424,7 +459,7 @@ final class Tweet
 	 * @param integer $lastId
 	 * @param boolean $withImage (optional, defaults to FALSE)
 	 *
-	 * @return stmt_Extended
+	 * @return mysqli_stmt_wrap
 	 */
 	public static function getByPage($pageNo, $lastId = null, $withImage = FALSE)
 	{
@@ -462,9 +497,9 @@ final class Tweet
 	/**
 	 *
 	 * @param integer $lastId
-	 * @para ingeger $limit (optional)
+	 * @param ingeger $limit (optional)
 	 *
-	 * @return stmt_Extended
+	 * @return mysqli_stmt_wrap
 	 */
 	public static function getSinceLastId($lastId, $limit = null)
 	{
@@ -509,7 +544,7 @@ final class Tweet
 	 *
 	 * @param boolean $withImage (optional, defaults to FALSE)
 	 *
-	 * @return array
+	 * @return integer
 	 */
 	public static function getUserCount($withImage = null)
 	{
@@ -542,7 +577,7 @@ final class Tweet
 	 * @param integer $limit (optional)
 	 * @param boolean $withImage (optional, defaults to FALSE)
 	 *
-	 * @return stmt_Extended
+	 * @return mysqli_stmt_wrap
 	 */
 	public static function getUsersByTerms($terms, $limit = null, $withImage = null)
 	{
@@ -603,7 +638,7 @@ final class Tweet
 	 * @param integer $limit (optional)
 	 * @param boolean $withImage (optional, defaults to FALSE)
 	 *
-	 * @return array
+	 * @return mysqli_stmt_wrap
 	 */
 	public static function getByUserName($userName, $limit = null, $withImage = null)
 	{
@@ -662,7 +697,7 @@ final class Tweet
 	 * @param integer $limit (optional)
 	 * @param boolean $withImage (optional, defaults to FALSE)
 	 *
-	 * @return array
+	 * @return mysqli_stmt_wrap
 	 */
 	public static function getByTerms($terms, $limit = null, $withImage = null)
 	{
@@ -720,7 +755,7 @@ final class Tweet
 	 *
 	 * @param integer $limit (optional)
 	 *
-	 * @return array
+	 * @return integer
 	 */
 	public static function getAverageDelay($limit = null)
 	{

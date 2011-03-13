@@ -56,7 +56,6 @@ function main()
 
 	// js config
 	$uiOptions = $config['UI']['options'];
-	$uiOptions['state']['last_page'] = Mosaic::getLastCompletePage();
 
 ?>
 <!DOCTYPE html>

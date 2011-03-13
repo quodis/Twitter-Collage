@@ -15,13 +15,6 @@ class Mosaic
 {
 
 	/**
-	 * @const string cache key
-	 */
-	const CACHE_KEY_LAST_TWEET = 'TWITTERPARTY::Mosaic::lastTweet::';
-	const CACHE_KEY_LAST_TWEET_WITH_IMAGE = 'TWITTERPARTY::Mosaic::lastTweetWithImage::';
-
-
-	/**
 	 * @var array
 	 */
 	private static $_config = null;
@@ -48,6 +41,7 @@ class Mosaic
 	 * @var integer twitt serial number
 	 */
 	private static $_lastTweetWithImage = null;
+
 
 	/**
 	 * static class, nothing to see here, move along
@@ -238,17 +232,19 @@ class Mosaic
 	 */
 	public static function updateMosaic()
 	{
-		$pageNo = Tweet::getLastCompletePage(self::getPageSize());
-		$result = Tweet::getByPage($pageNo, 0, TRUE);
-
 		$fileData = array(
 			'tiles' => array(),
 			'last_id' => null,
+			'total_tiles' => Tweet::getCount(TRUE),
 			'newest_tiles' => array(),
 		);
 
-		$i = 0;
-		$lastId = 0;
+		$pageSize = Mosaic::getPageSize();
+		// all slots
+		for ($i = 0; $i < $pageSize; $i++) $freeSlots[$i] = $i;
+
+		// get latest mosaic (if possible)
+		$result = Tweet::getLatestMosaic($pageSize);
 
 		if (!$result->count()) return;
 
@@ -256,14 +252,38 @@ class Mosaic
 		while ($tweet = $result->row())
 		{
 			if (isset($tiles[$tweet['p']])) continue;
+			// remove slot
+			unset($freeSlots[$tweet['p']]);
 			$tiles[$tweet['p']] = $tweet;
-			if ($tweet['i'] > $lastId) $lastId = $tweet['i'];
+		}
+
+		// some slots missing
+		if (count($freeSlots))
+		{
+			Debug::logMsg('some slots empty: ' . count($freeSlots));
+			// get
+			$result = Tweet::getFallbackTiles($freeSlots);
+			while ($tweet = $result->row())
+			{
+				if (isset($tiles[$tweet['p']])) continue;
+				// remove slot
+				unset($freeSlots[$tweet['p']]);
+				$tiles[$tweet['p']] = $tweet;
+			}
+		}
+
+		// still missing
+		if (count($freeSlots))
+		{
+			Debug::logMsg('still some slots empty:' . count($freeSlots) . ' (give up)');
+			return;
 		}
 
 		if (count($tiles))
 		{
 			$fileData['tiles'] = $tiles;
-			$fileData['last_id'] = $lastId;
+			// find max id
+			foreach ($tiles as $tile) if ($tile['i'] > $fileData['last_id']) $fileData['last_id'] = $tile['i'];
 		}
 
 		// save jpeg file
@@ -284,52 +304,39 @@ class Mosaic
 
 
 	/**
-	 * insert into the first free slot
+	 * try to keep one page complete
+	 * only insert into current page if the previous one has no free slots
+	 *
+	 * @param boolean $unprocessed (optional, defaults to FALSE)
 	 *
 	 * @return integer
 	 */
-	public static function getCurrentInsertingPageNo()
+	public static function getPriorityPageNo($unprocessed = FALSE)
 	{
-		$page = Tweet::getFirstIncompletePage(self::getPageSize());
+		$result = Tweet::getLastCoupleOfPages($unprocessed);
 
-		if (!$page) $page = Tweet::getLastPage() + 1;
-
-		if (!$page) $page = 1;
-
-		// page number
-		return $page;
-	}
-
-
-	/**
-	 * based on processed pages
-	 *
-	 * @return integer
-	 */
-	public static function getLastCompletePage()
-	{
-		$page = Tweet::getLastCompletePage(self::getPageSize());
-
-		return $page ? $page : 0;
-	}
-
-
-	/**
-	 * @return array
-	 */
-	public static function getProcessedPages($ts)
-	{
-		// load
-		$result = Tweet::getProcessedPages($ts);
-
+		$pageSize = self::getPageSize();
 
 		$pages = array();
-		while ($row = $result->row())
+		while ($pages[] = $result->row());
+
+		// the previous set is still incomplete
+		if (isset($pages[1]) && $pages[1]['cnt'] < $pageSize)
 		{
-			$pages[] = $row['page'];
+			return $pages[1]['page'];
 		}
-		// page number
-		return $pages;
+		// the current set is not complete?
+		if (isset($pages[0]) && $pages[0]['cnt'] < $pageSize)
+		{
+			return $pages[0]['page'];
+		}
+		// advance to new page
+		if (isset($pages[0]))
+		{
+			return $pages[0]['page'] + 1;
+		}
+		// is first page
+		else return 1;
 	}
 
 
@@ -344,8 +351,6 @@ class Mosaic
 		try
 		{
 			$tweet = Tweet::insert($row);
-
-			self::setLastTweet($tweet);
 
 			return $row;
 		}
@@ -366,19 +371,8 @@ class Mosaic
 	public static function updateTweetImage($id, & $imageData)
 	{
 		Tweet::updateImage($id, $imageData);
-
-		Cache::delete(self::CACHE_KEY_LAST_TWEET_WITH_IMAGE);
 	}
 
-	/**
-	 * @param array $lastTweet (by reference)
-	 */
-	public static function setLastTweet(array & $lastTweet)
-	{
-		self::$_lastTweet = $lastTweet;
-
-		Cache::set(self::CACHE_KEY_LAST_TWEET, $lastTweet, self::$_config['Cache']['TTL']['tweetIds']);
-	}
 
 
 	/**
@@ -386,9 +380,6 @@ class Mosaic
 	 */
 	public static function setLastTweetWithImage(array & $lastTweetWithImage)
 	{
-		self::$_lastTweetWithImage = $lastTweetWithImage;
-
-		Cache::set(self::CACHE_KEY_LAST_TWEET_WITH_IMAGE, $lastTweetWithImage, self::$_config['Cache']['TTL']['tweetIds']);
 	}
 
 
@@ -399,16 +390,10 @@ class Mosaic
 	 */
 	public static function getLastTweet()
 	{
-		// already loaded
-		if (!isset(self::$_lastTweet))
+		// load from db
+		if (!self::$_lastTweet)
 		{
-			self::$_lastTweet = Cache::Get(self::CACHE_KEY_LAST_TWEET);
-
-			// load from db
-			if (!self::$_lastTweet)
-			{
-				if ($row = Tweet::getLast()) self::setLastTweet($row);
-			}
+			if ($row = Tweet::getLast()) self::$_lastTweet = $row;
 		}
 		return self::$_lastTweet;
 	}
@@ -425,7 +410,7 @@ class Mosaic
 		if (!isset(self::$_lastTweetWithImage))
 		{
 			// load from db
-			if ($row = Tweet::getLast(TRUE)) self::setLastTweetWithImage($row);
+			if ($row = Tweet::getLast(TRUE)) self::$_lastTweetWithImage = $row;
 		}
 		return self::$_lastTweetWithImage;
 	}

@@ -40,12 +40,15 @@ Mosaic:
     internalComposite: 0
 Jobs:
     twitter-search:
+        hasCronSchedule: 1
         period: 10
     image-process:
+        hasCronSchedule: 1
         period: 1
         dbLimit: 100
         imgLimit: 1000
     mosaic-build:
+        hasCronSchedule: 1
         period: 5
 Cache:
     enabled: 0

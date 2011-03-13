@@ -33,7 +33,7 @@ Twitter:
     urlSearch: "http://search.twitter.com/search.json"
     terms: "#fx4 OR #ff4 OR #teamfirefox"
     rpp: 100
-    pageLimit: 30
+    pageLimit: 5
     timeout:
         apiCall: 5
         imgFile: 1
@@ -49,13 +49,16 @@ Mosaic:
     internalComposite: 0
 Jobs:
     twitter-search:
-        period: 10
+        hasCronSchedule: 1
+        period: 30
     image-process:
-        period: 1
+        hasCronSchedule: 1
+        period: 30
         dbLimit: 100
-        imgLimit: 1000
+        imgLimit: 100
     mosaic-build:
-        period: 5
+        hasCronSchedule: 1
+        period: 60
 Cache:
     enabled: 1
     TTL:

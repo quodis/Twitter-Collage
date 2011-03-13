@@ -29,6 +29,7 @@ function main()
 	$data = array(
 		'last_id' => $lastProcessedTweet['id'],
 		'tweet_count' => Tweet::getCount(TRUE),
+		'guest_count' =>  Tweet::getUserCount(TRUE),
 		'delay' => array(
 			'tweets' => $tweets,
 			'seconds' => $elapsed

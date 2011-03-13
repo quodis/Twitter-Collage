@@ -21,12 +21,12 @@ function main()
 	Debug::setForceLogToFile(TRUE);
 
 	$period = $config['Jobs']['twitter-search']['period'];
+	$hasCronSchedule = $config['Jobs']['twitter-search']['hasCronSchedule'];
 
 	while (TRUE)
 	{
 		// will return nothing on first call
-		$lastTweet = Mosaic::getLastTweet();
-		$lastId = isset($lastTweet['twitterId']) ? $lastTweet['twitterId'] : null;
+		$lastId = Tweet::getLastTwitterId();
 
 		// fetch results using twitter API
 		$newTweets = Twitter::search($config['Twitter']['terms'], $config['Twitter']['rpp'], $lastId);
@@ -45,7 +45,7 @@ function main()
 			if (!count($freeSlots))
 			{
 				// this page has them
-				$pageNo = Mosaic::getCurrentInsertingPageNo();
+				$pageNo = Mosaic::getPriorityPageNo();
 
 				// all slots
 				$pageSize = Mosaic::getPageSize();
@@ -60,20 +60,26 @@ function main()
 					unset($freeSlots[$row['p']]);
 				}
 
+				// sane
+				if (!count($freeSlots)) break;
+
 				// shuffle slots
 				shuffle($freeSlots);
 				Debug::logMsg('using page:' . $pageNo . ' free slots:' . count($freeSlots));
 			}
 
 			// pop one (but only after insert succeeds)
-			$tweets++;
 			$position = $freeSlots[count($freeSlots) - 1];
 
 			// insert tweet
 			$tweet['page'] = $pageNo;
 			$tweet['position'] = $position;
 			// ... and pop freee slot (on success)
-			if (Mosaic::addTweet($tweet)) array_pop($freeSlots);
+			if (Mosaic::addTweet($tweet))
+			{
+				$tweets++;
+				array_pop($freeSlots);
+			}
 		}
 
 		// sleep?
@@ -81,7 +87,12 @@ function main()
 		$sleep = $period - $elapsed;
 		if ($sleep < 1) $sleep = 1;
 
-		Debug::logMsg('OK! ... new tweets:' . $tweets . ' ... sleeping for ' . $sleep . ' seconds ...');
+		Debug::logMsg('OK! ... new tweets:' . $tweets . ' took ' . $elapsed . ' seconds');
+
+		if ($hasCronSchedule) break;
+
+		Debug::logMsg('... sleeping for ' . $sleep . ' seconds ...');
+
 		sleep($sleep);
 	}
 
