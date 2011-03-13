@@ -125,11 +125,11 @@ function main()
 						</dl>
 						<dl class="delay delay-seconds">
 							<dt><span>Delay</span></dt>
-							<dd id="job-delay-seconds"><strong class="value"><span>0</span></strong> <em>secs</em></dd>
+							<dd id="job-delay-seconds"><strong class="value"><span><?=$delaySeconds?></span></strong> <em>secs</em></dd>
 						</dl>
 						<dl class="delay delay-tweets">
 							<dt><span>Delay</span></dt>
-							<dd id="job-delay-ttweets"><strong class="value"><span>0</span></strong> <em>tweets</em></dd>
+							<dd id="job-delay-tweets"><strong class="value"><span><?=$delayTweets?></span></strong> <em>tweets</em></dd>
 						</dl>
 					</div><!-- counters -->
 
