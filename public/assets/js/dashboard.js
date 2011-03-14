@@ -69,6 +69,12 @@ var party = party || {};
 			
 			this.buildInterface();
 			
+			$.extend(party, {
+				"processMosaic": function(data) {
+					this.processMosaic(data);
+				}.bind(this) 
+			});
+			
 			this.loadMosaic();
 		},
 
@@ -159,17 +165,22 @@ var party = party || {};
 			$('<li id="loading">loading mosaic...</li>').appendTo('#mosaic');
 
 			// load
-			var url = this.freshUrl(this.options.store_url + '/mosaic.json');
-			this.load(url, {}, function(data) {
-				$('#loading').remove();
-				var count = this.addTiles(data.tiles);
-				if (!count) {
-					$('<li id="loading" class="empty">no mosaic...</li>').appendTo('#mosaic');
-				}
-			}.bind(this), 'mosaic', function() { 
-				$('#loading').remove();
-				$('<li id="loading">not found</li>').appendTo('#mosaic');
-			} ) ;
+			$.ajax({
+				url: this.freshUrl(this.options.store_url + '/mosaic.json'), 
+				type: 'GET',
+				dataType: 'jsonp',
+				jsonp: false // hardcoded callback = party.processMosaic({...})
+			});
+			
+		},
+		
+		processMosaic : function(data) 
+		{
+			$('#loading').remove();
+			var count = this.addTiles(data.tiles);
+			if (!count) {
+				$('<li id="loading" class="empty">no mosaic...</li>').appendTo('#mosaic');
+			}
 		},
 
 		poll : function()
@@ -872,7 +883,7 @@ var party = party || {};
 			} );
 		}
 	} );
-
+	
 
 	/**
 	 * add support for prototype like bind()

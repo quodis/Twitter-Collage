@@ -286,18 +286,23 @@ class Mosaic
 			foreach ($tiles as $tile) if ($tile['i'] > $fileData['last_id']) $fileData['last_id'] = $tile['i'];
 		}
 
+		// mosaic.json contents (jsonp)
+		$contents = 'party.processMosaic(' . json_encode($fileData) . ');';
+
 		// save jpeg file
 		$fileName = self::getImageFileName();
 		$image = Image::makeMosaic(self::$_config['Mosaic']['cols'], self::$_config['Mosaic']['rows'], self::$_pageConfig['index'], $tiles);
-		$image->writeImage($fileName);
-		chmod($fileName, octdec(self::$_config['Store']['filePermissions']));
-		chgrp($fileName, self::$_config['Store']['group']);
+		if ($image->writeImage($fileName))
+		{
+			if (isset(self::$_config['Store']['filePermissions'])) chmod($fileName, octdec(self::$_config['Store']['filePermissions']));
+			if (isset(self::$_config['Store']['group'])) chgrp($fileName, self::$_config['Store']['group']);
 
-		// save js file
-		$fileName = self::getDataFileName();
-		file_put_contents($fileName, json_encode($fileData));
-		chmod($fileName, octdec(self::$_config['Store']['filePermissions']));
-		chgrp($fileName, self::$_config['Store']['group']);
+			// save js file
+			$fileName = self::getDataFileName();
+			file_put_contents($fileName, $contents);
+			if (isset(self::$_config['Store']['filePermissions'])) chmod($fileName, octdec(self::$_config['Store']['filePermissions']));
+			if (isset(self::$_config['Store']['group'])) chgrp($fileName, self::$_config['Store']['group']);
+		}
 
 		return count($fileData['tiles']);
 	}
