@@ -56,7 +56,7 @@ var party = party || {};
 				initial_frames_per_second: 8,
 				initial_tiles_per_frame: 15,
 				new_tiles_per_second: 8,
-				pause_after: 10 // Minutes
+				pause_after: 12 // Minutes
 			},
 			medium: {
 				initial_frames_per_second: 4,
@@ -68,7 +68,7 @@ var party = party || {};
 				initial_frames_per_second: 1,
 				initial_tiles_per_frame: 200,
 				new_tiles_per_second: 1,
-				pause_after: 10 // Minutes
+				pause_after: 6 // Minutes
 			}
 		};
 	
@@ -532,22 +532,10 @@ var party = party || {};
 		// Show the image on a small timeout window
 		img = new Image();
 		$(img).load(function () {
-			console.log('loaded!');
 			b.avatar_img.attr('src', tile.m);
 			img = null;
 		}).attr('src', tile.m);
 		
-		// party.showBubbleImageTimer = window.setTimeout(function(){
-		// 	b.avatar_img.attr('src', tile.m);
-		// 	b.avatar_img.load(function(){
-		// 		$(this).fadeIn('fast');
-		// 	})
-		// 	party.showBubbleImageTimer = null;
-		// 	tile = null;
-		// }, 500);
-		// 
-		//b.avatar_img.attr('src', tile.m);
-					
 		// Position the selected tile element
 		tile_hover.css({
 			'left': (x*12) + 'px',
@@ -781,7 +769,7 @@ var party = party || {};
 	$.extend(party, {
 		"loading_message_seconds": 2,
 		"polling_timer_seconds": 180, 
-		"auto_bubble_seconds": 7,
+		"auto_bubble_seconds": 6,
 		"grid": [],
 		"index": [],
 		"init": init,
