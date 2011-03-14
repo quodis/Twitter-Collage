@@ -157,7 +157,7 @@ function main()
 						<li><?= /* L10n: Funny loading message */ _('Setting up Firefox deco') ?></li>
 					</ul>
 
-					<img  src="data:image/gif;base64,R0lGODlhAQABAPAAAP8A/wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" id="tile-hover" />
+					<img src="data:image/gif;base64,R0lGODlhAQABAPAAAP8A/wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" id="tile-hover" />
 
 					<article id="bubble" class="bubble">
 
@@ -166,7 +166,7 @@ function main()
 							<?php $link = '<a href="#" title="' . _('Twitter profile') . '" rel="author external" target="_blank"></a>'; ?>
 							<h1><?= sprintf(/* L10n: Used in: "twitter username" wrote */ _('%s <span>wrote</span>'), $link) ?></h1>
 							<a href="#" title="" rel="author external" class="twitter-avatar" target="_blank">
-								<img  src="data:image/gif;base64,R0lGODlhAQABAPAAAP8A/wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="<?= _('Twitter profile picture') ?>" width="48" height="48" />
+								<img src="assets/images/avatar-loading.gif" alt="<?= _('Twitter profile picture') ?>" width="48" height="48" />
 							</a>
 							<time datetime="<?=date('Y-m-d')?>" pubdate><a href="#" rel="bookmark external" title="<?= _('Permalink') ?>" target="_blank"></a></time>
 
