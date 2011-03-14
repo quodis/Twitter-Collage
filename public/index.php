@@ -157,7 +157,7 @@ function main()
 						<li><?= /* L10n: Funny loading message */ _('Setting up Firefox deco') ?></li>
 					</ul>
 
-					<img src="data:image/gif;base64,R0lGODlhAQABAPAAAP8A/wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" id="tile-hover" />
+					<div id="tile-hover"></div>
 
 					<article id="bubble" class="bubble">
 
