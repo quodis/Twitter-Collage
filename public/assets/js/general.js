@@ -455,7 +455,8 @@ var party = party || {};
 			position_css,
 			i,
 			g,
-			formatted_date;
+			formatted_date,
+			avatar_img_holder;
 		
 		tile = visible_tiles[pos];
 		if (!tile || !b) {
@@ -489,8 +490,8 @@ var party = party || {};
 				position_css = {
 					top: '',
 					right: '',
-					bottom: (532 - (y * 12)) + 'px',
-					left: ((x * 12) + 2) + 'px'
+					bottom: (567 - (y * 12)) + 'px',
+					left: ((x * 12) + 16) + 'px'
 				};
 			}
 		} else {
@@ -529,6 +530,12 @@ var party = party || {};
 		b.container.css(position_css).removeClass().addClass('bubble ' + position_class + ' color-' + g.r);
 		
 		// Show the image on a small timeout window
+		avatar_img_holder = $(new Image());
+		avatar_img_holder.load(function(){
+			b.avatar_img.attr('src', tile.m);
+			avatar_img_holder = null;
+		})
+		avatar_img_holder.src = tile.m;
 		
 		// party.showBubbleImageTimer = window.setTimeout(function(){
 		// 	b.avatar_img.attr('src', tile.m);
@@ -539,7 +546,7 @@ var party = party || {};
 		// 	tile = null;
 		// }, 500);
 		// 
-		b.avatar_img.attr('src', tile.m);
+		//b.avatar_img.attr('src', tile.m);
 					
 		// Position the selected tile element
 		tile_hover.css({
