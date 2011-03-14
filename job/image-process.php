@@ -21,6 +21,8 @@ function main()
 	Debug::setForceLogToFile(TRUE);
 
 	$period   = $config['Jobs']['image-process']['period'];
+	$hasCronSchedule = $config['Jobs']['twitter-search']['hasCronSchedule'];
+
 	$dbLimit  = $config['Jobs']['image-process']['dbLimit'];
 	$imgLimit = $config['Jobs']['image-process']['imgLimit'];
 
@@ -33,15 +35,22 @@ function main()
 	while (TRUE && $processed < $imgLimit)
 	{
 		// NOTE: sleep at the top of the loop prevents (see above)
-		if ($sleep) sleep($sleep);
+		if ($sleep && !$hasCronSchedule) sleep($sleep);
 
 		// start time
-		$start = time();
+		$gStart = time();
 
-		// fetch tweets
-		$tweetsWithoutImage = Tweet::getUnprocessed($dbLimit);
+		// fetch tiles from page priority page
+		$pageNo = Mosaic::getPriorityPageNo(TRUE);
+		$unprocessedTiles = Tweet::getUnprocessed($pageNo, $dbLimit);
 
-		while ($tweet = $tweetsWithoutImage->row())
+		// fetch others (oldest first)
+		if (!$unprocessedTiles->count())
+		{
+			$unprocessedTiles = Tweet::getUnprocessed(null, $dbLimit);
+		}
+
+		while ($tweet = $unprocessedTiles->row())
 		{
 			$processed++;
 
@@ -98,14 +107,16 @@ function main()
 		}
 
 		// sleep?
-		$elapsed = time() - $start;
+		$elapsed = time() - $gStart;
 		$sleep = $period - $elapsed;
 		if ($sleep < 0) $sleep = 0;
 
-		Debug::logMsg('OK! ... images processed: ' . $processed . '/' . $imgLimit . ' ... sleeping for ' . $sleep . ' seconds ...');
-	}
+		Debug::logMsg('OK! ... images processed: ' . $processed . '/' . $imgLimit . ' ... took ' . $elapsed . ' seconds');
 
-	Debug::logMsg('...this honoured worker is now going to hara-kiri...');
+		if ($hasCronSchedule) break;
+
+		Debug::logMsg('... sleeping for ' . $sleep . ' seconds ...');
+	}
 
 	exit();
 

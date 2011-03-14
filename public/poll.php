@@ -47,6 +47,7 @@ function main()
 	$data = array(
 		'tiles' => array(),
 		'last_id' => null,
+		'total_tiles' => Tweet::getCount(TRUE),
 		'msg' => null
 	);
 

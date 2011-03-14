@@ -49,7 +49,6 @@ var party = party || {};
 			active_bubble_pos: 0,
 			keep_bubble_open: false,
 			last_id: 0,
-			last_page: 0,
 			mosaic_offset: {},
 			initial_tiles_per_frame_incremental: 1,
 			draw_new_tiles_every: 0,
@@ -275,10 +274,9 @@ var party = party || {};
 		// Setup the search functionality
 		searchInit();
 		// Get the page of visible tiles
-		getVisibleTiles();
+		loadMosaic();
 		// Bind the hover action
-
-        party.canvas.bind('mousemove', function(ev) {
+		party.canvas.bind('mousemove', function(ev) {
 			var x,
 				y,
 				pos,
@@ -293,26 +291,26 @@ var party = party || {};
 
 			x = Math.ceil((ev.clientX + f_scrollLeft() - offset.left) / 12) - 1;
 			y = Math.ceil((ev.clientY + f_scrollTop() - offset.top) / 12) - 1;
-            if (x < 0 || y < 0) {
+			if (x < 0 || y < 0) {
 				return;
 			}
 
-            pos = party.mosaic.grid[x][y];
-            
-            party.mousemoveTimer = window.setTimeout(function(){
-                // is valid x,y
-                if (pos) {
-    				// Check if this is not the already opened bubble
-    				if (state.active_bubble_pos != pos.i) {
-    					state.active_bubble_pos = pos.i;
-    					showBubble(pos.i);
-    				}
-                } else {
-    				// Not a tile
-    				startAutoBubble();
-    			}
-            }, 50);			
-        });
+			pos = party.mosaic.grid[x][y];
+
+			party.mousemoveTimer = window.setTimeout(function(){
+				// is valid x,y
+				if (pos) {
+					// Check if this is not the already opened bubble
+					if (state.active_bubble_pos != pos.i) {
+						state.active_bubble_pos = pos.i;
+						showBubble(pos.i);
+					}
+				} else {
+					// Not a tile
+					startAutoBubble();
+				}
+			}, 50);			
+		});
 		
 		party.canvas.bind('mouseleave', function(){
 			startAutoBubble();
@@ -335,11 +333,11 @@ var party = party || {};
 		
 		// Close bubble on leave
 		party.bubble.container.bind('mouseleave', function() {
-		    state.keep_bubble_open = false;
+			state.keep_bubble_open = false;
 		});
 		
 		party.init = function() {
-		    return party;
+			return party;
 		}
 	}
 	
@@ -525,12 +523,12 @@ var party = party || {};
 		//Show the image on a small timeout window
 		
 		party.showBubbleImageTimer = window.setTimeout(function(){
-		    b.avatar_img.attr('src', tile.m);
-		    b.avatar_img.load(function(){
-		        $(this).fadeIn('fast');
-		    })
-		    party.showBubbleImageTimer = null;
-		    tile = null;
+			b.avatar_img.attr('src', tile.m);
+			b.avatar_img.load(function(){
+				$(this).fadeIn('fast');
+			})
+			party.showBubbleImageTimer = null;
+			tile = null;
 		}, 500);
 		
 		// Position the selected tile element
@@ -553,8 +551,8 @@ var party = party || {};
 		
 		//Clean the image showing timer if bubble is closed in the meanwhile
 		if (party.showBubbleImageTimer) {
-		    window.clearTimeout(party.showBubbleImageTimer);
-		    party.showBubbleImageTimer = null;
+			window.clearTimeout(party.showBubbleImageTimer);
+			party.showBubbleImageTimer = null;
 		}
 	}
 	
@@ -564,59 +562,54 @@ var party = party || {};
 	}
 	
 	// Get the last complete page of tiles
-	function getVisibleTiles() {
-		
-		// Check if we have a complete page. If not, try again later
-		if (party.state.last_page == 0) {
-			window.setTimeout(reloadPage, 3 * 60 * 1000);
-			return;
-		}
-
-		// Request URL
-		var url = party.store_url + '/mosaic.json';
-		
-		// Get the first visible page from server
-		$.getJSON(url, function(data) {
-			
-			// Hide the Loading
-			loadingHide();
-			
-			// Update last id
-			if (data.last_id > state.last_id) {
-				state.last_id = data.last_id;
-			}
-			// Write the data locally
-			visible_tiles = data.tiles;
-			// 
-			
-			var key;
-			for (key in visible_tiles) {
-				if (visible_tiles[key].p) {
-					autoplay_pool.push({id: parseInt(visible_tiles[key].i,10), position: parseInt(visible_tiles[key].p,10)});
-				}
-			}
-			total_positions = autoplay_pool.length;
-			// Put the newest on top
-			autoplay_pool.sort(function(a, b) {
-				return b.id - a.id;
-			});
-			// Keep the newest 200
-			autoplay_pool = autoplay_pool.slice(0, 199);
-			state.total_tiles = parseInt(party.state.last_page * total_positions, 10);
-			
-			// Enable search box
-			searchEnable();
-			
-			// Draw the mosaic!
-			initialDraw();
-			
-			// Start real-time polling
-			startPolling();
-			
-			// Clean memory
-			data = null;
-
+	function loadMosaic() {		
+		$.ajax({
+			url: party.store_url + '/mosaic.json', 
+			type: 'GET',
+			dataType: 'jsonp',
+			jsonp: false // hardcoded callback = party.processMosaic({...})
 		});
+	}
+
+	// Processe the from server
+	function processMosaic(data) {
+		// Hide the Loading
+		loadingHide();
+		
+		// Update last id
+		if (data.last_id > state.last_id) {
+			state.last_id = data.last_id;
+		}
+		// Write the data locally
+		visible_tiles = data.tiles;
+		// 
+		
+		var key;
+		for (key in visible_tiles) {
+			if (visible_tiles[key].p) {
+				autoplay_pool.push({id: parseInt(visible_tiles[key].i,10), position: parseInt(visible_tiles[key].p,10)});
+			}
+		}
+		total_positions = autoplay_pool.length;
+		// Put the newest on top
+		autoplay_pool.sort(function(a, b) {
+			return b.id - a.id;
+		});
+		// Keep the newest 200
+		autoplay_pool = autoplay_pool.slice(0, 199);
+		state.total_tiles = data.total_tiles;
+		
+		// Enable search box
+		searchEnable();
+		
+		// Draw the mosaic!
+		initialDraw();
+		
+		// Start real-time polling
+		startPolling();
+		
+		// Clean memory
+		data = null;
 	}
 	
 	function startDrawNewTiles() {
@@ -727,6 +720,7 @@ var party = party || {};
 				if (data.payload.last_id > state.last_id) {
 					state.last_id = data.payload.last_id;
 				}
+				state.total_tiles = data.payload.total_tiles;
 				
 				// Reverse the tiles to get the newest first and append the data to the buffer
 				new_tiles = new_tiles.concat(data.payload.tiles.reverse());
@@ -786,7 +780,8 @@ var party = party || {};
 		"performance_settings": performance_settings,
 		"state": state,
 		"new_tiles": new_tiles,
-		"loadingShow": loadingShow
+		"loadingShow": loadingShow,
+		"processMosaic":processMosaic
 	});
 	
 }());
@@ -794,11 +789,11 @@ var party = party || {};
 // Preload important stuff
 (function(){
 	var imgsToPreload = [
-	    'assets/images/layout/bubbles.png'
+		'assets/images/layout/bubbles.png'
 	];
 	for (var i=imgsToPreload.length; i--; ) {
-		    var img = new Image();
-		    img.src = imgsToPreload[i];
+			var img = new Image();
+			img.src = imgsToPreload[i];
 		}
 	}
 )();

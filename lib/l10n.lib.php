@@ -283,25 +283,33 @@ class Locale
 
 
 	/**
-	 *
+	 * @param string $input (optional)
 	 */
-	public static function choose()
+	public static function validateOrRedirect($input = null)
 	{
+		// get the admissible locales
 		self::_loadlanguageMap();
 
-		// get the admissible locales
-		$availableLocales = array_keys(self::$_languageMap);
-
-		$chooser = new ChooseLocale($availableLocales);
-
-		return $chooser->getCompatibleLocale();
+		// validate if input is given
+		if ($input && array_key_exists($input, self::$_languageMap))
+		{
+			return $input;
+		}
+		else
+		{
+			// auto-detect
+			$availableLocales = array_keys(self::$_languageMap);
+			$chooser = new ChooseLocale($availableLocales);
+			$locale = $chooser->getCompatibleLocale();
+			// and redirect
+			self::redirect($locale);
+		}
 	}
 
 	public static function redirect($locale)
 	{
 		global $config;
 		$url = $config['App']['url'] . '/' . $locale;
-		// redirect the user to his preferred language as defined in the accept-language request header
 		header('Date: '.gmdate('D, d M Y H:i:s \G\M\T', time()));
 		header('Expires: Fri, 01 Jan 1990 00:00:00 GMT');
 		header('Pragma: no-cache');

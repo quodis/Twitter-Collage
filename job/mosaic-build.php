@@ -21,6 +21,7 @@ function main()
 	Debug::setForceLogToFile(TRUE);
 
 	$period = $config['Jobs']['mosaic-build']['period'];
+	$hasCronSchedule = $config['Jobs']['twitter-search']['hasCronSchedule'];
 
 	while (TRUE)
 	{
@@ -29,14 +30,23 @@ function main()
 
 		$numTiles = Mosaic::updateMosaic();
 
-		Debug::logMsg('OK! ... updated mosaic. number of tiles:' . $numTiles);
+		if ($numTiles)
+		{
+			Debug::logMsg('OK! ... updated mosaic. number of tiles:' . $numTiles);
+		}
+		else Debug::logMsg('SKIP! ...');
 
 		// sleep?
 		$elapsed = time() - $start;
 		$sleep = $period - $elapsed;
 		if ($sleep < 1) $sleep = 1;
 
-		Debug::logMsg('OK! ... took ' . $elapsed . ' seconds, sleeping for ' . $sleep . ' seconds ...');
+		Debug::logMsg('OK! ... took ' . $elapsed . ' seconds');
+
+		if ($hasCronSchedule) break;
+
+		Debug::logMsg('... sleeping for ' . $sleep . ' seconds ...');
+
 		sleep($sleep);
 	}
 
