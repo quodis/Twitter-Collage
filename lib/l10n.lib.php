@@ -310,7 +310,6 @@ class Locale
 	{
 		global $config;
 		$url = $config['App']['url'] . '/' . $locale;
-		// redirect the user to his preferred language as defined in the accept-language request header
 		header('Date: '.gmdate('D, d M Y H:i:s \G\M\T', time()));
 		header('Expires: Fri, 01 Jan 1990 00:00:00 GMT');
 		header('Pragma: no-cache');
