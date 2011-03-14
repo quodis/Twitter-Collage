@@ -154,7 +154,7 @@ function main()
 					</div><!-- control-box page -->
 
 					<div id="quodis-badge">
-						<a target="_blank" href="/" title="Quodis" class="text-replace">by Quodis</a>
+						<a target="_blank" href="http://quodis.com" title="Quodis" class="text-replace">by Quodis</a>
 					</div><!-- quodis-badge -->
 
 				</aside><!-- main-content -->
