@@ -153,6 +153,10 @@ function main()
 						<button class="submit" type="submit" id="force-poll-bttn" tabindex="6" class="button"><span>Poll</span></button>
 					</div><!-- control-box page -->
 
+					<div id="quodis-badge">
+						<a target="_blank" href="/" title="Quodis" class="text-replace">by Quodis</a>
+					</div><!-- quodis-badge -->
+
 				</aside><!-- main-content -->
 
 				<ul id="mosaic">

@@ -58,6 +58,22 @@ footer {
 	color:#ffffff;
 }
 
+#quodis-badge {
+	margin-top: 12px;
+	padding-top: 24px;
+	border-top: 1px solid #87B7DD;
+}
+
+#quodis-badge a {
+	text-indent: -9999px;
+	overflow: hidden;
+	display: block;
+	float:right;
+	width: 77px;
+	height: 20px;
+	background: transparent url(../images/layout/quodis-logo.png) top left no-repeat;
+}
+
 
 /* 3. Control Panel */
 
