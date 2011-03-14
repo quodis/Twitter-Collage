@@ -22,11 +22,8 @@ function main()
 
 	// requested locale
 	$locale = isset($_GET['locale']) ? $_GET['locale'] : null;
-	if (!$locale)
-	{
-		$locale = Locale::choose();
-		Locale::redirect($locale);
-	}
+
+	$locale = Locale::validateOrRedirect($locale);
 
 	// cache
 	$cacheKey = 'TWITTER-PARTY::index::locale=' . $locale;

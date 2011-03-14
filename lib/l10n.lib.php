@@ -283,18 +283,27 @@ class Locale
 
 
 	/**
-	 *
+	 * @param string $input (optional)
 	 */
-	public static function choose()
+	public static function validateOrRedirect($input = null)
 	{
+		// get the admissible locales
 		self::_loadlanguageMap();
 
-		// get the admissible locales
-		$availableLocales = array_keys(self::$_languageMap);
-
-		$chooser = new ChooseLocale($availableLocales);
-
-		return $chooser->getCompatibleLocale();
+		// validate if input is given
+		if ($input && array_key_exists($input, self::$_languageMap))
+		{
+			return $input;
+		}
+		else
+		{
+			// auto-detect
+			$availableLocales = array_keys(self::$_languageMap);
+			$chooser = new ChooseLocale($availableLocales);
+			$locale = $chooser->getCompatibleLocale();
+			// and redirect
+			self::redirect($locale);
+		}
 	}
 
 	public static function redirect($locale)
