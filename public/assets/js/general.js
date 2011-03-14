@@ -309,16 +309,16 @@ var party = party || {};
 		});
 		
 		// Keep bubble open when tile is clicked
-		tile_hover.bind('click', function(event){
-			if (!state.keep_bubble_open) {
-				state.keep_bubble_open = true;
-			}
-			event.stopPropagation();
-			return false;
-		});
+		// tile_hover.bind('click', function(event){
+		// 	if (!state.keep_bubble_open) {
+		// 		state.keep_bubble_open = true;
+		// 	}
+		// 	event.stopPropagation();
+		// 	return false;
+		// });
 		
 		// Close the bubble
-		party.canvas.bind('click', hideBubble);
+		// party.canvas.bind('click', hideBubble);
 		
 		// Try to start autobubble when mouse leaves the mosaic
 		party.canvas.bind('mouseleave', function(){
@@ -326,22 +326,22 @@ var party = party || {};
 		});
 		
 		// Bubble link clicks
-		party.bubble.container.bind('click', function(event){
-			// Return true only if the user clicks on a link
-			event.stopPropagation();
-			return (event.target.nodeName.toLowerCase() == 'a' || event.target.nodeName.toLowerCase() == 'img');
-		});
-		
+		// party.bubble.container.bind('click', function(event){
+		// 	// Return true only if the user clicks on a link
+		// 	event.stopPropagation();
+		// 	return (event.target.nodeName.toLowerCase() == 'a' || event.target.nodeName.toLowerCase() == 'img');
+		// });
+		// 
 		// Keep bubble open on enter
 		party.bubble.container.bind('mouseenter', function() {
 			state.keep_bubble_open = true;
 			stopAutoBubble();
 		});
 
-		// // Close bubble on leave
-		// party.bubble.container.bind('mouseleave', function() {
-		// 	state.keep_bubble_open = false;
-		// });
+		// Close bubble on leave
+		party.bubble.container.bind('mouseleave', function() {
+			state.keep_bubble_open = false;
+		});
 
 		party.init = function() {
 			return party;
