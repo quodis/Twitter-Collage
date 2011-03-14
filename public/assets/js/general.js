@@ -291,7 +291,22 @@ var party = party || {};
 			}
 
 			pos = party.mosaic.grid[x][y];
+			
+			if (pos) {
+				
+				// Position the selected tile element
+				tile_hover.css({
+					'left': (x*12) + 'px',
+					'top': (y*12) + 'px',
+					'border-color': colors[pos.r]
+				});
 
+				// Show
+				tile_hover.show();
+			} else {
+				tile_hover.hide();
+			}
+			
 			party.mousemoveTimer = window.setTimeout(function(){
 				// is valid x,y
 				if (pos) {
@@ -536,15 +551,7 @@ var party = party || {};
 			img = null;
 		}).attr('src', tile.m);
 		
-		// Position the selected tile element
-		tile_hover.css({
-			'left': (x*12) + 'px',
-			'top': (y*12) + 'px',
-			'border-color': colors[g.r]
-		});
-		
-		// Show
-		tile_hover.show();
+
 		b.container.show();
 		
 	}
