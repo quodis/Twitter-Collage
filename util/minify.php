@@ -27,13 +27,13 @@ function main()
 		$mosaic = file_get_contents($cssPath . '/mosaic.css');
 		file_put_contents('/tmp/party.css', $ftp . $mosaic);
 
-		shell_exec(APP_PATH . '/src/yuicompressor-2.4.2.jar  /tmp/party.css -o ' . $cssPath . '/party-min.css');
+		shell_exec('/usr/bin/java -jar ' . APP_PATH . '/src/yuicompressor-2.4.2.jar  /tmp/party.css -o ' . $cssPath . '/party-min.css');
 
 		$global  = file_get_contents($jsPath . '/global.js');
 		$general = file_get_contents($jsPath . '/general.js');
 		file_put_contents('/tmp/party.js', $global . $general);
 
-		shell_exec(APP_PATH . '/src/compiler.jar  --js=/tmp/party.js --compilation_level ADVANCED_OPTIMIZATIONS -js_output_file=' . $jsPath . '/party-min.js');
+		shell_exec('/usr/bin/java -jar ' . APP_PATH . '/src/compiler.jar  --js=/tmp/party.js --compilation_level ADVANCED_OPTIMIZATIONS -js_output_file=' . $jsPath . '/party-min.js');
 	}
 
 	Dispatch::now(1, 'OK');
