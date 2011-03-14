@@ -289,7 +289,9 @@ http://www.opensource.org/licenses/mit-license.php
 
 #tile-hover {
 	position: absolute;
-	border-width: 2px;
+	border-width: 1px;
+	border-color: white;
+	border-color: rgba(255, 255, 255, 0.7);
 	border-style: solid;
 	margin-left: -2px;
 	margin-top: -2px;

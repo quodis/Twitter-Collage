@@ -234,6 +234,15 @@ var party = party || {};
 	}
 	
 	
+	
+	function moveHoverTile(x,y) {
+		tile_hover.css({
+			'left': (x*12) + 'px',
+			'top': (y*12) + 'px',
+			'display': 'block'
+		});
+	}
+	
 	// First to be called
 	function init() {
 		var bubble;
@@ -293,16 +302,7 @@ var party = party || {};
 			pos = party.mosaic.grid[x][y];
 			
 			if (pos) {
-				
-				// Position the selected tile element
-				tile_hover.css({
-					'left': (x*12) + 'px',
-					'top': (y*12) + 'px',
-					'border-color': colors[pos.r]
-				});
-
-				// Show
-				tile_hover.show();
+				moveHoverTile(x,y);
 			} else {
 				tile_hover.hide();
 			}
@@ -349,6 +349,13 @@ var party = party || {};
 		// 
 		// Keep bubble open on enter
 		party.bubble.container.bind('mouseenter', function() {
+			// Fixate the hover tile on the originating tile
+			var i = party.mosaic.index[state.active_bubble_pos];
+			if (!i) {
+				return;
+			}
+			moveHoverTile(i[0],i[1]);
+			
 			state.keep_bubble_open = true;
 			stopAutoBubble();
 		});
@@ -551,7 +558,7 @@ var party = party || {};
 			img = null;
 		}).attr('src', tile.m);
 		
-
+		moveHoverTile(x,y);
 		b.container.show();
 		
 	}
