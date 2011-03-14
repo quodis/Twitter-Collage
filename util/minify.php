@@ -31,7 +31,8 @@ function main()
 	$general = file_get_contents($jsPath . '/general.js');
 	file_put_contents('/tmp/party.js', $global . $general);
 
-	shell_exec('/usr/bin/java -jar ' . APP_PATH . '/src/compiler.jar  --js=/tmp/party.js --compilation_level ADVANCED_OPTIMIZATIONS --js_output_file=' . $jsPath . '/party-min.js');
+	shell_exec('/usr/bin/java -jar ' . APP_PATH . '/src/yuicompressor-2.4.2.jar  /tmp/party.js -o ' . $jsPath . '/party-min.js');
+	//shell_exec('/usr/bin/java -jar ' . APP_PATH . '/src/compiler.jar  --js=/tmp/party.js --compilation_level SIMPLE_OPTIMIZATIONS --js_output_file=' . $jsPath . '/party-min.js');
 
 	Dispatch::now(1, 'OK');
 }
