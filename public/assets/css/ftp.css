@@ -9,7 +9,6 @@ Licensed under a Creative Commons Attribution Share-Alike License v3.0 http://cr
 
 */
 
-
 /* 1.RESET */
 
 html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, code, del, dfn, em, img, q, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
@@ -187,10 +186,6 @@ body {
 	display: none;
 }
 
-
-
-/* 4.HEADER */
-
 /* 4.HEADER */
 #brand {
 	width: 250px;
@@ -269,8 +264,6 @@ body {
 	font-size:30px;
 	line-height: 30px;
 }
-
-
 
 /* 6.FOOTER */
 footer {
@@ -561,6 +554,7 @@ footer a:hover {
 	text-indent: -9999px;
 	position: absolute;
 	top:0;
+	display:none;
 }
 
 #search-box input {
@@ -659,6 +653,8 @@ footer a:hover {
 #download {
 	width: 300px;
 	margin: 0 0 -95px -20px;
+	position: relative;
+	z-index:30;
 }
 
 

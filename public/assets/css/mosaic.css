@@ -149,14 +149,14 @@ http://www.opensource.org/licenses/mit-license.php
 	background-color: #e1f0fa;
 }
 
-.color-0.top-left header{ background-position: -5px top; }
-.color-0.top-left p{ background-position: -620px bottom;}
-.color-0.bottom-left header{ background-position: -620px top;}
-.color-0.bottom-left p{ background-position: -5px bottom;}
-.color-0.top-right header{ background-position: -320px top;}
-.color-0.top-right p{ background-position: -638px bottom;}
-.color-0.bottom-right header{ background-position: -638px top;}
-.color-0.bottom-right p{ background-position: -320px bottom;}
+.color-0.top-left header{ background-position: 0px top; }
+.color-0.top-left p{ background-position: -600px bottom;}
+.color-0.bottom-left header{ background-position: -600px top;}
+.color-0.bottom-left p{ background-position: 0px bottom;}
+.color-0.top-right header{ background-position: -315px top;}
+.color-0.top-right p{ background-position: -615px bottom;}
+.color-0.bottom-right header{ background-position: -615px top;}
+.color-0.bottom-right p{ background-position: -315px bottom;}
 
 
 /* Dark blue */
@@ -180,14 +180,14 @@ http://www.opensource.org/licenses/mit-license.php
 	background-color: #9bc3e2;
 }
 
-.color-1.top-left header{ background-position: -930px top; }
-.color-1.top-left p{ background-position: -1545px bottom;}
-.color-1.bottom-left header{ background-position: -1545px top;}
-.color-1.bottom-left p{ background-position: -930px bottom;}
-.color-1.top-right header{ background-position: -1245px top;}
-.color-1.top-right p{ background-position: -1563px bottom;}
-.color-1.bottom-right header{ background-position: -1563px top;}
-.color-1.bottom-right p{ background-position: -1245px bottom;}
+.color-1.top-left header{ background-position: -900px top; }
+.color-1.top-left p{ background-position: -1500px bottom;}
+.color-1.bottom-left header{ background-position: -1500px top;}
+.color-1.bottom-left p{ background-position: -900px bottom;}
+.color-1.top-right header{ background-position: -1215px top;}
+.color-1.top-right p{ background-position: -1515px bottom;}
+.color-1.bottom-right header{ background-position: -1515px top;}
+.color-1.bottom-right p{ background-position: -1215px bottom;}
 
 /* Yellow */
 
@@ -210,14 +210,14 @@ http://www.opensource.org/licenses/mit-license.php
 	background-color: #fde9c7;
 }
 
-.color-2.top-left header{ background-position: -1850px top; }
-.color-2.top-left p{ background-position: -2465px bottom;}
-.color-2.bottom-left header{ background-position: -2465px top;}
-.color-2.bottom-left p{ background-position: -1850px bottom;}
-.color-2.top-right header{ background-position: -2165px top;}
-.color-2.top-right p{ background-position: -2483px bottom;}
-.color-2.bottom-right header{ background-position: -2483px top;}
-.color-2.bottom-right p{ background-position: -2165px bottom;}
+.color-2.top-left header{ background-position: -1800px top; }
+.color-2.top-left p{ background-position: -2400px bottom;}
+.color-2.bottom-left header{ background-position: -2400px top;}
+.color-2.bottom-left p{ background-position: -1800px bottom;}
+.color-2.top-right header{ background-position: -2115px top;}
+.color-2.top-right p{ background-position: -2415px bottom;}
+.color-2.bottom-right header{ background-position: -2415px top;}
+.color-2.bottom-right p{ background-position: -2115px bottom;}
 
 
 /* Dark Orange */
@@ -241,14 +241,14 @@ http://www.opensource.org/licenses/mit-license.php
 	background-color: #fde9c7;
 }
 
-.color-3.top-left header{ background-position: -2775px top; }
-.color-3.top-left p{ background-position: -3390px bottom;}
-.color-3.bottom-left header{ background-position: -3390px top;}
-.color-3.bottom-left p{ background-position: -2775px bottom;}
-.color-3.top-right header{ background-position: -3090px top;}
-.color-3.top-right p{ background-position: -3408px bottom;}
-.color-3.bottom-right header{ background-position: -3408px top;}
-.color-3.bottom-right p{ background-position: -3090px bottom;}
+.color-3.top-left header{ background-position: -2700px top; }
+.color-3.top-left p{ background-position: -3300px bottom;}
+.color-3.bottom-left header{ background-position: -3300px top;}
+.color-3.bottom-left p{ background-position: -2700px bottom;}
+.color-3.top-right header{ background-position: -3015px top;}
+.color-3.top-right p{ background-position: -3315px bottom;}
+.color-3.bottom-right header{ background-position: -3315px top;}
+.color-3.bottom-right p{ background-position: -3015px bottom;}
 
 
 
@@ -279,12 +279,12 @@ http://www.opensource.org/licenses/mit-license.php
 
 .bubble.top-right header, 
 .bubble.bottom-right header { 
-	padding: 25px 50px 10px 95px; 
+	padding: 25px 40px 10px 95px; 
 }
 
 .bubble.top-right p, 
 .bubble.bottom-right p { 
-	padding: 0 50px 30px 25px; 
+	padding: 0 40px 30px 25px; 
 }
 
 #tile-hover {
