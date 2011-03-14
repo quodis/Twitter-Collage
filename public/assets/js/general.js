@@ -481,8 +481,8 @@ var party = party || {};
 				position_class = "bottom-right";
 				position_css = {
 					top: '',
-					right: (564 - (x * 12)) + 'px',
-					bottom: (532 - (y * 12)) + 'px',
+					right: (580 - (x * 12)) + 'px',
+					bottom: (567 - (y * 12)) + 'px',
 					left: ''
 				};
 			} else {
@@ -498,17 +498,17 @@ var party = party || {};
 			if (x > 24) {
 				position_class = "top-right";
 				position_css = {
-					top: ((y * 12) - 16) + 'px',
-					right: (564 - (x * 12)) + 'px',
+					top: ((y * 12) + 16) + 'px',
+					right: (580 - (x * 12)) + 'px',
 					bottom: '',
 					left: ''
 				};
 			} else {
 				position_class = "top-left";
 				position_css = {
-					top: ((y * 12) - 16) + 'px',
+					top: ((y * 12) + 16) + 'px',
 					right: '',
-					left: ((x * 12) + 8) + 'px',
+					left: ((x * 12) + 17) + 'px',
 					bottom: ''
 				};
 			}	
