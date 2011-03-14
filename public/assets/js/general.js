@@ -514,7 +514,7 @@ var party = party || {};
 		}
 		
 		// Hide previous
-		b.avatar_img.attr('src', 'assets/images/avatar-loading.gif');
+		b.avatar_img.attr('src', 'assets/images/layout/avatar-loading.gif');
 		b.container.hide();
 		
 		// Localize stuff
