@@ -31,14 +31,14 @@ Licensed under a Creative Commons Attribution Share-Alike License v3.0 http://cr
 /* -- link */
 
 button::-moz-focus-inner { 
-	border: 0;
-	padding: 0;
+	border:0;
+	padding:0;
 }
 
 /* 2. Structure */
 #container {
 	margin:0 auto;
-	height: auto;
+	height:auto;
 }
 
 .main-content {
@@ -49,13 +49,13 @@ button::-moz-focus-inner {
 }
 
 footer {
-	margin-top: -85px;
+	margin-top:-85px;
 }
 #footer-copyright {
-	color: #669BE1;
+	color:#669BE1;
 }
 #footer-copyright a {
-	color: #ffffff;
+	color:#ffffff;
 }
 
 
@@ -68,9 +68,9 @@ footer {
 }
 
 .wrapper {
-	position: relative;
-	top: 0;
-	margin-top: 0;
+	position:relative;
+	top:0;
+	margin-top:0;
 }
 
 #brand {
@@ -140,7 +140,7 @@ footer {
 }
 .counter em {
 	display:block;
-	float: left;
+	float:left;
 	font-size:12px;
 	text-shadow:0 1px 0px #fff,  0 0 20px rgba(255, 255, 255, 0.4);
 	height:30px;
@@ -153,13 +153,13 @@ footer {
 }
 
 .counter dt span {
-	font-size: 16px;
-	color: #484848;
+	font-size:16px;
+	color:#484848;
 }
 
 .counter .value {
-	display: block;
-	margin-right: 10px;
+	display:block;
+	margin-right:10px;
 	border:1px solid #87b7dd;
 	-moz-border-radius:5px; border-radius:5px;
 }
@@ -170,13 +170,13 @@ footer {
 }
 
 #load-mosaic-bttn {
-	clear: both;
+	clear:both;
 }
 
 /* specific */
 
 .counter .tweets dt span {
-	display: block;
+	display:block;
 	width:30px;
 	background:url(../images/layout/twitter-bird-bg.png) left center no-repeat;
 	text-indent:-9999px;
@@ -187,7 +187,7 @@ footer {
 }
 
 .counter .delay dd strong {
-	margin-right: 5px;
+	margin-right:5px;
 }
 
 .counter .delay-seconds {
@@ -195,20 +195,20 @@ footer {
 }
 
 .counter .delay-tweets {
-	float: left;
+	float:left;
 }
 .counter .delay-tweets dt {
-	display: none;
+	display:none;
 }
 
 .counter .delay-tweets dd span {
-	background: none;
+	background:none;
 }
 
 /* SEARCH */
 
 .control-box {
-	padding-bottom:20px;
+	padding-bottom:18px;
 	clear:both;
 }
 
@@ -294,32 +294,32 @@ footer {
 	padding:4px;
 }
 .control-box #force-poll-bttn {
-	margin-right: 0px;
+	margin-right:0px;
 }
 
 .control-box.page h3 {
-	float: left;
+	float:left;
 	margin-right:10px;
 	line-height:30px;
 }
 .control-box.page .submit {
-	float: left;
+	float:left;
 	margin-right:10px;
 }
 
 /* 4. Mosaic */
 #mosaic {
-	position: absolute;
-	top: 40px;
-	right: 10px;
-	list-style: none;
-	z-index: 0;
+	position:absolute;
+	top:40px;
+	right:10px;
+	list-style:none;
+	z-index:0;
 }
 
 #loading {
-	position: absolute;
-	left: 200px;
-	z-index: 1000;
+	position:absolute;
+	left:200px;
+	z-index:1000;
 }
 
 #mosaic img {
@@ -331,7 +331,7 @@ footer {
 	z-index:1001;
 	margin-top:-4px;
 	margin-left:-4px;
-	border: 2px solid white;
+	border:2px solid white;
 	box-shadow:2px 2px 5px white; 
 }
 #mosaic li.excite img {
@@ -342,7 +342,7 @@ footer {
 /* 5. Widgets */
 
 #widgets {
-	float: right;
+	float:right;
 	width:596px;
 	border:1px solud black;
 }
@@ -361,8 +361,8 @@ body.shade #mosaic img{
 	background-color:#f0f7fc;
 	background-color:rgba(239, 246, 252, 0.8);
 	margin:0 0 40px;
-	padding:60px 20px 20px 20px;
-	border: 1px solid #D5E6EF;
+	padding:60px 18px 18px 18px;
+	border:1px solid #D5E6EF;
 	-moz-box-shadow:0px 0px 3px #A6BFCC;
 	-webkit-box-shadow:0px 0px 3px #A6BFCC;
 	box-shadow:0px 0px 3px #A6BFCC;
@@ -428,10 +428,10 @@ body.shade #mosaic img{
 
 #highlight {
 	min-height:10px;
-	margin-bottom: 0px;
+	margin-bottom:0px;
 }
 .user-tweets #highlight {
-	margin-bottom: 30px;
+	margin-bottom:30px;
 }
 #highlight p {
 	font-size:14px;
@@ -439,19 +439,13 @@ body.shade #mosaic img{
 
 #highlight.excite {
 	margin-top:-60px;
-	width: 430px;
+	width:430px;
 	padding:10px;
 }
 #highlight.excite h3,
 #highlight.excite .user-link,
 #highlight.excite .delete {
 	display:none;
-}
-
-#highlight.excite article img {
-	width:48px;
-	height:48px;
-	margin-bottom: 30px;
 }
 #highlight.excite p {
 	font-size:12px;
@@ -462,13 +456,18 @@ body.shade #mosaic img{
 /* -- tweet --*/
 
 .tweet {
+	position:relative;
+	padding-left:60px;
 	min-height:48px;
+	overflow:hidden;
 }
 
 .tweet img {
-	float:left;
-	margin-right:10px;
-	margin-bottom:20px;
+	position:absolute;
+	top:6px;
+	left:6px;
+	width:48px;
+	height:48px;
 }
 
 .tweet .contents {
@@ -488,32 +487,50 @@ body.shade #mosaic img{
 	line-height:24px;
 }
 .tweet .user-link {
-	float:left;
-	clear: both;
-	margin: 10px 10px 0 0;
-	padding: 6px 0px;
-	font-weight: bold;
-	font-size: 14px;
-	color: #1B5898;
-	cursor: pointer;
+	position:absolute;
+	left:6px;
+	bottom:6px;
+	clear:both;
+	margin:10px 10px 0 0;
+	font-weight:bold;
+	font-size:14px;
+	color:#1B5898;
+	cursor:pointer;
 }
 .tweet .user-link:hover {
-	text-decoration: underline
+	text-decoration:underline
+}
+
+.tweet .delete {
+	position:absolute;
+	right:6px;
+	bottom:6px;
 }
 
 #highlight .tweet img {
-	margin-bottom: 40px;
+	left:0px;
+	top:0px;
+}
+#highlight .tweet .user-link {
+	left:0px;
+	bottom:0px;
+}
+#highlight .tweet .delete {
+	right:0px;
+	bottom:0px;
 }
 
-#highlight .tweet .delete {
-	float: right;
-}
+.highlight .tweet {
+	padding-bottom: 33px;
+} 
 
 /* -- user -- */
 
 .user img {
 	float:left;
 	margin-right:10px;
+	width:48px;
+	height:48px;
 }
 
 .user .user-name {
@@ -527,8 +544,8 @@ body.shade #mosaic img{
 /* -- general lists -- */
 
 .list article {
-	padding:6px;
-	border: 1px solid #A6BFCC;
+	padding:6px 6px 33px 66px;
+	border:1px solid #A6BFCC;
 	border-radius:4px;
 	background-color:#ffffff;
 	-moz-border-radius:4px;
@@ -550,6 +567,7 @@ body.shade #mosaic img{
 	float:left;
 	width:250px;
 	margin:0 24px 12px 0;
+	padding: 6px;
 	min-height:48px;
 	cursor:pointer;
 }

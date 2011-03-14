@@ -316,6 +316,8 @@ var party = party || {};
 			
 			$('body').addClass('shade highlight');
 			
+			this.state.highlighted_position = -1;
+			
 			this.highlightTilePos(position);
 		},
 		
