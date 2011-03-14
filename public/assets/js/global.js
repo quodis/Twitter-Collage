@@ -99,7 +99,7 @@ function objectLength(obj) {
  * Add array.shuffle
  */
 Array.prototype.shuffle = function (){ 
-	for(var rnd, tmp, i=this.length; i; rnd=parseInt(Math.random()*i, 10), tmp=this[--i], this[i]=this[rnd], this[rnd]=tmp);
+	for(var rnd, tmp, i=this.length; i; rnd=parseInt(Math.random()*i, 10), tmp=this[--i], this[i]=this[rnd], this[rnd]=tmp) {};
 };
 
 
@@ -435,7 +435,7 @@ function date (format, timestamp) {
             return jsdate.getTime() / 1000 | 0;
         }
     };
-    this.date = function (format, timestamp) {
+    var dateFormat = function (format, timestamp) {
         that = this;
         jsdate = ((typeof timestamp === 'undefined') ? new Date() : // Not provided
         (timestamp instanceof Date) ? new Date(timestamp) : // JS Date()
@@ -443,5 +443,5 @@ function date (format, timestamp) {
         );
         return format.replace(formatChr, formatChrCb);
     };
-    return this.date(format, timestamp);
+    return dateFormat(format, timestamp);
 }

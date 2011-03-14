@@ -1,25 +1,17 @@
 /**
- * Firefox 4 Twitter Party
- * Design and development by Mozilla, Quodis
- * http://www.mozilla.com
- * http://www.quodis.com
+ * Firefox 4 Twitter Party Design and development by Mozilla, Quodis
+ * http://www.mozilla.com http://www.quodis.com
  * 
- * Licensed under a Creative Commons Attribution Share-Alike License v3.0 http://creativecommons.org/licenses/by-sa/3.0/ 
+ * Licensed under a Creative Commons Attribution Share-Alike License v3.0
+ * http://creativecommons.org/licenses/by-sa/3.0/
  */
 var party = party || {};
 
 (function () {
 	/**
-	tile object structure:
-		id AS i
-		position AS p
-		twitterId AS w
-		userName AS u
-		imageUrl AS m
-		createdTs AS c
-		contents AS n
-		imageData AS d
-	*/
+	 * tile object structure: id AS i position AS p twitterId AS w userName AS u
+	 * imageUrl AS m createdTs AS c contents AS n imageData AS d
+	 */
 	var initial_draw_timer,
 		loading_message_timer,
 		loading_indicator_timer,
@@ -35,7 +27,10 @@ var party = party || {};
 		draw_tiles_timer,
 		performance = {},
 		tile_hover = null,
-		colors = ['#ACE8F1', '#2D4891', '#F7DC4B', '#C52F14'], // Light-blue, Dark-blue, Yellow, Dark-orange
+		colors = ['#ACE8F1', '#2D4891', '#F7DC4B', '#C52F14'], // Light-blue,
+																// Dark-blue,
+																// Yellow,
+																// Dark-orange
 		counter = {
 			canvas: null,
 			current: 0,
@@ -142,7 +137,7 @@ var party = party || {};
 			append_tiles = false,
 			p;
 				
-		//j = (tile_counter + state.initial_tiles_per_frame_increment);
+		// j = (tile_counter + state.initial_tiles_per_frame_increment);
 		j = (tile_counter + party.performance.initial_tiles_per_frame);
 		
 		// Draw tiles_per_frame tiles and draw them
@@ -160,7 +155,7 @@ var party = party || {};
 		if (append_tiles) {
 
 			// Draw the tiles and proceed
-			//console.log(tiles_to_draw);
+			// console.log(tiles_to_draw);
 			party.canvas.append('', tiles_to_draw);
 			// Update counter
 			if (counter.current < state.total_tiles) {
@@ -251,7 +246,7 @@ var party = party || {};
 			// Remove the download button if this is already firefox >= 4
 			if (window.navigator.userAgent.search('Firefox/4') != -1) {
 				$('#download').remove();
-				//party.performance = party.performance_settings.medium;
+				// party.performance = party.performance_settings.medium;
 			}
 		}
 		
@@ -520,7 +515,7 @@ var party = party || {};
 		b.avatar_img.attr('src', '').hide();
 		b.container.css(position_css).removeClass().addClass('bubble ' + position_class + ' color-' + g.r);
 		
-		//Show the image on a small timeout window
+		// Show the image on a small timeout window
 		
 		party.showBubbleImageTimer = window.setTimeout(function(){
 			b.avatar_img.attr('src', tile.m);
@@ -549,7 +544,7 @@ var party = party || {};
 		party.bubble.container.hide();
 		tile_hover.hide();
 		
-		//Clean the image showing timer if bubble is closed in the meanwhile
+		// Clean the image showing timer if bubble is closed in the meanwhile
 		if (party.showBubbleImageTimer) {
 			window.clearTimeout(party.showBubbleImageTimer);
 			party.showBubbleImageTimer = null;
@@ -722,7 +717,8 @@ var party = party || {};
 				}
 				state.total_tiles = data.payload.total_tiles;
 				
-				// Reverse the tiles to get the newest first and append the data to the buffer
+				// Reverse the tiles to get the newest first and append the data
+				// to the buffer
 				new_tiles = new_tiles.concat(data.payload.tiles.reverse());
 				// Calculate at which speed new tiles should be drawn
 				state.draw_new_tiles_every = Math.round((party.performance.new_tiles_per_second * party.polling_timer_seconds) / new_tiles.length);
