@@ -23,20 +23,20 @@ function main()
 	$lastTweet = Mosaic::getLastTweet();
 	$lastProcessedTweet = Mosaic::getLastTweetWithImage();
 	$elapsed = Tweet::getAverageDelay(10);
-	$tweets = ($lastTweet['id'] - $lastProcessedTweet['id']);
+	$tweets = Tweet::getCountUnprocessed();
 
 	// dashboard state
 	$data = array(
-		'last_page' => Mosaic::getLastCompletePage(),
 		'last_id' => $lastProcessedTweet['id'],
-		'tweet_count' => Tweet::getCount(),
+		'tweet_count' => Tweet::getCount(TRUE),
+		'guest_count' =>  Tweet::getUserCount(TRUE),
 		'delay' => array(
 			'tweets' => $tweets,
 			'seconds' => $elapsed
 		)
 	);
 
-	Debug::logMsg('stat-short, last_page:' . $data['last_page'] . ' tweet_count:' . $data['tweet_count']);
+	Debug::logMsg('stat-short, tweet_count:' . $data['tweet_count']);
 
 	Dispatch::now(1, 'OK', $data);
 

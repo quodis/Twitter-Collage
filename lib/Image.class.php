@@ -226,7 +226,7 @@ class Image
 			$offsetX = $config[$position]['x'] * $tileSize;
 			$offsetY = $config[$position]['y'] * $tileSize;
 
-			dd($i . '/' . $count . ' [' . $config[$position]['x'] . ',' . $config[$position]['y'] . '] > [' . $offsetX . ',' . $offsetY . '] < ' . $processedFileName);
+			//dd($i . '/' . $count . ' [' . $config[$position]['x'] . ',' . $config[$position]['y'] . '] > [' . $offsetX . ',' . $offsetY . '] < ' . $processedFileName);
 
 			$image->compositeImage($processed, $processed->getImageCompose(), $offsetX, $offsetY);
 			continue;

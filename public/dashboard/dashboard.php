@@ -45,7 +45,7 @@ function main()
 	$lastTweet = Mosaic::getLastTweet();
 	$lastProcessedTweet = Mosaic::getLastTweetWithImage();
 	$delaySeconds = Tweet::getAverageDelay(10);
-	$delayTweets = ($lastTweet['id'] - $lastProcessedTweet['id']);
+	$delayTweets = Tweet::getCountUnprocessed();
 	if (!$delayTweets) $delaySeconds = 0;
 
 	// dashboard state
@@ -125,11 +125,11 @@ function main()
 						</dl>
 						<dl class="delay delay-seconds">
 							<dt><span>Delay</span></dt>
-							<dd id="job-delay-seconds"><strong class="value"><span>0</span></strong> <em>secs</em></dd>
+							<dd id="job-delay-seconds"><strong class="value"><span><?=$delaySeconds?></span></strong> <em>secs</em></dd>
 						</dl>
 						<dl class="delay delay-tweets">
 							<dt><span>Delay</span></dt>
-							<dd id="job-delay-ttweets"><strong class="value"><span>0</span></strong> <em>tweets</em></dd>
+							<dd id="job-delay-tweets"><strong class="value"><span><?=$delayTweets?></span></strong> <em>tweets</em></dd>
 						</dl>
 					</div><!-- counters -->
 
@@ -152,6 +152,10 @@ function main()
 						<button class="submit" type="submit" id="load-mosaic-bttn" tabindex="5" class="button"><span>Full Mosaic</span></button>
 						<button class="submit" type="submit" id="force-poll-bttn" tabindex="6" class="button"><span>Poll</span></button>
 					</div><!-- control-box page -->
+
+					<div id="quodis-badge">
+						<a target="_blank" href="http://quodis.com" title="Quodis" class="text-replace">by Quodis</a>
+					</div><!-- quodis-badge -->
 
 				</aside><!-- main-content -->
 

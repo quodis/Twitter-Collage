@@ -543,7 +543,7 @@ class Debug
 
 		$text = date('Y-m-d H:i:s') . ' | ' . Req::time() . ' > ' . self::$_context . ' > ' . $text . NL;
 
-		if (self::$_logEnabled && (CLIENT != SCRIPT || self::$_forceLogToFile))
+		if (self::$_forceLogToFile || (CLIENT != SCRIPT && self::$_logEnabled))
 		{
 			if ($file)
 			{

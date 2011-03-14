@@ -37,6 +37,7 @@ var party = party || {};
 			'party_on' : 'wild',
 			'guest_count' : 0,
 			'last_id' : 0,
+			'guest_count' : 0,
 			'tweet_count' : 0,
 			'short_stat_interval' : null,
 			'highlighted_position' : null,
@@ -68,6 +69,12 @@ var party = party || {};
 			
 			this.buildInterface();
 			
+			$.extend(party, {
+				"processMosaic": function(data) {
+					this.processMosaic(data);
+				}.bind(this) 
+			});
+			
 			this.loadMosaic();
 		},
 
@@ -80,8 +87,8 @@ var party = party || {};
 		buildInterface : function() 
 		{
 			// show last id
-			$('#guest-count span').rollNumbers(this.state.guest_count, 2000);
-			$('#tweet-count span').rollNumbers(this.state.tweet_count, 2000);
+			$('#guest-count span').text(this.state.guest_count);
+			$('#tweet-count span').text(this.state.tweet_count);
 			
 			// bind search user
 			$('#find-user').inputDefault().inputState( { 'onEnter' : function() {
@@ -136,7 +143,8 @@ var party = party || {};
 				this.load('/dashboard/stat-short.php', null, function(data) {
 					if (!data) return;
 					$.extend(this.state, data);
-					$('#tweet-count .value span').rollNumbers(this.state.tweet_count, parseInt(this.options.short_stat_interval / 2, 10));
+					$('#tweet-count span').text(this.state.guest_count);
+					$('#tweet-count span').text(this.state.tweet_count);
 					$('#job-delay-seconds .value span').html(this.state.delay.seconds);
 					$('#job-delay-tweets .value span').html(this.state.delay.tweets);
 				}.bind(this) );
@@ -157,17 +165,22 @@ var party = party || {};
 			$('<li id="loading">loading mosaic...</li>').appendTo('#mosaic');
 
 			// load
-			var url = this.freshUrl(this.options.store_url + '/mosaic.json');
-			this.load(url, {}, function(data) {
-				$('#loading').remove();
-				var count = this.addTiles(data.tiles);
-				if (!count) {
-					$('<li id="loading" class="empty">no mosaic...</li>').appendTo('#mosaic');
-				}
-			}.bind(this), 'mosaic', function() { 
-				$('#loading').remove();
-				$('<li id="loading">not found</li>').appendTo('#mosaic');
-			} ) ;
+			$.ajax({
+				url: this.freshUrl(this.options.store_url + '/mosaic.json'), 
+				type: 'GET',
+				dataType: 'jsonp',
+				jsonp: false // hardcoded callback = party.processMosaic({...})
+			});
+			
+		},
+		
+		processMosaic : function(data) 
+		{
+			$('#loading').remove();
+			var count = this.addTiles(data.tiles);
+			if (!count) {
+				$('<li id="loading" class="empty">no mosaic...</li>').appendTo('#mosaic');
+			}
 		},
 
 		poll : function()
@@ -235,7 +248,15 @@ var party = party || {};
 			var y = this.mosaic.index[tile.p][1];
 			var offsetX = this.options.tile_size * x;
 			var offsetY = this.options.tile_size * y;
-			var html = '<li id="' + tile.p + '" style="position: absolute; top: ' + offsetY +'px; left: ' + offsetX + 'px"><img src="data:image/gif;base64,' + tile.d + '" /></li>';
+			var tileImg;
+			if (tile.d) {
+				tileImg = '<img src="data:image/gif;base64,' + tile.d + '" />';
+			}
+			else {
+				var bgStyle = 'url(' + party.store_url + '/mosaic.jpg) no-repeat  -' + (x * 12) + 'px -' + (y * 12) + 'px';
+				tileImg = '<span style="display: block; width: 12px; height: 12px; background: '  + bgStyle + '"></span>';
+			}
+			var html = '<li id="' + tile.p + '" style="position: absolute; top: ' + offsetY +'px; left: ' + offsetX + 'px">' + tileImg + '</li>';
 			$(html).appendTo('#mosaic');
 			$('#' + tile.p).click( function(ev) {
 				ev.stopPropagation();
@@ -301,13 +322,14 @@ var party = party || {};
 				this.reset();
 				return;
 			}
+			
 			this.reset();
 			
 			$('body').addClass('shade highlight');
 			
-			this.highlightTilePos(position);
+			this.state.highlighted_position = -1;
 			
-			// FIX user click
+			this.highlightTilePos(position);
 		},
 		
 		findUser : function(user_name)
@@ -861,7 +883,7 @@ var party = party || {};
 			} );
 		}
 	} );
-
+	
 
 	/**
 	 * add support for prototype like bind()
@@ -889,65 +911,4 @@ var party = party || {};
 	};
 
 })(jQuery);
-
-/** 
- * jQuery (methods) 
- */
-(function($) {	
-	
-	$.fn.extend({
-		
-		/**
-		 * rolls numbers to 
-		 * 
-		 * @param integer to
-		 * @param integer milisecs 
-		 * @param function callback function(value) returns formatted value
-		 * @param integer iteration (used on recursion)
-		 */
-		rollNumbers : function(to, milisecs, formatCallback, iteration) 
-		{
-			var target = $(this).attr('data-value');
-			var frameMsecs = 200;
-			// first loop
-			if (!iteration) {
-				if (to == target) return;
-				$(this).attr('data-value', to);
-				iteration = Math.ceil(milisecs / frameMsecs);
-				if (!to) to = 0;
-				this.to = to;
-				this.num = parseInt(this.text(), 10);
-				if (!this.num) this.num = 0;
-			}
-			// drop obsoletes
-			else if (to != target);
-			iteration--;
-			
-			if (!iteration) {
-				this.num = to;
-			}
-			else {
-				var direction = this.num > to ? 1 : -1;
-				var delta = Math.abs(to - this.num);
-				delta = Math.floor(delta * 0.51);
-				if (this.num < to) {
-					this.num += delta;
-					if (this.num > to) this.num = to;
-				}
-				else if (this.num > to) {
-					this.num -= delta;
-					if (this.num < to) this.num = to;
-				}
-			}
-			var text = ('function' == typeof formatCallback) ? formatCallback(this.num) : this.num;
-			this.text(text);
-			if (this.num != to) {
-				setTimeout( function(el, to, milisecs, formatCallback, iteration) {
-					el.rollNumbers(to, milisecs, formatCallback, iteration);
-				}, frameMsecs, this, to, milisecs, formatCallback, iteration);
-			}
-		}
-	});
-})(jQuery);
-
 
