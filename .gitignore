@@ -15,3 +15,6 @@ assets/*.php
 # store files
 public/store/*
 
+# language
+locale/
+
