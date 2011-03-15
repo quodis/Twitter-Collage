@@ -66,6 +66,8 @@ function main()
 
 				try
 				{
+					Debug::logMsg('Image::makeTile(). id:' . $tweet['id'] . ' page:' . $tweet['page'] . ' position: ' . $tweet['position'] . ' from url:' . $tweet['imageUrl'] . ' into:' . Image::fileName('processed', md5($tweet['id']), 'gif'));
+
 					// prevent downloading faulty image (response is a 404 html in twitter.com)
 					if (strpos($imageUrl, 'default_profile_normal.png'))
 					{
