@@ -106,8 +106,6 @@ final class Tweet
 		$sql.= "  `processedTs` = ?";
 		$sql.= "  WHERE id = ?";
 
-		Debug::logMsg('Tweet::updateImage() length imageData: ' .strlen($imageData) . ' sql:' .  $sql);
-
 		$stmt = $mysqli->prepare($sql);
 
 		if (!$stmt) Debug::logMsg('Tweet::updateImage() prepare fail, error: ' . $mysqli->error);

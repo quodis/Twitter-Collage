@@ -119,37 +119,38 @@ class Image
 		$start = microtime(TRUE);
 		$time = array();
 
-		Debug::logMsg('fileName:' . $fileName);
+//		Debug::logMsg('strlen:' . filesize($fileName));
+		if (filesize($fileName) == 63893) throw new Exception('sexy eye exploit');
 
 		// new Imagick object from fileName
 		$image = new Imagick($fileName);
 
-		$time['load'] = microtime(TRUE);
-		Debug::logMsg($time, 'load');
+//		$time['load'] = microtime(TRUE);
+//		Debug::logMsg($time, 'load');
 
 		// resize the image to the tile size
 		$tileSize = self::$_config['Mosaic']['tileSize'];
 		$image->cropThumbnailImage($tileSize, $tileSize);
 
-		$time['crop'] = microtime(TRUE);
-		Debug::logMsg($time, 'crop');
+//		$time['crop'] = microtime(TRUE);
+//		Debug::logMsg($time, 'crop');
 
 		/* PROCESS THE ORIGINAL IMAGE */
 		$image->setImageFormat('gif');
 
-		$time['setgif'] = microtime(TRUE);
-		Debug::logMsg($time, 'setgif');
+//		$time['setgif'] = microtime(TRUE);
+//		Debug::logMsg($time, 'setgif');
 
 		// desaturate the image
 		$image->modulateImage(100, 0, 100);
 
-		$time['process'] = microtime(TRUE);
-		Debug::logMsg($time, 'process');
+//		$time['process'] = microtime(TRUE);
+//		Debug::logMsg($time, 'process');
 
 		// generate the destination
 		$destination = self::fileName('processed', md5($id), 'gif');
 
-		Debug::logMsg('destination:' . $destination);
+//		Debug::logMsg('destination:' . $destination);
 
 		// create the destination directory if it doesn't exist already
 		if (!is_dir(dirname($destination))) rmkdir(dirname($destination), self::$_config['Data']['dirPermissions'], self::$_config['Data']['group']);
@@ -166,23 +167,23 @@ class Image
 			$image->compositeImage($overlay, Imagick::COMPOSITE_HARDLIGHT, 0, 0);
 			$image->writeImage($destination);
 
-			$time['composite'] = microtime(TRUE);
-			Debug::logMsg($time . 'composite');
+//			$time['composite'] = microtime(TRUE);
+//			Debug::logMsg($time, 'composite');
 
 			// discover the binary path - currently returning a new line, simple fix
 			$binary_path = '/usr/bin/convert';
 			// build the cmd arguments
 			$cmd_arguments = "$destination -colors $colors +profile '*' 2>&1";
 
-			Debug::logMsg("cmd: $binary_path $cmd_arguments $destination");
+//			Debug::logMsg("cmd: $binary_path $cmd_arguments $destination");
 
 			// reprocess the first pass image using shell_exec
 			exec("$binary_path $cmd_arguments $destination", $output, $code);
 
-			Debug::logMsg($output, 'output, code:' . $code);
+//			Debug::logMsg($output, 'output, code:' . $code);
 
-			$time['convert'] = microtime(TRUE);
-			Debug::logMsg($time, 'convert');
+//			$time['convert'] = microtime(TRUE);
+//			Debug::logMsg($time, 'convert');
 
 			if ($code > 0) throw new Exception(implode("\n", $output));
 		}
@@ -198,7 +199,7 @@ class Image
 
 			if ($code > 0) throw new Exception(implode("\n", $output));
 
-			$time['composite'] = microtime(TRUE);
+//			$time['composite'] = microtime(TRUE);
 		}
 
 
@@ -212,11 +213,11 @@ class Image
 
 		//$contents = base64_encode($image->getImageBlob());
 
-		$time['done'] = microtime(TRUE);
+//		$time['done'] = microtime(TRUE);
 
-		$log = array();
-		foreach ($time as $key => $value) $log[] = $key . ': ' . ceil(($value - $start) * 1000) / 1000;
-		Debug::logMsg('TIME! id:' . $id . ' len:' . strlen($contents) .  ' > ' . implode(', ', $log));
+//		$log = array();
+//		foreach ($time as $key => $value) $log[] = $key . ': ' . ceil(($value - $start) * 1000) / 1000;
+//		Debug::logMsg('TIME! id:' . $id . ' len:' . strlen($contents) .  ' > ' . implode(', ', $log));
 
 		return $contents;
 	}
