@@ -276,7 +276,7 @@ class Locale
 		if (!isset(self::$_languageMap))
 		{
 			require_once LIB_PATH . '/spyc-0.4.5/spyc.php';
-			$configFile = $config['App']['path'] . '/config/locale.yaml';
+			$configFile = $config['App']['path'] . '/locale/locale.yaml';
 			self::$_languageMap = Spyc::YAMLLoad($configFile);
 		}
 	}
