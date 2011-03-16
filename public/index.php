@@ -213,6 +213,8 @@ function main()
 						<a href="http://www.mozilla.com/about/legal.html"><?= _('Legal Notices') ?></a> &nbsp;|&nbsp;
 						<a href="http://www.mozilla.com/legal/fraud-report/index.html"><?= _('Report Trademark Abuse') ?></a>
 					</p>
+					
+					<p><?= sprintf(/* L10n: %s will be the linked e-mail address */ _('Email %s if you would like to be removed from the mosaic.'), '<a href="mailto:twitterparty@mozilla.com">twitterparty@mozilla.com</a>') ?></p>
 
 					<p><?= sprintf(/* L10n: Leave all html code unchanged */ _('Except where otherwise <a href="%s">noted</a>, content on this site is licensed under the <br /><a href="%s" rel="external">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.'), 'http://www.mozilla.com/about/legal.html#site', 'http://creativecommons.org/licenses/by-sa/3.0/') ?></p>
 
