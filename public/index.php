@@ -213,6 +213,8 @@ function main()
 						<a href="http://www.mozilla.com/about/legal.html"><?= _('Legal Notices') ?></a> &nbsp;|&nbsp;
 						<a href="http://www.mozilla.com/legal/fraud-report/index.html"><?= _('Report Trademark Abuse') ?></a>
 					</p>
+					
+					<p><?= sprintf(/* L10n: %s will be the linked e-mail address */ _('Email %s if you would like to be removed from the mosaic.'), '<a href="mailto:twitterparty@mozilla.com">twitterparty@mozilla.com</a>') ?></p>
 
 					<p><?= sprintf(/* L10n: Leave all html code unchanged */ _('Except where otherwise <a href="%s">noted</a>, content on this site is licensed under the <br /><a href="%s" rel="external">Creative Commons Attribution Share-Alike License v3.0</a> or any later version.'), 'http://www.mozilla.com/about/legal.html#site', 'http://creativecommons.org/licenses/by-sa/3.0/') ?></p>
 
@@ -250,6 +252,36 @@ function main()
 		} )(jQuery);
 		//]]>
 		</script>
+
+    <!-- START OF SmartSource Data Collector TAG -->
+    <!-- Copyright (c) 1996-2011 WebTrends Inc.  All rights reserved. -->
+    <!-- Version: 9.3.0 -->
+    <!-- Tag Builder Version: 3.1  -->
+    <!-- Created: 3/15/2011 4:40:50 AM -->
+    <script src="/assets/js/webtrends.js" type="text/javascript"></script>
+    <!-- ----------------------------------------------------------------------------------- -->
+    <!-- Warning: The two script blocks below must remain inline. Moving them to an external -->
+    <!-- JavaScript include file can cause serious problems with cross-domain tracking.      -->
+    <!-- ----------------------------------------------------------------------------------- -->
+    <script type="text/javascript">
+    //<![CDATA[
+    var _tag=new WebTrends();
+    _tag.dcsGetId();
+    //]]>
+    </script>
+    <script type="text/javascript">
+    //<![CDATA[
+    _tag.dcsCustom=function(){
+    // Add custom parameters here.
+    //_tag.DCSext.param_name=param_value;
+    }
+    _tag.dcsCollect();
+    //]]>
+    </script>
+    <noscript>
+    <div><img alt="DCSIMG" id="DCSIMG" width="1" height="1" src="http://statse.webtrendslive.com/dcs84rh8huz5bd3tbd4yi2vbf_6j3y/njs.gif?dcsuri=/nojavascript&amp;WT.js=No&amp;WT.tv=9.3.0&amp;WT.dcssip=www.twitterparty.mozilla.org"/></div>
+    </noscript>
+    <!-- END OF SmartSource Data Collector TAG -->
 
 	</body>
 

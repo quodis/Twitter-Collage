@@ -60,7 +60,7 @@ pt-PT:
   locale: pt_PT.utf8
 rm:
   language: rm
-  locale: rm_CH.utf8
+  locale: it_CH.utf8
 ru:
   language: ru
   locale: ru_RU.utf8
