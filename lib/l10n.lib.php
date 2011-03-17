@@ -127,7 +127,7 @@ class localeDetails {
 	 *
 	 * @var array
 	 */
-	public static $_languages = array(
+	private static $_languages = array(
 		'af'			=> array( 'English' => 'Afrikaans',				'native' => 'Afrikaans'),
 		'ak'			=> array( 'English' => 'Akan',					'native' => 'Akan'), // unverified native name
 		'ast'			=> array( 'English' => 'Asturian',				'native' => 'Asturianu'),
@@ -249,6 +249,14 @@ class localeDetails {
 		'zu'			=> array( 'English' => 'Zulu',					'native' => 'isiZulu')
 	);
 
+	/**
+	 * An array of languages that are displayed rtl.  This is a separate array
+	 * because there are so few languages.
+	 *
+	 * @var array
+	 */
+	private static $_rtl_languages = array( 'ar', 'fa', 'fa-IR', 'he', 'ur' );
+
 	 /**
 	 * This is a function for getting a language's native name from a
 	 * locale.  If the name is not available, a blank string is returned.
@@ -261,6 +269,15 @@ class localeDetails {
 		if (array_key_exists($locale, self::$_languages)) {
 			return self::$_languages[$locale]['native'];
 		}
+	}
+
+	/**
+	 * @param string locale to lookup
+	 * @return boolan
+	 */
+	public static function isRtl($locale)
+	{
+		return in_array($locale, self::$_rtl_languages);
 	}
 }
 

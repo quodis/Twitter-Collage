@@ -84,6 +84,11 @@ http://www.opensource.org/licenses/mit-license.php
 	-webkit-transform: rotate(-3deg);
 	transform: rotate(-3deg);
 }
+.rtl .bubble .twitter-avatar {
+	-moz-transform: rotate(3deg);
+	-webkit-transform: rotate(3deg);
+	transform: rotate(3deg);
+}
 
 .bubble header time {
 	font-style: italic;
@@ -259,11 +264,21 @@ http://www.opensource.org/licenses/mit-license.php
 	top: 23px;
 	left: 45px;
 }
+.rtl .bubble.top-left .twitter-avatar,
+.rtl .bubble.bottom-left .twitter-avatar {
+	top: 23px;
+	right: 35px;
+}
  
 .bubble.top-right .twitter-avatar,
 .bubble.bottom-right .twitter-avatar {
 	top: 20px;
 	left: 30px;
+}
+.rtl .bubble.top-right .twitter-avatar,
+.rtl .bubble.bottom-right .twitter-avatar {
+	top: 20px;
+	right: 50px;
 }
 
 .bubble.top-left header, 
@@ -271,9 +286,17 @@ http://www.opensource.org/licenses/mit-license.php
 	padding: 25px 25px 10px 110px; 
 	min-height:50px;
 }
+.rtl .bubble.top-left header, 
+.rtl .bubble.bottom-left header { 
+	padding: 25px 100px 10px 35px; 
+}
 
 .bubble.top-left p, 
 .bubble.bottom-left p { 
+	padding: 0px 25px 30px 45px; 
+}
+.rtl .bubble.top-left p, 
+.rtl .bubble.bottom-left p { 
 	padding: 0px 25px 30px 45px; 
 }
 
@@ -281,11 +304,20 @@ http://www.opensource.org/licenses/mit-license.php
 .bubble.bottom-right header { 
 	padding: 25px 40px 10px 95px; 
 }
+.rtl .bubble.top-right header, 
+.rtl .bubble.bottom-right header { 
+	padding: 25px 110px 10px 25px; 
+}
 
 .bubble.top-right p, 
 .bubble.bottom-right p { 
 	padding: 0 40px 30px 25px; 
 }
+.rtl .bubble.top-right p, 
+.rtl .bubble.bottom-right p { 
+	padding: 0 40px 30px 25px; 
+}
+
 
 #tile-hover {
 	position: absolute;
