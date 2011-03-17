@@ -37,6 +37,8 @@ Twitter:
     timeout:
         apiCall: 5
         imgFile: 1
+    blacklist:
+        - firefoxsux
 Mosaic:
     logoFile: assets/logo-48x47.png
     reducedFile: assets/logo-reduced-48x47.png

@@ -1,4 +1,20 @@
 
+== 2011-03-16 ==
+
+Updated config with twitter username blacklist
+
+NOTE: Blacklist entry "firefoxsux" is not an example, it is a stupid spam bot
+
+NOTE: Make sure 8 spaces and a dash '-' preceed each entry (no tabs please) 
+
+Twitter:
+
+    ...
+
+    blacklist:
+        - firefoxsux
+
+
 == 2011-03-12 ==
 
 Updated config file with "hasCronSchedule" setting in each job configuration

@@ -68,6 +68,9 @@ function main()
 				Debug::logMsg('using page:' . $pageNo . ' free slots:' . count($freeSlots));
 			}
 
+			// blacklisted username?
+			if (in_array($tweet['from_user'], $config['Twitter']['blacklist'])) continue;
+
 			// pop one (but only after insert succeeds)
 			$position = $freeSlots[count($freeSlots) - 1];
 
