@@ -171,7 +171,7 @@ function main()
 
 						</header>
 
-						<p></p>
+						<p dir="ltr"></p>
 
 					</article><!-- bubble template -->
 
