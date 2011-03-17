@@ -313,14 +313,13 @@ var party = party || {};
 					stopAutoBubble();
 					// Check if this is not the already opened bubble
 					if (state.active_bubble_pos != pos.i) {
-						state.active_bubble_pos = pos.i;
 						showBubble(pos.i);
 					}
 				} else {
 					// Not a tile
 					startAutoBubble();
 				}
-			}, 50);			
+			}, 50);
 		});
 		
 		// Keep bubble open when tile is clicked
@@ -497,6 +496,8 @@ var party = party || {};
 			return;
 		}
 		
+		state.active_bubble_pos = pos;
+		
 		// Choose the arrow's position
 		if (y > 24) {
 			if (x > 24) {
@@ -554,9 +555,10 @@ var party = party || {};
 		// Show the image on a small timeout window
 		img = new Image();
 		$(img).load(function () {
+			if (state.active_bubble_pos != tile.p) return;  
 			b.avatar_img.attr('src', tile.m);
 			img = null;
-		}).attr('src', tile.m);
+		});//.attr('src', tile.m);
 		
 		moveHoverTile(x,y);
 		b.container.show();
