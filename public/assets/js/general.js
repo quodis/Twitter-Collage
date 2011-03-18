@@ -558,7 +558,7 @@ var party = party || {};
 			if (state.active_bubble_pos != tile.p) return;  
 			b.avatar_img.attr('src', tile.m);
 			img = null;
-		});//.attr('src', tile.m);
+		}).attr('src', tile.m);
 		
 		moveHoverTile(x,y);
 		b.container.show();
