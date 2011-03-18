@@ -657,6 +657,10 @@ footer a:hover {
 	z-index:30;
 }
 
+.rtl #download { 
+	margin: 0 -20px -95px 0;
+}
+
 
 a.download-link, a.download-link:link, a.download-link:visited {
 	display:block;
@@ -739,10 +743,18 @@ a.download-link:hover, a.download-link:active {
 #download a.download-link span.download-title {
 	font-size:22px;
 	display:inline-block;
+	float:left;
 	padding-right:30px;
 	padding-bottom:3px;
 	margin-right:14px;
 	vertical-align:middle;
 	background:url(../images/layout/download-arrow.png) 100% 50% no-repeat;
 	text-decoration: none;
+}
+#download a.download-link span.download-text {
+	display:inline-block;
+	float:left;
+	line-height: 28px;
+	padding-bottom:3px;
+	vertical-align:middle;
 }

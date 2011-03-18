@@ -62,6 +62,14 @@ http://www.opensource.org/licenses/mit-license.php
 	padding-left: 105px;
 }
 
+.bubble header h1 a {
+	white-space: -moz-pre-wrap;
+	white-space: -pre-wrap;
+	white-space: -o-pre-wrap;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
 .bubble h1 {
 	font-size: 18px;
 	font-style: italic;
@@ -101,15 +109,12 @@ http://www.opensource.org/licenses/mit-license.php
 	margin: 0;
 	position: relative;
 	min-height:40px;
-	
 	white-space: -moz-pre-wrap;
 	white-space: -pre-wrap;
 	white-space: -o-pre-wrap;
 	white-space: pre-wrap;
 	word-wrap: break-word;
 }
-
-
 
 /* 3.Bubbles Colors */
 
@@ -266,29 +271,29 @@ http://www.opensource.org/licenses/mit-license.php
 }
 .rtl .bubble.top-left .twitter-avatar,
 .rtl .bubble.bottom-left .twitter-avatar {
-	top: 23px;
+	top: 25px;
 	right: 35px;
 }
  
 .bubble.top-right .twitter-avatar,
 .bubble.bottom-right .twitter-avatar {
 	top: 20px;
-	left: 30px;
+	left: 27px;
 }
 .rtl .bubble.top-right .twitter-avatar,
 .rtl .bubble.bottom-right .twitter-avatar {
-	top: 20px;
+	top: 23px;
 	right: 50px;
 }
 
 .bubble.top-left header, 
 .bubble.bottom-left header { 
-	padding: 25px 25px 10px 110px; 
+	padding: 25px 25px 10px 115px; 
 	min-height:50px;
 }
 .rtl .bubble.top-left header, 
 .rtl .bubble.bottom-left header { 
-	padding: 25px 100px 10px 35px; 
+	padding: 25px 95px 10px 40px; 
 }
 
 .bubble.top-left p, 
@@ -306,7 +311,7 @@ http://www.opensource.org/licenses/mit-license.php
 }
 .rtl .bubble.top-right header, 
 .rtl .bubble.bottom-right header { 
-	padding: 25px 110px 10px 25px; 
+	padding: 25px 110px 15px 25px; 
 }
 
 .bubble.top-right p, 
