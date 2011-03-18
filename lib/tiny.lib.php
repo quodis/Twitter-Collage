@@ -383,7 +383,7 @@ class Cache
 		// drop out if not enabled
 		if (!self::$_config['Cache']['enabled']) return FALSE;
 		//
-		$ok = self::$_handler->delete($cacheKey);
+		$ok = self::$_handler->delete($cacheKey, 0);
 
 		audit::call('Cache', $ok ? 'delete/OK' : 'delete/FAIL', $cacheKey);
 
