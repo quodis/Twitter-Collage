@@ -156,7 +156,7 @@ var party = party || {};
 
 			// Draw the tiles and proceed
 			// console.log(tiles_to_draw);
-			party.canvas.append('', tiles_to_draw);
+			party.canvas.append(' ', tiles_to_draw);
 			// Update counter
 			if (counter.current < state.total_tiles) {
 				counter.current += counter.increment;
@@ -437,6 +437,11 @@ var party = party || {};
 		stopAutoBubble();
 		state.keep_bubble_open = true;
 		showBubble(pos);
+		
+		window.setTimeout(function(){
+		    state.keep_bubble_open = false;
+		}, 3000)
+		
 		// Clean memory
 		data = null;
 	}
