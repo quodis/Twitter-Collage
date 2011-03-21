@@ -637,6 +637,7 @@ footer a:hover {
 	height: 50px;
 	width: 118px;
 	text-indent: -9999px;
+	line-height:50px;
 	overflow: hidden;
 }
 

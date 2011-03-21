@@ -336,7 +336,7 @@ class Locale
 		exit();
 	}
 
-	public static function setUp($locale)
+	public static function setUp($locale, $domain = 'messages')
 	{
 		self::_loadlanguageMap();
 
@@ -352,9 +352,9 @@ class Locale
 		$locale_dir = dirname(__FILE__) . '/../locale';
 		putenv("LC_ALL=" . $l['locale']);
 		setlocale(LC_ALL, $l['locale']);
-		textdomain("messages");
-		bindtextdomain("messages", $locale_dir);
-		bind_textdomain_codeset("messages", 'UTF-8');
+		textdomain($domain);
+		bindtextdomain($domain, $locale_dir);
+		bind_textdomain_codeset($domain, 'UTF-8');
 
 		return $locale;
 	}

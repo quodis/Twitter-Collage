@@ -1,3 +1,18 @@
+== 2011-03-21 ==
+
+Updated config with mobile related changes
+
+App:
+    ...
+    branch: mobile
+    tweet-hashtag: "#fx4 #fxmobile"
+....
+UI:
+    ...
+    locale-domain: mobile
+
+Also deleted from under UI the deprecated entries "title", "keywords" and "description" (managed by l10n)
+
 
 == 2011-03-16 ==
 

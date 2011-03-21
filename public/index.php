@@ -20,6 +20,9 @@ function main()
 	Debug::setLogMsgFile($config['App']['pathLog'] .'/www.msg.log');
 	Debug::setLogErrorFile($config['App']['pathLog'] .'/www.error.log');
 
+	// branch
+	$branch = isset($config['App']['branch']) ? $config['App']['branch'] : 'default';
+
 	// requested locale
 	$locale = isset($_GET['locale']) ? $_GET['locale'] : null;
 	$locale = Locale::validateOrRedirect($locale);
@@ -40,7 +43,7 @@ function main()
 	}
 
 	// not in cache, we must validate locale
-	$locale = Locale::setUp($locale);
+	$locale = Locale::setUp($locale, $config['UI']['locale-domain']);
 	$dir = localeDetails::isRtl($locale) ? 'rtl' : 'ltr';
 
 	// reset cache key to actual locale used
@@ -100,7 +103,7 @@ function main()
 
 	</head>
 
-	<body class="<?=$dir?>">
+	<body class="<?=$dir?> <?=$branch?>-branch">
 
 		<div id="container" class="clearfix">
 
@@ -110,17 +113,18 @@ function main()
 				<header id="brand" role="banner">
 					<a href="/" title="<?= _('Start over') ?>">
 						<?= /* L10n: Logo translation. Feel free to change the order of the h1, h2 and p blocks. h1 max of 9 characters. h2 max of 13 characters. em max of 18 characters. */ _('<p><em>Join the</em></p><h1>Firefox 4</h1><h2>Twitter Party</h2>') ?>
+
 					</a>
 				</header>
 
 				<!-- CONTENT -->
 				<aside id="main-content" class="clearfix">
 
-					<p><?= sprintf(_('Be part of Team Firefox! Tweet about Firefox 4 with the %s hashtag and your avatar will join thousands of others from around the world as part of our logo mosaic.'), '<span class="hashtag">#fx4</span>') ?></p>
+					<p><?= sprintf(_('Be part of Team Firefox! Tweet about Firefox 4 with the %s hashtags and your avatar will join thousands of others from around the world as part of our logo mosaic.'), '<span class="hashtag">' . /* L10n: main-content text hashtags*/ _('#fx4 or #fxmobile') . '</span>') ?></p>
 
 					<div id="twitter-counter" class="clearfix">
 						<dl>
-							<dt><a href="http://twitter.com/share?url=http://mzl.la/hDx6aM&amp;via=firefox&amp;related=firefox&amp;text=<?= urlencode( /* L10n: Default text to tweet, max 89 characters */ _('Join me at the Firefox 4 Twitter Party and celebrate the newest version') . ' #fx4 #teamfirefox') ?>" title="<?= /* L10n: Action verb, will open the new tweet window */ _('Tweet') ?>" rel="external"><?= _('Tweet') ?></a></dt>
+							<dt><a href="http://twitter.com/share?url=http://mzl.la/hDx6aM&amp;via=firefox&amp;related=firefox&amp;text=<?= urlencode( /* L10n: Default text to tweet, max 89 characters */ _('Join me at the Firefox 4 Twitter Party and celebrate the newest version') . ' ' . $config['App']['tweet-hashtag']) ?>" title="<?= /* L10n: Action verb, will open the new tweet window */ _('Tweet') ?>" rel="external"><?= _('Tweet') ?></a></dt>
 							<dd><span></span></dd>
 						</dl>
 					</div><!-- twitter-counter -->
@@ -140,6 +144,13 @@ function main()
 					<div id="download">
 						<a class="download-link download-firefox" href="http://www.mozilla.com/"><span class="download-content"><span class="download-title">Firefox 4</span><span class="download-text"><?= /* L10n: Max of 15 characters */ _('Download here') ?></span></span></a>
 					</div><!-- download -->
+
+<?php if ($branch == 'mobile') { ?>
+					<div id="download-mobile">
+						<?= /* L10n: Mobile download button */ _('Get Firefox on Your Phone') ?>
+
+					</div><!-- download mobile -->
+<?php } ?>
 
 				</aside><!-- main-content -->
 
@@ -162,7 +173,7 @@ function main()
 
 						<header>
 
-							<?php $link = '<a href="#" title="' . _('Twitter profile') . '" rel="author external" target="_blank"></a>'; ?>
+<?php $link = '<a href="#" title="' . _('Twitter profile') . '" rel="author external" target="_blank"></a>'; ?>
 							<h1><?= sprintf(/* L10n: Used in: "twitter username" wrote */ _('%s <span>wrote</span>'), $link) ?></h1>
 							<a href="#" title="" rel="author external" class="twitter-avatar" target="_blank">
 								<img src="assets/images/layout/avatar-loading.gif" alt="<?= _('Twitter profile picture') ?>" width="48" height="48" />
