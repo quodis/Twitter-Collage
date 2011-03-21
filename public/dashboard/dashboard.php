@@ -67,13 +67,11 @@ function main()
 
 	<head>
 
-		<title><?=$config['UI']['title']?></title>
+		<title>Firefox 4 Twitter Party</title>
 
 		<meta charset="utf-8" />
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="keywords" content="<?=$config['UI']['keywords']?>" />
-		<meta name="description" content="<?=$config['UI']['description']?>" />
 		<meta name="author" content="Quodis" />
 		<meta name="copyright" content="© 2011" />
 		<meta name="distribution" content="global" />
