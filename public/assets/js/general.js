@@ -847,6 +847,8 @@ $(document).ready(function() {
 	// Let's get it started as soon as the mosaic is loaded
 	$mosaic_image = $('<img src="' + party.store_url + '/mosaic.jpg">');
 	$mosaic_image.load(party.init).each(function(){
-        party.init();
+        if(this.complete) {
+            party.init();
+        }
     });	
 });
