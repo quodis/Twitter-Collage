@@ -55,14 +55,14 @@ class ChooseLocale
 			$locale	  = $this->_cleanHTTPlocaleCode($var);
 			$shortLocale = array_shift((explode('-', $locale)));
 
-			// CHANGED ORDER (quodis) because Mozilla wants to give proirity to 'pt' over 'pt-PT'
-			if (in_array($shortLocale, $this->supportedLocales)) {
-				$l = $shortLocale;
-				break;
-			}
-
+			// CHANGED BACK ORDER (quodis) (March 21)
 			if (in_array($locale, $this->supportedLocales)) {
 				$l = $locale;
+				break;
+			}
+			
+			if (in_array($shortLocale, $this->supportedLocales)) {
+				$l = $shortLocale;
 				break;
 			}
 
