@@ -845,10 +845,11 @@ $(document).ready(function() {
 	party.loadingShow();
 	
 	// Let's get it started as soon as the mosaic is loaded
-	$mosaic_image = $('<img src="' + party.store_url + '/mosaic.jpg">');
+	$mosaic_image = $('<img style="display:none;" src="' + party.store_url + '/mosaic.jpg">');
+	$('body').append($mosaic_image);
 	$mosaic_image.load(party.init).each(function(){
         if(this.complete) {
-            party.init();
+            $(this).trigger('load').remove();
         }
     });	
 });
