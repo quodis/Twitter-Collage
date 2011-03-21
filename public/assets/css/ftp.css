@@ -752,9 +752,13 @@ a.download-link:hover, a.download-link:active {
 	margin-right:10px;
 	padding-bottom:3px;
 	vertical-align:middle;
-	background:url(../images/layout/download-arrow.png) 100% 50% no-repeat;
+	background:url(../images/layout/download-arrow-sprite.png) right 5px no-repeat;
 	text-decoration: none;
 }
+.rtl #download a.download-link span.download-title {
+	background-position: right -35px;
+}
+
 #download a.download-link span.download-text {
 	display:inline-block;
 	float:left;
