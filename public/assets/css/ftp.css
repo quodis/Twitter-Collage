@@ -205,6 +205,8 @@ body {
 	overflow: hidden;
 	text-decoration: none;
 	text-align: center;
+	color: #fff;
+	line-height: 10px;
 	
 	-moz-transform: rotate(0deg);
 	-webkit-transform: rotate(0deg);
@@ -364,6 +366,7 @@ footer a:hover {
 
 #sub-footer ul li#footer-connect a {
 	background-position:50% -330px;
+	width: 120px;
 }
 
 
@@ -374,7 +377,7 @@ footer a:hover {
 #sub-footer-newsletter{
 	float:right;
 	min-width:230px;
-	max-width:300px;
+	max-width: 340px;
 	margin:20px 0 0;
 	line-height:24px;
 	text-align:left;
@@ -637,6 +640,7 @@ footer a:hover {
 	height: 50px;
 	width: 118px;
 	text-indent: -9999px;
+	line-height:50px;
 	overflow: hidden;
 }
 
@@ -731,7 +735,7 @@ a.download-link:hover, a.download-link:active {
 
 #download a.download-link span.download-content {
 	margin-left: -25px;
-	padding-left:60px;
+	padding-left: 55px;
 	font-size:14px;
 	background-image:url(../images/layout/download-logo-sub.png);
 	height:40px;
@@ -744,9 +748,9 @@ a.download-link:hover, a.download-link:active {
 	font-size:22px;
 	display:inline-block;
 	float:left;
-	padding-right:30px;
+	padding-right:25px;
+	margin-right:10px;
 	padding-bottom:3px;
-	margin-right:14px;
 	vertical-align:middle;
 	background:url(../images/layout/download-arrow.png) 100% 50% no-repeat;
 	text-decoration: none;
@@ -754,7 +758,7 @@ a.download-link:hover, a.download-link:active {
 #download a.download-link span.download-text {
 	display:inline-block;
 	float:left;
-	line-height: 28px;
+	line-height: 30px;
 	padding-bottom:3px;
 	vertical-align:middle;
 }
