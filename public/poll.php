@@ -55,6 +55,7 @@ function main()
 	$tiles = array();
 	while ($tweet = $result->row())
 	{
+		$tweet['w'] = "".$tweet['w'];
 		$tiles[] = $tweet;
 		if ($tweet['i'] > $lastId) $lastId = $tweet['i'];
 	}
