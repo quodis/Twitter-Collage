@@ -311,7 +311,7 @@ class Mosaic
 		// DEBUG CODE
 
 		// HOPE LESS HACK
-		$contents = preg_replace('/,"w":(\d+),/U', '', $contents);
+		$contents = preg_replace('/,"w":(\d+),/', ',"w":"$1",', $contents);
 
 		// DEBUG CODE
 		dd('hack matches:' . preg_match_all('/,"w":(\d+),/', $contents, $matches));
