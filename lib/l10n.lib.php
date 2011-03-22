@@ -44,7 +44,6 @@ class ChooseLocale
 
 	public function getCompatibleLocale()
 	{
-		$l       = $this->defaultLocale;
 		$acclang = $this->getAcceptLangArray();
 
 		if(!is_array($acclang)) {
@@ -57,30 +56,27 @@ class ChooseLocale
 
 			// CHANGED BACK ORDER (quodis) (March 21)
 			if (in_array($locale, $this->supportedLocales)) {
-				$l = $locale;
-				break;
+				return $locale;
 			}
-			
+
 			if (in_array($shortLocale, $this->supportedLocales)) {
-				$l = $shortLocale;
-				break;
+				return $shortLocale;
 			}
 
 			// check if we map visitors short locales to site long locales
 			// like en->en-GB
 			if ($this->mapLonglocales == true) {
-				foreach ($this->supportedLocales as $var) {
-					$shortSupportedLocale = array_shift((explode('-', $var)));
+				foreach ($this->supportedLocales as $supported) {
+					$shortSupportedLocale = array_shift((explode('-', $supported)));
 					if ($shortLocale == $shortSupportedLocale) {
-						$l = $var;
-						break;
+						return $supported;
 					}
 				}
 			}
 
 		}
 
-		return $l;
+		return $this->defaultLocale;
 	}
 
 	public function getDefaultLocale() {
