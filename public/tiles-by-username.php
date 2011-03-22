@@ -30,6 +30,7 @@ function main()
 
 	while ($tweet = $result->row())
 	{
+		$tweet['w'] = "".$tweet['w'];
 		$data['tiles'][] = $tweet;
 	}
 
