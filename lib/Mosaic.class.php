@@ -268,6 +268,7 @@ class Mosaic
 				if (isset($tiles[$tweet['p']])) continue;
 				// remove slot
 				unset($freeSlots[$tweet['p']]);
+
 				$tiles[$tweet['p']] = $tweet;
 			}
 		}
@@ -282,12 +283,39 @@ class Mosaic
 		if (count($tiles))
 		{
 			$fileData['tiles'] = $tiles;
-			// find max id
-			foreach ($tiles as $tile) if ($tile['i'] > $fileData['last_id']) $fileData['last_id'] = $tile['i'];
+
+			// DEBUG CODE
+			$tile = reset($fileData['tiles']);
+			dd($tile['w'], 'before:' . gettype($tile['w']));
+			// DEBUG CODE
+
+			foreach ($fileData['tiles'] as $p => $tile)
+			{
+				// cast to string
+				$fileData['tiles'][$p]['w'] = "".$fileData['tiles'][$p]['w'];
+				// find max id
+				if ($tile['i'] > $fileData['last_id']) $fileData['last_id'] = $tile['i'];
+			}
 		}
 
 		// mosaic.json contents (jsonp)
 		$contents = 'party.processMosaic(' . json_encode($fileData) . ');';
+
+		// DEBUG CODE
+		$tile = reset($fileData['tiles']);
+		dd("#".$tile['w'], 'cast:' . gettype($tile['w']));
+		// DEBUG CODE
+
+		// DEBUG CODE
+		dd('encode matches:' . preg_match_all('/,"w":(\d+),/', $contents, $matches));
+		// DEBUG CODE
+
+		// HOPE LESS HACK
+		$contents = preg_replace('/,"w":(\d+),/U', '', $contents);
+
+		// DEBUG CODE
+		dd('hack matches:' . preg_match_all('/,"w":(\d+),/', $contents, $matches));
+		// DEBUG CODE
 
 		// save jpeg file
 		$fileName = self::getImageFileName();
