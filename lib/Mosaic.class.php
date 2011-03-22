@@ -284,11 +284,6 @@ class Mosaic
 		{
 			$fileData['tiles'] = $tiles;
 
-			// DEBUG CODE
-			$tile = reset($fileData['tiles']);
-			dd($tile['w'], 'before:' . gettype($tile['w']));
-			// DEBUG CODE
-
 			foreach ($fileData['tiles'] as $p => $tile)
 			{
 				// cast to string
@@ -300,22 +295,6 @@ class Mosaic
 
 		// mosaic.json contents (jsonp)
 		$contents = 'party.processMosaic(' . json_encode($fileData) . ');';
-
-		// DEBUG CODE
-		$tile = reset($fileData['tiles']);
-		dd("#".$tile['w'], 'cast:' . gettype($tile['w']));
-		// DEBUG CODE
-
-		// DEBUG CODE
-		dd('encode matches:' . preg_match_all('/,"w":(\d+),/', $contents, $matches));
-		// DEBUG CODE
-
-		// HOPE LESS HACK
-		$contents = preg_replace('/,"w":(\d+),/', ',"w":"$1",', $contents);
-
-		// DEBUG CODE
-		dd('hack matches:' . preg_match_all('/,"w":(\d+),/', $contents, $matches));
-		// DEBUG CODE
 
 		// save jpeg file
 		$fileName = self::getImageFileName();
