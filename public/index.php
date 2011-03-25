@@ -57,6 +57,9 @@ function main()
 	// js config
 	$uiOptions = $config['UI']['options'];
 
+	// TODO
+	$showDownload = 0;
+
 ?>
 <!DOCTYPE html>
 <html lang="<?= $locale?>" dir="<?=$dir?>">
@@ -103,7 +106,7 @@ function main()
 
 	</head>
 
-	<body class="<?=$dir?> <?=$branch?>-branch">
+	<body class="<?=$dir?> <?=$branch?>-branch<?=$showDownload ? 'download' : 'no-download'?>">
 
 		<div id="container" class="clearfix">
 
@@ -120,7 +123,7 @@ function main()
 				<!-- CONTENT -->
 				<aside id="main-content" class="clearfix">
 
-					<p><?= sprintf(_('Be part of Team Firefox! Tweet about Firefox 4 with the %s hashtags and your avatar will join thousands of others from around the world as part of our logo mosaic.'), '<span class="hashtag">' . /* L10n: main-content text hashtags*/ _('#fx4 or #fxmobile') . '</span>') ?></p>
+					<p><?= sprintf(_('Be part of Team Firefox! Tweet about Firefox 4 with the %s or %s hashtags and your avatar will join thousands of others from around the world as part of our logo mosaic.'), '<span class="hashtag">#fx4</span>', '<span class="hashtag">#fxmobile</span>') ?></p>
 
 					<div id="twitter-counter" class="clearfix">
 						<dl>
@@ -142,6 +145,7 @@ function main()
 					</form><!-- search-box -->
 
 					<div id="downloads">
+<?php if ($showDownload) { ?>
 						<div id="download">
 							<a class="download-link download-firefox" href="http://www.mozilla.com/">
 								<span class="download-content">
@@ -150,11 +154,13 @@ function main()
 								</span>
 							</a>
 						</div><!-- download -->
-<?php if ($branch == 'mobile') { ?>
-						<p id="download-mobile">
-							<a href="http://market.android.com/details?id=org.mozilla.firefox" title="Download Firefox Mobile"><?=/* L10n: Mobile download button */ _('Get Firefox on Your Phone!')?></a>
-						</p>
 <?php } ?>
+						<p id="download-mobile">
+							<a href="https://market.android.com/details?id=org.mozilla.firefox" title="Download Firefox Mobile"
+							  onMouseDown="dcsMultiTrack('DCS.dcsuri','/button/twitterparty/androiddownload', 'WT.ti','Twitter%20Party%20Mobile%20Download');">
+								<?=/* L10n: Mobile download button */ _('Get Firefox on Your Phone!') ?>
+							</a>
+						</p>
 					</div><!-- downloads -->
 
 				</aside><!-- main-content -->
