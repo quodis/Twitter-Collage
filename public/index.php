@@ -141,19 +141,23 @@ function main()
 
 					</form><!-- search-box -->
 
-					<div id="download">
-						<a class="download-link download-firefox" href="http://www.mozilla.com/"><span class="download-content"><span class="download-title">Firefox 4</span><span class="download-text"><?= /* L10n: Max of 15 characters */ _('Download here') ?></span></span></a>
-					</div><!-- download -->
-
+					<div id="downloads">
+						<div id="download">
+							<a class="download-link download-firefox" href="http://www.mozilla.com/">
+								<span class="download-content">
+									<span class="download-title">Firefox 4</span>
+									<span class="download-text"><?= /* L10n: Max of 15 characters */ _('Download here') ?></span>
+								</span>
+							</a>
+						</div><!-- download -->
 <?php if ($branch == 'mobile') { ?>
-					<div id="download-mobile">
-						<?= /* L10n: Mobile download button */ _('Get Firefox on Your Phone') ?>
-
-					</div><!-- download mobile -->
+						<p id="download-mobile">
+							<a href="http://market.android.com/details?id=org.mozilla.firefox" title="Download Firefox Mobile"><?=/* L10n: Mobile download button */ _('Get Firefox on Your Phone!')?></a>
+						</p>
 <?php } ?>
+					</div><!-- downloads -->
 
 				</aside><!-- main-content -->
-
 
 				<section id="mosaic" role="img">
 					<h2><?= _('Mosaic') ?></h2>
