@@ -651,18 +651,17 @@ footer a:hover {
 }
 
 
-
 /* DOWNLOAD BUTTON */
 
-#download {
+#downloads {
 	width: 300px;
-	margin: 0 0 -95px -20px;
+	margin: 0 0 -140px -20px;
 	position: relative;
-	z-index:30;
+	z-index: 30;
 }
 
-.rtl #download { 
-	margin: 0 -20px -95px 0;
+.rtl #downloads { 
+	margin: 0 -20px -140px 0;
 }
 
 
@@ -684,7 +683,7 @@ a.download-link, a.download-link:link, a.download-link:visited {
 	background:linear-gradient(top,  #84C63C 0%,  #489615 100%);
 	filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#84C63C',  endColorstr='#489615', GradientType=0 );
 	-moz-transition:box-shadow 0.2s ease-in-out;
-	-webit-transition:box-shadow 0.2s ease-in-out;
+	-webkit-transition:box-shadow 0.2s ease-in-out;
 	transition:box-shadow 0.2s ease-in-out;
 	text-decoration: none;
 }
