@@ -37,7 +37,7 @@ function main()
 	ini_set('zlib.output_compression', 1);
 
 	// check cache
-	if (FALSE || $output = Cache::get($cacheKey))
+	if ($output = Cache::get($cacheKey))
 	{
 		Dispatch::now(1, $output);
 	}
@@ -56,9 +56,6 @@ function main()
 
 	// js config
 	$uiOptions = $config['UI']['options'];
-
-	// TODO
-	$showDownload = 0;
 
 ?>
 <!DOCTYPE html>
@@ -106,7 +103,7 @@ function main()
 
 	</head>
 
-	<body class="<?=$dir?> <?=$branch?>-branch<?=$showDownload ? 'download' : 'no-download'?>">
+	<body class="<?=$dir?> <?=$branch?>-branch">
 
 		<div id="container" class="clearfix">
 
@@ -145,7 +142,6 @@ function main()
 					</form><!-- search-box -->
 
 					<div id="downloads">
-<?php if ($showDownload) { ?>
 						<div id="download">
 							<a class="download-link download-firefox" href="http://www.mozilla.com/">
 								<span class="download-content">
@@ -154,7 +150,6 @@ function main()
 								</span>
 							</a>
 						</div><!-- download -->
-<?php } ?>
 						<p id="download-mobile">
 							<a href="https://market.android.com/details?id=org.mozilla.firefox" title="Download Firefox Mobile"
 							  onMouseDown="dcsMultiTrack('DCS.dcsuri','/button/twitterparty/androiddownload', 'WT.ti','Twitter%20Party%20Mobile%20Download');">

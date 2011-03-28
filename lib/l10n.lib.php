@@ -44,7 +44,6 @@ class ChooseLocale
 
 	public function getCompatibleLocale()
 	{
-		$l       = $this->defaultLocale;
 		$acclang = $this->getAcceptLangArray();
 
 		if(!is_array($acclang)) {
@@ -55,32 +54,29 @@ class ChooseLocale
 			$locale	  = $this->_cleanHTTPlocaleCode($var);
 			$shortLocale = array_shift((explode('-', $locale)));
 
-			// CHANGED ORDER (quodis) because Mozilla wants to give proirity to 'pt' over 'pt-PT'
-			if (in_array($shortLocale, $this->supportedLocales)) {
-				$l = $shortLocale;
-				break;
+			// CHANGED BACK ORDER (quodis) (March 21)
+			if (in_array($locale, $this->supportedLocales)) {
+				return $locale;
 			}
 
-			if (in_array($locale, $this->supportedLocales)) {
-				$l = $locale;
-				break;
+			if (in_array($shortLocale, $this->supportedLocales)) {
+				return $shortLocale;
 			}
 
 			// check if we map visitors short locales to site long locales
 			// like en->en-GB
 			if ($this->mapLonglocales == true) {
-				foreach ($this->supportedLocales as $var) {
-					$shortSupportedLocale = array_shift((explode('-', $var)));
+				foreach ($this->supportedLocales as $supported) {
+					$shortSupportedLocale = array_shift((explode('-', $supported)));
 					if ($shortLocale == $shortSupportedLocale) {
-						$l = $var;
-						break;
+						return $supported;
 					}
 				}
 			}
 
 		}
 
-		return $l;
+		return $this->defaultLocale;
 	}
 
 	public function getDefaultLocale() {
@@ -336,7 +332,7 @@ class Locale
 		exit();
 	}
 
-	public static function setUp($locale, $domain = 'messages')
+	public static function setUp($locale)
 	{
 		self::_loadlanguageMap();
 
@@ -352,9 +348,9 @@ class Locale
 		$locale_dir = dirname(__FILE__) . '/../locale';
 		putenv("LC_ALL=" . $l['locale']);
 		setlocale(LC_ALL, $l['locale']);
-		textdomain($domain);
-		bindtextdomain($domain, $locale_dir);
-		bind_textdomain_codeset($domain, 'UTF-8');
+		textdomain("messages");
+		bindtextdomain("messages", $locale_dir);
+		bind_textdomain_codeset("messages", 'UTF-8');
 
 		return $locale;
 	}
