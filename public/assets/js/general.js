@@ -251,12 +251,6 @@ var party = party || {};
 		party.performance = party.performance_settings.high;
 		if ($.browser.msie) {
 			party.performance = party.performance_settings.medium;
-		} else if ($.browser.mozilla) {
-			// Remove the download button if this is already firefox >= 4
-			if (window.navigator.userAgent.search('Firefox/4') != -1) {
-				$('#download').remove();
-				// party.performance = party.performance_settings.medium;
-			}
 		}
 		
 		// Cache DOM elements
