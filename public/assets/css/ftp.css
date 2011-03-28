@@ -113,14 +113,14 @@ a img {
 */
 
 @font-face {
-    font-family: 'MetaBlackRoman';
-    src: url('../fonts/metablackroman-webfont.eot');
-    src: url('../fonts/metablackroman-webfont.eot?iefix') format('eot'),
-         url('../fonts/metablackroman-webfont.woff') format('woff'),
-         url('../fonts/metablackroman-webfont.ttf') format('truetype'),
-         url('../fonts/metablackroman-webfont.svg#webfont8UiA3WZm') format('svg');
-    font-weight: normal;
-    font-style: normal;
+	font-family: 'MetaBlackRoman';
+	src: url('../fonts/metablackroman-webfont.eot');
+	src: url('../fonts/metablackroman-webfont.eot?iefix') format('eot'),
+		 url('../fonts/metablackroman-webfont.woff') format('woff'),
+		 url('../fonts/metablackroman-webfont.ttf') format('truetype'),
+		 url('../fonts/metablackroman-webfont.svg#webfont8UiA3WZm') format('svg');
+	font-weight: normal;
+	font-style: normal;
 
 }
 
@@ -148,7 +148,7 @@ body {
 
 .wrapper {
 	width:940px;
-	height:650px;
+	height:700px;
 	margin-bottom:60px;
 	position:absolute;
 	top:50%;
@@ -772,7 +772,7 @@ p#download-mobile {
 	text-align: right;
 }
 
-p#download-mobile a{
+p#download-mobile a {
 	color:#447BC4;
 	font-size:13px;
 	text-decoration:none;
