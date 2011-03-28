@@ -156,7 +156,7 @@ var party = party || {};
 
 			// Draw the tiles and proceed
 			// console.log(tiles_to_draw);
-			party.canvas.append('', tiles_to_draw);
+			party.canvas.append(' ', tiles_to_draw);
 			// Update counter
 			if (counter.current < state.total_tiles) {
 				counter.current += counter.increment;
@@ -431,6 +431,11 @@ var party = party || {};
 		stopAutoBubble();
 		state.keep_bubble_open = true;
 		showBubble(pos);
+		
+		window.setTimeout(function(){
+		    state.keep_bubble_open = false;
+		}, 3000)
+		
 		// Clean memory
 		data = null;
 	}
@@ -839,7 +844,11 @@ $(document).ready(function() {
 	party.loadingShow();
 	
 	// Let's get it started as soon as the mosaic is loaded
-	$mosaic_image = $('<img src="' + party.store_url + '/mosaic.jpg">');
-	$mosaic_image.load(party.init);
-	
+	$mosaic_image = $('<img style="display:none;" src="' + party.store_url + '/mosaic.jpg">');
+	$('body').append($mosaic_image);
+	$mosaic_image.load(party.init).each(function(){
+        if(this.complete) {
+            $(this).trigger('load').remove();
+        }
+    });	
 });

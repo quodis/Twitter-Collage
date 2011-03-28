@@ -205,6 +205,8 @@ body {
 	overflow: hidden;
 	text-decoration: none;
 	text-align: center;
+	color: #fff;
+	line-height: 10px;
 	
 	-moz-transform: rotate(0deg);
 	-webkit-transform: rotate(0deg);
@@ -364,6 +366,7 @@ footer a:hover {
 
 #sub-footer ul li#footer-connect a {
 	background-position:50% -330px;
+	width: 120px;
 }
 
 
@@ -374,7 +377,7 @@ footer a:hover {
 #sub-footer-newsletter{
 	float:right;
 	min-width:230px;
-	max-width:300px;
+	max-width: 340px;
 	margin:20px 0 0;
 	line-height:24px;
 	text-align:left;
@@ -637,7 +640,7 @@ footer a:hover {
 	height: 50px;
 	width: 118px;
 	text-indent: -9999px;
-	line-height:50px;
+	line-height: 100px;
 	overflow: hidden;
 }
 
@@ -651,15 +654,15 @@ footer a:hover {
 
 /* DOWNLOAD BUTTON */
 
-#downloads {
+#download {
 	width: 300px;
-	margin: 0 0 -140px -20px;
+	margin: 0 0 -95px -20px;
 	position: relative;
 	z-index:30;
 }
 
-.rtl #downloads { 
-	margin: 0 -20px -140px 0;
+.rtl #download { 
+	margin: 0 -20px -95px 0;
 }
 
 
@@ -732,7 +735,7 @@ a.download-link:hover, a.download-link:active {
 
 #download a.download-link span.download-content {
 	margin-left: -25px;
-	padding-left:60px;
+	padding-left: 55px;
 	font-size:14px;
 	background-image:url(../images/layout/download-logo-sub.png);
 	height:40px;
@@ -745,28 +748,21 @@ a.download-link:hover, a.download-link:active {
 	font-size:22px;
 	display:inline-block;
 	float:left;
-	padding-right:30px;
+	padding-right:25px;
+	margin-right:10px;
 	padding-bottom:3px;
-	margin-right:14px;
 	vertical-align:middle;
-	background:url(../images/layout/download-arrow.png) 100% 50% no-repeat;
+	background:url(../images/layout/download-arrow-sprite.png) right 5px no-repeat;
 	text-decoration: none;
 }
+.rtl #download a.download-link span.download-title {
+	background-position: right -35px;
+}
+
 #download a.download-link span.download-text {
 	display:inline-block;
 	float:left;
-	line-height: 28px;
+	line-height: 30px;
 	padding-bottom:3px;
 	vertical-align:middle;
-}
-
-p#download-mobile {
-	width: 300px;
-	text-align: right;
-}
-
-p#download-mobile a{
-	color:#447BC4;
-	font-size:13px;
-	text-decoration:none;
 }

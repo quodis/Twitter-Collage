@@ -143,7 +143,7 @@ function main()
 
 					<div id="downloads">
 						<div id="download">
-							<a class="download-link download-firefox" href="http://www.mozilla.com/">
+							<a class="download-link download-firefox" href="http://www.mozilla.com/?WT.mc_id=tp1&amp;WT.mc_ev=click">
 								<span class="download-content">
 									<span class="download-title">Firefox 4</span>
 									<span class="download-text"><?= /* L10n: Max of 15 characters */ _('Download here') ?></span>
