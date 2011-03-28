@@ -151,7 +151,7 @@ function main()
 							</a>
 						</div><!-- download -->
 						<p id="download-mobile">
-							<a href="https://market.android.com/details?id=org.mozilla.firefox" title="Download Firefox Mobile"
+							<a href="http://www.mozilla.com/mobile/download/?WT.mc_id=tp2&WT.mc_ev=click" title="Download Firefox Mobile"
 							  onMouseDown="dcsMultiTrack('DCS.dcsuri','/button/twitterparty/androiddownload', 'WT.ti','Twitter%20Party%20Mobile%20Download');">
 								<?=/* L10n: Mobile download button */ _('Get Firefox on Your Phone!') ?>
 							</a>
