@@ -433,7 +433,7 @@ var party = party || {};
 		showBubble(pos);
 		
 		window.setTimeout(function(){
-		    state.keep_bubble_open = false;
+			state.keep_bubble_open = false;
 		}, 3000)
 		
 		// Clean memory
@@ -847,8 +847,8 @@ $(document).ready(function() {
 	$mosaic_image = $('<img style="display:none;" src="' + party.store_url + '/mosaic.jpg">');
 	$('body').append($mosaic_image);
 	$mosaic_image.load(party.init).each(function(){
-        if(this.complete) {
-            $(this).trigger('load').remove();
-        }
-    });	
+		if(this.complete) {
+			$(this).trigger('load').remove();
+		}
+	});	
 });

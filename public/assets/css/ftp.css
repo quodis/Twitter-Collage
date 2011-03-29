@@ -542,7 +542,7 @@ footer a:hover {
 #search-box {
 	background: url(../images/layout/aside-ornament.png) center top no-repeat;
 	padding-top: 30px;
-	min-height:110px;
+	min-height:75px;
 	position:relative;
 }
 
@@ -655,7 +655,7 @@ footer a:hover {
 
 #downloads {
 	width: 300px;
-	margin: 0 0 -140px -20px;
+	margin: 0 0 0px -20px;
 	position: relative;
 	z-index: 30;
 }
@@ -766,7 +766,12 @@ a.download-link:hover, a.download-link:active {
 	vertical-align:middle;
 }
 
+div#download {
+	position: absolute; width:300px; top: 40px;
+}
+
 p#download-mobile {
+	position: absolute; top: 95px;
 	width: 300px;
 	text-align: right;
 }
